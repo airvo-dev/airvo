@@ -1,0 +1,42 @@
+<svg width="320" height="80" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a394ff"/>
+      <stop offset="100%" stop-color="#fa6d8f"/>
+    </linearGradient>
+    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c6dfa" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#fa6d8f" stop-opacity="0.3"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a394ff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#7c6dfa" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="strongGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="36" cy="40" r="28" fill="url(#centerGlow)"/>
+  <line x1="36" y1="40" x2="58" y2="20" stroke="url(#lineGradient)" stroke-width="1.2" opacity="0.7"/>
+  <line x1="36" y1="40" x2="62" y2="40" stroke="url(#lineGradient)" stroke-width="1.2" opacity="0.7"/>
+  <line x1="36" y1="40" x2="58" y2="60" stroke="url(#lineGradient)" stroke-width="1.2" opacity="0.7"/>
+  <line x1="36" y1="40" x2="14" y2="22" stroke="url(#lineGradient)" stroke-width="1.2" opacity="0.4"/>
+  <line x1="36" y1="40" x2="14" y2="58" stroke="url(#lineGradient)" stroke-width="1.2" opacity="0.4"/>
+  <line x1="58" y1="20" x2="62" y2="40" stroke="url(#lineGradient)" stroke-width="0.8" opacity="0.3"/>
+  <line x1="62" y1="40" x2="58" y2="60" stroke="url(#lineGradient)" stroke-width="0.8" opacity="0.3"/>
+  <circle cx="58" cy="20" r="3.5" fill="#7c6dfa" opacity="0.7" filter="url(#softGlow)"/>
+  <circle cx="62" cy="40" r="3" fill="#9080ff" opacity="0.6" filter="url(#softGlow)"/>
+  <circle cx="58" cy="60" r="3.5" fill="#fa6d8f" opacity="0.6" filter="url(#softGlow)"/>
+  <circle cx="14" cy="22" r="2.5" fill="#7c6dfa" opacity="0.4"/>
+  <circle cx="14" cy="58" r="2.5" fill="#7c6dfa" opacity="0.4"/>
+  <circle cx="36" cy="40" r="9" fill="url(#mainGradient)" filter="url(#strongGlow)"/>
+  <circle cx="36" cy="40" r="5" fill="white" opacity="0.95"/>
+  <!-- Dark version: light text for dark backgrounds -->
+  <text x="80" y="47" font-family="'Syne','Inter','Segoe UI',system-ui,sans-serif" font-size="34" font-weight="800" letter-spacing="-1.5" fill="#e8e8f0">Airvo</text>
+  <text x="82" y="63" font-family="'Space Mono','Courier New',monospace" font-size="9.5" letter-spacing="2" fill="#a394ff" opacity="0.85">YOUR AI. YOUR RULES.</text>
+</svg>

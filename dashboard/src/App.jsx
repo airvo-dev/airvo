@@ -1,0 +1,1113 @@
+import { useState, useEffect, useCallback, useRef } from "react";
+
+const API = "http://localhost:8765";
+
+const LANGUAGES = [
+  { code: "en", label: "EN", flag: "🇺🇸", name: "English"   },
+  { code: "es", label: "ES", flag: "🇪🇸", name: "Español"   },
+  { code: "fr", label: "FR", flag: "🇫🇷", name: "Français"  },
+  { code: "de", label: "DE", flag: "🇩🇪", name: "Deutsch"   },
+  { code: "zh", label: "ZH", flag: "🇨🇳", name: "中文"       },
+  { code: "ja", label: "JA", flag: "🇯🇵", name: "日本語"     },
+  { code: "pt", label: "PT", flag: "🇧🇷", name: "Português" },
+];
+
+const I18N = {
+  en: {
+    nav_models:"Models", nav_status:"Status", nav_config:"Configuration",
+    nav_add:"Add Model", nav_help:"Help", nav_active:"ACTIVE", nav_none:"none",
+    connecting:"connecting...", offline:"server offline",
+    models_title:"Models", models_sub:"Activate models and configure their API keys",
+    stat_total:"Total", stat_active:"Active", stat_free:"Free", stat_with_key:"With Key",
+    stat_models:"models", stat_parallel:"in parallel", stat_no_cost:"no cost", stat_configured:"configured",
+    loading_models:"Loading models...",
+    active:"active", inactive:"inactive", free_badge:"FREE", paid_badge:"PAID",
+    save_key:"Save", hide_key:"hide", show_key:"show", change_key:"change", delete_btn:"delete",
+    key_placeholder:"API key...",
+    status_title:"Status", status_sub:"Server status and active models", server_label:"Server",
+    status_online:"● Online", status_offline_msg:"Cannot connect to server.",
+    status_offline_hint:"Make sure Airvo is running with",
+    field_version:"Version", field_active:"Active models", field_total:"Total models",
+    field_config:"Config file", field_endpoint:"Chat endpoint",
+    continue_label:"Continue.dev Config", continue_hint:"Add this to your continue.dev config.yaml:",
+    copy_config:"Copy config", copied:"Copied ✓",
+    config_title:"Configuration", config_sub:"Mode, temperature, memory and preferences",
+    mode_label:"Multi-Model Mode", active_models_label:"Active Models",
+    no_active_models:"No active models. Activate at least one in Models.",
+    mode_parallel:"Parallel", mode_parallel_desc:"All models respond, you see all answers",
+    mode_race:"Race", mode_race_desc:"Fastest model wins",
+    mode_vote:"Vote", mode_vote_desc:"Consensus between models",
+    mode_review:"Review", mode_review_desc:"One generates, another critiques", mode_set:"Mode",
+    temp_label:"Temperature",
+    temp_hint_low:"0.0 — deterministic, precise. Best for code and refactoring.",
+    temp_hint_mid:"0.5 — balanced. Good for most tasks.",
+    temp_hint_high:"1.0 — creative, varied. Best for brainstorming and docs.",
+    temp_saved:"Temperature saved",
+    maxtokens_label:"Max Tokens",
+    maxtokens_saved:"Max tokens saved",
+    memory_label:"Project Context",
+    memory_sub:"Write once, injected into every request. Helps Airvo understand your stack without repeating yourself.",
+    memory_enable:"Enable project context",
+    memory_placeholder:"Example:\nI work with FastAPI and Python 3.12.\nAlways use async/await and type hints.\nThis is an e-commerce REST API.\nDeploy target is Railway with Docker.\nDo not suggest Redux, we use Zustand.",
+    memory_chars:"chars",
+    memory_max:"max",
+    memory_saved:"Project context saved ✓",
+    memory_too_long:"Context too long — trim it down",
+    memory_tokens_warning:"⚠ Context is large — consider trimming",
+    stats_label:"Usage Stats",
+    stats_requests:"requests",
+    stats_tokens:"tokens",
+    stats_reset:"Reset stats",
+    stats_reset_confirm:"Reset all usage stats?",
+    stats_reset_done:"Stats reset",
+    stats_empty:"No usage data yet. Start coding!",
+    add_title:"Add Model", add_sub:"Any model compatible with LiteLLM — any provider, any API",
+    new_model:"New Model",
+    field_id:"Model ID", field_name:"Display Name", field_provider:"Provider",
+    field_apikey:"API Key", field_baseurl:"Base URL", field_notes:"Notes",
+    check_active:"Activate immediately", add_btn:"Add Model",
+    tip_id_title:"What is the Model ID?",
+    tip_id_body:"Unique identifier in format provider/model-name. This is what LiteLLM uses to route your request to the right API.",
+    tip_id_examples:"groq/llama-3.3-70b-versatile\nopenai/gpt-4o\nanthropic/claude-sonnet-4-5\nollama/llama3\nlmstudio/local\ndeepseek/deepseek-chat\nmistral/mistral-large-latest",
+    tip_name_title:"What is the Display Name?",
+    tip_name_body:"A friendly name shown in the dashboard and sidebar.",
+    tip_name_examples:"Llama 3.3 70B\nGPT-4o\nClaude Sonnet\nMy Local Model",
+    tip_provider_title:"What is the Provider?",
+    tip_provider_body:"The company or system that hosts the model.",
+    tip_provider_examples:"groq · openai · anthropic\nollama · lmstudio · deepseek\nmistral · cohere · gemini\ntogetherai · fireworks · openrouter",
+    tip_apikey_title:"Where do I get the API Key?",
+    tip_apikey_body:"A secret token that authenticates your requests. Leave empty for local models.",
+    tip_apikey_examples:"Groq → console.groq.com (free)\nOpenAI → platform.openai.com\nAnthropic → console.anthropic.com\nDeepSeek → platform.deepseek.com\nOllama / LM Studio → leave empty",
+    tip_baseurl_title:"What is the Base URL?",
+    tip_baseurl_body:"The server address for requests. Only needed for local models.",
+    tip_baseurl_examples:"Ollama → http://localhost:11434\nLM Studio → http://localhost:1234\nCloud models → leave empty (auto)",
+    tip_notes_title:"Notes (optional)",
+    tip_notes_body:"A personal reminder — context limit, cost, quality notes.",
+    tip_notes_examples:"Free tier · 128k context\nBest for code generation\nSlow but very accurate",
+    tip_active_title:"What does 'Activate immediately' mean?",
+    tip_active_body:"If checked, the model goes live right away. If unchecked, it's saved but inactive.",
+    tip_active_examples:"✓ Checked → model is ON\n✗ Unchecked → model is saved but OFF",
+    help_title:"Help", help_sub:"Everything you need to add and use any model in Airvo",
+    help_what_title:"What is Airvo?",
+    help_what_body:"Airvo is a local AI server that connects your editor (VS Code + continue.dev) to any AI model — simultaneously. You bring your own API keys, Airvo handles the rest.",
+    help_adding_title:"Adding Models — Field by Field",
+    help_field_id_title:"Model ID",
+    help_field_id_desc:"The unique key that identifies both the provider and the model. Format is always provider/model-name.",
+    help_field_id_ex:"groq/llama-3.3-70b-versatile\ngroq/llama-3.1-8b-instant\nopenai/gpt-4o\nopenai/gpt-4o-mini\nanthropic/claude-sonnet-4-5\nollama/llama3\nollama/codellama\nlmstudio/local\ndeepseek/deepseek-chat\nmistral/mistral-large-latest\ngemini/gemini-1.5-pro",
+    help_field_name_title:"Display Name",
+    help_field_name_desc:"A friendly label shown in the dashboard.",
+    help_field_provider_title:"Provider",
+    help_field_provider_desc:"The service hosting the model.",
+    help_field_apikey_title:"API Key",
+    help_field_apikey_desc:"Your secret authentication token. Get it from each provider's dashboard. Leave empty for local models.",
+    help_field_apikey_links:"console.groq.com → Groq (free tier available)\nplatform.openai.com → OpenAI\nconsole.anthropic.com → Anthropic\nplatform.deepseek.com → DeepSeek\naistudio.google.com → Gemini",
+    help_field_baseurl_title:"Base URL",
+    help_field_baseurl_desc:"The server address for requests. Leave empty for cloud providers.",
+    help_field_baseurl_ex:"http://localhost:11434 → Ollama\nhttp://localhost:1234 → LM Studio",
+    help_modes_title:"Multi-Model Modes",
+    help_mode_parallel:"Parallel — All active models respond to every message. You see all answers side by side.",
+    help_mode_race:"Race — All models receive the message simultaneously. The first one to finish wins.",
+    help_mode_vote:"Vote — Models generate responses and the consensus answer is shown.",
+    help_mode_review:"Review — One model generates a response, another critiques it.",
+    help_faq_title:"FAQ",
+    help_faq_1_q:"Do I need all fields to add a model?",
+    help_faq_1_a:"No. Only Model ID, Name and Provider are required.",
+    help_faq_2_q:"Can I use any model, even ones not listed?",
+    help_faq_2_a:"Yes — any model supported by LiteLLM works with Airvo.",
+    help_faq_3_q:"Where is my API key stored?",
+    help_faq_3_a:"Locally in ~/.airvo/models.json. It never leaves your computer.",
+    help_faq_4_q:"How do I use a local model with Ollama?",
+    help_faq_4_a:"Install Ollama, pull a model (ollama pull llama3), add it with ID: ollama/llama3, Provider: ollama, Base URL: http://localhost:11434.",
+    help_faq_5_q:"What is Project Context?",
+    help_faq_5_a:"A static note injected into every request so Airvo knows your stack, preferences and constraints. Write it once in Configuration → Project Context.",
+    help_faq_6_q:"Does Project Context consume extra tokens?",
+    help_faq_6_a:"Yes — a small fixed amount per request (~650 tokens max). It's optional and opt-in. Disable it anytime in Configuration.",
+    toast_activated:"Model activated", toast_deactivated:"Model deactivated",
+    toast_key_saved:"API key saved ✓", toast_key_error:"Enter a valid API key",
+    toast_deleted:"Model deleted", toast_added:"Model added ✓",
+    toast_error_toggle:"Error updating model", toast_error_key:"Error saving key",
+    toast_error_delete:"Error deleting model", toast_error_add:"Error adding model",
+    confirm_delete:"Delete this model?",
+    toast_limit:"Airvo v1 supports up to 2 active models. Deactivate one to activate another.",
+    stat_v1_limit:"v1 limit · 2 max",
+    auto_detected:"Auto-detected",
+    auto_local_hint:"Local model — no API cost",
+    auto_cloud_hint:"Cloud model — API usage billed by provider",
+  },
+  es: {
+    nav_models:"Modelos", nav_status:"Estado", nav_config:"Configuración",
+    nav_add:"Agregar Modelo", nav_help:"Ayuda", nav_active:"ACTIVOS", nav_none:"ninguno",
+    connecting:"conectando...", offline:"servidor offline",
+    models_title:"Modelos", models_sub:"Activá modelos y configurá sus API keys",
+    stat_total:"Total", stat_active:"Activos", stat_free:"Gratuitos", stat_with_key:"Con Key",
+    stat_models:"modelos", stat_parallel:"en paralelo", stat_no_cost:"sin costo", stat_configured:"configurados",
+    loading_models:"Cargando modelos...",
+    active:"activo", inactive:"inactivo", free_badge:"GRATIS", paid_badge:"PAGO",
+    save_key:"Guardar", hide_key:"ocultar", show_key:"ver", change_key:"cambiar", delete_btn:"eliminar",
+    key_placeholder:"API key...",
+    status_title:"Estado", status_sub:"Estado del servidor y modelos activos", server_label:"Servidor",
+    status_online:"● Online", status_offline_msg:"No se puede conectar al servidor.",
+    status_offline_hint:"Asegurate de que Airvo esté corriendo con",
+    field_version:"Versión", field_active:"Modelos activos", field_total:"Total modelos",
+    field_config:"Archivo de config", field_endpoint:"Endpoint de chat",
+    continue_label:"Config de Continue.dev", continue_hint:"Pegá esto en tu config.yaml:",
+    copy_config:"Copiar config", copied:"Copiado ✓",
+    config_title:"Configuración", config_sub:"Modo, temperatura, memoria y preferencias",
+    mode_label:"Modo Multi-Modelo", active_models_label:"Modelos Activos",
+    no_active_models:"No hay modelos activos. Activá al menos uno en Modelos.",
+    mode_parallel:"Paralelo", mode_parallel_desc:"Todos responden, ves todas las respuestas",
+    mode_race:"Carrera", mode_race_desc:"El más rápido gana",
+    mode_vote:"Votación", mode_vote_desc:"Consenso entre modelos",
+    mode_review:"Revisión", mode_review_desc:"Uno genera, otro critica", mode_set:"Modo",
+    temp_label:"Temperatura",
+    temp_hint_low:"0.0 — determinístico, preciso. Ideal para código.",
+    temp_hint_mid:"0.5 — equilibrado. Funciona para la mayoría de tareas.",
+    temp_hint_high:"1.0 — creativo, variado. Ideal para brainstorming.",
+    temp_saved:"Temperatura guardada",
+    maxtokens_label:"Máximo de Tokens",
+    maxtokens_saved:"Máximo de tokens guardado",
+    memory_label:"Contexto del Proyecto",
+    memory_sub:"Escribilo una vez, se inyecta en cada request. Ayuda a Airvo a entender tu stack sin repetirlo.",
+    memory_enable:"Activar contexto del proyecto",
+    memory_placeholder:"Ejemplo:\nTrabajo con FastAPI y Python 3.12.\nSiempre uso async/await y type hints.\nEs una API REST de e-commerce.\nDeploy en Railway con Docker.\nNo uses Redux, usamos Zustand.",
+    memory_chars:"chars",
+    memory_max:"máx",
+    memory_saved:"Contexto guardado ✓",
+    memory_too_long:"Contexto muy largo — reducilo",
+    memory_tokens_warning:"⚠ Contexto grande — considerá reducirlo",
+    stats_label:"Estadísticas de Uso",
+    stats_requests:"requests",
+    stats_tokens:"tokens",
+    stats_reset:"Resetear estadísticas",
+    stats_reset_confirm:"¿Resetear todas las estadísticas?",
+    stats_reset_done:"Estadísticas reseteadas",
+    stats_empty:"Sin datos aún. ¡Empezá a programar!",
+    add_title:"Agregar Modelo", add_sub:"Cualquier modelo compatible con LiteLLM",
+    new_model:"Nuevo Modelo",
+    field_id:"ID del Modelo", field_name:"Nombre", field_provider:"Proveedor",
+    field_apikey:"API Key", field_baseurl:"Base URL", field_notes:"Notas",
+    check_active:"Activar inmediatamente", add_btn:"Agregar Modelo",
+    tip_id_title:"¿Qué es el ID del Modelo?", tip_id_body:"Identificador único con formato proveedor/nombre-modelo.", tip_id_examples:"groq/llama-3.3-70b-versatile\nopenai/gpt-4o\nanthropic/claude-sonnet-4-5\nollama/llama3",
+    tip_name_title:"¿Qué es el Nombre?", tip_name_body:"Etiqueta amigable para el dashboard.", tip_name_examples:"Llama 3.3 70B\nGPT-4o\nMi Modelo Local",
+    tip_provider_title:"¿Qué es el Proveedor?", tip_provider_body:"La empresa que aloja el modelo.", tip_provider_examples:"groq · openai · anthropic · ollama · lmstudio",
+    tip_apikey_title:"¿Dónde consigo la API Key?", tip_apikey_body:"Token secreto para autenticar. Dejalo vacío para modelos locales.", tip_apikey_examples:"Groq → console.groq.com (gratis)\nOpenAI → platform.openai.com\nOllama → dejar vacío",
+    tip_baseurl_title:"¿Qué es la Base URL?", tip_baseurl_body:"Dirección del servidor. Solo para modelos locales.", tip_baseurl_examples:"Ollama → http://localhost:11434\nLM Studio → http://localhost:1234",
+    tip_notes_title:"Notas (opcional)", tip_notes_body:"Recordatorio personal.", tip_notes_examples:"Tier gratuito · 128k contexto\nMejor para código",
+    tip_active_title:"¿Qué hace 'Activar inmediatamente'?", tip_active_body:"Marcado = modelo ON desde ya. Sin marcar = guardado pero inactivo.", tip_active_examples:"✓ Marcado → modelo ON\n✗ Sin marcar → guardado pero OFF",
+    help_title:"Ayuda", help_sub:"Todo lo que necesitás para usar Airvo",
+    help_what_title:"¿Qué es Airvo?", help_what_body:"Airvo es un servidor de IA local que conecta tu editor a cualquier modelo de IA simultáneamente.",
+    help_adding_title:"Agregar Modelos — Campo a Campo",
+    help_field_id_title:"ID del Modelo", help_field_id_desc:"Clave única: proveedor/nombre-modelo.",
+    help_field_id_ex:"groq/llama-3.3-70b-versatile\ngroq/llama-3.1-8b-instant\nopenai/gpt-4o\nollama/llama3\nlmstudio/local",
+    help_field_name_title:"Nombre", help_field_name_desc:"Etiqueta amigable en el dashboard.",
+    help_field_provider_title:"Proveedor", help_field_provider_desc:"El servicio que aloja el modelo.",
+    help_field_apikey_title:"API Key", help_field_apikey_desc:"Token de autenticación. Dejalo vacío para modelos locales.",
+    help_field_apikey_links:"console.groq.com → Groq\nplatform.openai.com → OpenAI\nconsole.anthropic.com → Anthropic",
+    help_field_baseurl_title:"Base URL", help_field_baseurl_desc:"Solo para modelos locales.",
+    help_field_baseurl_ex:"http://localhost:11434 → Ollama\nhttp://localhost:1234 → LM Studio",
+    help_modes_title:"Modos Multi-Modelo",
+    help_mode_parallel:"Paralelo — Todos los modelos responden. Ves todas las respuestas.",
+    help_mode_race:"Carrera — Gana el primero en responder.",
+    help_mode_vote:"Votación — Se muestra el consenso.",
+    help_mode_review:"Revisión — Uno genera, otro critica.",
+    help_faq_title:"Preguntas Frecuentes",
+    help_faq_1_q:"¿Necesito completar todos los campos?", help_faq_1_a:"No. Solo ID, Nombre y Proveedor son obligatorios.",
+    help_faq_2_q:"¿Puedo usar cualquier modelo?", help_faq_2_a:"Sí — si LiteLLM lo soporta, Airvo lo soporta.",
+    help_faq_3_q:"¿Dónde se guarda mi API key?", help_faq_3_a:"En ~/.airvo/models.json. Nunca sale de tu computadora.",
+    help_faq_4_q:"¿Cómo uso Ollama?", help_faq_4_a:"Instalá Ollama, bajá un modelo, agregalo con ID: ollama/llama3, Base URL: http://localhost:11434.",
+    help_faq_5_q:"¿Qué es el Contexto del Proyecto?", help_faq_5_a:"Una nota que se inyecta en cada request para que Airvo conozca tu stack sin que lo repitas.",
+    help_faq_6_q:"¿El contexto consume tokens extra?", help_faq_6_a:"Sí, un pequeño monto fijo por request (~650 tokens máx). Es opcional y opt-in.",
+    toast_activated:"Modelo activado", toast_deactivated:"Modelo desactivado",
+    toast_key_saved:"API key guardada ✓", toast_key_error:"Ingresá una API key válida",
+    toast_deleted:"Modelo eliminado", toast_added:"Modelo agregado ✓",
+    toast_error_toggle:"Error al actualizar", toast_error_key:"Error al guardar key",
+    toast_error_delete:"Error al eliminar", toast_error_add:"Error al agregar modelo",
+    confirm_delete:"¿Eliminar este modelo?",
+    toast_limit:"Airvo v1 soporta hasta 2 modelos activos.",
+    stat_v1_limit:"límite v1 · máx 2",
+    auto_detected:"Detectado automáticamente",
+    auto_local_hint:"Modelo local — sin costo de API",
+    auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
+  },
+  fr: { nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun" },
+  de: { nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine" },
+  zh: { nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无" },
+  ja: { nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし" },
+  pt: { nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum" },
+};
+
+const MEMORY_MAX_CHARS = 2500;
+
+const css = `
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --bg:#0a0a0f; --bg2:#111118; --bg3:#1a1a24; --border:#2a2a3a;
+    --accent:#7c6dfa; --accent2:#fa6d8f; --green:#4ade80;
+    --yellow:#fbbf24; --red:#f87171; --text:#e8e8f0; --text2:#8888aa;
+    --mono:'Space Mono',monospace; --sans:'Syne',sans-serif;
+  }
+  body { background:var(--bg); color:var(--text); font-family:var(--sans); min-height:100vh; }
+  .dashboard { display:grid; grid-template-columns:230px 1fr; grid-template-rows:60px 1fr; min-height:100vh; }
+  .header { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; padding:0 28px; background:var(--bg2); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+  .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; letter-spacing:-0.5px; }
+  .logo-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(.8)} }
+  .header-right { display:flex; align-items:center; gap:16px; }
+  .header-status { display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; color:var(--text2); }
+  .status-dot { width:7px; height:7px; border-radius:50%; }
+  .status-dot.ok{background:var(--green);box-shadow:0 0 8px var(--green);} .status-dot.err{background:var(--red);} .status-dot.loading{background:var(--yellow);animation:pulse 1s infinite;}
+  .lang-trigger { display:flex; align-items:center; gap:6px; padding:5px 10px; border-radius:8px; background:var(--bg3); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:12px; font-weight:700; cursor:pointer; transition:all .15s; user-select:none; }
+  .lang-trigger:hover { border-color:#3a3a5a; }
+  .lang-arrow { color:var(--text2); font-size:10px; transition:transform .2s; }
+  .lang-arrow.open { transform:rotate(180deg); }
+  .lang-menu { position:absolute; top:calc(100% + 8px); right:0; background:var(--bg2); border:1px solid var(--border); border-radius:10px; overflow:hidden; min-width:160px; z-index:200; box-shadow:0 8px 32px rgba(0,0,0,.5); animation:dropIn .15s ease; }
+  @keyframes dropIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+  .lang-option { display:flex; align-items:center; gap:10px; width:100%; padding:10px 14px; background:transparent; border:none; cursor:pointer; color:var(--text2); font-family:var(--mono); font-size:12px; font-weight:700; text-align:left; transition:all .1s; }
+  .lang-option:hover{background:var(--bg3);color:var(--text);} .lang-option.selected{background:var(--bg3);color:var(--accent);}
+  .lang-check { margin-left:auto; color:var(--accent); }
+  .sidebar { background:var(--bg2); border-right:1px solid var(--border); padding:24px 0; display:flex; flex-direction:column; gap:4px; }
+  .nav-section { padding:0 16px; margin-bottom:8px; }
+  .nav-label { font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--text2); text-transform:uppercase; padding:0 8px; margin-bottom:6px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:600; color:var(--text2); transition:all .15s; border:1px solid transparent; }
+  .nav-item:hover{background:var(--bg3);color:var(--text);} .nav-item.active{background:var(--bg3);color:var(--accent);border-color:var(--border);}
+  .nav-icon { font-size:16px; width:20px; text-align:center; }
+  .nav-badge { margin-left:auto; background:var(--accent); color:white; font-size:10px; font-family:var(--mono); padding:1px 6px; border-radius:10px; font-weight:700; }
+  .main { padding:32px; overflow-y:auto; }
+  .page-title { font-size:28px; font-weight:800; letter-spacing:-1px; margin-bottom:6px; }
+  .page-sub { color:var(--text2); font-size:14px; margin-bottom:32px; font-family:var(--mono); }
+  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+  .stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .stat-label { font-family:var(--mono); font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .stat-value { font-size:32px; font-weight:800; letter-spacing:-1px; line-height:1; }
+  .stat-value.accent{color:var(--accent)} .stat-value.green{color:var(--green)} .stat-value.yellow{color:var(--yellow)} .stat-value.pink{color:var(--accent2)}
+  .stat-sub { font-family:var(--mono); font-size:11px; color:var(--text2); margin-top:6px; }
+  .models-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+  .model-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:20px; transition:all .2s; position:relative; overflow:hidden; }
+  .model-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--border); transition:background .2s; }
+  .model-card.active::before{background:var(--accent);} .model-card.active{border-color:#3a3a5a;}
+  .model-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; }
+  .model-name { font-size:15px; font-weight:700; margin-bottom:3px; }
+  .model-id { font-family:var(--mono); font-size:11px; color:var(--text2); }
+  .model-notes { font-size:12px; color:var(--text2); margin-bottom:14px; font-family:var(--mono); }
+  .model-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .model-stats { display:flex; gap:12px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+  .model-stat-item { font-family:var(--mono); font-size:10px; color:var(--text2); }
+  .model-stat-item span { color:var(--accent); font-weight:700; }
+  .provider-badge { font-family:var(--mono); font-size:10px; padding:3px 8px; border-radius:6px; font-weight:700; text-transform:uppercase; flex-shrink:0; }
+  .provider-groq{background:#1a2a1a;color:#4ade80;border:1px solid #2a4a2a;} .provider-openai{background:#1a2a1a;color:#74c69d;border:1px solid #2a4a2a;} .provider-anthropic{background:#2a1a1a;color:#fa8072;border:1px solid #4a2a2a;} .provider-ollama{background:#1a1a2a;color:#7c6dfa;border:1px solid #2a2a4a;} .provider-lmstudio{background:#2a2a1a;color:#fbbf24;border:1px solid #4a4a2a;} .provider-default{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+  .free-badge { font-family:var(--mono); font-size:10px; padding:2px 7px; border-radius:4px; font-weight:700; }
+  .free-badge.free{background:#1a2a1a;color:var(--green);border:1px solid #2a4a2a;} .free-badge.paid{background:#2a2a1a;color:var(--yellow);border:1px solid #4a4a2a;}
+  .toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .toggle-track { position:absolute; inset:0; background:var(--bg3); border:1px solid var(--border); border-radius:12px; cursor:pointer; transition:all .2s; }
+  .toggle-track::after { content:''; position:absolute; left:3px; top:50%; transform:translateY(-50%); width:16px; height:16px; background:var(--text2); border-radius:50%; transition:all .2s; }
+  .toggle input:checked + .toggle-track{background:#2a2a4a;border-color:var(--accent);} .toggle input:checked + .toggle-track::after{left:calc(100% - 19px);background:var(--accent);box-shadow:0 0 8px var(--accent);}
+  .key-row { display:flex; gap:8px; margin-top:12px; }
+  .key-input { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:8px 12px; color:var(--text); font-family:var(--mono); font-size:12px; outline:none; transition:border-color .15s; }
+  .key-input:focus{border-color:var(--accent);} .key-input::placeholder{color:var(--text2);}
+  .btn { padding:8px 16px; border-radius:8px; font-family:var(--sans); font-size:13px; font-weight:700; cursor:pointer; border:none; transition:all .15s; white-space:nowrap; }
+  .btn-primary{background:var(--accent);color:white;} .btn-primary:hover{background:#9080ff;box-shadow:0 0 16px rgba(124,109,250,.4);}
+  .btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border);} .btn-ghost:hover{color:var(--text);border-color:#3a3a5a;}
+  .btn-danger{background:#2a1a1a;color:var(--red);border:1px solid #4a2a2a;} .btn-danger:hover{background:#3a2020;}
+  .btn-sm { padding:5px 10px; font-size:12px; }
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; }
+  .card-title { font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text2); margin-bottom:16px; font-family:var(--mono); }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-group.full { grid-column:1/-1; }
+  .form-label-row { display:flex; align-items:center; gap:6px; }
+  .form-label { font-family:var(--mono); font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; }
+  .form-input { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 14px; color:var(--text); font-family:var(--mono); font-size:13px; outline:none; transition:border-color .15s; }
+  .form-input:focus{border-color:var(--accent);} .form-input::placeholder{color:var(--text2);}
+  .form-textarea { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:12px 14px; color:var(--text); font-family:var(--mono); font-size:12px; outline:none; transition:border-color .15s; resize:vertical; min-height:140px; line-height:1.7; }
+  .form-textarea:focus{border-color:var(--accent);} .form-textarea::placeholder{color:var(--text2);}
+  .form-textarea.over-limit{border-color:var(--red);}
+  .tooltip-wrap { position:relative; display:inline-flex; align-items:center; }
+  .tooltip-icon { width:16px; height:16px; border-radius:50%; background:var(--bg3); border:1px solid var(--border); color:var(--text2); font-size:10px; font-family:var(--mono); font-weight:700; cursor:help; display:flex; align-items:center; justify-content:center; transition:all .15s; flex-shrink:0; }
+  .tooltip-icon:hover{border-color:var(--accent);color:var(--accent);}
+  .tooltip-box { position:absolute; left:24px; top:50%; transform:translateY(-50%); background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; min-width:280px; max-width:340px; z-index:300; box-shadow:0 8px 32px rgba(0,0,0,.6); animation:dropIn .15s ease; pointer-events:none; }
+  .tooltip-box.flip{left:auto;right:24px;}
+  .tooltip-title { font-family:var(--mono); font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .tooltip-body { font-size:12px; color:var(--text2); line-height:1.6; margin-bottom:10px; }
+  .tooltip-examples { background:var(--bg3); border-radius:6px; padding:10px 12px; }
+  .tooltip-examples-label { font-family:var(--mono); font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .tooltip-example-line { font-family:var(--mono); font-size:11px; color:var(--green); line-height:1.8; }
+  .mode-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  .mode-card { padding:14px; border:1px solid var(--border); border-radius:10px; cursor:pointer; transition:all .15s; background:var(--bg3); }
+  .mode-card:hover{border-color:#3a3a5a;} .mode-card.selected{border-color:var(--accent);background:#1a1a2a;}
+  .mode-card-title { font-size:13px; font-weight:700; margin-bottom:4px; }
+  .mode-card-desc { font-size:11px; color:var(--text2); font-family:var(--mono); }
+  .active-model-item { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+  .active-model-item:last-child{border-bottom:none;}
+  .active-model-name { font-size:13px; font-weight:600; }
+  .active-model-id { font-family:var(--mono); font-size:11px; color:var(--text2); }
+  .slider-wrap { display:flex; flex-direction:column; gap:10px; }
+  .slider { -webkit-appearance:none; width:100%; height:4px; border-radius:2px; background:var(--bg3); border:1px solid var(--border); outline:none; cursor:pointer; }
+  .slider::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--accent); cursor:pointer; box-shadow:0 0 8px rgba(124,109,250,.4); }
+  .slider::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:var(--accent); cursor:pointer; border:none; }
+  .slider-labels { display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; color:var(--text2); }
+  .slider-value { font-family:var(--mono); font-size:20px; font-weight:700; color:var(--accent); }
+  .slider-hint { font-family:var(--mono); font-size:11px; color:var(--text2); }
+  .memory-counter { font-family:var(--mono); font-size:11px; display:flex; justify-content:space-between; }
+  .memory-counter.ok{color:var(--text2);} .memory-counter.warn{color:var(--yellow);} .memory-counter.over{color:var(--red);}
+  .stats-table { width:100%; border-collapse:collapse; }
+  .stats-table th { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text2); text-align:left; padding:8px 0; border-bottom:1px solid var(--border); }
+  .stats-table td { font-family:var(--mono); font-size:12px; padding:10px 0; border-bottom:1px solid var(--border); color:var(--text2); }
+  .stats-table td:first-child { color:var(--text); font-weight:700; }
+  .stats-table td.num { color:var(--accent); font-weight:700; text-align:right; }
+  .stats-table tr:last-child td { border-bottom:none; }
+  .help-section { margin-bottom:32px; }
+  .help-section-title { font-size:16px; font-weight:800; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+  .help-section-icon { font-size:18px; }
+  .help-field-block { margin-bottom:20px; padding:16px; background:var(--bg3); border-radius:10px; border:1px solid var(--border); }
+  .help-field-title { font-family:var(--mono); font-size:12px; font-weight:700; color:var(--accent); margin-bottom:6px; text-transform:uppercase; letter-spacing:1px; }
+  .help-field-desc { font-size:13px; color:var(--text2); line-height:1.7; margin-bottom:10px; }
+  .help-code-block { background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:10px 14px; font-family:var(--mono); font-size:11px; color:var(--green); line-height:1.9; }
+  .help-mode-item { padding:12px 16px; background:var(--bg3); border-radius:8px; border:1px solid var(--border); margin-bottom:8px; font-size:13px; color:var(--text2); line-height:1.6; }
+  .help-mode-item strong{color:var(--text);font-weight:700;}
+  .faq-item { margin-bottom:16px; padding:16px; background:var(--bg3); border-radius:10px; border:1px solid var(--border); }
+  .faq-q { font-size:13px; font-weight:700; margin-bottom:8px; color:var(--text); }
+  .faq-a { font-size:13px; color:var(--text2); line-height:1.7; font-family:var(--mono); }
+  .help-intro { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:28px; font-size:14px; color:var(--text2); line-height:1.8; }
+  .help-intro strong{color:var(--accent);}
+  .divider { border:none; border-top:1px solid var(--border); margin:16px 0; }
+  .empty { text-align:center; padding:48px; color:var(--text2); font-family:var(--mono); font-size:13px; }
+  .toast-container { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:8px; z-index:1000; }
+  .toast { padding:12px 18px; border-radius:10px; font-family:var(--mono); font-size:13px; border:1px solid; animation:slideIn .2s ease; }
+  @keyframes slideIn { from{transform:translateX(20px);opacity:0} to{transform:translateX(0);opacity:1} }
+  .toast.success{background:#0a1a0a;color:var(--green);border-color:#2a4a2a;} .toast.error{background:#1a0a0a;color:var(--red);border-color:#4a2a2a;} .toast.info{background:#0a0a1a;color:var(--accent);border-color:#2a2a4a;} .toast.warning{background:#1a1500;color:var(--yellow);border-color:#4a3a00;}
+`;
+
+function getProviderClass(p) {
+  const map = { groq:"groq", openai:"openai", anthropic:"anthropic", ollama:"ollama", lmstudio:"lmstudio" };
+  return `provider-${map[p] || "default"}`;
+}
+
+function maskKey(key) {
+  if (!key) return "";
+  if (key.length <= 8) return "••••••••";
+  return key.slice(0,6) + "••••••••" + key.slice(-4);
+}
+
+function inferIsFree(provider, baseUrl) {
+  const localProviders = ["ollama", "lmstudio"];
+  if (localProviders.includes((provider || "").toLowerCase())) return true;
+  if (baseUrl && baseUrl.trim()) return true;
+  return false;
+}
+
+function getTempHint(val, t) {
+  if (val <= 0.2) return t("temp_hint_low");
+  if (val >= 0.8) return t("temp_hint_high");
+  return t("temp_hint_mid");
+}
+
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+  const add = useCallback((msg, type="info") => {
+    const id = Date.now();
+    setToasts(t => [...t, { id, msg, type }]);
+    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3000);
+  }, []);
+  return { toasts, add };
+}
+
+function useLanguage() {
+  const [lang, setLangState] = useState(() => localStorage.getItem("airvo_lang") || "en");
+  const setLang = useCallback((code) => { localStorage.setItem("airvo_lang", code); setLangState(code); }, []);
+  const t = useCallback((key) => I18N[lang]?.[key] ?? I18N["en"][key] ?? key, [lang]);
+  return { lang, setLang, t };
+}
+
+function LangDropdown({ lang, setLang }) {
+  const [open, setOpen] = useState(false);
+  const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
+  useEffect(() => {
+    if (!open) return;
+    const close = () => setOpen(false);
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, [open]);
+  return (
+    <div style={{ position:"relative" }} onClick={e => e.stopPropagation()}>
+      <div className="lang-trigger" onClick={() => setOpen(!open)}>
+        <span style={{ fontSize:15 }}>{current.flag}</span>
+        <span>{current.label}</span>
+        <span className={`lang-arrow ${open?"open":""}`}>▾</span>
+      </div>
+      {open && (
+        <div className="lang-menu">
+          {LANGUAGES.map(l => (
+            <button key={l.code} className={`lang-option ${lang===l.code?"selected":""}`}
+              onClick={() => { setLang(l.code); setOpen(false); }}>
+              <span style={{ fontSize:15 }}>{l.flag}</span>
+              <span>{l.name}</span>
+              {lang === l.code && <span className="lang-check">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Tooltip({ title, body, examples, flip = false }) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div className="tooltip-wrap" onMouseEnter={() => setVisible(true)} onMouseLeave={() => setVisible(false)}>
+      <div className="tooltip-icon">?</div>
+      {visible && (
+        <div className={`tooltip-box ${flip ? "flip" : ""}`}>
+          <div className="tooltip-title">{title}</div>
+          <div className="tooltip-body">{body}</div>
+          {examples && (
+            <div className="tooltip-examples">
+              <div className="tooltip-examples-label">Examples</div>
+              {examples.split("\n").map((ex, i) => (
+                <div key={i} className="tooltip-example-line">▸ {ex}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function AirvoDashboard() {
+  const [page, setPage]        = useState("models");
+  const [models, setModels]    = useState([]);
+  const [health, setHealth]    = useState(null);
+  const [loading, setLoading]  = useState(true);
+  const [prefs, setPrefs]      = useState(null);
+  const [stats, setStats]      = useState({});
+  const { toasts, add: toast } = useToast();
+  const { lang, setLang, t }   = useLanguage();
+
+  const fetchAll = useCallback(async () => {
+    try {
+      const [mRes, hRes, pRes, sRes] = await Promise.all([
+        fetch(`${API}/api/models`),
+        fetch(`${API}/api/health`),
+        fetch(`${API}/api/prefs`),
+        fetch(`${API}/api/stats`),
+      ]);
+      setModels((await mRes.json()).models || []);
+      setHealth(await hRes.json());
+      setPrefs(await pRes.json());
+      setStats((await sRes.json()).stats || {});
+    } catch { setHealth(null); }
+    finally  { setLoading(false); }
+  }, []);
+
+  useEffect(() => { fetchAll(); }, [fetchAll]);
+
+  const MAX_ACTIVE = 2;
+
+  async function toggleModel(id, current) {
+    const active = models.filter(m => m.active);
+    if (!current && active.length >= MAX_ACTIVE) {
+      toast(t("toast_limit"), "warning");
+      return;
+    }
+    try {
+      await fetch(`${API}/api/models/${encodeURIComponent(id)}/toggle?active=${!current}`, { method:"PATCH" });
+      setModels(prev => prev.map(m => m.id===id ? { ...m, active:!current } : m));
+      toast(t(!current?"toast_activated":"toast_deactivated"), !current?"success":"info");
+    } catch { toast(t("toast_error_toggle"), "error"); }
+  }
+
+  async function saveKey(id, key) {
+    if (!key.trim()) return toast(t("toast_key_error"), "error");
+    try {
+      await fetch(`${API}/api/models/${encodeURIComponent(id)}`, {
+        method:"PATCH", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ api_key: key.trim() }),
+      });
+      setModels(prev => prev.map(m => m.id===id ? { ...m, api_key:key.trim() } : m));
+      toast(t("toast_key_saved"), "success");
+    } catch { toast(t("toast_error_key"), "error"); }
+  }
+
+  async function deleteModel(id) {
+    if (!confirm(t("confirm_delete"))) return;
+    try {
+      await fetch(`${API}/api/models/${encodeURIComponent(id)}`, { method:"DELETE" });
+      setModels(prev => prev.filter(m => m.id!==id));
+      toast(t("toast_deleted"), "info");
+    } catch { toast(t("toast_error_delete"), "error"); }
+  }
+
+  async function addModel(data) {
+    try {
+      await fetch(`${API}/api/models`, {
+        method:"POST", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(data),
+      });
+      toast(t("toast_added"), "success");
+      fetchAll();
+    } catch { toast(t("toast_error_add"), "error"); }
+  }
+
+  async function updatePrefs(updates) {
+    try {
+      await fetch(`${API}/api/prefs`, {
+        method:"PATCH", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(updates),
+      });
+      setPrefs(prev => ({ ...prev, ...updates }));
+    } catch {}
+  }
+
+  async function resetStats() {
+    if (!confirm(t("stats_reset_confirm"))) return;
+    await fetch(`${API}/api/stats`, { method:"DELETE" });
+    setStats({});
+    toast(t("stats_reset_done"), "info");
+  }
+
+  const active       = models.filter(m => m.active);
+  const continueYaml = `models:\n  - name: Airvo\n    provider: openai\n    model: airvo-auto\n    apiBase: http://localhost:8765/v1\n    apiKey: local\n    roles:\n      - chat\n      - edit\n      - apply`;
+
+  return (
+    <>
+      <style>{css}</style>
+      <div className="dashboard">
+
+        <header className="header">
+          <div className="logo">
+            <div className="logo-dot" />
+            Airvo
+          </div>
+          <div className="header-right">
+            <LangDropdown lang={lang} setLang={setLang} />
+            <div className="header-status">
+              <div className={`status-dot ${loading?"loading":health?"ok":"err"}`} />
+              {loading ? t("connecting") : health ? `v${health.version} · localhost:8765` : t("offline")}
+            </div>
+          </div>
+        </header>
+
+        <aside className="sidebar">
+          <div className="nav-section">
+            {[
+              { id:"models", icon:"◈", label:t("nav_models"), badge:models.length||null },
+              { id:"status", icon:"◎", label:t("nav_status") },
+              { id:"config", icon:"⊙", label:t("nav_config") },
+              { id:"add",    icon:"+", label:t("nav_add")    },
+              { id:"help",   icon:"?", label:t("nav_help")   },
+            ].map(n => (
+              <div key={n.id} className={`nav-item ${page===n.id?"active":""}`} onClick={() => setPage(n.id)}>
+                <span className="nav-icon">{n.icon}</span>
+                {n.label}
+                {n.badge && <span className="nav-badge">{n.badge}</span>}
+              </div>
+            ))}
+          </div>
+          <div className="nav-section" style={{ marginTop:"auto" }}>
+            <div className="nav-label">{t("nav_active")}</div>
+            {active.length === 0
+              ? <div style={{ padding:"8px 12px", fontSize:12, color:"var(--text2)", fontFamily:"var(--mono)" }}>{t("nav_none")}</div>
+              : active.map(m => (
+                <div key={m.id} style={{ padding:"6px 12px", fontSize:12, color:"var(--accent)", fontFamily:"var(--mono)" }}>
+                  ▸ {m.name}
+                </div>
+              ))
+            }
+          </div>
+        </aside>
+
+        <main className="main">
+
+          {/* ── MODELS PAGE ── */}
+          {page === "models" && <>
+            <h1 className="page-title">{t("models_title")}</h1>
+            <p className="page-sub">{t("models_sub")}</p>
+            <div className="stats-row">
+              {[
+                { label:t("stat_total"),    val:models.length,                       sub:t("stat_models"),     cls:"accent" },
+                { label:t("stat_active"),   val:active.length, max:MAX_ACTIVE,          sub:t("stat_parallel"),   cls:"green", showBar:true },
+                { label:t("stat_free"),     val:models.filter(m=>inferIsFree(m.provider,m.base_url)).length, sub:t("stat_no_cost"), cls:"yellow" },
+                { label:t("stat_with_key"), val:models.filter(m=>m.api_key).length,  sub:t("stat_configured"), cls:"pink" },
+              ].map(s => (
+                <div key={s.label} className="stat-card">
+                  <div className="stat-label">{s.label}</div>
+                  <div className={`stat-value ${s.cls}`}>
+                    {s.showBar ? `${s.val} / ${s.max}` : s.val}
+                  </div>
+                  {s.showBar && (
+                    <div style={{ margin:"8px 0 4px", height:4, background:"var(--bg3)", borderRadius:2, overflow:"hidden" }}>
+                      <div style={{ height:"100%", width:`${(s.val/s.max)*100}%`, background:"var(--green)", borderRadius:2, transition:"width 0.3s ease", boxShadow: s.val >= s.max ? "0 0 8px var(--green)" : "none" }} />
+                    </div>
+                  )}
+                  <div className="stat-sub">{s.showBar ? t("stat_v1_limit") : s.sub}</div>
+                </div>
+              ))}
+            </div>
+            {loading
+              ? <div className="empty">{t("loading_models")}</div>
+              : <div className="models-grid">
+                  {models.map(m => (
+                    <ModelCard key={m.id} model={m} t={t} stats={stats[m.id]}
+                      onToggle={() => toggleModel(m.id, m.active)}
+                      onSaveKey={key => saveKey(m.id, key)}
+                      onDelete={() => deleteModel(m.id)}
+                    />
+                  ))}
+                </div>
+            }
+          </>}
+
+          {/* ── STATUS PAGE ── */}
+          {page === "status" && <>
+            <h1 className="page-title">{t("status_title")}</h1>
+            <p className="page-sub">{t("status_sub")}</p>
+            <div style={{ display:"grid", gap:20 }}>
+              <div className="card">
+                <div className="card-title">{t("server_label")}</div>
+                {health
+                  ? <div style={{ display:"grid", gap:12 }}>
+                      {[
+                        ["Status", <span style={{color:"var(--green)"}}>{t("status_online")}</span>],
+                        [t("field_version"),  health.version],
+                        [t("field_active"),   health.active_models?.join(", ")||t("nav_none")],
+                        [t("field_total"),    health.total_models],
+                        [t("field_config"),   health.config_file],
+                        [t("field_endpoint"), "http://localhost:8765/v1/chat/completions"],
+                      ].map(([label,val]) => (
+                        <div key={label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid var(--border)", paddingBottom:10 }}>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{label}</span>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12 }}>{val}</span>
+                        </div>
+                      ))}
+                    </div>
+                  : <div style={{ color:"var(--red)", fontFamily:"var(--mono)", fontSize:13, lineHeight:1.8 }}>
+                      ✗ {t("status_offline_msg")}<br/>
+                      <span style={{ color:"var(--text2)" }}>{t("status_offline_hint")} <strong>airvo start</strong></span>
+                    </div>
+                }
+              </div>
+              <div className="card">
+                <div className="card-title">{t("continue_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", marginBottom:12 }}>{t("continue_hint")}</p>
+                <pre style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:8, padding:16, fontFamily:"var(--mono)", fontSize:12, color:"var(--accent)", overflow:"auto" }}>{continueYaml}</pre>
+                <div style={{ marginTop:12 }}>
+                  <button className="btn btn-ghost btn-sm" onClick={() => { navigator.clipboard.writeText(continueYaml); toast(t("copied"), "success"); }}>
+                    {t("copy_config")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>}
+
+          {/* ── CONFIG PAGE ── */}
+          {page === "config" && prefs && <>
+            <h1 className="page-title">{t("config_title")}</h1>
+            <p className="page-sub">{t("config_sub")}</p>
+            <div style={{ display:"grid", gap:20 }}>
+
+              {/* Multi-Model Mode */}
+              <div className="card">
+                <div className="card-title">{t("mode_label")}</div>
+                <div className="mode-grid">
+                  {[
+                    { id:"parallel", title:t("mode_parallel"), desc:t("mode_parallel_desc") },
+                    { id:"race",     title:t("mode_race"),     desc:t("mode_race_desc")     },
+                    { id:"vote",     title:t("mode_vote"),     desc:t("mode_vote_desc")     },
+                    { id:"review",   title:t("mode_review"),   desc:t("mode_review_desc")   },
+                  ].map(m => (
+                    <div key={m.id} className={`mode-card ${prefs.mode===m.id?"selected":""}`}
+                      onClick={() => { updatePrefs({ mode: m.id }); toast(`${t("mode_set")}: ${m.title}`, "info"); }}>
+                      <div className="mode-card-title">{m.title}</div>
+                      <div className="mode-card-desc">{m.desc}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Temperature */}
+              <div className="card">
+                <div className="card-title">{t("temp_label")}</div>
+                <div className="slider-wrap">
+                  <div style={{ display:"flex", alignItems:"baseline", gap:12 }}>
+                    <span className="slider-value">{(prefs.temperature ?? 0.7).toFixed(1)}</span>
+                    <span className="slider-hint">{getTempHint(prefs.temperature ?? 0.7, t)}</span>
+                  </div>
+                  <input type="range" className="slider" min="0" max="1" step="0.1"
+                    value={prefs.temperature ?? 0.7}
+                    onChange={e => setPrefs(p => ({ ...p, temperature: parseFloat(e.target.value) }))}
+                    onMouseUp={e => { updatePrefs({ temperature: parseFloat(e.target.value) }); toast(t("temp_saved"), "success"); }}
+                    onTouchEnd={e => { updatePrefs({ temperature: parseFloat(e.target.value) }); toast(t("temp_saved"), "success"); }}
+                  />
+                  <div className="slider-labels">
+                    <span>0.0</span><span>0.5</span><span>1.0</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Max Tokens */}
+              <div className="card">
+                <div className="card-title">{t("maxtokens_label")}</div>
+                <div style={{ display:"flex", gap:12, alignItems:"center" }}>
+                  <input type="number" className="form-input" style={{ width:140 }}
+                    value={prefs.max_tokens ?? 4096} min={256} max={32000} step={256}
+                    onChange={e => setPrefs(p => ({ ...p, max_tokens: parseInt(e.target.value) }))}
+                    onBlur={e => { updatePrefs({ max_tokens: parseInt(e.target.value) }); toast(t("maxtokens_saved"), "success"); }}
+                  />
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>tokens</span>
+                </div>
+              </div>
+
+              {/* Project Context / Memory */}
+              <div className="card">
+                <div className="card-title">{t("memory_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>
+                  {t("memory_sub")}
+                </p>
+                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
+                  <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:13, fontWeight:600 }}>
+                    <input type="checkbox"
+                      checked={prefs.memory_enabled ?? false}
+                      onChange={e => updatePrefs({ memory_enabled: e.target.checked })}
+                    />
+                    {t("memory_enable")}
+                  </label>
+                </div>
+                {(prefs.memory_enabled) && <>
+                  <textarea
+                    className={`form-textarea ${(prefs.memory_text||"").length > MEMORY_MAX_CHARS ? "over-limit" : ""}`}
+                    placeholder={t("memory_placeholder")}
+                    value={prefs.memory_text || ""}
+                    onChange={e => setPrefs(p => ({ ...p, memory_text: e.target.value }))}
+                    onBlur={e => {
+                      const text = e.target.value;
+                      if (text.length > MEMORY_MAX_CHARS) { toast(t("memory_too_long"), "error"); return; }
+                      updatePrefs({ memory_text: text });
+                      toast(t("memory_saved"), "success");
+                    }}
+                  />
+                  <div style={{ marginTop:8 }}>
+                    {(() => {
+                      const len = (prefs.memory_text||"").length;
+                      const cls = len > MEMORY_MAX_CHARS ? "over" : len > MEMORY_MAX_CHARS * 0.8 ? "warn" : "ok";
+                      return (
+                        <div className={`memory-counter ${cls}`}>
+                          <span>{len} {t("memory_chars")}</span>
+                          <span>{MEMORY_MAX_CHARS} {t("memory_max")}</span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </>}
+              </div>
+
+              {/* Usage Stats */}
+              <div className="card">
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
+                  <div className="card-title" style={{ marginBottom:0 }}>{t("stats_label")}</div>
+                  <button className="btn btn-ghost btn-sm" onClick={resetStats}>{t("stats_reset")}</button>
+                </div>
+                {Object.keys(stats).length === 0
+                  ? <div className="empty" style={{ padding:24 }}>{t("stats_empty")}</div>
+                  : <table className="stats-table">
+                      <thead>
+                        <tr>
+                          <th>Model</th>
+                          <th style={{ textAlign:"right" }}>{t("stats_requests")}</th>
+                          <th style={{ textAlign:"right" }}>{t("stats_tokens")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.entries(stats).map(([id, s]) => {
+                          const model = models.find(m => m.id === id);
+                          return (
+                            <tr key={id}>
+                              <td>
+                                <div>{model?.name || id}</div>
+                                <div style={{ fontSize:10, color:"var(--text2)", fontFamily:"var(--mono)" }}>{id}</div>
+                              </td>
+                              <td className="num">{s.requests.toLocaleString()}</td>
+                              <td className="num">{s.tokens.toLocaleString()}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                }
+              </div>
+
+              {/* Active Models */}
+              <div className="card">
+                <div className="card-title">{t("active_models_label")}</div>
+                {active.length === 0
+                  ? <div className="empty" style={{ padding:24 }}>{t("no_active_models")}</div>
+                  : active.map(m => (
+                    <div key={m.id} className="active-model-item">
+                      <div>
+                        <div className="active-model-name">{m.name}</div>
+                        <div className="active-model-id">{m.id}</div>
+                      </div>
+                      <div style={{ display:"flex", gap:8 }}>
+                        <span className={`free-badge ${inferIsFree(m.provider,m.base_url)?"free":"paid"}`}>
+                          {inferIsFree(m.provider,m.base_url)?t("free_badge"):t("paid_badge")}
+                        </span>
+                        <span className={`provider-badge ${getProviderClass(m.provider)}`}>{m.provider}</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+
+            </div>
+          </>}
+
+          {/* ── ADD MODEL PAGE ── */}
+          {page === "add" && <>
+            <h1 className="page-title">{t("add_title")}</h1>
+            <p className="page-sub">{t("add_sub")}</p>
+            <AddModelForm onAdd={addModel} t={t} />
+          </>}
+
+          {/* ── HELP PAGE ── */}
+          {page === "help" && <HelpPage t={t} setPage={setPage} />}
+
+        </main>
+      </div>
+
+      <div className="toast-container">
+        {toasts.map(x => <div key={x.id} className={`toast ${x.type}`}>{x.msg}</div>)}
+      </div>
+    </>
+  );
+}
+
+function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete }) {
+  const [keyInput, setKeyInput] = useState("");
+  const [showKey, setShowKey]   = useState(false);
+  const isFree   = inferIsFree(model.provider, model.base_url);
+  const needsKey = !isFree;
+
+  return (
+    <div className={`model-card ${model.active?"active":""}`}>
+      <div className="model-header">
+        <div>
+          <div className="model-name">{model.name}</div>
+          <div className="model-id">{model.id}</div>
+        </div>
+        <span className={`provider-badge ${getProviderClass(model.provider)}`}>{model.provider}</span>
+      </div>
+      {model.notes && <div className="model-notes">{model.notes}</div>}
+      <div className="model-footer">
+        <span className={`free-badge ${isFree?"free":"paid"}`}>{isFree?t("free_badge"):t("paid_badge")}</span>
+        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+          <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+            {model.active ? t("active") : t("inactive")}
+          </span>
+          <label className="toggle">
+            <input type="checkbox" checked={model.active} onChange={onToggle} />
+            <span className="toggle-track" />
+          </label>
+        </div>
+      </div>
+
+      {/* Usage stats inline */}
+      {stats && (stats.requests > 0 || stats.tokens > 0) && (
+        <div className="model-stats">
+          <div className="model-stat-item">
+            <span>{stats.requests.toLocaleString()}</span> req
+          </div>
+          <div className="model-stat-item">
+            <span>{stats.tokens.toLocaleString()}</span> tokens
+          </div>
+        </div>
+      )}
+
+      {needsKey && <>
+        <hr className="divider" />
+        {model.api_key
+          ? <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:8 }}>
+              <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--green)" }}>
+                ✓ {showKey ? model.api_key : maskKey(model.api_key)}
+              </span>
+              <div style={{ display:"flex", gap:6 }}>
+                <button className="btn btn-ghost btn-sm" onClick={() => setShowKey(!showKey)}>
+                  {showKey ? t("hide_key") : t("show_key")}
+                </button>
+                <button className="btn btn-ghost btn-sm" onClick={() => setKeyInput("")}>
+                  {t("change_key")}
+                </button>
+              </div>
+            </div>
+          : <div className="key-row">
+              <input className="key-input" type="password"
+                placeholder={t("key_placeholder")} value={keyInput}
+                onChange={e => setKeyInput(e.target.value)}
+                onKeyDown={e => e.key==="Enter" && onSaveKey(keyInput)}
+              />
+              <button className="btn btn-primary btn-sm" onClick={() => onSaveKey(keyInput)}>
+                {t("save_key")}
+              </button>
+            </div>
+        }
+      </>}
+      <div style={{ marginTop:12, display:"flex", justifyContent:"flex-end" }}>
+        <button className="btn btn-danger btn-sm" onClick={onDelete}>{t("delete_btn")}</button>
+      </div>
+    </div>
+  );
+}
+
+function AddModelForm({ onAdd, t }) {
+  const empty = { id:"", name:"", provider:"", api_key:"", base_url:"", notes:"", active:false };
+  const [form, setForm] = useState(empty);
+  const set = (k, v) => setForm(f => ({ ...f, [k]:v }));
+
+  function handleSubmit() {
+    if (!form.id.trim() || !form.name.trim() || !form.provider.trim()) return;
+    const free = inferIsFree(form.provider, form.base_url);
+    onAdd({ ...form, free, api_key:form.api_key||null, base_url:form.base_url||null });
+    setForm(empty);
+  }
+
+  return (
+    <div className="card">
+      <div className="card-title">{t("new_model")}</div>
+      <div className="form-grid">
+        <div className="form-group">
+          <div className="form-label-row">
+            <span className="form-label">{t("field_id")} *</span>
+            <Tooltip title={t("tip_id_title")} body={t("tip_id_body")} examples={t("tip_id_examples")} />
+          </div>
+          <input className="form-input" placeholder="groq/llama-3.3-70b-versatile"
+            value={form.id} onChange={e => set("id", e.target.value)} />
+        </div>
+        <div className="form-group">
+          <div className="form-label-row">
+            <span className="form-label">{t("field_name")} *</span>
+            <Tooltip title={t("tip_name_title")} body={t("tip_name_body")} examples={t("tip_name_examples")} flip />
+          </div>
+          <input className="form-input" placeholder="Llama 3.3 70B"
+            value={form.name} onChange={e => set("name", e.target.value)} />
+        </div>
+        <div className="form-group">
+          <div className="form-label-row">
+            <span className="form-label">{t("field_provider")} *</span>
+            <Tooltip title={t("tip_provider_title")} body={t("tip_provider_body")} examples={t("tip_provider_examples")} />
+          </div>
+          <input className="form-input" placeholder="groq"
+            value={form.provider} onChange={e => set("provider", e.target.value)} />
+        </div>
+        <div className="form-group">
+          <div className="form-label-row">
+            <span className="form-label">{t("field_apikey")}</span>
+            <Tooltip title={t("tip_apikey_title")} body={t("tip_apikey_body")} examples={t("tip_apikey_examples")} flip />
+          </div>
+          <input className="form-input" type="password" placeholder="sk-..."
+            value={form.api_key} onChange={e => set("api_key", e.target.value)} />
+        </div>
+        <div className="form-group">
+          <div className="form-label-row">
+            <span className="form-label">{t("field_baseurl")}</span>
+            <Tooltip title={t("tip_baseurl_title")} body={t("tip_baseurl_body")} examples={t("tip_baseurl_examples")} />
+          </div>
+          <input className="form-input" placeholder="http://localhost:11434"
+            value={form.base_url} onChange={e => set("base_url", e.target.value)} />
+        </div>
+        <div className="form-group">
+          <div className="form-label-row">
+            <span className="form-label">{t("field_notes")}</span>
+            <Tooltip title={t("tip_notes_title")} body={t("tip_notes_body")} examples={t("tip_notes_examples")} flip />
+          </div>
+          <input className="form-input" placeholder="Free tier · 128k context"
+            value={form.notes} onChange={e => set("notes", e.target.value)} />
+        </div>
+        <div className="form-group full" style={{ flexDirection:"row", alignItems:"center", justifyContent:"space-between", marginTop:4 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{t("auto_detected")}:</span>
+            <span className={`free-badge ${inferIsFree(form.provider, form.base_url) ? "free" : "paid"}`}>
+              {inferIsFree(form.provider, form.base_url) ? t("free_badge") : t("paid_badge")}
+            </span>
+            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+              {inferIsFree(form.provider, form.base_url) ? t("auto_local_hint") : t("auto_cloud_hint")}
+            </span>
+          </div>
+          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+            <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:13 }}>
+              <input type="checkbox" checked={form.active} onChange={e => set("active", e.target.checked)} />
+              {t("check_active")}
+            </label>
+            <Tooltip title={t("tip_active_title")} body={t("tip_active_body")} examples={t("tip_active_examples")} flip />
+          </div>
+        </div>
+        <div className="form-group full">
+          <button className="btn btn-primary" onClick={handleSubmit}>{t("add_btn")}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HelpPage({ t, setPage }) {
+  return (
+    <>
+      <h1 className="page-title">{t("help_title")}</h1>
+      <p className="page-sub">{t("help_sub")}</p>
+      <div className="help-intro">
+        <strong>Airvo</strong> — {t("help_what_body")}
+      </div>
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">+</span>
+          {t("help_adding_title")}
+        </div>
+        {[
+          { title:t("help_field_id_title"),      desc:t("help_field_id_desc"),      ex:t("help_field_id_ex") },
+          { title:t("help_field_name_title"),     desc:t("help_field_name_desc"),     ex:null },
+          { title:t("help_field_provider_title"), desc:t("help_field_provider_desc"), ex:"groq · openai · anthropic · ollama · lmstudio · deepseek · mistral · cohere · gemini · togetherai · fireworks · openrouter" },
+          { title:t("help_field_apikey_title"),   desc:t("help_field_apikey_desc"),   ex:t("help_field_apikey_links") },
+          { title:t("help_field_baseurl_title"),  desc:t("help_field_baseurl_desc"),  ex:t("help_field_baseurl_ex") },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc">{f.desc}</div>
+            {f.ex && (
+              <div className="help-code-block">
+                {f.ex.split("\n").map((line, i) => <div key={i}>▸ {line}</div>)}
+              </div>
+            )}
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("add")}>+ {t("nav_add")}</button>
+        </div>
+      </div>
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">⊙</span>
+          {t("help_modes_title")}
+        </div>
+        {[t("help_mode_parallel"),t("help_mode_race"),t("help_mode_vote"),t("help_mode_review")].map((m, i) => {
+          const [label, ...rest] = m.split(" — ");
+          return (
+            <div key={i} className="help-mode-item">
+              <strong>{label}</strong> — {rest.join(" — ")}
+            </div>
+          );
+        })}
+      </div>
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">?</span>
+          {t("help_faq_title")}
+        </div>
+        {[1,2,3,4,5,6].map(n => (
+          <div key={n} className="faq-item">
+            <div className="faq-q">Q: {t(`help_faq_${n}_q`)}</div>
+            <div className="faq-a">{t(`help_faq_${n}_a`)}</div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}

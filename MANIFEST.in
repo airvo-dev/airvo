@@ -1,0 +1,6 @@
+# Include compiled React dashboard in the package
+recursive-include airvo/dashboard/dist *
+
+# Include README and license
+include README.md
+include LICENSE
