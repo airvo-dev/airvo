@@ -87,11 +87,14 @@ That's it. Airvo will:
 - Auto-configure continue.dev at `~/.continue/config.yaml`
 - Open the dashboard at `http://localhost:8765`
 
-**3. Add your API key**
+**3. Add your first model**
 
-Open the dashboard → Models → find Groq → paste your API key → Save.
+Open the dashboard → Add Model → fill in the model details → Save.
 
-> Get a free Groq API key at [console.groq.com](https://console.groq.com) — no credit card required.
+Not sure where to start? Add Groq — it's free and fast:
+- **Model ID:** `groq/llama-3.3-70b-versatile`
+- **Provider:** `groq`
+- **API Key:** get one free at [console.groq.com](https://console.groq.com) — no credit card required
 
 **4. Install continue.dev in VS Code**
 
@@ -279,7 +282,7 @@ ollama pull llama3
 **Explain legacy code**
 ```
 "explain what this function does and why it might be slow"
-→ two models analyze in parallel
+→ if you have two models active, both analyze in parallel
 → you see both perspectives and choose the best explanation
 ```
 
@@ -334,6 +337,15 @@ Airvo is designed with privacy and security in mind:
 
 ## FAQ
 
+**How do I add a model?**
+Open the dashboard → Add Model → fill in the Model ID, Provider, and API Key → Save. Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works. Check the Supported Models table for examples.
+
+**How do I run two models in parallel?**
+Add two models in the dashboard and activate both. Airvo will call them simultaneously on every request. You can have up to 2 active models in v0.1.0.
+
+**What is the Model ID format?**
+It follows LiteLLM's format: `provider/model-name`. For example: `groq/llama-3.3-70b-versatile`, `openai/gpt-4o`, `ollama/llama3`. Check the [LiteLLM docs](https://docs.litellm.ai/docs/providers) for the full list.
+
 **Do I need to pay for anything?**
 Airvo itself is free. You only pay for the AI models you use. Groq, Ollama, and LM Studio all have free options.
 
@@ -349,8 +361,14 @@ Yes — any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers)
 **How do I get a free Groq API key?**
 Go to [console.groq.com](https://console.groq.com), sign up, and create an API key. No credit card required.
 
+**How do I add a local model like Ollama?**
+Install [Ollama](https://ollama.com), pull a model with `ollama pull llama3`, then add it in the dashboard with Model ID `ollama/llama3`, Provider `ollama`, Base URL `http://localhost:11434`, and leave the API Key empty.
+
 **Can I run Airvo on a local network?**
 Yes — run `airvo start --host 0.0.0.0` and it will be accessible from any device on your network.
+
+**Airvo is not connecting to VS Code — what do I do?**
+Make sure continue.dev is installed in VS Code and that `airvo start` has run at least once to create the config. You can verify the config exists at `~/.continue/config.yaml`.
 
 ---
 
