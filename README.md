@@ -30,6 +30,7 @@ Airvo runs on your machine, connects to any AI model simultaneously, and integra
 - [Configuration](#configuration)
 - [Use Cases](#use-cases)
 - [Roadmap](#roadmap)
+- [Security](#security)
 - [FAQ](#faq)
 - [Community](#community)
 - [License](#license)
@@ -316,6 +317,18 @@ We're working on the next phase of Airvo. If you want to be the first to know:
 
 → ⭐ Star this repo to follow updates
 → 💬 Open an issue and tell us what you'd like to see
+
+---
+
+## Security
+
+Airvo is designed with privacy and security in mind:
+
+- **API keys stay local** — stored in `~/.airvo/models.json` on your machine, never sent to Airvo servers
+- **Localhost only** — the server listens on `localhost:8765` by default, not accessible from the internet
+- **Restricted CORS** — only the dashboard and VS Code extensions can make requests to the server
+- **No telemetry** — Airvo collects no usage data, no analytics, no crash reports
+- **Open source** — the full source code is on GitHub, you can audit everything
 
 ---
 
