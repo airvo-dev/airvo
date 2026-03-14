@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)"  srcset="docs/assets/airvo-logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/airvo-logo-light.svg">
-  <img src="docs/assets/airvo-logo-light.svg" alt="Airvo" height="80"/>
+  <source media="(prefers-color-scheme: dark)"  srcset="airvo/docs/assets/airvo-logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="airvo/docs/assets/airvo-logo-light.svg">
+  <img src="airvo/docs/assets/airvo-logo-light.svg" alt="Airvo" height="80"/>
 </picture>
 
 <br/>
@@ -160,17 +160,17 @@ The Airvo dashboard runs at `http://localhost:8765` and lets you manage everythi
 
 **Models page** — activate/deactivate models, save API keys, see requests and tokens per model.
 
-![Airvo Dashboard - Models](docs/assets/screenshot-models.png)
+![Airvo Dashboard - Models](airvo/docs/assets/screenshot-models.png)
 
 **Configuration page** — set multi-model mode, adjust temperature and max tokens, enable project context, view usage stats.
 
 **Add Model page** — add any model with contextual tooltips on every field.
 
-![Airvo Dashboard - Add Model](docs/assets/screenshot-add-model.png)
+![Airvo Dashboard - Add Model](airvo/docs/assets/screenshot-add-model.png)
 
 **Help page** — full reference guide, field-by-field documentation, FAQ.
 
-![Airvo Dashboard - Help](docs/assets/screenshot-help.png)
+![Airvo Dashboard - Help](airvo/docs/assets/screenshot-help.png)
 
 ---
 
@@ -192,7 +192,7 @@ Airvo supports running multiple models at once. Configure the mode in the Config
 
 Airvo works through [continue.dev](https://continue.dev) — a VS Code extension for AI-assisted coding.
 
-![Continue.dev with Airvo](docs/assets/screenshot-vscode.png)
+![Continue.dev with Airvo](airvo/docs/assets/screenshot-vscode.png)
 
 **What you can do:**
 
