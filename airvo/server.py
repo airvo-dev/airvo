@@ -17,9 +17,13 @@ app = FastAPI(
 # ── CORS — needed for dashboard in development mode ───────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "http://localhost:8765",
+        "http://127.0.0.1:8765",
+    ],
+    allow_origin_regex=r"vscode-webview://.*",  # continue.dev en VS Code
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 # ── API routes — registered BEFORE static files ───────────────────────────
