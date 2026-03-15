@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.1.1-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
