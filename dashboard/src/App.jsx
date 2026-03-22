@@ -128,8 +128,8 @@ const I18N = {
     toast_error_toggle:"Error updating model", toast_error_key:"Error saving key",
     toast_error_delete:"Error deleting model", toast_error_add:"Error adding model",
     confirm_delete:"Delete this model?",
-    toast_limit:"Airvo v1 supports up to 2 active models. Deactivate one to activate another.",
-    stat_v1_limit:"v1 limit · 2 max",
+    toast_limit:"Airvo supports up to 3 active models. Deactivate one to activate another.",
+    stat_v1_limit:"max 3 active",
     auto_detected:"Auto-detected",
     auto_local_hint:"Local model — no API cost",
     auto_cloud_hint:"Cloud model — API usage billed by provider",
@@ -223,8 +223,8 @@ const I18N = {
     toast_error_toggle:"Error al actualizar", toast_error_key:"Error al guardar key",
     toast_error_delete:"Error al eliminar", toast_error_add:"Error al agregar modelo",
     confirm_delete:"¿Eliminar este modelo?",
-    toast_limit:"Airvo v1 soporta hasta 2 modelos activos.",
-    stat_v1_limit:"límite v1 · máx 2",
+    toast_limit:"Airvo soporta hasta 3 modelos activos. Desactivá uno para activar otro.",
+    stat_v1_limit:"máx 3 activos",
     auto_detected:"Detectado automáticamente",
     auto_local_hint:"Modelo local — sin costo de API",
     auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
@@ -503,7 +503,7 @@ export default function AirvoDashboard() {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
-  const MAX_ACTIVE = 2;
+  const MAX_ACTIVE = 3;
 
   async function toggleModel(id, current) {
     const active = models.filter(m => m.active);
@@ -712,16 +712,21 @@ export default function AirvoDashboard() {
                 <div className="card-title">{t("mode_label")}</div>
                 <div className="mode-grid">
                   {[
-                    { id:"parallel", title:t("mode_parallel"), desc:t("mode_parallel_desc") },
-                    { id:"race",     title:t("mode_race"),     desc:t("mode_race_desc")     },
-                    { id:"vote",     title:t("mode_vote"),     desc:t("mode_vote_desc")     },
-                    { id:"review",   title:t("mode_review"),   desc:t("mode_review_desc")   },
-                  ].map(m => (
-                    <div key={m.id} className={`mode-card ${prefs.mode===m.id?"selected":""}`}
-                      onClick={() => { updatePrefs({ mode: m.id }); toast(`${t("mode_set")}: ${m.title}`, "info"); }}>
-                      <div className="mode-card-title">{m.title}</div>
-                      <div className="mode-card-desc">{m.desc}</div>
-                    </div>
+                    { id:"parallel", title:t("mode_parallel"), desc:t("mode_parallel_desc"), soon:false },
+                    { id:"race",     title:t("mode_race"),     desc:t("mode_race_desc"),     soon:true  },
+                    { id:"vote",     title:t("mode_vote"),     desc:t("mode_vote_desc"),     soon:true  },
+                    { id:"review",   title:t("mode_review"),   desc:t("mode_review_desc"),   soon:true  },
+                    ].map(m => (
+                      <div key={m.id}
+                        className={`mode-card ${prefs.mode===m.id&&!m.soon?"selected":""}`}
+                        onClick={() => { if (m.soon) return; updatePrefs({ mode: m.id }); toast(`${t("mode_set")}: ${m.title}`, "info"); }}
+                        style={m.soon ? { opacity:0.45, cursor:"not-allowed" } : {}}>
+                        <div className="mode-card-title">
+                          {m.title}
+                          {m.soon && <span style={{ marginLeft:8, fontSize:10, fontFamily:"var(--mono)", color:"var(--accent)", background:"#1a1a2a", border:"1px solid var(--accent)", borderRadius:4, padding:"1px 6px", verticalAlign:"middle" }}>SOON</span>}
+                        </div>
+                        <div className="mode-card-desc">{m.desc}</div>
+                      </div>
                   ))}
                 </div>
               </div>
@@ -1087,11 +1092,18 @@ function HelpPage({ t, setPage }) {
           <span className="help-section-icon">⊙</span>
           {t("help_modes_title")}
         </div>
-        {[t("help_mode_parallel"),t("help_mode_race"),t("help_mode_vote"),t("help_mode_review")].map((m, i) => {
-          const [label, ...rest] = m.split(" — ");
+        {[
+          { key:t("help_mode_parallel"), soon:false },
+          { key:t("help_mode_race"),     soon:true  },
+          { key:t("help_mode_vote"),     soon:true  },
+          { key:t("help_mode_review"),   soon:true  },
+        ].map((m, i) => {
+          const [label, ...rest] = m.key.split(" — ");
           return (
-            <div key={i} className="help-mode-item">
-              <strong>{label}</strong> — {rest.join(" — ")}
+            <div key={i} className="help-mode-item" style={m.soon ? { opacity:0.5 } : {}}>
+              <strong>{label}</strong>
+              {m.soon && <span style={{ marginLeft:8, fontSize:10, fontFamily:"var(--mono)", color:"var(--accent)", background:"#1a1a2a", border:"1px solid var(--accent)", borderRadius:4, padding:"1px 6px" }}>COMING SOON</span>}
+              {" — "}{rest.join(" — ")}
             </div>
           );
         })}
