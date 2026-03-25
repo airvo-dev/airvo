@@ -18,8 +18,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:8765",
-        "http://127.0.0.1:8765",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
     ],
     allow_origin_regex=r"vscode-webview://.*",  # continue.dev en VS Code
     allow_methods=["GET", "POST", "PATCH", "DELETE"],

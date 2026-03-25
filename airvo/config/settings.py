@@ -154,12 +154,12 @@ def record_usage(model_id: str, tokens_used: int):
 class Settings(BaseSettings):
     # ── Server ────────────────────────────────────────────
     host:              str   = "localhost"
-    port:              int   = 8765
+    port:              int   = 5000
     log_level:         str   = "info"
     auto_open_browser: bool  = True
 
     # ── Model behavior defaults (overridden by prefs.json) ────────────────
-    max_parallel_models: int   = 2
+    max_parallel_models: int   = 3
     default_mode:        str   = "parallel"
     max_tokens:          int   = 4096
     temperature:         float = 0.7

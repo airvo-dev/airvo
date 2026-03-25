@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const API = "http://localhost:8765";
+const API = "http://localhost:5000";
 
 const LANGUAGES = [
   { code: "en", label: "EN", flag: "🇺🇸", name: "English"   },
@@ -568,7 +568,7 @@ export default function AirvoDashboard() {
   }
 
   const active       = models.filter(m => m.active);
-  const continueYaml = `models:\n  - name: Airvo\n    provider: openai\n    model: airvo-auto\n    apiBase: http://localhost:8765/v1\n    apiKey: local\n    roles:\n      - chat\n      - edit\n      - apply`;
+  const continueYaml = `models:\n  - name: Airvo\n    provider: openai\n    model: airvo-auto\n    apiBase: http://localhost:5000/v1\n    apiKey: local\n    roles:\n      - chat\n      - edit\n      - apply`;
 
   return (
     <>
@@ -584,7 +584,7 @@ export default function AirvoDashboard() {
             <LangDropdown lang={lang} setLang={setLang} />
             <div className="header-status">
               <div className={`status-dot ${loading?"loading":health?"ok":"err"}`} />
-              {loading ? t("connecting") : health ? `v${health.version} · localhost:8765` : t("offline")}
+              {loading ? t("connecting") : health ? `v${health.version} · localhost:5000` : t("offline")}
             </div>
           </div>
         </header>
@@ -674,7 +674,7 @@ export default function AirvoDashboard() {
                         [t("field_active"),   health.active_models?.join(", ")||t("nav_none")],
                         [t("field_total"),    health.total_models],
                         [t("field_config"),   health.config_file],
-                        [t("field_endpoint"), "http://localhost:8765/v1/chat/completions"],
+                        [t("field_endpoint"), "http://localhost:5000/v1/chat/completions"],
                       ].map(([label,val]) => (
                         <div key={label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid var(--border)", paddingBottom:10 }}>
                           <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{label}</span>
@@ -723,9 +723,12 @@ export default function AirvoDashboard() {
                         style={m.soon ? { opacity:0.45, cursor:"not-allowed" } : {}}>
                         <div className="mode-card-title">
                           {m.title}
-                          {m.soon && <span style={{ marginLeft:8, fontSize:10, fontFamily:"var(--mono)", color:"var(--accent)", background:"#1a1a2a", border:"1px solid var(--accent)", borderRadius:4, padding:"1px 6px", verticalAlign:"middle" }}>SOON</span>}
+                          {m.soon && <span style={{ marginLeft:8, fontSize:10, fontFamily:"var(--mono)", color:"var(--accent)", background:"#1a1a2a", border:"1px solid var(--accent)", borderRadius:4, padding:"1px 6px", verticalAlign:"middle" }}>🔒 SOON</span>}
                         </div>
-                        <div className="mode-card-desc">{m.desc}</div>
+                        <div className="mode-card-desc">
+                          {m.desc}
+                          {m.soon && <div style={{ marginTop:8, fontSize:11, color:"var(--yellow)", fontFamily:"var(--mono)" }}>Coming Soon in v0.2</div>}
+                        </div>
                       </div>
                   ))}
                 </div>

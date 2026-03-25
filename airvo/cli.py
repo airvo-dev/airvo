@@ -33,7 +33,7 @@ models:
   - name: Airvo
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:8765/v1
+    apiBase: http://localhost:5000/v1
     apiKey: local
     roles:
       - chat
@@ -42,7 +42,7 @@ models:
   - name: Airvo Autocomplete
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:8765/v1
+    apiBase: http://localhost:5000/v1
     apiKey: local
     roles:
       - autocomplete
@@ -115,7 +115,7 @@ def ensure_continue_config():
     else:
         # Check if Airvo entry already exists
         existing = CONTINUE_FILE.read_text(encoding="utf-8")
-        if "apiBase: http://localhost:8765/v1" in existing:
+        if "apiBase: http://localhost:5000/v1" in existing:
             typer.echo("  ✓ continue.dev config already has Airvo entry")
         else:
             # Append Airvo models to existing config
@@ -124,7 +124,7 @@ def ensure_continue_config():
   - name: Airvo
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:8765/v1
+    apiBase: http://localhost:5000/v1
     apiKey: local
     roles:
       - chat
@@ -167,7 +167,7 @@ def open_browser_delayed(url: str, delay: float = 1.5):
 @app.command()
 def start(
     host: str        = typer.Option("localhost", "--host", "-h", help="Server host"),
-    port: int        = typer.Option(8765,        "--port", "-p", help="Server port"),
+    port: int        = typer.Option(5000,        "--port", "-p", help="Server port"),
     no_browser: bool = typer.Option(False, "--no-browser", help="Don't open browser automatically"),
     reload: bool     = typer.Option(False, "--reload",     help="Enable hot reload (development)"),
 ):
