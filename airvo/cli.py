@@ -68,10 +68,12 @@ CONTINUE_MARKETPLACE_URL = (
 
 def print_banner(host: str, port: int, dashboard_ready: bool):
     """Print startup banner with server info"""
+    from importlib.metadata import version as _v
+    _ver = _v("airvo")
     dashboard_status = "✓ dashboard ready" if dashboard_ready else "⚠ dashboard not built"
     typer.echo(f"""
     ╔══════════════════════════════════════╗
-    ║   🚀 Airvo v0.3.3                   ║
+    ║   🚀 Airvo v{_ver:<27}║
     ║                                      ║
     ║   Server:    http://{host}:{port}      ║
     ║   Dashboard: http://{host}:{port}      ║
@@ -274,7 +276,8 @@ def config(
 @app.command()
 def version():
     """Show Airvo version"""
-    typer.echo("  Airvo v0.3.3")
+    from importlib.metadata import version as _v
+    typer.echo(f"  Airvo v{_v('airvo')}")
 
 
 # ── Entry point ───────────────────────────────────────────────────────────

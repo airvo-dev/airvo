@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from importlib.metadata import version as _pkg_version
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -10,10 +11,12 @@ from airvo.api.routes import router
 # ── Request size limit (10 MB max) ────────────────────────────────────────
 MAX_REQUEST_SIZE = 10 * 1024 * 1024  # 10 MB
 
+_VERSION = _pkg_version("airvo")
+
 # ── FastAPI app ────────────────────────────────────────────────────────────
 app = FastAPI(
     title="Airvo",
-    version="0.3.2",
+    version=_VERSION,
     description="Local AI coding copilot — any model, any provider.",
 )
 
