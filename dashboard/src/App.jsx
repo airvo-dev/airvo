@@ -2275,8 +2275,8 @@ export default function AirvoDashboard() {
                   value={prefs.agent_model ?? ""}
                   onChange={e => { updatePrefs({ agent_model: e.target.value }); toast(t("agent_model_saved"), "success"); }}>
                   <option value="">{t("agent_model_auto")}</option>
-                  {(health?.active_models ?? []).map(m => (
-                    <option key={m.id} value={m.id}>{m.name}</option>
+                  {(health?.active_models ?? []).map(id => (
+                    <option key={id} value={id}>{id}</option>
                   ))}
                 </select>
               </div>
