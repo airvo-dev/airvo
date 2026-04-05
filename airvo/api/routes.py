@@ -54,6 +54,7 @@ class PrefsUpdate(BaseModel):
     max_history_messages: Optional[int]   = None
     memory_enabled:   Optional[bool]       = None
     memory_text:      Optional[str]        = None
+    agent_model:      Optional[str]        = None
     # ── RAG ─────────────────────────────────────────────────────────────────
     rag_enabled:      Optional[bool]       = None
     rag_path:         Optional[str]        = None
@@ -322,7 +323,8 @@ async def chat_completions(request: ChatRequest):
         # When tools are present (Agent/Plan mode in continue.dev),
         # bypass multi-model and use the first active model directly.
         if request.tools:
-            m = active[0]
+            agent_model_id = prefs.get("agent_model", "")
+            m = next((x for x in active if x["id"] == agent_model_id), active[0])
             kwargs = dict(
                 model       = m["id"],
                 messages    = messages,

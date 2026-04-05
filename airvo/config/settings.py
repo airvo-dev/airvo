@@ -84,6 +84,7 @@ DEFAULT_PREFS = {
     "max_history_messages": 10,
     "memory_enabled":  False,
     "memory_text":     "",
+    "agent_model":     "",
     # ── RAG / Smart Memory ───────────────────────────────────────────────────
     "rag_enabled":      False,
     "rag_path":         "",

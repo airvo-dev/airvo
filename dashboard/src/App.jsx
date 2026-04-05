@@ -201,6 +201,19 @@ const I18N = {
     help_disc_tip_body:"Click '+ Add to Airvo' on any discovered model. For Ollama models, copy the pull command shown and run it in your terminal first.",
     help_history_title:"Chat History Limit",
     help_history_body:"Airvo keeps only the last N messages of your conversation per request (default 10). Lower this if you hit token limits with free API tiers — Groq free tier allows 6k–12k tokens per minute. The full chat history stays in your editor; only what's sent to the model is trimmed.",
+    help_agent_title:"Agent/Plan Mode & Model Selection",
+    help_agent_what_title:"What is Agent/Plan mode?",
+    help_agent_what_body:"continue.dev has 3 modes: Chat (💬), Agent (⚡), and Plan (📋). In Agent and Plan, your IDE sends tool definitions alongside your message — tools to read files, write code, run terminal commands, etc.",
+    help_agent_why_title:"Why only one model responds in Agent/Plan?",
+    help_agent_why_body:"Tool calling is a multi-turn stateful conversation: the model requests a tool, the IDE runs it and returns the result, the model requests another tool, and so on. This back-and-forth requires a single model to maintain context. Running multiple models in parallel would mean multiple conflicting file edits.",
+    help_agent_select_title:"Choosing which model handles Agent/Plan",
+    help_agent_select_body:"In Configuration → Agent/Plan Model, pick any of your active models. If set to Auto, Airvo uses the first active model in your list. Choose your most capable model here — it will do all the agentic work.",
+    help_agent_tip_title:"Tip",
+    help_agent_tip_body:"Use Chat mode to compare responses from all your models. Use Agent/Plan mode when you need the AI to actually edit files and run commands — that always uses one model.",
+    agent_model_label:"Agent/Plan Model",
+    agent_model_sub:"Model used for Agent and Plan mode in your IDE. These modes use tool calls and require a single model.",
+    agent_model_saved:"Agent model saved ✓",
+    agent_model_auto:"Auto (first active model)",
     help_trouble_title:"Troubleshooting",
     help_trouble_1_q:"Rate limit error / tokens too large from Groq or other provider",
     help_trouble_1_a:"Go to Configuration → Chat History Limit and set it to 4 or 6 messages. If Smart Memory (RAG) is enabled, also lower 'Max context injected' to 1000–2000 characters. Free Groq tier: 6k–12k tokens/min.",
@@ -387,6 +400,19 @@ const I18N = {
     help_disc_tip_body:"Hacé click en '+ Agregar a Airvo' en cualquier modelo descubierto. Para modelos Ollama, copiá el comando pull que aparece y ejecutalo en tu terminal primero.",
     help_history_title:"Límite de Historial de Chat",
     help_history_body:"Airvo envía solo los últimos N mensajes de tu conversación por request (por defecto 10). Bajalo si superás los límites de tokens con APIs gratuitas — Groq gratuito permite 6k–12k tokens por minuto. El historial completo queda en tu editor; solo se recorta lo que se envía al modelo.",
+    help_agent_title:"Modo Agente/Plan y Selección de Modelo",
+    help_agent_what_title:"¿Qué es el modo Agente/Plan?",
+    help_agent_what_body:"continue.dev tiene 3 modos: Chat (💬), Agente (⚡) y Plan (📋). En Agente y Plan, tu IDE envía definiciones de herramientas junto con tu mensaje — herramientas para leer archivos, escribir código, ejecutar comandos, etc.",
+    help_agent_why_title:"¿Por qué solo un modelo responde en Agente/Plan?",
+    help_agent_why_body:"Las llamadas a herramientas son una conversación multi-turno con estado: el modelo solicita una herramienta, el IDE la ejecuta y devuelve el resultado, el modelo solicita otra, y así. Este ida y vuelta requiere un único modelo para mantener el contexto. Varios modelos en paralelo implicarían ediciones de archivos conflictivas.",
+    help_agent_select_title:"Elegir qué modelo maneja Agente/Plan",
+    help_agent_select_body:"En Configuración → Modelo Agente/Plan, elegí cualquier modelo activo. Si está en Auto, Airvo usa el primer modelo activo de tu lista. Elegí tu modelo más capaz — es el que hará todo el trabajo agéntico.",
+    help_agent_tip_title:"Consejo",
+    help_agent_tip_body:"Usá el modo Chat para comparar respuestas de todos tus modelos. Usá Agente/Plan cuando necesitás que la IA edite archivos y ejecute comandos — ese siempre usa un solo modelo.",
+    agent_model_label:"Modelo Agente/Plan",
+    agent_model_sub:"Modelo usado para los modos Agente y Plan en tu IDE. Estos modos usan llamadas a herramientas y requieren un único modelo.",
+    agent_model_saved:"Modelo agente guardado ✓",
+    agent_model_auto:"Auto (primer modelo activo)",
     help_trouble_title:"Solución de Problemas",
     help_trouble_1_q:"Error de límite de velocidad / tokens demasiado grandes de Groq u otro proveedor",
     help_trouble_1_a:"Andá a Configuración → Límite de Historial y ponelo en 4 o 6 mensajes. Si Smart Memory (RAG) está activado, bajá también el límite de contexto RAG a 1000–2000 caracteres.",
@@ -570,6 +596,19 @@ const I18N = {
     help_disc_tip_body:"Cliquez sur '+ Ajouter à Airvo' sur n'importe quel modèle découvert. Pour les modèles Ollama, copiez la commande pull affichée et exécutez-la dans votre terminal d'abord.",
     help_history_title:"Limite d'Historique de Chat",
     help_history_body:"Airvo n'envoie que les N derniers messages de votre conversation par requête (défaut 10). Réduisez si vous dépassez les limites de tokens avec les APIs gratuites — Groq gratuit permet 6k–12k tokens/min. L'historique complet reste dans votre éditeur ; seul ce qui est envoyé au modèle est tronqué.",
+    help_agent_title:"Mode Agent/Plan et Sélection du Modèle",
+    help_agent_what_title:"Qu'est-ce que le mode Agent/Plan ?",
+    help_agent_what_body:"continue.dev a 3 modes : Chat (💬), Agent (⚡) et Plan (📋). En mode Agent et Plan, votre IDE envoie des définitions d'outils avec votre message — outils pour lire des fichiers, écrire du code, exécuter des commandes, etc.",
+    help_agent_why_title:"Pourquoi un seul modèle répond en Agent/Plan ?",
+    help_agent_why_body:"Les appels d'outils forment une conversation multi-tours avec état : le modèle demande un outil, l'IDE l'exécute et renvoie le résultat, le modèle en demande un autre, etc. Cet aller-retour exige un seul modèle pour maintenir le contexte. Plusieurs modèles en parallèle entraîneraient des modifications de fichiers conflictuelles.",
+    help_agent_select_title:"Choisir quel modèle gère Agent/Plan",
+    help_agent_select_body:"Dans Configuration → Modèle Agent/Plan, choisissez n'importe lequel de vos modèles actifs. En Auto, Airvo utilise le premier modèle actif de votre liste. Choisissez votre modèle le plus capable — il fera tout le travail agentique.",
+    help_agent_tip_title:"Conseil",
+    help_agent_tip_body:"Utilisez le mode Chat pour comparer les réponses de tous vos modèles. Utilisez Agent/Plan quand vous avez besoin que l'IA édite vraiment des fichiers et exécute des commandes — cela utilise toujours un seul modèle.",
+    agent_model_label:"Modèle Agent/Plan",
+    agent_model_sub:"Modèle utilisé pour les modes Agent et Plan dans votre IDE. Ces modes utilisent des appels d'outils et nécessitent un seul modèle.",
+    agent_model_saved:"Modèle agent sauvegardé ✓",
+    agent_model_auto:"Auto (premier modèle actif)",
     help_trouble_title:"Dépannage",
     help_trouble_1_q:"Erreur de limite de débit / tokens trop grands de Groq ou autre fournisseur",
     help_trouble_1_a:"Allez dans Configuration → Limite d'Historique et mettez 4 ou 6 messages. Si Smart Memory (RAG) est activé, réduisez aussi la limite de contexte RAG à 1000–2000 caractères.",
@@ -753,6 +792,19 @@ const I18N = {
     help_disc_tip_body:"Klicken Sie auf '+ Zu Airvo hinzufügen' bei einem entdeckten Modell. Für Ollama-Modelle kopieren Sie den angezeigten Pull-Befehl und führen ihn zuerst im Terminal aus.",
     help_history_title:"Chat-Verlauf-Limit",
     help_history_body:"Airvo sendet nur die letzten N Nachrichten Ihrer Unterhaltung pro Anfrage (Standard 10). Reduzieren Sie dies, wenn Sie Token-Limits mit kostenlosen API-Tarifen überschreiten — Groq kostenlos: 6k–12k Token/Min. Der vollständige Verlauf bleibt in Ihrem Editor; nur was an das Modell gesendet wird, wird gekürzt.",
+    help_agent_title:"Agent/Plan-Modus und Modellauswahl",
+    help_agent_what_title:"Was ist der Agent/Plan-Modus?",
+    help_agent_what_body:"continue.dev hat 3 Modi: Chat (💬), Agent (⚡) und Plan (📋). In Agent und Plan sendet Ihre IDE Werkzeugdefinitionen neben Ihrer Nachricht — Werkzeuge zum Lesen von Dateien, Schreiben von Code, Ausführen von Befehlen usw.",
+    help_agent_why_title:"Warum antwortet nur ein Modell im Agent/Plan-Modus?",
+    help_agent_why_body:"Werkzeugaufrufe sind ein mehrstufiges zustandsbehaftetes Gespräch: das Modell fordert ein Werkzeug an, die IDE führt es aus und gibt das Ergebnis zurück, das Modell fordert ein weiteres an usw. Dieses Hin und Her erfordert ein einzelnes Modell zur Kontexterhaltung. Mehrere parallele Modelle würden widersprüchliche Dateibearbeitungen bedeuten.",
+    help_agent_select_title:"Welches Modell den Agent/Plan-Modus behandelt",
+    help_agent_select_body:"Unter Konfiguration → Agent/Plan-Modell wählen Sie ein aktives Modell. Bei Auto verwendet Airvo das erste aktive Modell in Ihrer Liste. Wählen Sie Ihr leistungsfähigstes Modell — es erledigt die gesamte agentische Arbeit.",
+    help_agent_tip_title:"Tipp",
+    help_agent_tip_body:"Verwenden Sie den Chat-Modus, um Antworten aller Modelle zu vergleichen. Verwenden Sie Agent/Plan, wenn die KI tatsächlich Dateien bearbeiten und Befehle ausführen soll — das verwendet immer ein Modell.",
+    agent_model_label:"Agent/Plan-Modell",
+    agent_model_sub:"Modell für Agent- und Plan-Modus in Ihrer IDE. Diese Modi verwenden Werkzeugaufrufe und benötigen ein einzelnes Modell.",
+    agent_model_saved:"Agentenmodell gespeichert ✓",
+    agent_model_auto:"Auto (erstes aktives Modell)",
     help_trouble_title:"Fehlerbehebung",
     help_trouble_1_q:"Ratenlimit-Fehler / zu viele Tokens von Groq oder anderem Anbieter",
     help_trouble_1_a:"Gehen Sie zu Konfiguration → Chat-Verlauf-Limit und setzen Sie es auf 4 oder 6 Nachrichten. Wenn Smart Memory (RAG) aktiviert ist, reduzieren Sie auch das RAG-Kontextlimit auf 1000–2000 Zeichen.",
@@ -936,6 +988,19 @@ const I18N = {
     help_disc_tip_body:"点击任何已发现模型上的「+ 添加到 Airvo」。对于 Ollama 模型，复制显示的拉取命令并先在终端中运行。",
     help_history_title:"聊天历史限制",
     help_history_body:"Airvo 每次请求只发送最后 N 条对话消息（默认 10 条）。如果您在免费 API 层级上遇到 token 限制，请降低此值——Groq 免费层级每分钟允许 6k–12k tokens。完整历史保留在编辑器中；只有发送给模型的内容会被截断。",
+    help_agent_title:"Agent/Plan 模式与模型选择",
+    help_agent_what_title:"什么是 Agent/Plan 模式？",
+    help_agent_what_body:"continue.dev 有 3 种模式：Chat（💬）、Agent（⚡）和 Plan（📋）。在 Agent 和 Plan 模式下，您的 IDE 会随消息发送工具定义——用于读取文件、编写代码、运行终端命令等的工具。",
+    help_agent_why_title:"为什么 Agent/Plan 模式下只有一个模型响应？",
+    help_agent_why_body:"工具调用是一个多轮有状态的对话：模型请求一个工具，IDE 运行它并返回结果，模型再请求另一个工具，如此往复。这种来回需要单个模型来维护上下文。并行运行多个模型意味着多个冲突的文件编辑。",
+    help_agent_select_title:"选择哪个模型处理 Agent/Plan",
+    help_agent_select_body:"在配置 → Agent/Plan 模型中，选择任意活跃模型。设为自动时，Airvo 使用列表中的第一个活跃模型。在此选择您最强大的模型——它将完成所有智能体工作。",
+    help_agent_tip_title:"提示",
+    help_agent_tip_body:"使用 Chat 模式比较所有模型的响应。当您需要 AI 实际编辑文件和运行命令时，请使用 Agent/Plan 模式——该模式始终使用一个模型。",
+    agent_model_label:"Agent/Plan 模型",
+    agent_model_sub:"用于 IDE 中 Agent 和 Plan 模式的模型。这些模式使用工具调用，需要单个模型。",
+    agent_model_saved:"Agent 模型已保存 ✓",
+    agent_model_auto:"自动（第一个活跃模型）",
     help_trouble_title:"故障排除",
     help_trouble_1_q:"Groq 或其他提供商出现速率限制错误 / tokens 过多",
     help_trouble_1_a:"前往配置 → 聊天历史限制，将其设置为 4 或 6 条消息。如果启用了智能记忆（RAG），还需将 RAG 上下文限制降低到 1000–2000 字符。",
@@ -1119,6 +1184,19 @@ const I18N = {
     help_disc_tip_body:"発見されたモデルの「+ Airvoに追加」をクリックします。Ollamaモデルの場合、表示されたpullコマンドをコピーしてターミナルで先に実行してください。",
     help_history_title:"チャット履歴制限",
     help_history_body:"Airvoはリクエストごとに最後のNメッセージのみを送信します（デフォルト10）。無料APIティアでトークン制限に達した場合は減らしてください — Groq無料ティアは1分あたり6k〜12kトークン。完全な履歴はエディターに残ります；モデルに送信されるものだけがトリミングされます。",
+    help_agent_title:"エージェント/プランモードとモデル選択",
+    help_agent_what_title:"エージェント/プランモードとは？",
+    help_agent_what_body:"continue.devには3つのモードがあります：Chat（💬）、Agent（⚡）、Plan（📋）。AgentとPlanでは、IDEがメッセージと一緒にツール定義を送信します——ファイルの読み取り、コード作成、ターミナルコマンド実行などのツールです。",
+    help_agent_why_title:"なぜAgent/Planモードでは1つのモデルしか応答しないのですか？",
+    help_agent_why_body:"ツール呼び出しはマルチターンのステートフルな会話です：モデルがツールをリクエストし、IDEがそれを実行して結果を返し、モデルが別のツールをリクエストし、といった具合に続きます。このやり取りにはコンテキストを維持するために単一モデルが必要です。複数のモデルを並行実行すると、矛盾するファイル編集が発生します。",
+    help_agent_select_title:"Agent/Planを処理するモデルの選択",
+    help_agent_select_body:"設定 → Agent/Planモデルで、アクティブなモデルを選択してください。Autoに設定すると、Airvoはリストの最初のアクティブモデルを使用します。最も高性能なモデルを選択してください——それがすべてのエージェント作業を行います。",
+    help_agent_tip_title:"ヒント",
+    help_agent_tip_body:"すべてのモデルの応答を比較するにはChatモードを使用してください。AIに実際にファイルを編集してコマンドを実行させる場合はAgent/Planモードを使用してください——常に1つのモデルを使用します。",
+    agent_model_label:"Agent/Planモデル",
+    agent_model_sub:"IDEのAgentおよびPlanモードに使用されるモデル。これらのモードはツール呼び出しを使用し、単一モデルが必要です。",
+    agent_model_saved:"エージェントモデルを保存しました ✓",
+    agent_model_auto:"自動（最初のアクティブモデル）",
     help_trouble_title:"トラブルシューティング",
     help_trouble_1_q:"Groqまたは他のプロバイダーからのレート制限エラー / トークンが多すぎる",
     help_trouble_1_a:"設定 → チャット履歴制限 に移動して4または6メッセージに設定してください。スマートメモリ（RAG）が有効な場合はRAGコンテキスト上限も1000〜2000文字に下げてください。",
@@ -1302,6 +1380,19 @@ const I18N = {
     help_disc_tip_body:"Clique em '+ Adicionar ao Airvo' em qualquer modelo descoberto. Para modelos Ollama, copie o comando pull exibido e execute-o no terminal primeiro.",
     help_history_title:"Limite de Histórico de Chat",
     help_history_body:"O Airvo envia apenas as últimas N mensagens da sua conversa por requisição (padrão 10). Diminua se atingir limites de tokens com APIs gratuitas — Groq gratuito permite 6k–12k tokens/min. O histórico completo fica no editor; apenas o que é enviado ao modelo é cortado.",
+    help_agent_title:"Modo Agente/Plan e Seleção de Modelo",
+    help_agent_what_title:"O que é o modo Agente/Plan?",
+    help_agent_what_body:"O continue.dev tem 3 modos: Chat (💬), Agente (⚡) e Plan (📋). Em Agente e Plan, seu IDE envia definições de ferramentas junto com sua mensagem — ferramentas para ler arquivos, escrever código, executar comandos, etc.",
+    help_agent_why_title:"Por que apenas um modelo responde no modo Agente/Plan?",
+    help_agent_why_body:"As chamadas de ferramentas são uma conversa multi-turno com estado: o modelo solicita uma ferramenta, o IDE a executa e retorna o resultado, o modelo solicita outra, e assim por diante. Esse vai e vem exige um único modelo para manter o contexto. Rodar múltiplos modelos em paralelo causaria edições conflitantes nos arquivos.",
+    help_agent_select_title:"Escolhendo qual modelo trata o Agente/Plan",
+    help_agent_select_body:"Em Configuração → Modelo Agente/Plan, escolha qualquer modelo ativo. Se definido como Auto, o Airvo usa o primeiro modelo ativo da sua lista. Escolha seu modelo mais capaz — ele fará todo o trabalho agêntico.",
+    help_agent_tip_title:"Dica",
+    help_agent_tip_body:"Use o modo Chat para comparar respostas de todos os seus modelos. Use Agente/Plan quando precisar que a IA edite arquivos e execute comandos — isso sempre usa um modelo.",
+    agent_model_label:"Modelo Agente/Plan",
+    agent_model_sub:"Modelo usado para os modos Agente e Plan no seu IDE. Esses modos usam chamadas de ferramentas e requerem um único modelo.",
+    agent_model_saved:"Modelo agente salvo ✓",
+    agent_model_auto:"Auto (primeiro modelo ativo)",
     help_trouble_title:"Solução de Problemas",
     help_trouble_1_q:"Erro de limite de taxa / tokens demais do Groq ou outro provedor",
     help_trouble_1_a:"Vá em Configuração → Limite de Histórico e defina para 4 ou 6 mensagens. Se o Smart Memory (RAG) estiver ativo, reduza também o limite de contexto RAG para 1000–2000 caracteres.",
@@ -2176,6 +2267,20 @@ export default function AirvoDashboard() {
                 </div>
               </div>
 
+              {/* Agent/Plan Model */}
+              <div className="card">
+                <div className="card-title">⚡ {t("agent_model_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", margin:"0 0 14px 0", lineHeight:1.6 }}>{t("agent_model_sub")}</p>
+                <select className="form-input" style={{ width:"100%" }}
+                  value={prefs.agent_model ?? ""}
+                  onChange={e => { updatePrefs({ agent_model: e.target.value }); toast(t("agent_model_saved"), "success"); }}>
+                  <option value="">{t("agent_model_auto")}</option>
+                  {(health?.active_models ?? []).map(m => (
+                    <option key={m.id} value={m.id}>{m.name}</option>
+                  ))}
+                </select>
+              </div>
+
               {/* Temperature */}
               <div className="card">
                 <div className="card-title">{t("temp_label")}</div>
@@ -2779,6 +2884,30 @@ function HelpPage({ t, setPage }) {
         </div>
         <div className="help-field-block">
           <div className="help-field-desc">{t("help_history_body")}</div>
+        </div>
+      </div>
+
+      {/* Agent/Plan Mode & Model Selection */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">⚡</span>
+          {t("help_agent_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_agent_what_title")}</div>
+          <div className="help-field-desc">{t("help_agent_what_body")}</div>
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_agent_why_title")}</div>
+          <div className="help-field-desc">{t("help_agent_why_body")}</div>
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_agent_select_title")}</div>
+          <div className="help-field-desc">{t("help_agent_select_body")}</div>
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">💡 {t("help_agent_tip_title")}</div>
+          <div className="help-field-desc">{t("help_agent_tip_body")}</div>
         </div>
       </div>
 
