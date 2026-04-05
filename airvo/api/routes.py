@@ -326,19 +326,25 @@ async def chat_completions(request: ChatRequest):
         if len(other_msgs) > max_history:
             other_msgs = other_msgs[-max_history:]
 
-        # ── Per-message char cap — truncate long assistant responses ─────────
-        # A single long assistant message (e.g. large code block) can blow
-        # the TPM limit even with few messages. Cap each non-system message
-        # at 2000 chars (~500 tokens) to stay well within Groq free limits.
-        MAX_MSG_CHARS = 2000
-        trimmed = []
-        for m in other_msgs:
-            content = m.get("content") or ""
-            if isinstance(content, str) and len(content) > MAX_MSG_CHARS:
-                m = dict(m)
-                m["content"] = content[:MAX_MSG_CHARS] + " … [trimmed]"
-            trimmed.append(m)
-        other_msgs = trimmed
+        # ── Per-message char cap — only for providers with strict TPM limits ─
+        # Free Groq tier = 6000 TPM total. Cap message content to avoid blowing
+        # the limit. Paid providers (OpenAI, Anthropic, etc.) have 100k+ context
+        # windows — no need to truncate, doing so would reduce response quality.
+        _LOW_TPM_PROVIDERS = {"groq"}
+        _active_providers = {(m.get("id") or "").split("/")[0].lower()
+                             for m in settings.get_active_models()}
+        _needs_char_cap = bool(_active_providers & _LOW_TPM_PROVIDERS)
+
+        if _needs_char_cap:
+            MAX_MSG_CHARS = 2000
+            trimmed = []
+            for m in other_msgs:
+                content = m.get("content") or ""
+                if isinstance(content, str) and len(content) > MAX_MSG_CHARS:
+                    m = dict(m)
+                    m["content"] = content[:MAX_MSG_CHARS] + " … [trimmed]"
+                trimmed.append(m)
+            other_msgs = trimmed
 
         messages = system_msgs + other_msgs
 
