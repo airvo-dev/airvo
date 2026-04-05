@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.2.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -46,7 +46,7 @@ Your Editor (VS Code)
        │
        │  OpenAI-compatible API
        ▼
-  Airvo Server  ←─── runs on localhost:8765
+  Airvo Server  ←─── runs on localhost:5000
        │
        ├── Groq (Llama 3.1, Llama 3.3)
        ├── OpenAI (GPT-4o, GPT-4o mini)
@@ -85,7 +85,7 @@ airvo start
 That's it. Airvo will:
 - Create your config at `~/.airvo/models.json`
 - Auto-configure continue.dev at `~/.continue/config.yaml`
-- Open the dashboard at `http://localhost:8765`
+- Open the dashboard at `http://localhost:5000`
 
 **3. Add your first model**
 
@@ -118,7 +118,7 @@ Run up to 3 models simultaneously. See all responses in VS Code and choose the b
 Use Ollama or LM Studio with no API key, no internet, no cost. Your code never leaves your machine.
 
 **🎛️ Visual Dashboard**
-Manage models, configure API keys, toggle models on/off — all from a clean dark UI at `localhost:8765`.
+Manage models, configure API keys, toggle models on/off — all from a clean dark UI at `localhost:5000`.
 
 **🧠 Project Context**
 Write your stack, preferences and constraints once. Airvo injects it into every request so the model always knows your project — without you repeating yourself.
@@ -160,7 +160,7 @@ Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works w
 
 ## Dashboard
 
-The Airvo dashboard runs at `http://localhost:8765` and lets you manage everything visually.
+The Airvo dashboard runs at `http://localhost:5000` and lets you manage everything visually.
 
 **Models page** — activate/deactivate models, save API keys, see requests and tokens per model.
 
@@ -213,7 +213,7 @@ models:
   - name: Airvo
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:8765/v1
+    apiBase: http://localhost:5000/v1
     apiKey: local
     roles:
       - chat
@@ -228,7 +228,7 @@ models:
 **CLI options**
 
 ```bash
-airvo start                    # default: localhost:8765, opens browser
+airvo start                    # default: localhost:5000, opens browser
 airvo start --port 9000        # custom port
 airvo start --host 0.0.0.0     # accessible from local network
 airvo start --no-browser       # don't open browser automatically
@@ -303,7 +303,7 @@ add ollama/llama3 → no API key, no internet, no cost
 
 ## Roadmap
 
-**v0.1.0 — Available now**
+**v0.2.0 — Available now**
 - ✅ Local FastAPI server with OpenAI-compatible API
 - ✅ LiteLLM integration — any provider, any model
 - ✅ Multi-model parallel mode
@@ -328,7 +328,7 @@ We're working on the next phase of Airvo. If you want to be the first to know:
 Airvo is designed with privacy and security in mind:
 
 - **API keys stay local** — stored in `~/.airvo/models.json` on your machine, never sent to Airvo servers
-- **Localhost only** — the server listens on `localhost:8765` by default, not accessible from the internet
+- **Localhost only** — the server listens on `localhost:5000` by default, not accessible from the internet
 - **Restricted CORS** — only the dashboard and VS Code extensions can make requests to the server
 - **No telemetry** — Airvo collects no usage data, no analytics, no crash reports
 - **Open source** — the full source code is on GitHub, you can audit everything

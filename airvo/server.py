@@ -1,18 +1,32 @@
 import os
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from airvo.api.routes import router
+
+# ── Request size limit (10 MB max) ────────────────────────────────────────
+MAX_REQUEST_SIZE = 10 * 1024 * 1024  # 10 MB
 
 # ── FastAPI app ────────────────────────────────────────────────────────────
 app = FastAPI(
     title="Airvo",
-    version="0.1.0",
+    version="0.2.0",
     description="Local AI coding copilot — any model, any provider.",
 )
+
+# ── Request size limit middleware ───────────────────────────────────────
+@app.middleware("http")
+async def limit_request_size(request: Request, call_next):
+    content_length = request.headers.get("content-length")
+    if content_length and int(content_length) > MAX_REQUEST_SIZE:
+        return JSONResponse(
+            status_code=413,
+            content={"detail": "Request too large. Maximum size is 10 MB."}
+        )
+    return await call_next(request)
 
 # ── CORS — needed for dashboard in development mode ───────────────────────
 app.add_middleware(
@@ -51,10 +65,18 @@ if _dist.exists():
         """
         Catch-all route — serve static files if they exist,
         otherwise fall back to index.html for React client-side routing.
+        Path traversal protection: resolved path must stay within _dist.
         """
-        file_path = _dist / full_path
-        if file_path.exists() and file_path.is_file():
-            return FileResponse(str(file_path))
+        try:
+            file_path = (_dist / full_path).resolve()
+            dist_resolved = _dist.resolve()
+            # Block path traversal attacks
+            if not str(file_path).startswith(str(dist_resolved)):
+                return FileResponse(str(_dist / "index.html"))
+            if file_path.exists() and file_path.is_file():
+                return FileResponse(str(file_path))
+        except Exception:
+            pass
         return FileResponse(str(_dist / "index.html"))
 
 else:

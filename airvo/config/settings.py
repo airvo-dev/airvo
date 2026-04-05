@@ -82,7 +82,23 @@ DEFAULT_PREFS = {
     "temperature":     0.7,
     "max_tokens":      4096,
     "memory_enabled":  False,
-    "memory_text":     ""
+    "memory_text":     "",
+    # ── RAG / Smart Memory ───────────────────────────────────────────────────
+    "rag_enabled":      False,
+    "rag_path":         "",
+    "rag_max_index_mb": 200,
+    "rag_max_file_kb":  500,
+    "rag_top_k":        5,
+    "rag_extensions": [
+        ".py", ".js", ".ts", ".jsx", ".tsx",
+        ".md", ".go", ".rs", ".java", ".cpp", ".c",
+        ".html", ".css", ".json", ".yaml", ".yml", ".toml",
+        ".txt", ".sh", ".rb", ".php", ".swift", ".kt",
+    ],
+    "rag_exclude_dirs": [
+        "node_modules", ".git", "dist", "__pycache__",
+        "venv", ".venv", "build", ".next", "coverage",
+    ],
 }
 
 
@@ -229,14 +245,21 @@ class Settings(BaseSettings):
         return load_prefs().get("max_tokens", self.max_tokens)
 
     def get_memory_prompt(self) -> Optional[str]:
-        """Returns memory text to inject into system prompt, or None if disabled"""
+        """Returns memory text to inject into system prompt, or None if disabled.
+        Sanitizes control characters to prevent prompt injection via memory text."""
         prefs = load_prefs()
         if not prefs.get("memory_enabled") or not prefs.get("memory_text", "").strip():
             return None
         text = prefs["memory_text"].strip()
         if len(text) > MEMORY_MAX_CHARS:
             text = text[:MEMORY_MAX_CHARS]
-        return text
+        # Remove null bytes and other dangerous control characters
+        # Keep newlines (\n), tabs (\t) and carriage returns (\r) as they're valid
+        text = "".join(
+            ch for ch in text
+            if ch in ("\n", "\t", "\r") or (ord(ch) >= 32 and ord(ch) != 127)
+        )
+        return text if text.strip() else None
 
     # ── Stats ─────────────────────────────────────────────
 

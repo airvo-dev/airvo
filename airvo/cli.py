@@ -58,7 +58,7 @@ def print_banner(host: str, port: int, dashboard_ready: bool):
     dashboard_status = "✓ dashboard ready" if dashboard_ready else "⚠ dashboard not built"
     typer.echo(f"""
     ╔══════════════════════════════════════╗
-    ║   🚀 Airvo v0.1.0                   ║
+    ║   🚀 Airvo v0.2.0                   ║
     ║                                      ║
     ║   Server:    http://{host}:{port}      ║
     ║   Dashboard: http://{host}:{port}      ║
@@ -246,7 +246,7 @@ def config(
 @app.command()
 def version():
     """Show Airvo version"""
-    typer.echo("  Airvo v0.1.0")
+    typer.echo("  Airvo v0.2.0")
 
 
 # ── Entry point ───────────────────────────────────────────────────────────

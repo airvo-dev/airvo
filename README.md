@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.1-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.2.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -29,7 +29,6 @@ Airvo runs on your machine, connects to any AI model simultaneously, and integra
 - [VS Code Integration](#vs-code-integration)
 - [Configuration](#configuration)
 - [Use Cases](#use-cases)
-- [Roadmap](#roadmap)
 - [Security](#security)
 - [FAQ](#faq)
 - [Community](#community)
@@ -46,7 +45,7 @@ Your Editor (VS Code)
        │
        │  OpenAI-compatible API
        ▼
-  Airvo Server  ←─── runs on localhost:8765
+  Airvo Server  ←─── runs on localhost:5000
        │
        ├── Groq (Llama 3.1, Llama 3.3)
        ├── OpenAI (GPT-4o, GPT-4o mini)
@@ -59,7 +58,8 @@ Your Editor (VS Code)
 **Why Airvo?**
 
 - ✅ Any model, any provider — no lock-in
-- ✅ Two models responding in parallel — see both, choose the best
+- ✅ Up to 3 models simultaneously — parallel, race, vote or review
+- ✅ 4 multi-model modes — Parallel, Race, Vote, Review
 - ✅ Your API keys stored locally — never shared
 - ✅ 100% local option — zero internet, zero cost
 - ✅ Works with free tiers — Groq, Ollama, LM Studio
@@ -85,7 +85,7 @@ airvo start
 That's it. Airvo will:
 - Create your config at `~/.airvo/models.json`
 - Auto-configure continue.dev at `~/.continue/config.yaml`
-- Open the dashboard at `http://localhost:8765`
+- Open the dashboard at `http://localhost:5000`
 
 **3. Add your first model**
 
@@ -111,8 +111,8 @@ Open VS Code → press `Ctrl+L` → ask anything.
 **🤖 Any Model, Any Provider**
 Add any model supported by LiteLLM — over 100 providers. Groq, OpenAI, Anthropic, Ollama, LM Studio, DeepSeek, Mistral, Gemini, and more.
 
-**⚡ Multi-Model Parallel**
-Run two models simultaneously. See both responses in VS Code and choose the best one.
+**⚡ Multi-Model Modes**
+Run up to 3 models simultaneously in 4 modes: **Parallel** (see all answers), **Race** (fastest wins), **Vote** (consensus), **Review** (one generates, others refine).
 
 **🔒 100% Local Option**
 Use Ollama or LM Studio with no API key, no internet, no cost. Your code never leaves your machine.
@@ -160,7 +160,7 @@ Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works w
 
 ## Dashboard
 
-The Airvo dashboard runs at `http://localhost:8765` and lets you manage everything visually.
+The Airvo dashboard runs at `http://localhost:5000` and lets you manage everything visually.
 
 **Models page** — activate/deactivate models, save API keys, see requests and tokens per model.
 
@@ -213,7 +213,7 @@ models:
   - name: Airvo
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:8765/v1
+    apiBase: http://localhost:5000/v1
     apiKey: local
     roles:
       - chat
@@ -228,7 +228,7 @@ models:
 **CLI options**
 
 ```bash
-airvo start                    # default: localhost:8765, opens browser
+airvo start                    # default: localhost:5000, opens browser
 airvo start --port 9000        # custom port
 airvo start --host 0.0.0.0     # accessible from local network
 airvo start --no-browser       # don't open browser automatically
@@ -301,34 +301,12 @@ add ollama/llama3 → no API key, no internet, no cost
 
 ---
 
-## Roadmap
-
-**v0.1.0 — Available now**
-- ✅ Local FastAPI server with OpenAI-compatible API
-- ✅ LiteLLM integration — any provider, any model
-- ✅ Multi-model parallel mode
-- ✅ Continue.dev integration for VS Code
-- ✅ Visual dashboard with 7 languages
-- ✅ CLI — `pip install airvo && airvo start`
-- ✅ Temperature and max tokens — configurable from dashboard
-- ✅ Project Context — inject your stack into every request
-- ✅ Usage stats — requests and tokens per model, stored locally
-
-**What's next**
-
-We're working on the next phase of Airvo. If you want to be the first to know:
-
-→ ⭐ Star this repo to follow updates
-→ 💬 Open an issue and tell us what you'd like to see
-
----
-
 ## Security
 
 Airvo is designed with privacy and security in mind:
 
 - **API keys stay local** — stored in `~/.airvo/models.json` on your machine, never sent to Airvo servers
-- **Localhost only** — the server listens on `localhost:8765` by default, not accessible from the internet
+- **Localhost only** — the server listens on `localhost:5000` by default, not accessible from the internet
 - **Restricted CORS** — only the dashboard and VS Code extensions can make requests to the server
 - **No telemetry** — Airvo collects no usage data, no analytics, no crash reports
 - **Open source** — the full source code is on GitHub, you can audit everything
@@ -340,8 +318,8 @@ Airvo is designed with privacy and security in mind:
 **How do I add a model?**
 Open the dashboard → Add Model → fill in the Model ID, Provider, and API Key → Save. Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works. Check the Supported Models table for examples.
 
-**How do I run two models in parallel?**
-Add two models in the dashboard and activate both. Airvo will call them simultaneously on every request. You can have up to 2 active models in v0.1.0.
+**How do I run multiple models?**
+Add models in the dashboard and activate them. Airvo supports up to **3 active models** simultaneously. Choose your mode in Configuration: Parallel, Race, Vote, or Review.
 
 **What is the Model ID format?**
 It follows LiteLLM's format: `provider/model-name`. For example: `groq/llama-3.3-70b-versatile`, `openai/gpt-4o`, `ollama/llama3`. Check the [LiteLLM docs](https://docs.litellm.ai/docs/providers) for the full list.

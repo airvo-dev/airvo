@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "airvo"
-version = "0.1.1"
+version = "0.2.0"
 description = "Your local AI coding copilot — any model, any provider, zero cloud."
 readme = "README.md"
 license = { text = "MIT" }
@@ -34,6 +34,13 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "aiofiles>=23.0.0",
     "typer>=0.9.0",
+]
+
+# ── Optional dependencies ─────────────────────────────────────────────────
+[project.optional-dependencies]
+rag = [
+    "sentence-transformers>=2.0.0",
+    "chromadb>=0.4.0",
 ]
 
 # ── CLI entry point — makes "airvo" command available after pip install ────

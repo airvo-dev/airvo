@@ -54,6 +54,32 @@ const I18N = {
     memory_saved:"Project context saved ✓",
     memory_too_long:"Context too long — trim it down",
     memory_tokens_warning:"⚠ Context is large — consider trimming",
+    rag_label:"Smart Memory (RAG)",
+    rag_sub:"Semantic search of your codebase — relevant code injected into every request automatically. Embeddings run 100% locally.",
+    rag_enable:"Enable Smart Memory",
+    rag_warning_title:"One-time setup required",
+    rag_warning_body:"Smart Memory downloads a local AI embedding model (~90 MB) on first use. Your code never leaves your computer.",
+    rag_warning_confirm:"Enable anyway",
+    rag_path_label:"Project Path",
+    rag_path_placeholder:"/path/to/your/project",
+    rag_index_btn:"Index Now",
+    rag_indexing:"Indexing…",
+    rag_status_files:"files indexed",
+    rag_status_chunks:"chunks",
+    rag_status_size:"MB index",
+    rag_status_last:"Last indexed",
+    rag_status_never:"never",
+    rag_clear_btn:"Clear Index",
+    rag_clear_confirm:"Delete the entire RAG index? This cannot be undone.",
+    rag_clear_done:"Index cleared",
+    rag_index_done:"Indexing complete ✓",
+    rag_index_error:"Indexing failed",
+    rag_not_available:"RAG dependencies not installed",
+    rag_install_hint:"Run: pip install airvo[rag]",
+    rag_advanced:"Advanced settings",
+    rag_max_mb:"Max index size (MB)",
+    rag_max_kb:"Max file size (KB)",
+    rag_top_k:"Results per request",
     stats_label:"Usage Stats",
     stats_requests:"requests",
     stats_tokens:"tokens",
@@ -175,6 +201,32 @@ const I18N = {
     memory_saved:"Contexto guardado ✓",
     memory_too_long:"Contexto muy largo — reducilo",
     memory_tokens_warning:"⚠ Contexto grande — considerá reducirlo",
+    rag_label:"Memoria Inteligente (RAG)",
+    rag_sub:"Búsqueda semántica de tu código — fragmentos relevantes inyectados automáticamente. Funciona 100% local.",
+    rag_enable:"Activar Memoria Inteligente",
+    rag_warning_title:"Configuración única requerida",
+    rag_warning_body:"Memoria Inteligente descarga un modelo de embeddings local (~90 MB) la primera vez. Tu código nunca sale de tu computadora.",
+    rag_warning_confirm:"Activar de todas formas",
+    rag_path_label:"Ruta del Proyecto",
+    rag_path_placeholder:"/ruta/a/tu/proyecto",
+    rag_index_btn:"Indexar Ahora",
+    rag_indexing:"Indexando…",
+    rag_status_files:"archivos indexados",
+    rag_status_chunks:"fragmentos",
+    rag_status_size:"MB índice",
+    rag_status_last:"Último indexado",
+    rag_status_never:"nunca",
+    rag_clear_btn:"Limpiar Índice",
+    rag_clear_confirm:"¿Eliminar el índice RAG completo? Esta acción no se puede deshacer.",
+    rag_clear_done:"Índice limpiado",
+    rag_index_done:"Indexación completa ✓",
+    rag_index_error:"Error al indexar",
+    rag_not_available:"Dependencias RAG no instaladas",
+    rag_install_hint:"Ejecutar: pip install airvo[rag]",
+    rag_advanced:"Configuración avanzada",
+    rag_max_mb:"Tamaño máximo del índice (MB)",
+    rag_max_kb:"Tamaño máximo por archivo (KB)",
+    rag_top_k:"Resultados por solicitud",
     stats_label:"Estadísticas de Uso",
     stats_requests:"requests",
     stats_tokens:"tokens",
@@ -268,6 +320,32 @@ const I18N = {
     memory_saved:"Contexte enregistré ✓",
     memory_too_long:"Contexte trop long — réduisez-le",
     memory_tokens_warning:"⚠ Contexte volumineux — envisagez de le réduire",
+    rag_label:"Mémoire Intelligente (RAG)",
+    rag_sub:"Recherche sémantique dans votre code — les extraits pertinents sont injectés automatiquement. 100% local.",
+    rag_enable:"Activer la Mémoire Intelligente",
+    rag_warning_title:"Configuration unique requise",
+    rag_warning_body:"La Mémoire Intelligente télécharge un modèle d'embeddings local (~90 Mo) au premier démarrage. Votre code ne quitte jamais votre ordinateur.",
+    rag_warning_confirm:"Activer quand même",
+    rag_path_label:"Chemin du Projet",
+    rag_path_placeholder:"/chemin/vers/votre/projet",
+    rag_index_btn:"Indexer Maintenant",
+    rag_indexing:"Indexation…",
+    rag_status_files:"fichiers indexés",
+    rag_status_chunks:"fragments",
+    rag_status_size:"Mo d'index",
+    rag_status_last:"Dernière indexation",
+    rag_status_never:"jamais",
+    rag_clear_btn:"Effacer l'Index",
+    rag_clear_confirm:"Supprimer l'index RAG entier ? Cette action est irréversible.",
+    rag_clear_done:"Index effacé",
+    rag_index_done:"Indexation terminée ✓",
+    rag_index_error:"Échec de l'indexation",
+    rag_not_available:"Dépendances RAG non installées",
+    rag_install_hint:"Exécuter : pip install airvo[rag]",
+    rag_advanced:"Paramètres avancés",
+    rag_max_mb:"Taille max de l'index (Mo)",
+    rag_max_kb:"Taille max par fichier (Ko)",
+    rag_top_k:"Résultats par requête",
     stats_label:"Statistiques d'Utilisation",
     stats_requests:"requêtes", stats_tokens:"tokens",
     stats_reset:"Réinitialiser les stats",
@@ -360,6 +438,32 @@ const I18N = {
     memory_saved:"Kontext gespeichert ✓",
     memory_too_long:"Kontext zu lang — kürzen Sie ihn",
     memory_tokens_warning:"⚠ Kontext ist groß — kürzen empfohlen",
+    rag_label:"Smart Memory (RAG)",
+    rag_sub:"Semantische Suche in Ihrem Code — relevante Ausschnitte werden automatisch eingefügt. 100% lokal.",
+    rag_enable:"Smart Memory aktivieren",
+    rag_warning_title:"Einmalige Einrichtung erforderlich",
+    rag_warning_body:"Smart Memory lädt beim ersten Start ein lokales Embedding-Modell (~90 MB) herunter. Ihr Code verlässt niemals Ihren Computer.",
+    rag_warning_confirm:"Trotzdem aktivieren",
+    rag_path_label:"Projektpfad",
+    rag_path_placeholder:"/pfad/zu/ihrem/projekt",
+    rag_index_btn:"Jetzt indexieren",
+    rag_indexing:"Wird indexiert…",
+    rag_status_files:"indexierte Dateien",
+    rag_status_chunks:"Fragmente",
+    rag_status_size:"MB Index",
+    rag_status_last:"Zuletzt indexiert",
+    rag_status_never:"nie",
+    rag_clear_btn:"Index löschen",
+    rag_clear_confirm:"Den gesamten RAG-Index löschen? Dies kann nicht rückgängig gemacht werden.",
+    rag_clear_done:"Index gelöscht",
+    rag_index_done:"Indexierung abgeschlossen ✓",
+    rag_index_error:"Indexierung fehlgeschlagen",
+    rag_not_available:"RAG-Abhängigkeiten nicht installiert",
+    rag_install_hint:"Ausführen: pip install airvo[rag]",
+    rag_advanced:"Erweiterte Einstellungen",
+    rag_max_mb:"Max. Indexgröße (MB)",
+    rag_max_kb:"Max. Dateigröße (KB)",
+    rag_top_k:"Ergebnisse pro Anfrage",
     stats_label:"Nutzungsstatistiken",
     stats_requests:"Anfragen", stats_tokens:"Token",
     stats_reset:"Statistiken zurücksetzen",
@@ -452,6 +556,32 @@ const I18N = {
     memory_saved:"上下文已保存 ✓",
     memory_too_long:"上下文太长 — 请精简",
     memory_tokens_warning:"⚠ 上下文较大 — 建议精简",
+    rag_label:"智能记忆 (RAG)",
+    rag_sub:"对代码库进行语义搜索 — 相关代码片段自动注入每次请求。完全本地运行。",
+    rag_enable:"启用智能记忆",
+    rag_warning_title:"需要一次性设置",
+    rag_warning_body:"智能记忆在首次使用时会下载一个本地嵌入模型（约 90 MB）。您的代码永远不会离开您的计算机。",
+    rag_warning_confirm:"仍然启用",
+    rag_path_label:"项目路径",
+    rag_path_placeholder:"/您的/项目/路径",
+    rag_index_btn:"立即索引",
+    rag_indexing:"索引中…",
+    rag_status_files:"已索引文件",
+    rag_status_chunks:"片段",
+    rag_status_size:"MB 索引",
+    rag_status_last:"最后索引时间",
+    rag_status_never:"从未",
+    rag_clear_btn:"清除索引",
+    rag_clear_confirm:"删除整个 RAG 索引？此操作无法撤销。",
+    rag_clear_done:"索引已清除",
+    rag_index_done:"索引完成 ✓",
+    rag_index_error:"索引失败",
+    rag_not_available:"RAG 依赖项未安装",
+    rag_install_hint:"运行：pip install airvo[rag]",
+    rag_advanced:"高级设置",
+    rag_max_mb:"最大索引大小（MB）",
+    rag_max_kb:"最大文件大小（KB）",
+    rag_top_k:"每次请求的结果数",
     stats_label:"使用统计",
     stats_requests:"请求数", stats_tokens:"Token 数",
     stats_reset:"重置统计",
@@ -544,6 +674,32 @@ const I18N = {
     memory_saved:"コンテキストを保存しました ✓",
     memory_too_long:"コンテキストが長すぎます — 短くしてください",
     memory_tokens_warning:"⚠ コンテキストが大きい — 削減を検討してください",
+    rag_label:"スマートメモリ (RAG)",
+    rag_sub:"コードベースのセマンティック検索 — 関連するコードが自動的にリクエストに挿入されます。完全ローカル動作。",
+    rag_enable:"スマートメモリを有効にする",
+    rag_warning_title:"初回セットアップが必要です",
+    rag_warning_body:"スマートメモリは初回使用時にローカル埋め込みモデル（約90 MB）をダウンロードします。コードがコンピュータの外に出ることはありません。",
+    rag_warning_confirm:"それでも有効にする",
+    rag_path_label:"プロジェクトパス",
+    rag_path_placeholder:"/your/project/path",
+    rag_index_btn:"今すぐインデックス",
+    rag_indexing:"インデックス中…",
+    rag_status_files:"インデックス済みファイル",
+    rag_status_chunks:"チャンク",
+    rag_status_size:"MB インデックス",
+    rag_status_last:"最終インデックス",
+    rag_status_never:"なし",
+    rag_clear_btn:"インデックスを削除",
+    rag_clear_confirm:"RAGインデックス全体を削除しますか？この操作は元に戻せません。",
+    rag_clear_done:"インデックスを削除しました",
+    rag_index_done:"インデックス完了 ✓",
+    rag_index_error:"インデックス失敗",
+    rag_not_available:"RAG依存関係がインストールされていません",
+    rag_install_hint:"実行：pip install airvo[rag]",
+    rag_advanced:"詳細設定",
+    rag_max_mb:"最大インデックスサイズ (MB)",
+    rag_max_kb:"最大ファイルサイズ (KB)",
+    rag_top_k:"リクエストごとの結果数",
     stats_label:"使用統計",
     stats_requests:"リクエスト", stats_tokens:"トークン",
     stats_reset:"統計をリセット",
@@ -636,6 +792,32 @@ const I18N = {
     memory_saved:"Contexto salvo ✓",
     memory_too_long:"Contexto muito longo — reduza-o",
     memory_tokens_warning:"⚠ Contexto grande — considere reduzir",
+    rag_label:"Memória Inteligente (RAG)",
+    rag_sub:"Busca semântica no seu código — trechos relevantes injetados automaticamente em cada solicitação. 100% local.",
+    rag_enable:"Ativar Memória Inteligente",
+    rag_warning_title:"Configuração única necessária",
+    rag_warning_body:"A Memória Inteligente baixa um modelo de embeddings local (~90 MB) na primeira vez. Seu código nunca sai do seu computador.",
+    rag_warning_confirm:"Ativar mesmo assim",
+    rag_path_label:"Caminho do Projeto",
+    rag_path_placeholder:"/caminho/para/seu/projeto",
+    rag_index_btn:"Indexar Agora",
+    rag_indexing:"Indexando…",
+    rag_status_files:"arquivos indexados",
+    rag_status_chunks:"fragmentos",
+    rag_status_size:"MB de índice",
+    rag_status_last:"Última indexação",
+    rag_status_never:"nunca",
+    rag_clear_btn:"Limpar Índice",
+    rag_clear_confirm:"Excluir o índice RAG inteiro? Esta ação não pode ser desfeita.",
+    rag_clear_done:"Índice limpo",
+    rag_index_done:"Indexação concluída ✓",
+    rag_index_error:"Falha na indexação",
+    rag_not_available:"Dependências RAG não instaladas",
+    rag_install_hint:"Execute: pip install airvo[rag]",
+    rag_advanced:"Configurações avançadas",
+    rag_max_mb:"Tamanho máximo do índice (MB)",
+    rag_max_kb:"Tamanho máximo por arquivo (KB)",
+    rag_top_k:"Resultados por solicitação",
     stats_label:"Estatísticas de Uso",
     stats_requests:"requisições", stats_tokens:"tokens",
     stats_reset:"Resetar estatísticas",
@@ -937,6 +1119,10 @@ export default function AirvoDashboard() {
   const [loading, setLoading]  = useState(true);
   const [prefs, setPrefs]      = useState(null);
   const [stats, setStats]      = useState({});
+  const [ragStatus, setRagStatus]       = useState(null);
+  const [ragIndexing, setRagIndexing]   = useState(false);
+  const [ragAdvanced, setRagAdvanced]   = useState(false);
+  const [showRagWarning, setShowRagWarning] = useState(false);
   const { toasts, add: toast } = useToast();
   const { lang, setLang, t }   = useLanguage();
 
@@ -956,7 +1142,15 @@ export default function AirvoDashboard() {
     finally  { setLoading(false); }
   }, []);
 
+  const fetchRagStatus = useCallback(async () => {
+    try {
+      const res = await fetch(`${API}/api/rag/status`);
+      if (res.ok) setRagStatus(await res.json());
+    } catch {}
+  }, []);
+
   useEffect(() => { fetchAll(); }, [fetchAll]);
+  useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
 
   const MAX_ACTIVE = 3;
 
@@ -1022,6 +1216,36 @@ export default function AirvoDashboard() {
     toast(t("stats_reset_done"), "info");
   }
 
+  async function triggerRagIndex() {
+    const path = (prefs?.rag_path || "").trim();
+    if (!path) { toast(t("rag_path_label") + ": required", "error"); return; }
+    setRagIndexing(true);
+    try {
+      const res = await fetch(`${API}/api/rag/index`, {
+        method:"POST", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({
+          path,
+          max_index_mb: prefs?.rag_max_index_mb,
+          max_file_kb:  prefs?.rag_max_file_kb,
+          extensions:   prefs?.rag_extensions,
+          exclude_dirs: prefs?.rag_exclude_dirs,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast(data.detail || t("rag_index_error"), "error"); return; }
+      toast(t("rag_index_done"), "success");
+      await fetchRagStatus();
+    } catch { toast(t("rag_index_error"), "error"); }
+    finally { setRagIndexing(false); }
+  }
+
+  async function clearRagIndex() {
+    if (!confirm(t("rag_clear_confirm"))) return;
+    await fetch(`${API}/api/rag/reset`, { method:"DELETE" });
+    toast(t("rag_clear_done"), "info");
+    await fetchRagStatus();
+  }
+
   const active       = models.filter(m => m.active);
   const continueYaml = `models:\n  - name: Airvo\n    provider: openai\n    model: airvo-auto\n    apiBase: http://localhost:5000/v1\n    apiKey: local\n    roles:\n      - chat\n      - edit\n      - apply`;
 
@@ -1037,6 +1261,11 @@ export default function AirvoDashboard() {
           </div>
           <div className="header-right">
             <LangDropdown lang={lang} setLang={setLang} />
+            {prefs?.rag_enabled && ragStatus?.available && ragStatus?.chunks_total > 0 && (
+              <div style={{ display:"flex", alignItems:"center", gap:5, padding:"3px 9px", borderRadius:6, background:"#1a1a2a", border:"1px solid var(--accent)", fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", fontWeight:700 }}>
+                🧠 RAG
+              </div>
+            )}
             <div className="header-status">
               <div className={`status-dot ${loading?"loading":health?"ok":"err"}`} />
               {loading ? t("connecting") : health ? `v${health.version} · localhost:5000` : t("offline")}
@@ -1265,6 +1494,117 @@ export default function AirvoDashboard() {
                 </>}
               </div>
 
+              {/* Smart Memory / RAG */}
+              <div className="card">
+                <div className="card-title">🧠 {t("rag_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>
+                  {t("rag_sub")}
+                </p>
+
+                {/* Not-available banner */}
+                {ragStatus && !ragStatus.available && (
+                  <div style={{ padding:"12px 14px", background:"#1a1200", border:"1px solid #4a3a00", borderRadius:8, marginBottom:14, fontFamily:"var(--mono)", fontSize:11, color:"var(--yellow)" }}>
+                    ⚠ {t("rag_not_available")} — <code>{t("rag_install_hint")}</code>
+                  </div>
+                )}
+
+                {/* Enable toggle */}
+                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
+                  <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:13, fontWeight:600 }}>
+                    <input type="checkbox"
+                      checked={prefs?.rag_enabled ?? false}
+                      onChange={e => {
+                        if (e.target.checked && !(prefs?.rag_enabled)) {
+                          setShowRagWarning(true);
+                        } else {
+                          updatePrefs({ rag_enabled: e.target.checked });
+                        }
+                      }}
+                    />
+                    {t("rag_enable")}
+                  </label>
+                </div>
+
+                {(prefs?.rag_enabled) && <>
+                  {/* Path + Index button */}
+                  <div style={{ display:"flex", gap:10, marginBottom:14, alignItems:"flex-end" }}>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("rag_path_label")}</div>
+                      <input type="text" className="form-input" style={{ width:"100%" }}
+                        placeholder={t("rag_path_placeholder")}
+                        value={prefs?.rag_path || ""}
+                        onChange={e => setPrefs(p => ({ ...p, rag_path: e.target.value }))}
+                        onBlur={e => updatePrefs({ rag_path: e.target.value.trim() })}
+                      />
+                    </div>
+                    <button className="btn btn-primary" style={{ flexShrink:0 }}
+                      disabled={ragIndexing || !prefs?.rag_path?.trim()}
+                      onClick={triggerRagIndex}>
+                      {ragIndexing ? t("rag_indexing") : t("rag_index_btn")}
+                    </button>
+                  </div>
+
+                  {/* Index stats */}
+                  {ragStatus && ragStatus.chunks_total > 0 && (
+                    <div style={{ display:"flex", gap:20, marginBottom:14, padding:"10px 14px", background:"var(--bg3)", borderRadius:8, border:"1px solid var(--border)", fontFamily:"var(--mono)", fontSize:11 }}>
+                      <div><span style={{ color:"var(--accent)", fontWeight:700 }}>{ragStatus.files_indexed}</span> <span style={{ color:"var(--text2)" }}>{t("rag_status_files")}</span></div>
+                      <div><span style={{ color:"var(--accent)", fontWeight:700 }}>{ragStatus.chunks_total.toLocaleString()}</span> <span style={{ color:"var(--text2)" }}>{t("rag_status_chunks")}</span></div>
+                      <div><span style={{ color:"var(--accent)", fontWeight:700 }}>{ragStatus.index_size_mb}</span> <span style={{ color:"var(--text2)" }}>{t("rag_status_size")}</span></div>
+                      {ragStatus.last_indexed && (
+                        <div style={{ marginLeft:"auto" }}>
+                          <span style={{ color:"var(--text2)" }}>{t("rag_status_last")}: </span>
+                          <span style={{ color:"var(--text)" }}>{new Date(ragStatus.last_indexed).toLocaleString()}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Advanced toggle */}
+                  <div style={{ marginBottom:10 }}>
+                    <button className="btn btn-ghost btn-sm"
+                      onClick={() => setRagAdvanced(v => !v)}>
+                      {ragAdvanced ? "▾" : "▸"} {t("rag_advanced")}
+                    </button>
+                  </div>
+
+                  {ragAdvanced && (
+                    <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:14, marginBottom:14, padding:"14px", background:"var(--bg3)", borderRadius:8, border:"1px solid var(--border)" }}>
+                      <div>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("rag_max_mb")}</div>
+                        <input type="number" className="form-input" style={{ width:"100%" }}
+                          value={prefs?.rag_max_index_mb ?? 200} min={10} max={2000} step={50}
+                          onChange={e => setPrefs(p => ({ ...p, rag_max_index_mb: parseInt(e.target.value) }))}
+                          onBlur={e => updatePrefs({ rag_max_index_mb: parseInt(e.target.value) })}
+                        />
+                      </div>
+                      <div>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("rag_max_kb")}</div>
+                        <input type="number" className="form-input" style={{ width:"100%" }}
+                          value={prefs?.rag_max_file_kb ?? 500} min={10} max={5000} step={50}
+                          onChange={e => setPrefs(p => ({ ...p, rag_max_file_kb: parseInt(e.target.value) }))}
+                          onBlur={e => updatePrefs({ rag_max_file_kb: parseInt(e.target.value) })}
+                        />
+                      </div>
+                      <div>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("rag_top_k")}</div>
+                        <input type="number" className="form-input" style={{ width:"100%" }}
+                          value={prefs?.rag_top_k ?? 5} min={1} max={20} step={1}
+                          onChange={e => setPrefs(p => ({ ...p, rag_top_k: parseInt(e.target.value) }))}
+                          onBlur={e => updatePrefs({ rag_top_k: parseInt(e.target.value) })}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Clear index */}
+                  {ragStatus && ragStatus.chunks_total > 0 && (
+                    <div style={{ marginTop:4 }}>
+                      <button className="btn btn-danger btn-sm" onClick={clearRagIndex}>{t("rag_clear_btn")}</button>
+                    </div>
+                  )}
+                </>}
+              </div>
+
               {/* Usage Stats */}
               <div className="card">
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
@@ -1341,6 +1681,26 @@ export default function AirvoDashboard() {
       <div className="toast-container">
         {toasts.map(x => <div key={x.id} className={`toast ${x.type}`}>{x.msg}</div>)}
       </div>
+
+      {/* RAG first-enable warning modal */}
+      {showRagWarning && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:500 }}>
+          <div style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:16, padding:32, maxWidth:420, width:"90%", boxShadow:"0 16px 64px rgba(0,0,0,0.8)" }}>
+            <div style={{ fontSize:32, marginBottom:16 }}>🧠</div>
+            <div style={{ fontSize:17, fontWeight:800, marginBottom:12 }}>{t("rag_warning_title")}</div>
+            <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", lineHeight:1.8, marginBottom:24 }}>
+              {t("rag_warning_body")}
+            </p>
+            <div style={{ display:"flex", gap:12 }}>
+              <button className="btn btn-primary" style={{ flex:1 }} onClick={() => {
+                updatePrefs({ rag_enabled: true });
+                setShowRagWarning(false);
+              }}>{t("rag_warning_confirm")}</button>
+              <button className="btn btn-ghost" onClick={() => setShowRagWarning(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
