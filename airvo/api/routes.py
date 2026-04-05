@@ -13,20 +13,35 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# ── TPM-aware max_tokens cap ─────────────────────────────────────────────
-# Groq free tier: 6000 TPM total (input + output combined).
-# Cap output tokens so input always has headroom.
-_PROVIDER_MAX_TOKENS = {
-    "groq": 2000,  # leaves ~4000 tokens for input (6000 TPM limit)
+# ── Per-provider TPM / context limits ────────────────────────────────────
+# Add any provider here that has strict rate limits on free tiers.
+# max_output : cap for max_tokens sent to the API (~output tokens)
+# max_msg_chars : cap per history message content (prevents huge input tokens)
+# Providers NOT listed here are uncapped (OpenAI, Anthropic, Ollama, etc.)
+_PROVIDER_LIMITS: dict[str, dict] = {
+    "groq":       {"max_output": 2000, "max_msg_chars": 2000},  # 6k–14k TPM free
+    "together":   {"max_output": 2000, "max_msg_chars": 2000},  # ~10k TPM free
+    "cerebras":   {"max_output": 2000, "max_msg_chars": 2000},  # ~10k TPM free
+    "novita":     {"max_output": 2000, "max_msg_chars": 2000},  # varies
+    "openrouter": {"max_output": 2000, "max_msg_chars": 2000},  # free models vary
 }
 
+def _provider(model_id: str) -> str:
+    return (model_id or "").split("/")[0].lower()
+
 def _safe_max_tokens(model_id: str, requested: int) -> int:
-    """Return the lower of requested and provider TPM-safe limit."""
-    provider = (model_id or "").split("/")[0].lower()
-    cap = _PROVIDER_MAX_TOKENS.get(provider)
-    if cap:
-        return min(requested, cap)
-    return requested
+    """Cap output tokens for providers with strict TPM limits."""
+    cap = _PROVIDER_LIMITS.get(_provider(model_id), {}).get("max_output")
+    return min(requested, cap) if cap else requested
+
+def _msg_char_cap(active_models: list) -> int | None:
+    """Return the tightest max_msg_chars across all active models, or None if uncapped."""
+    caps = [
+        _PROVIDER_LIMITS[_provider(m["id"])]["max_msg_chars"]
+        for m in active_models
+        if _provider(m["id"]) in _PROVIDER_LIMITS
+    ]
+    return min(caps) if caps else None
 
 # ── Schemas ───────────────────────────────────────────────────────────────
 class Message(BaseModel):
@@ -327,22 +342,16 @@ async def chat_completions(request: ChatRequest):
             other_msgs = other_msgs[-max_history:]
 
         # ── Per-message char cap — only for providers with strict TPM limits ─
-        # Free Groq tier = 6000 TPM total. Cap message content to avoid blowing
-        # the limit. Paid providers (OpenAI, Anthropic, etc.) have 100k+ context
-        # windows — no need to truncate, doing so would reduce response quality.
-        _LOW_TPM_PROVIDERS = {"groq"}
-        _active_providers = {(m.get("id") or "").split("/")[0].lower()
-                             for m in settings.get_active_models()}
-        _needs_char_cap = bool(_active_providers & _LOW_TPM_PROVIDERS)
-
-        if _needs_char_cap:
-            MAX_MSG_CHARS = 2000
+        # Uses _PROVIDER_LIMITS to determine the tightest cap across all active
+        # models. Paid/local providers (OpenAI, Anthropic, Ollama) are uncapped.
+        _char_cap = _msg_char_cap(settings.get_active_models())
+        if _char_cap:
             trimmed = []
             for m in other_msgs:
                 content = m.get("content") or ""
-                if isinstance(content, str) and len(content) > MAX_MSG_CHARS:
+                if isinstance(content, str) and len(content) > _char_cap:
                     m = dict(m)
-                    m["content"] = content[:MAX_MSG_CHARS] + " … [trimmed]"
+                    m["content"] = content[:_char_cap] + " … [trimmed]"
                 trimmed.append(m)
             other_msgs = trimmed
 
