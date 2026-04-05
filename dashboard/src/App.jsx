@@ -47,6 +47,12 @@ const I18N = {
     disc_ollama_offline:"Ollama is offline", disc_free_badge:"Free",
     disc_context:"context", disc_no_results:"No models found", disc_ram_required:"RAM required",
     disc_already_added:"Already added", disc_open_section:"Discover",
+    disc_local_explain:"Local models run 100% on your computer via Ollama — no API key, no internet, no cost. Completely private.",
+    disc_local_how:"① Copy the pull command below → run it in your terminal to download the model.  ② Click '+ Add to Airvo' to register it in Airvo.",
+    disc_fits_detail:"Fits in your available RAM — will load and run smoothly",
+    disc_too_large_detail:"Needs more RAM than currently available — may be very slow or fail to load",
+    disc_cloud_explain:"Cloud models run on OpenRouter's servers — powerful, no local GPU needed. Requires a free OpenRouter API key.",
+    disc_cloud_how:"① Click '+ Add to Airvo'.  ② Go to the Models page and set your OpenRouter API key.  ③ Activate the model and you're done.",
     continue_label:"Continue.dev Config", continue_hint:"Add this to your continue.dev config.yaml:",
     copy_config:"Copy config", copied:"Copied ✓",
     config_title:"Configuration", config_sub:"Mode, temperature, memory and preferences",
@@ -249,6 +255,12 @@ const I18N = {
     disc_ollama_offline:"Ollama no disponible", disc_free_badge:"Gratis",
     disc_context:"contexto", disc_no_results:"No se encontraron modelos", disc_ram_required:"RAM requerida",
     disc_already_added:"Ya agregado", disc_open_section:"Descubrir",
+    disc_local_explain:"Los modelos locales corren 100% en tu computadora via Ollama — sin API key, sin internet, sin costo. Completamente privado.",
+    disc_local_how:"① Copiá el pull command de abajo → ejecutalo en tu terminal para descargar el modelo.  ② Hacé click en '+ Agregar a Airvo' para registrarlo.",
+    disc_fits_detail:"Entra en tu RAM disponible — cargará y correrá sin problemas",
+    disc_too_large_detail:"Necesita más RAM de la disponible — puede ser muy lento o fallar al cargar",
+    disc_cloud_explain:"Los modelos cloud corren en los servidores de OpenRouter — potentes, sin GPU local. Requiere una API key gratuita de OpenRouter.",
+    disc_cloud_how:"① Hacé click en '+ Agregar a Airvo'.  ② Andá a la página Modelos y configurá tu API key de OpenRouter.  ③ Activá el modelo.",
     continue_label:"Config de Continue.dev", continue_hint:"Pegá esto en tu config.yaml:",
     copy_config:"Copiar config", copied:"Copiado ✓",
     config_title:"Configuración", config_sub:"Modo, temperatura, memoria y preferencias",
@@ -424,6 +436,12 @@ const I18N = {
     disc_ollama_offline:"Ollama hors ligne", disc_free_badge:"Gratuit",
     disc_context:"contexte", disc_no_results:"Aucun modèle trouvé", disc_ram_required:"RAM requise",
     disc_already_added:"Déjà ajouté", disc_open_section:"Découvrir",
+    disc_local_explain:"Les modèles locaux fonctionnent à 100% sur votre ordinateur via Ollama — aucune clé API, pas d'internet, gratuit. Complètement privé.",
+    disc_local_how:"① Copiez la commande pull ci-dessous → exécutez-la dans votre terminal pour télécharger le modèle.  ② Cliquez '+ Ajouter à Airvo' pour l'enregistrer.",
+    disc_fits_detail:"Tient dans votre RAM disponible — se chargera et fonctionnera sans problème",
+    disc_too_large_detail:"Nécessite plus de RAM que disponible — peut être très lent ou ne pas se charger",
+    disc_cloud_explain:"Les modèles cloud fonctionnent sur les serveurs d'OpenRouter — puissants, sans GPU local. Nécessite une clé API OpenRouter gratuite.",
+    disc_cloud_how:"① Cliquez '+ Ajouter à Airvo'.  ② Allez dans la page Modèles et configurez votre clé OpenRouter.  ③ Activez le modèle.",
     continue_label:"Config Continue.dev", continue_hint:"Ajoutez ceci à votre config.yaml :",
     copy_config:"Copier la config", copied:"Copié ✓",
     config_title:"Configuration", config_sub:"Mode, température, mémoire et préférences",
@@ -597,6 +615,12 @@ const I18N = {
     disc_ollama_offline:"Ollama offline", disc_free_badge:"Kostenlos",
     disc_context:"Kontext", disc_no_results:"Keine Modelle gefunden", disc_ram_required:"RAM erforderlich",
     disc_already_added:"Bereits hinzugefügt", disc_open_section:"Entdecken",
+    disc_local_explain:"Lokale Modelle laufen 100% auf Ihrem Computer über Ollama — kein API-Schlüssel, kein Internet, kostenlos. Vollständig privat.",
+    disc_local_how:"① Pull-Befehl unten kopieren → im Terminal ausführen, um das Modell herunterzuladen.  ② '+ Zu Airvo hinzufügen' klicken, um es zu registrieren.",
+    disc_fits_detail:"Passt in Ihren verfügbaren RAM — wird problemlos laden und laufen",
+    disc_too_large_detail:"Benötigt mehr RAM als verfügbar — kann sehr langsam sein oder fehlschlagen",
+    disc_cloud_explain:"Cloud-Modelle laufen auf OpenRouter-Servern — leistungsstark, keine lokale GPU nötig. Erfordert einen kostenlosen OpenRouter-API-Schlüssel.",
+    disc_cloud_how:"① '+ Zu Airvo hinzufügen' klicken.  ② Modelle-Seite öffnen und OpenRouter-API-Schlüssel setzen.  ③ Modell aktivieren.",
     continue_label:"Continue.dev Konfiguration", continue_hint:"Fügen Sie dies zu Ihrer config.yaml hinzu:",
     copy_config:"Konfiguration kopieren", copied:"Kopiert ✓",
     config_title:"Konfiguration", config_sub:"Modus, Temperatur, Speicher und Einstellungen",
@@ -770,6 +794,12 @@ const I18N = {
     disc_ollama_offline:"Ollama 离线", disc_free_badge:"免费",
     disc_context:"上下文", disc_no_results:"未找到模型", disc_ram_required:"所需内存",
     disc_already_added:"已添加", disc_open_section:"发现",
+    disc_local_explain:"本地模型通过 Ollama 在您的电脑上 100% 本地运行——无需 API 密钥、无需联网、完全免费，完全私密。",
+    disc_local_how:"① 复制下方的拉取命令 → 在终端运行以下载模型。  ② 点击「+ 添加到 Airvo」注册模型。",
+    disc_fits_detail:"适合您的可用 RAM — 可以流畅加载和运行",
+    disc_too_large_detail:"需要比可用 RAM 更多的内存 — 可能非常慢或无法加载",
+    disc_cloud_explain:"云端模型在 OpenRouter 服务器上运行——功能强大，无需本地 GPU。需要免费的 OpenRouter API 密钥。",
+    disc_cloud_how:"① 点击「+ 添加到 Airvo」。  ② 前往模型页面设置 OpenRouter API 密钥。  ③ 激活模型即可。",
     continue_label:"Continue.dev 配置", continue_hint:"将以下内容添加到您的 config.yaml：",
     copy_config:"复制配置", copied:"已复制 ✓",
     config_title:"配置", config_sub:"模式、温度、记忆和偏好设置",
@@ -943,6 +973,12 @@ const I18N = {
     disc_ollama_offline:"Ollamaオフライン", disc_free_badge:"無料",
     disc_context:"コンテキスト", disc_no_results:"モデルが見つかりません", disc_ram_required:"必要なRAM",
     disc_already_added:"追加済み", disc_open_section:"発見",
+    disc_local_explain:"ローカルモデルは Ollama を介してコンピューター上で 100% 実行されます — API キー不要、インターネット不要、無料。完全プライベート。",
+    disc_local_how:"① 下の pull コマンドをコピー → ターミナルで実行してモデルをダウンロード。  ② 「+ Airvo に追加」をクリックして登録。",
+    disc_fits_detail:"利用可能な RAM に収まります — スムーズに読み込んで実行できます",
+    disc_too_large_detail:"利用可能な RAM より多くが必要 — 非常に遅いか読み込みに失敗する可能性があります",
+    disc_cloud_explain:"クラウドモデルは OpenRouter のサーバーで実行されます — 高性能、ローカル GPU 不要。無料の OpenRouter API キーが必要です。",
+    disc_cloud_how:"① 「+ Airvo に追加」をクリック。  ② モデルページで OpenRouter API キーを設定。  ③ モデルを有効化。",
     continue_label:"Continue.dev設定", continue_hint:"これをconfig.yamlに追加してください：",
     copy_config:"設定をコピー", copied:"コピー済み ✓",
     config_title:"設定", config_sub:"モード、温度、メモリ、設定",
@@ -1116,6 +1152,12 @@ const I18N = {
     disc_ollama_offline:"Ollama offline", disc_free_badge:"Grátis",
     disc_context:"contexto", disc_no_results:"Nenhum modelo encontrado", disc_ram_required:"RAM necessária",
     disc_already_added:"Já adicionado", disc_open_section:"Descobrir",
+    disc_local_explain:"Modelos locais rodam 100% no seu computador via Ollama — sem chave API, sem internet, sem custo. Completamente privado.",
+    disc_local_how:"① Copie o pull command abaixo → execute no terminal para baixar o modelo.  ② Clique em '+ Adicionar ao Airvo' para registrá-lo.",
+    disc_fits_detail:"Cabe na sua RAM disponível — vai carregar e rodar sem problemas",
+    disc_too_large_detail:"Precisa de mais RAM do que disponível — pode ser muito lento ou falhar ao carregar",
+    disc_cloud_explain:"Modelos cloud rodam nos servidores do OpenRouter — poderosos, sem GPU local. Requer uma chave API gratuita do OpenRouter.",
+    disc_cloud_how:"① Clique em '+ Adicionar ao Airvo'.  ② Vá em Modelos e configure sua chave OpenRouter.  ③ Ative o modelo.",
     continue_label:"Configuração Continue.dev", continue_hint:"Adicione isto ao seu config.yaml:",
     copy_config:"Copiar configuração", copied:"Copiado ✓",
     config_title:"Configuração", config_sub:"Modo, temperatura, memória e preferências",
@@ -1823,7 +1865,11 @@ export default function AirvoDashboard() {
                   {/* LOCAL TAB — Ollama catalog */}
                   {discTab === "local" && (<>
                     {discLoading && !discOllama && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_loading")}</p>}
-                    {discOllama && (
+                    {discOllama && (<>
+                      <div style={{ padding:"10px 14px", background:"var(--bg)", border:"1px solid var(--border)", borderRadius:8, marginBottom:12, fontFamily:"var(--mono)", fontSize:11, lineHeight:1.8 }}>
+                        <div style={{ fontWeight:600, marginBottom:4, color:"var(--text)" }}>💻 {t("disc_local_explain")}</div>
+                        <div style={{ color:"var(--accent)" }}>📋 {t("disc_local_how")}</div>
+                      </div>
                       <div style={{ display:"grid", gap:10 }}>
                         {(discOllama.catalog || []).map(m => {
                           const sizeStr = m.size_gb >= 1 ? `${m.size_gb.toFixed(1)} GB` : `${Math.round(m.size_gb * 1024)} MB`;
@@ -1834,9 +1880,9 @@ export default function AirvoDashboard() {
                                   <span style={{ fontFamily:"var(--mono)", fontSize:13, fontWeight:700 }}>{m.name}</span>
                                   {m.installed && <span style={{ fontSize:10, fontFamily:"var(--mono)", background:"#003a10", border:"1px solid var(--green)", color:"var(--green)", borderRadius:4, padding:"1px 6px" }}>✓ {t("disc_installed")}</span>}
                                   {m.fits_ram ? (
-                                    <span style={{ fontSize:10, fontFamily:"var(--mono)", background:"#001a00", border:"1px solid #2a6a2a", color:"#4ade80", borderRadius:4, padding:"1px 6px" }}>{t("disc_fits")}</span>
+                                    <span title={t("disc_fits_detail")} style={{ fontSize:10, fontFamily:"var(--mono)", background:"#001a00", border:"1px solid #2a6a2a", color:"#4ade80", borderRadius:4, padding:"1px 6px", cursor:"help" }}>{t("disc_fits")}</span>
                                   ) : (
-                                    <span style={{ fontSize:10, fontFamily:"var(--mono)", background:"#1a0000", border:"1px solid #6a1a1a", color:"var(--red)", borderRadius:4, padding:"1px 6px" }}>{t("disc_too_large")}</span>
+                                    <span title={t("disc_too_large_detail")} style={{ fontSize:10, fontFamily:"var(--mono)", background:"#1a0000", border:"1px solid #6a1a1a", color:"var(--red)", borderRadius:4, padding:"1px 6px", cursor:"help" }}>{t("disc_too_large")}</span>
                                   )}
                                   {(m.tags || []).map(tag => (
                                     <span key={tag} style={{ fontSize:10, fontFamily:"var(--mono)", color:"var(--text2)", borderRadius:4, padding:"1px 6px", border:"1px solid var(--border)" }}>{tag}</span>
@@ -1855,13 +1901,17 @@ export default function AirvoDashboard() {
                         })}
                         {!discOllama?.catalog?.length && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_no_results")}</p>}
                       </div>
-                    )}
+                    </>)}
                   </>)}
 
                   {/* CLOUD TAB — OpenRouter */}
                   {discTab === "cloud" && (<>
                     {discLoading && !discOpenRouter && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_loading")}</p>}
-                    {discOpenRouter && (
+                    {discOpenRouter && (<>
+                      <div style={{ padding:"10px 14px", background:"var(--bg)", border:"1px solid var(--border)", borderRadius:8, marginBottom:12, fontFamily:"var(--mono)", fontSize:11, lineHeight:1.8 }}>
+                        <div style={{ fontWeight:600, marginBottom:4, color:"var(--text)" }}>☁️ {t("disc_cloud_explain")}</div>
+                        <div style={{ color:"var(--accent)" }}>📋 {t("disc_cloud_how")}</div>
+                      </div>
                       <div style={{ display:"grid", gap:10 }}>
                         {(discOpenRouter || []).map(m => (
                           <div key={m.id} style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"12px 14px", background:"var(--bg3)", borderRadius:8, border:"1px solid var(--border)" }}>
@@ -1884,7 +1934,7 @@ export default function AirvoDashboard() {
                         ))}
                         {!discOpenRouter?.length && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_no_results")}</p>}
                       </div>
-                    )}
+                    </>)}
                   </>)}
                 </div>
               )}
