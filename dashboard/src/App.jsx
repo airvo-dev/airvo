@@ -18,6 +18,7 @@ const I18N = {
     nav_add:"Add Model", nav_help:"Help", nav_active:"ACTIVE", nav_none:"none",
     connecting:"connecting...", offline:"server offline",
     models_title:"Models", models_sub:"Activate models and configure their API keys",
+    suggestions_title:"Suggestions", suggestions_sub:"Add an API key to start using these models",
     stat_total:"Total", stat_active:"Active", stat_free:"Free", stat_with_key:"With Key",
     stat_models:"models", stat_parallel:"in parallel", stat_no_cost:"no cost", stat_configured:"configured",
     loading_models:"Loading models...",
@@ -243,6 +244,7 @@ const I18N = {
     nav_add:"Agregar Modelo", nav_help:"Ayuda", nav_active:"ACTIVOS", nav_none:"ninguno",
     connecting:"conectando...", offline:"servidor offline",
     models_title:"Modelos", models_sub:"Activá modelos y configurá sus API keys",
+    suggestions_title:"Sugerencias", suggestions_sub:"Agregá una API key para empezar a usar estos modelos",
     stat_total:"Total", stat_active:"Activos", stat_free:"Gratuitos", stat_with_key:"Con Key",
     stat_models:"modelos", stat_parallel:"en paralelo", stat_no_cost:"sin costo", stat_configured:"configurados",
     loading_models:"Cargando modelos...",
@@ -441,6 +443,7 @@ const I18N = {
     nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun",
     connecting:"connexion...", offline:"serveur hors ligne",
     models_title:"Modèles", models_sub:"Activez les modèles et configurez leurs clés API",
+    suggestions_title:"Suggestions", suggestions_sub:"Ajoutez une clé API pour utiliser ces modèles",
     stat_total:"Total", stat_active:"Actifs", stat_free:"Gratuits", stat_with_key:"Avec Clé",
     stat_models:"modèles", stat_parallel:"en parallèle", stat_no_cost:"sans coût", stat_configured:"configurés",
     loading_models:"Chargement des modèles...",
@@ -637,6 +640,7 @@ const I18N = {
     nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine",
     connecting:"verbinde...", offline:"Server offline",
     models_title:"Modelle", models_sub:"Modelle aktivieren und API-Schlüssel konfigurieren",
+    suggestions_title:"Vorschläge", suggestions_sub:"API-Schlüssel hinzufügen, um diese Modelle zu nutzen",
     stat_total:"Gesamt", stat_active:"Aktiv", stat_free:"Kostenlos", stat_with_key:"Mit Schlüssel",
     stat_models:"Modelle", stat_parallel:"parallel", stat_no_cost:"kostenlos", stat_configured:"konfiguriert",
     loading_models:"Modelle werden geladen...",
@@ -833,6 +837,7 @@ const I18N = {
     nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无",
     connecting:"连接中...", offline:"服务器离线",
     models_title:"模型", models_sub:"激活模型并配置其 API 密钥",
+    suggestions_title:"建议", suggestions_sub:"添加 API 密钥以开始使用这些模型",
     stat_total:"总计", stat_active:"已激活", stat_free:"免费", stat_with_key:"已配置密钥",
     stat_models:"个模型", stat_parallel:"并行运行", stat_no_cost:"无费用", stat_configured:"已配置",
     loading_models:"正在加载模型...",
@@ -1029,6 +1034,7 @@ const I18N = {
     nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし",
     connecting:"接続中...", offline:"サーバーオフライン",
     models_title:"モデル", models_sub:"モデルを有効にしてAPIキーを設定する",
+    suggestions_title:"提案", suggestions_sub:"APIキーを追加してこれらのモデルを使い始めましょう",
     stat_total:"合計", stat_active:"アクティブ", stat_free:"無料", stat_with_key:"キー設定済み",
     stat_models:"モデル", stat_parallel:"並列実行", stat_no_cost:"コストなし", stat_configured:"設定済み",
     loading_models:"モデルを読み込み中...",
@@ -1225,6 +1231,7 @@ const I18N = {
     nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum",
     connecting:"conectando...", offline:"servidor offline",
     models_title:"Modelos", models_sub:"Ative modelos e configure suas chaves de API",
+    suggestions_title:"Sugestões", suggestions_sub:"Adicione uma chave de API para começar a usar esses modelos",
     stat_total:"Total", stat_active:"Ativos", stat_free:"Gratuitos", stat_with_key:"Com Chave",
     stat_models:"modelos", stat_parallel:"em paralelo", stat_no_cost:"sem custo", stat_configured:"configurados",
     loading_models:"Carregando modelos...",
@@ -1927,12 +1934,16 @@ export default function AirvoDashboard() {
           {page === "models" && <>
             <h1 className="page-title">{t("models_title")}</h1>
             <p className="page-sub">{t("models_sub")}</p>
+            {(() => {
+              const configured  = models.filter(m => m.active || m.api_key);
+              const suggestions = models.filter(m => !m.active && !m.api_key);
+              return <>
             <div className="stats-row">
               {[
-                { label:t("stat_total"),    val:models.length,                       sub:t("stat_models"),     cls:"accent" },
+                { label:t("stat_total"),    val:configured.length,                       sub:t("stat_models"),     cls:"accent" },
                 { label:t("stat_active"),   val:active.length, max:MAX_ACTIVE,          sub:t("stat_parallel"),   cls:"green", showBar:true },
-                { label:t("stat_free"),     val:models.filter(m=>inferIsFree(m.provider,m.base_url)).length, sub:t("stat_no_cost"), cls:"yellow" },
-                { label:t("stat_with_key"), val:models.filter(m=>m.api_key).length,  sub:t("stat_configured"), cls:"pink" },
+                { label:t("stat_free"),     val:configured.filter(m=>inferIsFree(m.provider,m.base_url)).length, sub:t("stat_no_cost"), cls:"yellow" },
+                { label:t("stat_with_key"), val:configured.filter(m=>m.api_key).length,  sub:t("stat_configured"), cls:"pink" },
               ].map(s => (
                 <div key={s.label} className="stat-card">
                   <div className="stat-label">{s.label}</div>
@@ -1950,16 +1961,36 @@ export default function AirvoDashboard() {
             </div>
             {loading
               ? <div className="empty">{t("loading_models")}</div>
-              : <div className="models-grid">
-                  {models.map(m => (
-                    <ModelCard key={m.id} model={m} t={t} stats={stats[m.id]}
-                      onToggle={() => toggleModel(m.id, m.active)}
-                      onSaveKey={key => saveKey(m.id, key)}
-                      onDelete={() => deleteModel(m.id)}
-                    />
-                  ))}
-                </div>
+              : <>
+                  <div className="models-grid">
+                    {configured.map(m => (
+                      <ModelCard key={m.id} model={m} t={t} stats={stats[m.id]}
+                        onToggle={() => toggleModel(m.id, m.active)}
+                        onSaveKey={key => saveKey(m.id, key)}
+                        onDelete={() => deleteModel(m.id)}
+                      />
+                    ))}
+                  </div>
+                  {suggestions.length > 0 && (
+                    <div style={{ marginTop:28 }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                        <span style={{ fontFamily:"var(--mono)", fontSize:14, fontWeight:700, color:"var(--text2)" }}>💡 {t("suggestions_title")}</span>
+                      </div>
+                      <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", marginBottom:14 }}>{t("suggestions_sub")}</p>
+                      <div className="models-grid" style={{ opacity:0.7 }}>
+                        {suggestions.map(m => (
+                          <ModelCard key={m.id} model={m} t={t} stats={stats[m.id]}
+                            onToggle={() => toggleModel(m.id, m.active)}
+                            onSaveKey={key => saveKey(m.id, key)}
+                            onDelete={() => deleteModel(m.id)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
             }
+              </>; })()}
 
             {/* ── DISCOVER MODELS SECTION ── */}
             <div style={{ marginTop:28 }}>
