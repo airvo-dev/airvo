@@ -62,6 +62,10 @@ const I18N = {
     mode_race:"Race", mode_race_desc:"Fastest model wins",
     mode_vote:"Vote", mode_vote_desc:"Consensus between models",
     mode_review:"Review", mode_review_desc:"One generates, another critiques", mode_set:"Mode",
+    tool_call_badge:"Agent/Plan mode",
+    tool_call_badge_tip:"Last request used a single model because your IDE sent tool calls (Agent or Plan mode). Multi-model only works in Chat mode.",
+    mode_note_tools:"⚡ Last request used Agent/Plan mode — only 1 model responded. This is expected: tool calls require a single-model conversation. Switch to Chat mode in your IDE to get multi-model responses.",
+    last_req_multi:"multi-model ✓", last_req_single:"single model",
     temp_label:"Temperature",
     temp_hint_low:"0.0 — deterministic, precise. Best for code and refactoring.",
     temp_hint_mid:"0.5 — balanced. Good for most tasks.",
@@ -270,6 +274,10 @@ const I18N = {
     mode_race:"Carrera", mode_race_desc:"El más rápido gana",
     mode_vote:"Votación", mode_vote_desc:"Consenso entre modelos",
     mode_review:"Revisión", mode_review_desc:"Uno genera, otro critica", mode_set:"Modo",
+    tool_call_badge:"Modo Agent/Plan",
+    tool_call_badge_tip:"La última request usó un solo modelo porque tu IDE envió tool calls (modo Agent o Plan). El modo multi-modelo solo funciona en modo Chat.",
+    mode_note_tools:"⚡ Último request usó modo Agent/Plan — solo respondió 1 modelo. Esto es normal: los tool calls requieren conversación con un modelo. Cambiá a modo Chat en tu IDE para respuestas multi-modelo.",
+    last_req_multi:"multi-modelo ✓", last_req_single:"modelo único",
     temp_label:"Temperatura",
     temp_hint_low:"0.0 — determinístico, preciso. Ideal para código.",
     temp_hint_mid:"0.5 — equilibrado. Funciona para la mayoría de tareas.",
@@ -451,6 +459,10 @@ const I18N = {
     mode_race:"Course", mode_race_desc:"Le modèle le plus rapide gagne",
     mode_vote:"Vote", mode_vote_desc:"Consensus entre les modèles",
     mode_review:"Révision", mode_review_desc:"Un génère, un autre critique", mode_set:"Mode",
+    tool_call_badge:"Mode Agent/Plan",
+    tool_call_badge_tip:"La dernière requête a utilisé un seul modèle car votre IDE a envoyé des tool calls (mode Agent ou Plan). Le multi-modèle ne fonctionne qu'en mode Chat.",
+    mode_note_tools:"⚡ Dernière requête en mode Agent/Plan — seulement 1 modèle a répondu. C'est normal : les tool calls nécessitent une conversation mono-modèle. Passez en mode Chat dans votre IDE pour des réponses multi-modèles.",
+    last_req_multi:"multi-modèle ✓", last_req_single:"modèle unique",
     temp_label:"Température",
     temp_hint_low:"0.0 — déterministe, précis. Idéal pour le code.",
     temp_hint_mid:"0.5 — équilibré. Convient à la plupart des tâches.",
@@ -630,6 +642,10 @@ const I18N = {
     mode_race:"Rennen", mode_race_desc:"Das schnellste Modell gewinnt",
     mode_vote:"Abstimmung", mode_vote_desc:"Konsens zwischen den Modellen",
     mode_review:"Überprüfung", mode_review_desc:"Eines generiert, ein anderes kritisiert", mode_set:"Modus",
+    tool_call_badge:"Agent/Plan-Modus",
+    tool_call_badge_tip:"Die letzte Anfrage verwendete ein Modell, da Ihre IDE Tool Calls gesendet hat (Agent- oder Plan-Modus). Multi-Modell funktioniert nur im Chat-Modus.",
+    mode_note_tools:"⚡ Letzte Anfrage im Agent/Plan-Modus — nur 1 Modell hat geantwortet. Das ist normal: Tool Calls erfordern eine Einzelmodell-Konversation. Wechseln Sie im IDE zum Chat-Modus für Multi-Modell-Antworten.",
+    last_req_multi:"Multi-Modell ✓", last_req_single:"Einzelmodell",
     temp_label:"Temperatur",
     temp_hint_low:"0.0 — deterministisch, präzise. Ideal für Code.",
     temp_hint_mid:"0.5 — ausgewogen. Gut für die meisten Aufgaben.",
@@ -809,6 +825,10 @@ const I18N = {
     mode_race:"竞速", mode_race_desc:"最快的模型获胜",
     mode_vote:"投票", mode_vote_desc:"模型之间达成共识",
     mode_review:"审阅", mode_review_desc:"一个生成，另一个批评", mode_set:"模式",
+    tool_call_badge:"Agent/Plan 模式",
+    tool_call_badge_tip:"最后一次请求使用了单个模型，因为您的 IDE 发送了工具调用（Agent 或 Plan 模式）。多模型仅在 Chat 模式下工作。",
+    mode_note_tools:"⚡ 最后一次请求使用了 Agent/Plan 模式 — 只有 1 个模型响应。这是正常的：工具调用需要单模型对话。在 IDE 中切换到 Chat 模式以获得多模型响应。",
+    last_req_multi:"多模型 ✓", last_req_single:"单模型",
     temp_label:"温度",
     temp_hint_low:"0.0 — 确定性，精确。适合代码。",
     temp_hint_mid:"0.5 — 平衡。适合大多数任务。",
@@ -988,6 +1008,10 @@ const I18N = {
     mode_race:"レース", mode_race_desc:"最も速いモデルが勝つ",
     mode_vote:"投票", mode_vote_desc:"モデル間のコンセンサス",
     mode_review:"レビュー", mode_review_desc:"1つが生成し、もう1つが批評", mode_set:"モード",
+    tool_call_badge:"Agent/Planモード",
+    tool_call_badge_tip:"IDEがツールコールを送信したため（AgentまたはPlanモード）、最後のリクエストは単一モデルを使用しました。マルチモデルはChatモードでのみ動作します。",
+    mode_note_tools:"⚡ 最後のリクエストはAgent/Planモードを使用 — 1つのモデルのみが応答しました。これは正常です：ツールコールは単一モデルの会話が必要です。マルチモデル応答にはIDEでChatモードに切り替えてください。",
+    last_req_multi:"マルチモデル ✓", last_req_single:"シングルモデル",
     temp_label:"温度",
     temp_hint_low:"0.0 — 決定論的、正確。コードに最適。",
     temp_hint_mid:"0.5 — バランス良好。ほとんどのタスクに適用。",
@@ -1167,6 +1191,10 @@ const I18N = {
     mode_race:"Corrida", mode_race_desc:"O modelo mais rápido vence",
     mode_vote:"Votação", mode_vote_desc:"Consenso entre os modelos",
     mode_review:"Revisão", mode_review_desc:"Um gera, outro critica", mode_set:"Modo",
+    tool_call_badge:"Modo Agent/Plan",
+    tool_call_badge_tip:"O último request usou um único modelo porque seu IDE enviou tool calls (modo Agent ou Plan). Multi-modelo só funciona no modo Chat.",
+    mode_note_tools:"⚡ Último request usou modo Agent/Plan — apenas 1 modelo respondeu. Isso é esperado: tool calls exigem conversa com um único modelo. Mude para modo Chat no IDE para respostas multi-modelo.",
+    last_req_multi:"multi-modelo ✓", last_req_single:"modelo único",
     temp_label:"Temperatura",
     temp_hint_low:"0.0 — determinístico, preciso. Ideal para código.",
     temp_hint_mid:"0.5 — equilibrado. Bom para a maioria das tarefas.",
@@ -1754,6 +1782,18 @@ export default function AirvoDashboard() {
                 🧠 RAG
               </div>
             )}
+            {health?.last_request?.type === "tool_call" && (
+              <div title={t("tool_call_badge_tip")}
+                onClick={() => setPage("config")}
+                style={{ display:"flex", alignItems:"center", gap:5, padding:"3px 9px", borderRadius:6, background:"#1a1200", border:"1px solid var(--yellow)", fontFamily:"var(--mono)", fontSize:11, color:"var(--yellow)", fontWeight:700, cursor:"pointer" }}>
+                ⚡ {t("tool_call_badge")}
+              </div>
+            )}
+            {health?.last_request?.type === "multi" && (
+              <div style={{ display:"flex", alignItems:"center", gap:5, padding:"3px 9px", borderRadius:6, background:"#001a00", border:"1px solid var(--green)", fontFamily:"var(--mono)", fontSize:11, color:"var(--green)", fontWeight:700 }}>
+                ⊙ {t("last_req_multi")}
+              </div>
+            )}
             <div className="header-status">
               <div className={`status-dot ${loading?"loading":health?"ok":"err"}`} />
               {loading ? t("connecting") : health ? `v${health.version} · localhost:5000` : t("offline")}
@@ -2107,6 +2147,11 @@ export default function AirvoDashboard() {
               {/* Multi-Model Mode */}
               <div className="card">
                 <div className="card-title">{t("mode_label")}</div>
+                {health?.last_request?.type === "tool_call" && (
+                  <div style={{ padding:"10px 14px", background:"#1a1200", border:"1px solid var(--yellow)", borderRadius:8, marginBottom:14, fontFamily:"var(--mono)", fontSize:11, color:"var(--yellow)", lineHeight:1.7 }}>
+                    {t("mode_note_tools")}
+                  </div>
+                )}
                 <div className="mode-grid">
                   {[
                     { id:"parallel", title:t("mode_parallel"), desc:t("mode_parallel_desc"), soon:false },

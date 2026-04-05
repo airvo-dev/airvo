@@ -338,6 +338,7 @@ async def chat_completions(request: ChatRequest):
                 kwargs["api_base"] = m["base_url"]
 
             response = await litellm.acompletion(**kwargs)
+            settings.record_last_request("tool_call", model=m.get("name", m["id"]))
             return StreamingResponse(
                 single_model_stream(response, m["id"]),
                 media_type="text/event-stream"
@@ -358,6 +359,7 @@ async def chat_completions(request: ChatRequest):
                 kwargs["api_base"] = m["base_url"]
 
             response = await litellm.acompletion(**kwargs)
+            settings.record_last_request("single", model=m.get("name", m["id"]))
             return StreamingResponse(
                 single_model_stream(response, m["id"]),
                 media_type="text/event-stream"
@@ -375,6 +377,7 @@ async def chat_completions(request: ChatRequest):
         else:  # parallel (default)
             results = await parallel_mode(active, messages, request)
 
+        settings.record_last_request("multi", mode=mode)
         return StreamingResponse(
             multi_model_stream(results),
             media_type="text/event-stream"
@@ -462,7 +465,8 @@ async def health():
         "version":       "0.3.0",
         "active_models": [m["id"] for m in active],
         "total_models":  len(settings.get_models()),
-        "config_file":   "~/.airvo/models.json"
+        "config_file":   "~/.airvo/models.json",
+        "last_request":  settings.get_last_request(),
     }
 
 # ── RAG endpoints ─────────────────────────────────────────────────────────

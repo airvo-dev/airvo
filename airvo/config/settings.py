@@ -274,6 +274,37 @@ class Settings(BaseSettings):
     def reset_stats(self):
         save_stats({})
 
+    # ── Last request tracking ──────────────────────────────
+
+    def record_last_request(self, req_type: str, mode: str = None, model: str = None):
+        record_last_request(req_type, mode, model)
+
+    def get_last_request(self) -> dict:
+        return get_last_request()
+
+
+# ── In-memory last-request tracker (not persisted to disk) ───────────────
+_last_request: dict = {
+    "type":              None,   # "tool_call" | "multi" | "single"
+    "mode":              None,   # "parallel" | "race" | "vote" | "review" | None
+    "model":             None,   # model name (single / tool_call only)
+    "count":             0,      # total requests served since startup
+    "tool_bypass_count": 0,      # times tool-call bypass was triggered
+}
+
+
+def record_last_request(req_type: str, mode: str = None, model: str = None):
+    _last_request["type"]  = req_type
+    _last_request["mode"]  = mode
+    _last_request["model"] = model
+    _last_request["count"] += 1
+    if req_type == "tool_call":
+        _last_request["tool_bypass_count"] += 1
+
+
+def get_last_request() -> dict:
+    return dict(_last_request)
+
 
 # ── Global settings instance ──────────────────────────────────────────────
 settings = Settings()
