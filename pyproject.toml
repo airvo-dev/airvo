@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "airvo"
-version = "0.3.3"
+version = "0.3.4"
 description = "Your local AI coding copilot — any model, any provider, zero cloud."
 readme = "README.md"
 license = { text = "MIT" }

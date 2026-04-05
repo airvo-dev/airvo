@@ -100,10 +100,16 @@ async def call_model(model_config: dict, messages: list, request):
     try:
         prefs = settings.get_prefs()
         _raw_max = request.max_tokens or prefs.get("max_tokens", settings.max_tokens)
+        _capped  = _safe_max_tokens(model_config["id"], _raw_max)
+        _total_chars = sum(len(m.get("content") or "") for m in messages)
+        logger.warning(
+            "[TPM-DEBUG] model=%s  raw_max=%s  capped=%s  msgs=%d  total_chars=%d",
+            model_config["id"], _raw_max, _capped, len(messages), _total_chars
+        )
         kwargs = dict(
             model       = model_config["id"],
             messages    = messages,
-            max_tokens  = _safe_max_tokens(model_config["id"], _raw_max),
+            max_tokens  = _capped,
             temperature = request.temperature or prefs.get("temperature", settings.temperature),
             stream      = False,
             api_key     = model_config.get("api_key"),
@@ -287,6 +293,25 @@ async def multi_model_stream(results):
 @router.post("/v1/chat/completions")
 async def chat_completions(request: ChatRequest):
     try:
+        # ── EARLY: force-cap max_tokens for ALL Groq-limited providers ───
+        # This runs before ANY code path (tool_call, single, multi).
+        # continue.dev may send max_tokens=4096 which exceeds Groq 6k TPM.
+        _active = settings.get_active_models()
+        _active_providers = {_provider(m["id"]) for m in _active}
+        _lowest_cap = None
+        for p in _active_providers:
+            c = _PROVIDER_LIMITS.get(p, {}).get("max_output")
+            if c and (_lowest_cap is None or c < _lowest_cap):
+                _lowest_cap = c
+        if _lowest_cap and request.max_tokens and request.max_tokens > _lowest_cap:
+            logger.warning("[TPM-GUARD] request.max_tokens %d → capped to %d",
+                           request.max_tokens, _lowest_cap)
+            request.max_tokens = _lowest_cap
+        elif _lowest_cap and not request.max_tokens:
+            request.max_tokens = _lowest_cap
+            logger.warning("[TPM-GUARD] request.max_tokens was None → set to %d",
+                           _lowest_cap)
+
         # Serialise messages preserving tool calling fields
         messages = []
         for m in request.messages:
