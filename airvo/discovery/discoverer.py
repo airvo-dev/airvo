@@ -108,7 +108,7 @@ def get_openrouter_models(limit: int = 60) -> List[dict]:
     try:
         req = urllib.request.Request(
             "https://openrouter.ai/api/v1/models",
-            headers={"User-Agent": "Airvo/0.3.0", "Accept": "application/json"},
+            headers={"User-Agent": "Airvo/0.3.1", "Accept": "application/json"},
         )
         with urllib.request.urlopen(req, timeout=8) as r:
             raw = json.loads(r.read())

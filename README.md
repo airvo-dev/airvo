@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.3.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.3.1-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -377,6 +377,12 @@ Make sure continue.dev is installed in VS Code and that `airvo start` has run at
 ---
 
 ## Changelog
+
+**v0.3.1** — Agent/Plan model selector, IPv6 fix, UI improvements
+- **Agent/Plan Model selector** — choose which active model handles Agent/Plan (tool call) requests from continue.dev. Configured in the Configuration page.
+- **Server IPv6 fix** — server now binds to `127.0.0.1` explicitly; `.env` PORT is correctly loaded on startup.
+- **Dashboard** — relative API URLs (no hardcoded host), CORS accepts any localhost port.
+- **UI** — Agent/Plan mode badge in header, Discovery info boxes, RAM badge tooltips, step-by-step workflow, Chat History Limit config, expanded Help page (7 languages).
 
 **v0.3.0** — Smart Memory, Memory Manager, Model Discovery
 - **Smart Memory (RAG)** — semantic codebase indexing with `sentence-transformers` + ChromaDB, 100% local. Enable in Configuration.

@@ -464,7 +464,7 @@ async def health():
     active = settings.get_active_models()
     return {
         "status":        "ok",
-        "version":       "0.3.0",
+        "version":       "0.3.1",
         "active_models": [m["id"] for m in active],
         "total_models":  len(settings.get_models()),
         "config_file":   "~/.airvo/models.json",
