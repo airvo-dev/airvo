@@ -80,7 +80,7 @@ DEFAULT_MODELS = [
 DEFAULT_PREFS = {
     "mode":            "parallel",
     "temperature":     0.7,
-    "max_tokens":      4096,
+    "max_tokens":      1024,   # keep low: Groq free tier = 6000 TPM total (input+output)
     "max_history_messages": 10,
     "memory_enabled":  False,
     "memory_text":     "",
@@ -91,7 +91,7 @@ DEFAULT_PREFS = {
     "rag_max_index_mb": 200,
     "rag_max_file_kb":  500,
     "rag_top_k":        5,
-    "rag_max_inject_chars": 3000,
+    "rag_max_inject_chars": 1500,  # ~375 tokens — safe for Groq 6k TPM
     "rag_extensions": [
         ".py", ".js", ".ts", ".jsx", ".tsx",
         ".md", ".go", ".rs", ".java", ".cpp", ".c",

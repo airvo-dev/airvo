@@ -13,6 +13,21 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+# ── TPM-aware max_tokens cap ─────────────────────────────────────────────
+# Groq free tier: 6000 TPM total (input + output combined).
+# Cap output tokens so input always has headroom.
+_PROVIDER_MAX_TOKENS = {
+    "groq": 2000,  # leaves ~4000 tokens for input (6000 TPM limit)
+}
+
+def _safe_max_tokens(model_id: str, requested: int) -> int:
+    """Return the lower of requested and provider TPM-safe limit."""
+    provider = (model_id or "").split("/")[0].lower()
+    cap = _PROVIDER_MAX_TOKENS.get(provider)
+    if cap:
+        return min(requested, cap)
+    return requested
+
 # ── Schemas ───────────────────────────────────────────────────────────────
 class Message(BaseModel):
     role:         str
@@ -69,10 +84,11 @@ class PrefsUpdate(BaseModel):
 async def call_model(model_config: dict, messages: list, request):
     try:
         prefs = settings.get_prefs()
+        _raw_max = request.max_tokens or prefs.get("max_tokens", settings.max_tokens)
         kwargs = dict(
             model       = model_config["id"],
             messages    = messages,
-            max_tokens  = request.max_tokens  or prefs.get("max_tokens", settings.max_tokens),
+            max_tokens  = _safe_max_tokens(model_config["id"], _raw_max),
             temperature = request.temperature or prefs.get("temperature", settings.temperature),
             stream      = False,
             api_key     = model_config.get("api_key"),
@@ -340,10 +356,11 @@ async def chat_completions(request: ChatRequest):
         if request.tools:
             agent_model_id = prefs.get("agent_model", "")
             m = next((x for x in active if x["id"] == agent_model_id), active[0])
+            _raw_max = request.max_tokens or prefs.get("max_tokens", settings.max_tokens)
             kwargs = dict(
                 model       = m["id"],
                 messages    = messages,
-                max_tokens  = request.max_tokens  or prefs.get("max_tokens", settings.max_tokens),
+                max_tokens  = _safe_max_tokens(m["id"], _raw_max),
                 temperature = request.temperature or prefs.get("temperature", settings.temperature),
                 stream      = True,
                 api_key     = m.get("api_key"),
@@ -364,10 +381,11 @@ async def chat_completions(request: ChatRequest):
         # ── Single model — real streaming ─────────────────
         if len(active) == 1:
             m = active[0]
+            _raw_max = request.max_tokens or prefs.get("max_tokens", settings.max_tokens)
             kwargs = dict(
                 model       = m["id"],
                 messages    = messages,
-                max_tokens  = request.max_tokens  or prefs.get("max_tokens", settings.max_tokens),
+                max_tokens  = _safe_max_tokens(m["id"], _raw_max),
                 temperature = request.temperature or prefs.get("temperature", settings.temperature),
                 stream      = True,
                 api_key     = m.get("api_key"),
