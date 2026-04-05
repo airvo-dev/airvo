@@ -13,7 +13,7 @@ MAX_REQUEST_SIZE = 10 * 1024 * 1024  # 10 MB
 # ── FastAPI app ────────────────────────────────────────────────────────────
 app = FastAPI(
     title="Airvo",
-    version="0.3.1",
+    version="0.3.2",
     description="Local AI coding copilot — any model, any provider.",
 )
 

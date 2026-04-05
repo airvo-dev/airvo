@@ -1,12 +1,12 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)"  srcset="airvo/docs/assets/airvo-logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="airvo/docs/assets/airvo-logo-light.svg">
-  <img src="airvo/docs/assets/airvo-logo-light.svg" alt="Airvo" height="80"/>
+  <source media="(prefers-color-scheme: dark)"  srcset="https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/airvo-logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/airvo-logo-light.svg">
+  <img src="https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/airvo-logo-light.svg" alt="Airvo" height="80"/>
 </picture>
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.3.1-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.3.2-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -176,17 +176,17 @@ The Airvo dashboard runs at `http://localhost:5000` and lets you manage everythi
 
 **Models page** — activate/deactivate models, save API keys, see requests and tokens per model.
 
-![Airvo Dashboard - Models](airvo/docs/assets/screenshot-models.png)
+![Airvo Dashboard - Models](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-models.png)
 
 **Configuration page** — set multi-model mode, adjust temperature and max tokens, enable project context, configure Smart Memory (RAG), view usage stats.
 
 **Add Model page** — add any model with contextual tooltips on every field.
 
-![Airvo Dashboard - Add Model](airvo/docs/assets/screenshot-add-model.png)
+![Airvo Dashboard - Add Model](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-add-model.png)
 
 **Help page** — full reference guide, field-by-field documentation, FAQ.
 
-![Airvo Dashboard - Help](airvo/docs/assets/screenshot-help.png)
+![Airvo Dashboard - Help](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-help.png)
 
 ---
 
@@ -208,7 +208,7 @@ Airvo supports running multiple models at once. Configure the mode in the Config
 
 Airvo works through [continue.dev](https://continue.dev) — a VS Code extension for AI-assisted coding.
 
-![Continue.dev with Airvo](airvo/docs/assets/screenshot-vscode.png)
+![Continue.dev with Airvo](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-vscode.png)
 
 **What you can do:**
 
@@ -377,6 +377,9 @@ Make sure continue.dev is installed in VS Code and that `airvo start` has run at
 ---
 
 ## Changelog
+
+**v0.3.2** — Fix README image URLs for PyPI
+- Fixed all image paths to absolute GitHub raw URLs so screenshots and logo display correctly on PyPI.
 
 **v0.3.1** — Agent/Plan model selector, IPv6 fix, UI improvements
 - **Agent/Plan Model selector** — choose which active model handles Agent/Plan (tool call) requests from continue.dev. Configured in the Configuration page.
