@@ -31,11 +31,8 @@ async def limit_request_size(request: Request, call_next):
 # ── CORS — needed for dashboard in development mode ───────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5000",
-        "http://127.0.0.1:5000",
-    ],
-    allow_origin_regex=r"vscode-webview://.*",  # continue.dev en VS Code
+    allow_origins=["*"],
+    allow_origin_regex=r"(vscode-webview://.*|http://localhost:\d+|http://127\.0\.0\.1:\d+)",
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Content-Type", "Authorization"],
 )

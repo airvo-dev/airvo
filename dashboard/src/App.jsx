@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const API = import.meta.env.DEV ? "" : "http://localhost:8765";
+const API = import.meta.env.DEV ? "" : "";
 
 const LANGUAGES = [
   { code: "en", label: "EN", flag: "🇺🇸", name: "English"   },

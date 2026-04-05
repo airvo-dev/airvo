@@ -10,6 +10,12 @@ from pathlib import Path
 
 import typer
 import uvicorn
+from dotenv import load_dotenv
+
+# Load .env from cwd (project root) or from the package parent directory
+_dotenv_cwd = Path.cwd() / ".env"
+_dotenv_pkg = Path(__file__).parent.parent / ".env"
+load_dotenv(_dotenv_cwd if _dotenv_cwd.exists() else _dotenv_pkg)
 
 # ── CLI app ────────────────────────────────────────────────────────────────
 app = typer.Typer(
@@ -25,7 +31,8 @@ CONTINUE_DIR  = Path.home() / ".continue"
 CONTINUE_FILE = CONTINUE_DIR / "config.yaml"
 
 # ── Continue.dev config template ──────────────────────────────────────────
-CONTINUE_CONFIG = """\
+def _make_continue_config(port: int) -> str:
+    return f"""\
 name: Local Config
 version: 1.0.0
 schema: v1
@@ -33,7 +40,7 @@ models:
   - name: Airvo
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:5000/v1
+    apiBase: http://localhost:{port}/v1
     apiKey: local
     roles:
       - chat
@@ -42,7 +49,7 @@ models:
   - name: Airvo Autocomplete
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:5000/v1
+    apiBase: http://localhost:{port}/v1
     apiKey: local
     roles:
       - autocomplete
@@ -100,31 +107,46 @@ def detect_continue_dev() -> bool:
     return False
 
 
-def ensure_continue_config():
+def ensure_continue_config(port: int = 5000):
     """
     Write continue.dev config.yaml if it doesn't exist yet.
     If it exists but doesn't have the Airvo entry, append it.
+    If it exists with a different port, update it.
     Also warns if continue.dev extension is not detected in VS Code.
     """
+    import re as _re
     CONTINUE_DIR.mkdir(parents=True, exist_ok=True)
+
+    correct_url = f"http://localhost:{port}/v1"
 
     if not CONTINUE_FILE.exists():
         # First time — write the full config
-        CONTINUE_FILE.write_text(CONTINUE_CONFIG, encoding="utf-8")
+        CONTINUE_FILE.write_text(_make_continue_config(port), encoding="utf-8")
         typer.echo("  ✓ continue.dev config created at ~/.continue/config.yaml")
     else:
-        # Check if Airvo entry already exists
         existing = CONTINUE_FILE.read_text(encoding="utf-8")
-        if "apiBase: http://localhost:5000/v1" in existing:
-            typer.echo("  ✓ continue.dev config already has Airvo entry")
+        # Check for any Airvo apiBase entry (any port)
+        any_airvo = _re.search(r"apiBase: http://localhost:\d+/v1", existing)
+        if any_airvo:
+            if correct_url in existing:
+                typer.echo("  ✓ continue.dev config already has Airvo entry")
+            else:
+                # Port changed — update all occurrences to new port
+                updated = _re.sub(
+                    r"(apiBase: http://localhost:)\d+(/v1)",
+                    rf"\g<1>{port}\g<2>",
+                    existing,
+                )
+                CONTINUE_FILE.write_text(updated, encoding="utf-8")
+                typer.echo(f"  ✓ continue.dev config updated to port {port}")
         else:
             # Append Airvo models to existing config
-            airvo_entry = """
+            airvo_entry = f"""
   # Airvo — added automatically
   - name: Airvo
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:5000/v1
+    apiBase: {correct_url}
     apiKey: local
     roles:
       - chat
@@ -166,8 +188,8 @@ def open_browser_delayed(url: str, delay: float = 1.5):
 # ── Main command: airvo start ─────────────────────────────────────────────
 @app.command()
 def start(
-    host: str        = typer.Option("localhost", "--host", "-h", help="Server host"),
-    port: int        = typer.Option(5000,        "--port", "-p", help="Server port"),
+    host: str        = typer.Option("127.0.0.1", "--host", "-h", help="Server host"),
+    port: int        = typer.Option(int(os.getenv("PORT", 5000)), "--port", "-p", help="Server port"),
     no_browser: bool = typer.Option(False, "--no-browser", help="Don't open browser automatically"),
     reload: bool     = typer.Option(False, "--reload",     help="Enable hot reload (development)"),
 ):
@@ -180,7 +202,7 @@ def start(
     ensure_models_config()
 
     # Step 2 — auto-configure and detect continue.dev
-    ensure_continue_config()
+    ensure_continue_config(port)
 
     # Step 3 — check if dashboard is built
     package_dir     = Path(__file__).parent
