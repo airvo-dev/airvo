@@ -148,6 +148,17 @@ const I18N = {
     help_faq_5_a:"A static note injected into every request so Airvo knows your stack, preferences and constraints. Write it once in Configuration → Project Context.",
     help_faq_6_q:"Does Project Context consume extra tokens?",
     help_faq_6_a:"Yes — a small fixed amount per request (~650 tokens max). It's optional and opt-in. Disable it anytime in Configuration.",
+    help_faq_7_q:"What is Smart Memory (RAG)?",
+    help_faq_7_a:"Smart Memory indexes your codebase locally using AI embeddings. Before each request, Airvo automatically finds the most relevant files and injects them into the prompt — no copy-pasting needed.",
+    help_faq_8_q:"Does Smart Memory send my code to the cloud?",
+    help_faq_8_a:"Never. The embedding model (all-MiniLM-L6-v2) runs 100% on your machine. Your code never leaves your computer. The index is stored in ~/.airvo/rag/.",
+    help_rag_title:"Smart Memory (RAG)",
+    help_rag_what_title:"What it does",
+    help_rag_what_body:"Smart Memory scans your project, splits files into chunks, generates vector embeddings locally, and stores them in a ChromaDB database on your machine. When you send a message, Airvo embeds your query and retrieves the most semantically similar code chunks — then injects them into the AI's context automatically.",
+    help_rag_setup_title:"How to enable it",
+    help_rag_setup_steps:"1. Go to Configuration → Smart Memory (RAG)\n2. Toggle \"Enable Smart Memory\" ON (one-time 90 MB model download)\n3. Enter the path to your project folder\n4. Click \"Index Now\" and wait for indexing to complete\n5. The 🧠 RAG badge appears in the header when active",
+    help_rag_privacy_title:"Privacy & performance",
+    help_rag_privacy_body:"Everything runs locally — embeddings, index, and retrieval. No data is sent to any server. Indexing is fast for most projects. Large monorepos may take a few minutes on first run.",
     toast_activated:"Model activated", toast_deactivated:"Model deactivated",
     toast_key_saved:"API key saved ✓", toast_key_error:"Enter a valid API key",
     toast_deleted:"Model deleted", toast_added:"Model added ✓",
@@ -269,6 +280,17 @@ const I18N = {
     help_faq_4_q:"¿Cómo uso Ollama?", help_faq_4_a:"Instalá Ollama, bajá un modelo, agregalo con ID: ollama/llama3, Base URL: http://localhost:11434.",
     help_faq_5_q:"¿Qué es el Contexto del Proyecto?", help_faq_5_a:"Una nota que se inyecta en cada request para que Airvo conozca tu stack sin que lo repitas.",
     help_faq_6_q:"¿El contexto consume tokens extra?", help_faq_6_a:"Sí, un pequeño monto fijo por request (~650 tokens máx). Es opcional y opt-in.",
+    help_faq_7_q:"¿Qué es la Memoria Inteligente (RAG)?",
+    help_faq_7_a:"La Memoria Inteligente indexa tu código localmente usando embeddings de IA. Antes de cada request, Airvo encuentra automáticamente los archivos más relevantes y los inyecta en el prompt.",
+    help_faq_8_q:"¿Mi código se envía a la nube?",
+    help_faq_8_a:"Nunca. El modelo de embeddings corre 100% en tu máquina. El índice se guarda en ~/.airvo/rag/ y tu código nunca sale de tu computadora.",
+    help_rag_title:"Memoria Inteligente (RAG)",
+    help_rag_what_title:"Qué hace",
+    help_rag_what_body:"Memoria Inteligente escanea tu proyecto, divide archivos en fragmentos, genera embeddings vectoriales localmente y los guarda en ChromaDB. Cuando enviás un mensaje, Airvo busca los fragmentos más relevantes y los inyecta automáticamente en el contexto.",
+    help_rag_setup_title:"Cómo activarla",
+    help_rag_setup_steps:"1. Ir a Configuración → Memoria Inteligente\n2. Activar \"Activar Memoria Inteligente\" (descarga única de ~90 MB)\n3. Ingresar la ruta de tu proyecto\n4. Hacer clic en \"Indexar Ahora\" y esperar\n5. El badge 🧠 RAG aparece en el header cuando está activo",
+    help_rag_privacy_title:"Privacidad y rendimiento",
+    help_rag_privacy_body:"Todo corre localmente — embeddings, índice y búsqueda. No se envía ningún dato. La indexación es rápida para la mayoría de proyectos.",
     toast_activated:"Modelo activado", toast_deactivated:"Modelo desactivado",
     toast_key_saved:"API key guardada ✓", toast_key_error:"Ingresá una API key válida",
     toast_deleted:"Modelo eliminado", toast_added:"Modelo agregado ✓",
@@ -387,6 +409,17 @@ const I18N = {
     help_faq_4_q:"Comment utiliser Ollama ?", help_faq_4_a:"Installez Ollama, téléchargez un modèle, ajoutez-le avec ID: ollama/llama3, URL de base: http://localhost:11434.",
     help_faq_5_q:"Qu'est-ce que le Contexte du Projet ?", help_faq_5_a:"Une note injectée dans chaque requête pour qu'Airvo connaisse votre stack.",
     help_faq_6_q:"Le contexte consomme-t-il des tokens supplémentaires ?", help_faq_6_a:"Oui, un petit montant fixe par requête (~650 tokens max). C'est optionnel.",
+    help_faq_7_q:"Qu'est-ce que la Mémoire Intelligente (RAG) ?",
+    help_faq_7_a:"La Mémoire Intelligente indexe votre code localement avec des embeddings IA. Avant chaque requête, Airvo trouve automatiquement les fichiers les plus pertinents et les injecte dans le prompt.",
+    help_faq_8_q:"Mon code est-il envoyé dans le cloud ?",
+    help_faq_8_a:"Jamais. Le modèle d'embeddings tourne 100% sur votre machine. L'index est stocké dans ~/.airvo/rag/ et votre code ne quitte jamais votre ordinateur.",
+    help_rag_title:"Mémoire Intelligente (RAG)",
+    help_rag_what_title:"Ce qu'elle fait",
+    help_rag_what_body:"La Mémoire Intelligente analyse votre projet, découpe les fichiers en fragments, génère des embeddings vectoriels localement et les stocke dans ChromaDB. À chaque message, Airvo récupère les fragments les plus pertinents et les injecte automatiquement dans le contexte.",
+    help_rag_setup_title:"Comment l'activer",
+    help_rag_setup_steps:"1. Aller dans Configuration → Mémoire Intelligente\n2. Activer \"Activer la Mémoire Intelligente\" (téléchargement unique ~90 Mo)\n3. Entrer le chemin de votre projet\n4. Cliquer sur \"Indexer Maintenant\" et attendre\n5. Le badge 🧠 RAG apparaît dans l'en-tête quand c'est actif",
+    help_rag_privacy_title:"Confidentialité et performance",
+    help_rag_privacy_body:"Tout fonctionne localement — embeddings, index et recherche. Aucune donnée n'est envoyée. L'indexation est rapide pour la plupart des projets.",
     toast_activated:"Modèle activé", toast_deactivated:"Modèle désactivé",
     toast_key_saved:"Clé API enregistrée ✓", toast_key_error:"Entrez une clé API valide",
     toast_deleted:"Modèle supprimé", toast_added:"Modèle ajouté ✓",
@@ -505,6 +538,17 @@ const I18N = {
     help_faq_4_q:"Wie verwende ich Ollama?", help_faq_4_a:"Installieren Sie Ollama, laden Sie ein Modell, fügen Sie es mit ID: ollama/llama3, Basis-URL: http://localhost:11434 hinzu.",
     help_faq_5_q:"Was ist der Projektkontext?", help_faq_5_a:"Eine Notiz, die in jede Anfrage eingefügt wird, damit Airvo Ihren Stack kennt.",
     help_faq_6_q:"Verbraucht der Kontext zusätzliche Token?", help_faq_6_a:"Ja, ein kleiner fester Betrag pro Anfrage (~650 Token max). Es ist optional.",
+    help_faq_7_q:"Was ist Smart Memory (RAG)?",
+    help_faq_7_a:"Smart Memory indiziert Ihren Code lokal mit KI-Embeddings. Vor jeder Anfrage findet Airvo automatisch die relevantesten Dateien und fügt sie in den Prompt ein.",
+    help_faq_8_q:"Wird mein Code in die Cloud gesendet?",
+    help_faq_8_a:"Niemals. Das Embedding-Modell läuft 100% auf Ihrem Rechner. Der Index wird in ~/.airvo/rag/ gespeichert und Ihr Code verlässt niemals Ihren Computer.",
+    help_rag_title:"Smart Memory (RAG)",
+    help_rag_what_title:"Was es tut",
+    help_rag_what_body:"Smart Memory scannt Ihr Projekt, teilt Dateien in Abschnitte auf, generiert lokal Vektoreinbettungen und speichert sie in ChromaDB. Bei jeder Nachricht findet Airvo die relevantesten Abschnitte und fügt sie automatisch in den Kontext ein.",
+    help_rag_setup_title:"So aktivieren Sie es",
+    help_rag_setup_steps:"1. Gehen Sie zu Konfiguration → Smart Memory\n2. Aktivieren Sie \"Smart Memory aktivieren\" (einmaliger Download ~90 MB)\n3. Geben Sie den Projektpfad ein\n4. Klicken Sie auf \"Jetzt indexieren\" und warten Sie\n5. Das 🧠 RAG-Badge erscheint im Header, wenn es aktiv ist",
+    help_rag_privacy_title:"Datenschutz & Leistung",
+    help_rag_privacy_body:"Alles läuft lokal — Embeddings, Index und Suche. Es werden keine Daten gesendet. Die Indexierung ist für die meisten Projekte schnell.",
     toast_activated:"Modell aktiviert", toast_deactivated:"Modell deaktiviert",
     toast_key_saved:"API-Schlüssel gespeichert ✓", toast_key_error:"Geben Sie einen gültigen API-Schlüssel ein",
     toast_deleted:"Modell gelöscht", toast_added:"Modell hinzugefügt ✓",
@@ -623,6 +667,17 @@ const I18N = {
     help_faq_4_q:"如何使用 Ollama？", help_faq_4_a:"安装 Ollama，下载模型，使用 ID: ollama/llama3，基础 URL: http://localhost:11434 添加。",
     help_faq_5_q:"什么是项目上下文？", help_faq_5_a:"注入每个请求的说明，让 Airvo 了解您的技术栈。",
     help_faq_6_q:"上下文会消耗额外的 Token 吗？", help_faq_6_a:"是的，每次请求消耗少量固定 Token（最多约 650）。这是可选功能。",
+    help_faq_7_q:"什么是智能记忆 (RAG)？",
+    help_faq_7_a:"智能记忆使用本地 AI 嵌入索引您的代码库。在每次请求前，Airvo 自动找到最相关的文件并注入到提示中。",
+    help_faq_8_q:"我的代码会被发送到云端吗？",
+    help_faq_8_a:"绝不会。嵌入模型 100% 在您的机器上运行。索引存储在 ~/.airvo/rag/ 中，您的代码永远不会离开您的电脑。",
+    help_rag_title:"智能记忆 (RAG)",
+    help_rag_what_title:"它的功能",
+    help_rag_what_body:"智能记忆扫描您的项目，将文件拆分为块，在本地生成向量嵌入，并存储在 ChromaDB 中。每次发送消息时，Airvo 检索最相关的代码块并自动注入到 AI 上下文中。",
+    help_rag_setup_title:"如何启用",
+    help_rag_setup_steps:"1. 前往配置 → 智能记忆\n2. 开启 \"启用智能记忆\"（一次性下载约 90 MB）\n3. 输入项目路径\n4. 点击 \"立即索引\" 并等待\n5. 激活后，标题栏将显示 🧠 RAG 徽章",
+    help_rag_privacy_title:"隐私与性能",
+    help_rag_privacy_body:"一切在本地运行——嵌入、索引和检索。不发送任何数据。大多数项目的索引速度很快。",
     toast_activated:"模型已激活", toast_deactivated:"模型已停用",
     toast_key_saved:"API 密钥已保存 ✓", toast_key_error:"请输入有效的 API 密钥",
     toast_deleted:"模型已删除", toast_added:"模型已添加 ✓",
@@ -741,6 +796,17 @@ const I18N = {
     help_faq_4_q:"Ollamaはどのように使いますか？", help_faq_4_a:"Ollamaをインストールし、モデルをダウンロードして、ID: ollama/llama3、ベースURL: http://localhost:11434で追加してください。",
     help_faq_5_q:"プロジェクトコンテキストとは？", help_faq_5_a:"毎回のリクエストに注入されるメモで、Airvoがあなたのスタックを理解するのに役立ちます。",
     help_faq_6_q:"コンテキストは追加のトークンを消費しますか？", help_faq_6_a:"はい、リクエストごとに少量の固定トークン（最大約650）を消費します。オプション機能です。",
+    help_faq_7_q:"スマートメモリ (RAG) とは何ですか？",
+    help_faq_7_a:"スマートメモリはローカルAIエンベディングを使ってコードベースをインデックス化します。各リクエストの前に、Airvoが最も関連性の高いファイルを自動的に見つけてプロンプトに注入します。",
+    help_faq_8_q:"コードはクラウドに送信されますか？",
+    help_faq_8_a:"絶対に送信されません。エンベディングモデルは100%あなたのマシン上で動作します。インデックスは ~/.airvo/rag/ に保存され、コードがコンピュータの外に出ることはありません。",
+    help_rag_title:"スマートメモリ (RAG)",
+    help_rag_what_title:"機能の説明",
+    help_rag_what_body:"スマートメモリはプロジェクトをスキャンし、ファイルをチャンクに分割し、ローカルでベクターエンベディングを生成してChromaDBに保存します。メッセージを送信するたびに、Airvoが最も関連性の高いコードチャンクを取得し、AIのコンテキストに自動的に注入します。",
+    help_rag_setup_title:"有効化の手順",
+    help_rag_setup_steps:"1. 設定 → スマートメモリに移動\n2. \"スマートメモリを有効にする\" をONにする（初回のみ約90MBダウンロード）\n3. プロジェクトのパスを入力\n4. \"今すぐインデックス\" をクリックして待機\n5. アクティブになるとヘッダーに 🧠 RAG バッジが表示されます",
+    help_rag_privacy_title:"プライバシーとパフォーマンス",
+    help_rag_privacy_body:"エンベディング、インデックス、検索のすべてがローカルで実行されます。データは送信されません。ほとんどのプロジェクトでインデックス化は高速です。",
     toast_activated:"モデルを有効化しました", toast_deactivated:"モデルを無効化しました",
     toast_key_saved:"APIキーを保存しました ✓", toast_key_error:"有効なAPIキーを入力してください",
     toast_deleted:"モデルを削除しました", toast_added:"モデルを追加しました ✓",
@@ -859,6 +925,17 @@ const I18N = {
     help_faq_4_q:"Como uso o Ollama?", help_faq_4_a:"Instale o Ollama, baixe um modelo, adicione com ID: ollama/llama3, URL Base: http://localhost:11434.",
     help_faq_5_q:"O que é o Contexto do Projeto?", help_faq_5_a:"Uma nota injetada em cada requisição para que o Airvo conheça seu stack.",
     help_faq_6_q:"O contexto consome tokens extras?", help_faq_6_a:"Sim, um pequeno valor fixo por requisição (~650 tokens máx). É opcional.",
+    help_faq_7_q:"O que é a Memória Inteligente (RAG)?",
+    help_faq_7_a:"A Memória Inteligente indexa seu código localmente usando embeddings de IA. Antes de cada requisição, o Airvo encontra automaticamente os arquivos mais relevantes e os injeta no prompt.",
+    help_faq_8_q:"Meu código é enviado para a nuvem?",
+    help_faq_8_a:"Nunca. O modelo de embeddings roda 100% na sua máquina. O índice é armazenado em ~/.airvo/rag/ e seu código nunca sai do seu computador.",
+    help_rag_title:"Memória Inteligente (RAG)",
+    help_rag_what_title:"O que ela faz",
+    help_rag_what_body:"A Memória Inteligente escaneia seu projeto, divide arquivos em fragmentos, gera embeddings vetoriais localmente e os armazena no ChromaDB. A cada mensagem, o Airvo recupera os fragmentos mais relevantes e os injeta automaticamente no contexto.",
+    help_rag_setup_title:"Como ativar",
+    help_rag_setup_steps:"1. Vá para Configuração → Memória Inteligente\n2. Ative \"Ativar Memória Inteligente\" (download único de ~90 MB)\n3. Insira o caminho do seu projeto\n4. Clique em \"Indexar Agora\" e aguarde\n5. O badge 🧠 RAG aparece no cabeçalho quando ativo",
+    help_rag_privacy_title:"Privacidade e desempenho",
+    help_rag_privacy_body:"Tudo roda localmente — embeddings, índice e busca. Nenhum dado é enviado. A indexação é rápida para a maioria dos projetos.",
     toast_activated:"Modelo ativado", toast_deactivated:"Modelo desativado",
     toast_key_saved:"Chave API salva ✓", toast_key_error:"Insira uma chave API válida",
     toast_deleted:"Modelo excluído", toast_added:"Modelo adicionado ✓",
@@ -1928,10 +2005,33 @@ function HelpPage({ t, setPage }) {
       </div>
       <div className="help-section">
         <div className="help-section-title">
+          <span className="help-section-icon">🧠</span>
+          {t("help_rag_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_rag_what_title")}</div>
+          <div className="help-field-desc">{t("help_rag_what_body")}</div>
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_rag_setup_title")}</div>
+          <div className="help-code-block">
+            {t("help_rag_setup_steps").split("\n").map((step, i) => (
+              <div key={i}>{step}</div>
+            ))}
+          </div>
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_rag_privacy_title")}</div>
+          <div className="help-field-desc">{t("help_rag_privacy_body")}</div>
+        </div>
+      </div>
+
+      <div className="help-section">
+        <div className="help-section-title">
           <span className="help-section-icon">?</span>
           {t("help_faq_title")}
         </div>
-        {[1,2,3,4,5,6].map(n => (
+        {[1,2,3,4,5,6,7,8].map(n => (
           <div key={n} className="faq-item">
             <div className="faq-q">Q: {t(`help_faq_${n}_q`)}</div>
             <div className="faq-a">{t(`help_faq_${n}_a`)}</div>
