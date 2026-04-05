@@ -51,6 +51,7 @@ class PrefsUpdate(BaseModel):
     mode:             Optional[str]        = None
     temperature:      Optional[float]      = None
     max_tokens:       Optional[int]        = None
+    max_history_messages: Optional[int]   = None
     memory_enabled:   Optional[bool]       = None
     memory_text:      Optional[str]        = None
     # ── RAG ─────────────────────────────────────────────────────────────────
@@ -59,6 +60,7 @@ class PrefsUpdate(BaseModel):
     rag_max_index_mb: Optional[int]        = None
     rag_max_file_kb:  Optional[int]        = None
     rag_top_k:        Optional[int]        = None
+    rag_max_inject_chars: Optional[int]     = None
     rag_extensions:   Optional[List[str]]  = None
     rag_exclude_dirs: Optional[List[str]]  = None
 
@@ -287,12 +289,26 @@ async def chat_completions(request: ChatRequest):
                     chunks = retrieve(last_user_msg, top_k=top_k)
                     ctx    = format_context(chunks)
                     if ctx:
+                        # Hard cap: ~3000 chars ≈ 750 tokens to avoid TPM limits
+                        max_rag_chars = int(prefs.get("rag_max_inject_chars", 3000))
+                        if len(ctx) > max_rag_chars:
+                            ctx = ctx[:max_rag_chars] + "\n... [RAG context truncated]"
                         system_content += f"\n\n{ctx}"
             except Exception as _rag_exc:
                 logger.warning(f"[RAG] context injection failed: {_rag_exc}")
 
         if not any(m["role"] == "system" for m in messages):
             messages.insert(0, {"role": "system", "content": system_content})
+
+        # ── History truncation — keep system + last N messages ───────────────
+        # Prevents hitting TPM limits on free tiers (Groq: 6k-12k TPM)
+        # Each message pair (user+assistant) is ~500-2000 tokens on average.
+        max_history = int(prefs.get("max_history_messages", 10))
+        system_msgs = [m for m in messages if m["role"] == "system"]
+        other_msgs  = [m for m in messages if m["role"] != "system"]
+        if len(other_msgs) > max_history:
+            other_msgs = other_msgs[-max_history:]
+        messages = system_msgs + other_msgs
 
         active = settings.get_active_models()
 

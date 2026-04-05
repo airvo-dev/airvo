@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const API = "http://localhost:5000";
+const API = import.meta.env.DEV ? "" : "http://localhost:8765";
 
 const LANGUAGES = [
   { code: "en", label: "EN", flag: "🇺🇸", name: "English"   },
@@ -63,6 +63,9 @@ const I18N = {
     temp_saved:"Temperature saved",
     maxtokens_label:"Max Tokens",
     maxtokens_saved:"Max tokens saved",
+    maxhistory_label:"Chat History Limit",
+    maxhistory_sub:"Max messages kept per request. Lower = fewer tokens sent to the model.",
+    maxhistory_saved:"History limit saved",
     memory_label:"Project Context",
     memory_sub:"Write once, injected into every request. Helps Airvo understand your stack without repeating yourself.",
     memory_enable:"Enable project context",
@@ -98,6 +101,7 @@ const I18N = {
     rag_max_mb:"Max index size (MB)",
     rag_max_kb:"Max file size (KB)",
     rag_top_k:"Results per request",
+    rag_max_inject_chars:"Max context injected (chars)",
     stats_label:"Usage Stats",
     stats_requests:"requests",
     stats_tokens:"tokens",
@@ -177,6 +181,28 @@ const I18N = {
     help_rag_setup_steps:"1. Go to Configuration → Smart Memory (RAG)\n2. Toggle \"Enable Smart Memory\" ON (one-time 90 MB model download)\n3. Enter the path to your project folder\n4. Click \"Index Now\" and wait for indexing to complete\n5. The 🧠 RAG badge appears in the header when active",
     help_rag_privacy_title:"Privacy & performance",
     help_rag_privacy_body:"Everything runs locally — embeddings, index, and retrieval. No data is sent to any server. Indexing is fast for most projects. Large monorepos may take a few minutes on first run.",
+    help_hw_title:"Memory Manager",
+    help_hw_body:"Real-time RAM and GPU usage in the Status page. Shows which Ollama models are loaded in memory, warns when RAM is under pressure (>75% WARNING, >90% CRITICAL), and lets you unload models with one click — no terminal needed.",
+    help_hw_tip_title:"When to use it",
+    help_hw_tip_body:"If Ollama is slow or unresponsive, check Status — you may have multiple large models loaded simultaneously. Unload unused ones to free RAM.",
+    help_disc_title:"Model Discovery",
+    help_disc_body:"In the Models page, expand '🔭 Discover Models'. Local tab shows a curated Ollama catalog filtered by what fits in your RAM — green badge means it fits, red means you need more RAM. Cloud tab shows OpenRouter models with free ones highlighted.",
+    help_disc_tip_title:"Quick add",
+    help_disc_tip_body:"Click '+ Add to Airvo' on any discovered model. For Ollama models, copy the pull command shown and run it in your terminal first.",
+    help_history_title:"Chat History Limit",
+    help_history_body:"Airvo keeps only the last N messages of your conversation per request (default 10). Lower this if you hit token limits with free API tiers — Groq free tier allows 6k–12k tokens per minute. The full chat history stays in your editor; only what's sent to the model is trimmed.",
+    help_trouble_title:"Troubleshooting",
+    help_trouble_1_q:"Rate limit error / tokens too large from Groq or other provider",
+    help_trouble_1_a:"Go to Configuration → Chat History Limit and set it to 4 or 6 messages. If Smart Memory (RAG) is enabled, also lower 'Max context injected' to 1000–2000 characters. Free Groq tier: 6k–12k tokens/min.",
+    help_trouble_2_q:"Cannot connect to server / dashboard shows server offline",
+    help_trouble_2_a:"Make sure Airvo is running: open a terminal and run 'airvo start'. Verify the port in your .env file (default 8765) matches what's in your IDE extension settings.",
+    help_trouble_3_q:"A model shows an error / red icon",
+    help_trouble_3_a:"Check the API key for that model in the Models page. For Ollama models, make sure Ollama is running ('ollama serve') and the model is downloaded ('ollama pull modelname').",
+    help_trouble_4_q:"Smart Memory (RAG) is not finding my code / retrieval seems off",
+    help_trouble_4_a:"Go to Configuration → Smart Memory → click 'Index Now'. Confirm the path points to your project root. After adding new files, re-index. Setting Top K to 1–2 is enough for most projects.",
+    help_trouble_5_q:"Model Discovery shows no Ollama models as installed",
+    help_trouble_5_a:"Ollama may not be running. Start it with 'ollama serve'. The catalog always loads — the Installed badge just requires Ollama to respond on localhost:11434.",
+    config_context_memory_section:"Context & Memory",
     toast_activated:"Model activated", toast_deactivated:"Model deactivated",
     toast_key_saved:"API key saved ✓", toast_key_error:"Enter a valid API key",
     toast_deleted:"Model deleted", toast_added:"Model added ✓",
@@ -239,6 +265,9 @@ const I18N = {
     temp_saved:"Temperatura guardada",
     maxtokens_label:"Máximo de Tokens",
     maxtokens_saved:"Máximo de tokens guardado",
+    maxhistory_label:"Límite de Historial",
+    maxhistory_sub:"Máx. mensajes por request. Más bajo = menos tokens enviados al modelo.",
+    maxhistory_saved:"Límite guardado",
     memory_label:"Contexto del Proyecto",
     memory_sub:"Escribilo una vez, se inyecta en cada request. Ayuda a Airvo a entender tu stack sin repetirlo.",
     memory_enable:"Activar contexto del proyecto",
@@ -274,6 +303,7 @@ const I18N = {
     rag_max_mb:"Tamaño máximo del índice (MB)",
     rag_max_kb:"Tamaño máximo por archivo (KB)",
     rag_top_k:"Resultados por solicitud",
+    rag_max_inject_chars:"Máx. contexto inyectado (chars)",
     stats_label:"Estadísticas de Uso",
     stats_requests:"requests",
     stats_tokens:"tokens",
@@ -327,6 +357,28 @@ const I18N = {
     help_rag_setup_steps:"1. Ir a Configuración → Memoria Inteligente\n2. Activar \"Activar Memoria Inteligente\" (descarga única de ~90 MB)\n3. Ingresar la ruta de tu proyecto\n4. Hacer clic en \"Indexar Ahora\" y esperar\n5. El badge 🧠 RAG aparece en el header cuando está activo",
     help_rag_privacy_title:"Privacidad y rendimiento",
     help_rag_privacy_body:"Todo corre localmente — embeddings, índice y búsqueda. No se envía ningún dato. La indexación es rápida para la mayoría de proyectos.",
+    help_hw_title:"Gestor de Memoria",
+    help_hw_body:"Uso de RAM y GPU en tiempo real en la página Estado. Muestra qué modelos de Ollama están cargados en memoria, avisa cuando la RAM está bajo presión (>75% AVISO, >90% CRÍTICO) y permite descargar modelos con un click — sin terminal.",
+    help_hw_tip_title:"Cuándo usarlo",
+    help_hw_tip_body:"Si Ollama está lento o no responde, revisá Estado — puede haber varios modelos grandes cargados simultáneamente. Descargá los que no usés para liberar RAM.",
+    help_disc_title:"Descubrimiento de Modelos",
+    help_disc_body:"En la página Modelos, expandí '🔭 Descubrir Modelos'. La pestaña Local muestra un catálogo de Ollama filtrado por lo que cabe en tu RAM — verde significa que entra, rojo que necesitás más RAM. La pestaña Cloud muestra modelos de OpenRouter con los gratuitos destacados.",
+    help_disc_tip_title:"Agregar rápido",
+    help_disc_tip_body:"Hacé click en '+ Agregar a Airvo' en cualquier modelo descubierto. Para modelos Ollama, copiá el comando pull que aparece y ejecutalo en tu terminal primero.",
+    help_history_title:"Límite de Historial de Chat",
+    help_history_body:"Airvo envía solo los últimos N mensajes de tu conversación por request (por defecto 10). Bajalo si superás los límites de tokens con APIs gratuitas — Groq gratuito permite 6k–12k tokens por minuto. El historial completo queda en tu editor; solo se recorta lo que se envía al modelo.",
+    help_trouble_title:"Solución de Problemas",
+    help_trouble_1_q:"Error de límite de velocidad / tokens demasiado grandes de Groq u otro proveedor",
+    help_trouble_1_a:"Andá a Configuración → Límite de Historial y ponelo en 4 o 6 mensajes. Si Smart Memory (RAG) está activado, bajá también el límite de contexto RAG a 1000–2000 caracteres.",
+    help_trouble_2_q:"No se puede conectar al servidor / el dashboard muestra servidor offline",
+    help_trouble_2_a:"Asegurate de que Airvo esté corriendo: abrí una terminal y ejecutá 'airvo start'. Verificá que el puerto en tu .env (por defecto 8765) coincida con la configuración de la extensión.",
+    help_trouble_3_q:"Un modelo muestra error / ícono rojo",
+    help_trouble_3_a:"Revisá la API key de ese modelo en la página Modelos. Para modelos Ollama, asegurate de que Ollama esté corriendo ('ollama serve') y el modelo esté descargado ('ollama pull nombre').",
+    help_trouble_4_q:"Smart Memory (RAG) no encuentra mi código / la búsqueda falla",
+    help_trouble_4_a:"Andá a Configuración → Smart Memory → hacé click en 'Indexar Ahora'. Confirmá que la ruta apunta a la raíz de tu proyecto. Luego de agregar archivos, reindexá. Top K en 1–2 es suficiente para la mayoría.",
+    help_trouble_5_q:"Descubrimiento de Modelos no muestra modelos Ollama como instalados",
+    help_trouble_5_a:"Ollama puede no estar corriendo. Inicialo con 'ollama serve'. El catálogo siempre carga — la insignia Instalado requiere que Ollama responda en localhost:11434.",
+    config_context_memory_section:"Contexto & Memoria",
     toast_activated:"Modelo activado", toast_deactivated:"Modelo desactivado",
     toast_key_saved:"API key guardada ✓", toast_key_error:"Ingresá una API key válida",
     toast_deleted:"Modelo eliminado", toast_added:"Modelo agregado ✓",
@@ -388,6 +440,9 @@ const I18N = {
     temp_saved:"Température enregistrée",
     maxtokens_label:"Tokens Maximum",
     maxtokens_saved:"Tokens maximum enregistrés",
+    maxhistory_label:"Limite d'Historique",
+    maxhistory_sub:"Nb max de messages par requête. Plus bas = moins de tokens envoyés.",
+    maxhistory_saved:"Limite enregistrée",
     memory_label:"Contexte du Projet",
     memory_sub:"Écrivez une fois, injecté dans chaque requête. Aide Airvo à comprendre votre stack.",
     memory_enable:"Activer le contexte du projet",
@@ -422,6 +477,7 @@ const I18N = {
     rag_max_mb:"Taille max de l'index (Mo)",
     rag_max_kb:"Taille max par fichier (Ko)",
     rag_top_k:"Résultats par requête",
+    rag_max_inject_chars:"Contexte max injecté (chars)",
     stats_label:"Statistiques d'Utilisation",
     stats_requests:"requêtes", stats_tokens:"tokens",
     stats_reset:"Réinitialiser les stats",
@@ -474,6 +530,28 @@ const I18N = {
     help_rag_setup_steps:"1. Aller dans Configuration → Mémoire Intelligente\n2. Activer \"Activer la Mémoire Intelligente\" (téléchargement unique ~90 Mo)\n3. Entrer le chemin de votre projet\n4. Cliquer sur \"Indexer Maintenant\" et attendre\n5. Le badge 🧠 RAG apparaît dans l'en-tête quand c'est actif",
     help_rag_privacy_title:"Confidentialité et performance",
     help_rag_privacy_body:"Tout fonctionne localement — embeddings, index et recherche. Aucune donnée n'est envoyée. L'indexation est rapide pour la plupart des projets.",
+    help_hw_title:"Gestionnaire de Mémoire",
+    help_hw_body:"Utilisation RAM et GPU en temps réel sur la page Statut. Affiche les modèles Ollama chargés en mémoire, avertit quand la RAM est sous pression (>75% AVERTISSEMENT, >90% CRITIQUE) et permet de décharger des modèles en un clic — sans terminal.",
+    help_hw_tip_title:"Quand l'utiliser",
+    help_hw_tip_body:"Si Ollama est lent ou ne répond pas, vérifiez Statut — plusieurs grands modèles sont peut-être chargés simultanément. Déchargez ceux inutilisés pour libérer de la RAM.",
+    help_disc_title:"Découverte de Modèles",
+    help_disc_body:"Dans la page Modèles, développez '🔭 Découvrir les Modèles'. L'onglet Local affiche un catalogue Ollama filtré par ce qui tient dans votre RAM — vert signifie que ça rentre, rouge que vous avez besoin de plus de RAM. L'onglet Cloud affiche les modèles OpenRouter avec les gratuits mis en évidence.",
+    help_disc_tip_title:"Ajout rapide",
+    help_disc_tip_body:"Cliquez sur '+ Ajouter à Airvo' sur n'importe quel modèle découvert. Pour les modèles Ollama, copiez la commande pull affichée et exécutez-la dans votre terminal d'abord.",
+    help_history_title:"Limite d'Historique de Chat",
+    help_history_body:"Airvo n'envoie que les N derniers messages de votre conversation par requête (défaut 10). Réduisez si vous dépassez les limites de tokens avec les APIs gratuites — Groq gratuit permet 6k–12k tokens/min. L'historique complet reste dans votre éditeur ; seul ce qui est envoyé au modèle est tronqué.",
+    help_trouble_title:"Dépannage",
+    help_trouble_1_q:"Erreur de limite de débit / tokens trop grands de Groq ou autre fournisseur",
+    help_trouble_1_a:"Allez dans Configuration → Limite d'Historique et mettez 4 ou 6 messages. Si Smart Memory (RAG) est activé, réduisez aussi la limite de contexte RAG à 1000–2000 caractères.",
+    help_trouble_2_q:"Impossible de se connecter au serveur / le tableau de bord affiche serveur hors ligne",
+    help_trouble_2_a:"Assurez-vous qu'Airvo est lancé : ouvrez un terminal et exécutez 'airvo start'. Vérifiez que le port dans votre fichier .env (défaut 8765) correspond aux paramètres de l'extension.",
+    help_trouble_3_q:"Un modèle affiche une erreur / icône rouge",
+    help_trouble_3_a:"Vérifiez la clé API de ce modèle dans la page Modèles. Pour les modèles Ollama, assurez-vous qu'Ollama est lancé ('ollama serve') et que le modèle est téléchargé ('ollama pull nom').",
+    help_trouble_4_q:"Smart Memory (RAG) ne trouve pas mon code / la recherche échoue",
+    help_trouble_4_a:"Allez dans Configuration → Smart Memory → cliquez sur 'Indexer Maintenant'. Confirmez que le chemin pointe vers la racine de votre projet. Après avoir ajouté des fichiers, ré-indexez. Top K à 1–2 suffit pour la plupart des projets.",
+    help_trouble_5_q:"La Découverte de Modèles ne montre pas les modèles Ollama comme installés",
+    help_trouble_5_a:"Ollama n'est peut-être pas lancé. Démarrez-le avec 'ollama serve'. Le catalogue se charge toujours — le badge Installé nécessite qu'Ollama réponde sur localhost:11434.",
+    config_context_memory_section:"Contexte & Mémoire",
     toast_activated:"Modèle activé", toast_deactivated:"Modèle désactivé",
     toast_key_saved:"Clé API enregistrée ✓", toast_key_error:"Entrez une clé API valide",
     toast_deleted:"Modèle supprimé", toast_added:"Modèle ajouté ✓",
@@ -535,6 +613,9 @@ const I18N = {
     temp_saved:"Temperatur gespeichert",
     maxtokens_label:"Maximale Token",
     maxtokens_saved:"Maximale Token gespeichert",
+    maxhistory_label:"Verlaufslimit",
+    maxhistory_sub:"Max. Nachrichten pro Anfrage. Niedriger = weniger gesendete Token.",
+    maxhistory_saved:"Limit gespeichert",
     memory_label:"Projektkontext",
     memory_sub:"Einmal schreiben, in jede Anfrage eingefügt. Hilft Airvo, Ihren Stack zu verstehen.",
     memory_enable:"Projektkontext aktivieren",
@@ -569,6 +650,7 @@ const I18N = {
     rag_max_mb:"Max. Indexgröße (MB)",
     rag_max_kb:"Max. Dateigröße (KB)",
     rag_top_k:"Ergebnisse pro Anfrage",
+    rag_max_inject_chars:"Max. injizierter Kontext (Zeichen)",
     stats_label:"Nutzungsstatistiken",
     stats_requests:"Anfragen", stats_tokens:"Token",
     stats_reset:"Statistiken zurücksetzen",
@@ -621,6 +703,28 @@ const I18N = {
     help_rag_setup_steps:"1. Gehen Sie zu Konfiguration → Smart Memory\n2. Aktivieren Sie \"Smart Memory aktivieren\" (einmaliger Download ~90 MB)\n3. Geben Sie den Projektpfad ein\n4. Klicken Sie auf \"Jetzt indexieren\" und warten Sie\n5. Das 🧠 RAG-Badge erscheint im Header, wenn es aktiv ist",
     help_rag_privacy_title:"Datenschutz & Leistung",
     help_rag_privacy_body:"Alles läuft lokal — Embeddings, Index und Suche. Es werden keine Daten gesendet. Die Indexierung ist für die meisten Projekte schnell.",
+    help_hw_title:"Speicherverwaltung",
+    help_hw_body:"Echtzeit-RAM- und GPU-Auslastung auf der Statusseite. Zeigt welche Ollama-Modelle im Speicher geladen sind, warnt bei RAM-Druck (>75% WARNUNG, >90% KRITISCH) und ermöglicht das Entladen von Modellen mit einem Klick — kein Terminal nötig.",
+    help_hw_tip_title:"Wann verwenden",
+    help_hw_tip_body:"Wenn Ollama langsam oder nicht reagiert, prüfen Sie Status — möglicherweise sind mehrere große Modelle gleichzeitig geladen. Entladen Sie ungenutzte, um RAM freizugeben.",
+    help_disc_title:"Modell-Entdeckung",
+    help_disc_body:"Erweitern Sie auf der Modelle-Seite '🔭 Modelle entdecken'. Der Lokal-Tab zeigt einen Ollama-Katalog gefiltert nach dem, was in Ihren RAM passt — grüne Markierung bedeutet es passt, rot bedeutet mehr RAM nötig. Der Cloud-Tab zeigt OpenRouter-Modelle mit hervorgehobenen kostenlosen.",
+    help_disc_tip_title:"Schnell hinzufügen",
+    help_disc_tip_body:"Klicken Sie auf '+ Zu Airvo hinzufügen' bei einem entdeckten Modell. Für Ollama-Modelle kopieren Sie den angezeigten Pull-Befehl und führen ihn zuerst im Terminal aus.",
+    help_history_title:"Chat-Verlauf-Limit",
+    help_history_body:"Airvo sendet nur die letzten N Nachrichten Ihrer Unterhaltung pro Anfrage (Standard 10). Reduzieren Sie dies, wenn Sie Token-Limits mit kostenlosen API-Tarifen überschreiten — Groq kostenlos: 6k–12k Token/Min. Der vollständige Verlauf bleibt in Ihrem Editor; nur was an das Modell gesendet wird, wird gekürzt.",
+    help_trouble_title:"Fehlerbehebung",
+    help_trouble_1_q:"Ratenlimit-Fehler / zu viele Tokens von Groq oder anderem Anbieter",
+    help_trouble_1_a:"Gehen Sie zu Konfiguration → Chat-Verlauf-Limit und setzen Sie es auf 4 oder 6 Nachrichten. Wenn Smart Memory (RAG) aktiviert ist, reduzieren Sie auch das RAG-Kontextlimit auf 1000–2000 Zeichen.",
+    help_trouble_2_q:"Verbindung zum Server nicht möglich / Dashboard zeigt Server offline",
+    help_trouble_2_a:"Stellen Sie sicher, dass Airvo läuft: Terminal öffnen und 'airvo start' ausführen. Prüfen Sie, dass der Port in Ihrer .env-Datei (Standard 8765) mit den Erweiterungs-Einstellungen übereinstimmt.",
+    help_trouble_3_q:"Ein Modell zeigt einen Fehler / rotes Symbol",
+    help_trouble_3_a:"Prüfen Sie den API-Schlüssel für dieses Modell auf der Modelle-Seite. Für Ollama-Modelle stellen Sie sicher, dass Ollama läuft ('ollama serve') und das Modell heruntergeladen ist ('ollama pull name').",
+    help_trouble_4_q:"Smart Memory (RAG) findet meinen Code nicht / Suche schlägt fehl",
+    help_trouble_4_a:"Gehen Sie zu Konfiguration → Smart Memory → klicken Sie auf 'Jetzt Indexieren'. Bestätigen Sie, dass der Pfad auf Ihr Projektstamm zeigt. Nach neuen Dateien re-indexieren. Top K auf 1–2 reicht für die meisten Projekte.",
+    help_trouble_5_q:"Modell-Entdeckung zeigt keine Ollama-Modelle als installiert",
+    help_trouble_5_a:"Ollama läuft möglicherweise nicht. Starten Sie es mit 'ollama serve'. Der Katalog lädt immer — das Installiert-Badge erfordert nur, dass Ollama auf localhost:11434 antwortet.",
+    config_context_memory_section:"Kontext & Speicher",
     toast_activated:"Modell aktiviert", toast_deactivated:"Modell deaktiviert",
     toast_key_saved:"API-Schlüssel gespeichert ✓", toast_key_error:"Geben Sie einen gültigen API-Schlüssel ein",
     toast_deleted:"Modell gelöscht", toast_added:"Modell hinzugefügt ✓",
@@ -682,6 +786,9 @@ const I18N = {
     temp_saved:"温度已保存",
     maxtokens_label:"最大 Token 数",
     maxtokens_saved:"最大 Token 数已保存",
+    maxhistory_label:"历史记录限制",
+    maxhistory_sub:"每次请求保留的最大消息数。越小发送的 token 越少。",
+    maxhistory_saved:"限制已保存",
     memory_label:"项目上下文",
     memory_sub:"写一次，注入每个请求。帮助 Airvo 了解您的技术栈。",
     memory_enable:"启用项目上下文",
@@ -716,6 +823,7 @@ const I18N = {
     rag_max_mb:"最大索引大小（MB）",
     rag_max_kb:"最大文件大小（KB）",
     rag_top_k:"每次请求的结果数",
+    rag_max_inject_chars:"最大注入上下文（字符）",
     stats_label:"使用统计",
     stats_requests:"请求数", stats_tokens:"Token 数",
     stats_reset:"重置统计",
@@ -768,6 +876,28 @@ const I18N = {
     help_rag_setup_steps:"1. 前往配置 → 智能记忆\n2. 开启 \"启用智能记忆\"（一次性下载约 90 MB）\n3. 输入项目路径\n4. 点击 \"立即索引\" 并等待\n5. 激活后，标题栏将显示 🧠 RAG 徽章",
     help_rag_privacy_title:"隐私与性能",
     help_rag_privacy_body:"一切在本地运行——嵌入、索引和检索。不发送任何数据。大多数项目的索引速度很快。",
+    help_hw_title:"内存管理器",
+    help_hw_body:"在状态页面实时查看 RAM 和 GPU 使用情况。显示哪些 Ollama 模型已加载到内存中，当 RAM 压力过大时发出警告（>75% 警告，>90% 严重），并支持一键卸载模型——无需终端。",
+    help_hw_tip_title:"何时使用",
+    help_hw_tip_body:"如果 Ollama 运行缓慢或无响应，请查看状态页面——可能同时加载了多个大型模型。卸载未使用的模型以释放 RAM。",
+    help_disc_title:"模型发现",
+    help_disc_body:"在模型页面，展开「🔭 发现模型」。本地标签显示按 RAM 容量过滤的 Ollama 目录——绿色标记表示适合，红色表示需要更多 RAM。云端标签显示 OpenRouter 模型，免费模型会被突出显示。",
+    help_disc_tip_title:"快速添加",
+    help_disc_tip_body:"点击任何已发现模型上的「+ 添加到 Airvo」。对于 Ollama 模型，复制显示的拉取命令并先在终端中运行。",
+    help_history_title:"聊天历史限制",
+    help_history_body:"Airvo 每次请求只发送最后 N 条对话消息（默认 10 条）。如果您在免费 API 层级上遇到 token 限制，请降低此值——Groq 免费层级每分钟允许 6k–12k tokens。完整历史保留在编辑器中；只有发送给模型的内容会被截断。",
+    help_trouble_title:"故障排除",
+    help_trouble_1_q:"Groq 或其他提供商出现速率限制错误 / tokens 过多",
+    help_trouble_1_a:"前往配置 → 聊天历史限制，将其设置为 4 或 6 条消息。如果启用了智能记忆（RAG），还需将 RAG 上下文限制降低到 1000–2000 字符。",
+    help_trouble_2_q:"无法连接到服务器 / 仪表板显示服务器离线",
+    help_trouble_2_a:"确保 Airvo 正在运行：打开终端并运行 'airvo start'。验证 .env 文件中的端口（默认 8765）与扩展设置一致。",
+    help_trouble_3_q:"模型显示错误 / 红色图标",
+    help_trouble_3_a:"在模型页面检查该模型的 API 密钥。对于 Ollama 模型，确保 Ollama 正在运行（'ollama serve'）且模型已下载（'ollama pull 名称'）。",
+    help_trouble_4_q:"智能记忆（RAG）找不到我的代码 / 检索效果不佳",
+    help_trouble_4_a:"前往配置 → 智能记忆 → 点击「立即索引」。确认路径指向项目根目录。添加新文件后请重新索引。对大多数项目，Top K 设为 1–2 就足够了。",
+    help_trouble_5_q:"模型发现未显示 Ollama 模型为已安装",
+    help_trouble_5_a:"Ollama 可能未运行。使用 'ollama serve' 启动它。目录始终加载——已安装标记仅需要 Ollama 在 localhost:11434 上响应。",
+    config_context_memory_section:"上下文与内存",
     toast_activated:"模型已激活", toast_deactivated:"模型已停用",
     toast_key_saved:"API 密钥已保存 ✓", toast_key_error:"请输入有效的 API 密钥",
     toast_deleted:"模型已删除", toast_added:"模型已添加 ✓",
@@ -829,6 +959,9 @@ const I18N = {
     temp_saved:"温度を保存しました",
     maxtokens_label:"最大トークン数",
     maxtokens_saved:"最大トークン数を保存しました",
+    maxhistory_label:"履歴制限",
+    maxhistory_sub:"リクエストごとの最大メッセージ数。小さいほど送信トークンが少なくなります。",
+    maxhistory_saved:"制限を保存しました",
     memory_label:"プロジェクトコンテキスト",
     memory_sub:"一度書くと、すべてのリクエストに注入されます。Airvoがあなたのスタックを理解するのに役立ちます。",
     memory_enable:"プロジェクトコンテキストを有効にする",
@@ -863,6 +996,7 @@ const I18N = {
     rag_max_mb:"最大インデックスサイズ (MB)",
     rag_max_kb:"最大ファイルサイズ (KB)",
     rag_top_k:"リクエストごとの結果数",
+    rag_max_inject_chars:"最大注入コンテキスト（文字）",
     stats_label:"使用統計",
     stats_requests:"リクエスト", stats_tokens:"トークン",
     stats_reset:"統計をリセット",
@@ -915,6 +1049,28 @@ const I18N = {
     help_rag_setup_steps:"1. 設定 → スマートメモリに移動\n2. \"スマートメモリを有効にする\" をONにする（初回のみ約90MBダウンロード）\n3. プロジェクトのパスを入力\n4. \"今すぐインデックス\" をクリックして待機\n5. アクティブになるとヘッダーに 🧠 RAG バッジが表示されます",
     help_rag_privacy_title:"プライバシーとパフォーマンス",
     help_rag_privacy_body:"エンベディング、インデックス、検索のすべてがローカルで実行されます。データは送信されません。ほとんどのプロジェクトでインデックス化は高速です。",
+    help_hw_title:"メモリマネージャー",
+    help_hw_body:"ステータスページでRAMとGPUの使用状況をリアルタイムで確認できます。Ollamaモデルのメモリ読み込み状況を表示し、RAM負荷が高い場合（>75% 警告、>90% 危険）に警告し、ターミナル不要でワンクリックでモデルをアンロードできます。",
+    help_hw_tip_title:"使用タイミング",
+    help_hw_tip_body:"Ollamaが遅い、または応答しない場合はステータスを確認してください — 複数の大きなモデルが同時に読み込まれている可能性があります。未使用のものをアンロードしてRAMを解放してください。",
+    help_disc_title:"モデル検出",
+    help_disc_body:"モデルページで「🔭 モデルを探す」を展開します。ローカルタブはRAMに収まるものでフィルタされたOllamaカタログを表示します — 緑バッジは適合、赤は追加RAMが必要。クラウドタブは無料モデルをハイライトしたOpenRouterモデルを表示します。",
+    help_disc_tip_title:"クイック追加",
+    help_disc_tip_body:"発見されたモデルの「+ Airvoに追加」をクリックします。Ollamaモデルの場合、表示されたpullコマンドをコピーしてターミナルで先に実行してください。",
+    help_history_title:"チャット履歴制限",
+    help_history_body:"Airvoはリクエストごとに最後のNメッセージのみを送信します（デフォルト10）。無料APIティアでトークン制限に達した場合は減らしてください — Groq無料ティアは1分あたり6k〜12kトークン。完全な履歴はエディターに残ります；モデルに送信されるものだけがトリミングされます。",
+    help_trouble_title:"トラブルシューティング",
+    help_trouble_1_q:"Groqまたは他のプロバイダーからのレート制限エラー / トークンが多すぎる",
+    help_trouble_1_a:"設定 → チャット履歴制限 に移動して4または6メッセージに設定してください。スマートメモリ（RAG）が有効な場合はRAGコンテキスト上限も1000〜2000文字に下げてください。",
+    help_trouble_2_q:"サーバーに接続できない / ダッシュボードがサーバーオフラインを表示",
+    help_trouble_2_a:"Airvoが実行中か確認してください：ターミナルを開いて 'airvo start' を実行。.envファイルのポート（デフォルト8765）が拡張機能の設定と一致しているか確認してください。",
+    help_trouble_3_q:"モデルがエラー / 赤いアイコンを表示する",
+    help_trouble_3_a:"モデルページでそのモデルのAPIキーを確認してください。Ollamaモデルの場合、Ollamaが実行中（'ollama serve'）でモデルがダウンロード済み（'ollama pull 名前'）か確認してください。",
+    help_trouble_4_q:"スマートメモリ（RAG）がコードを見つけない / 検索がうまくいかない",
+    help_trouble_4_a:"設定 → スマートメモリ → 「今すぐインデックス」をクリック。パスがプロジェクトルートを指しているか確認。新しいファイル追加後は再インデックスしてください。Top K 1〜2がほとんどのプロジェクトで十分です。",
+    help_trouble_5_q:"モデル検出がOllamaモデルをインストール済みとして表示しない",
+    help_trouble_5_a:"Ollamaが実行されていない可能性があります。'ollama serve' で起動してください。カタログは常に読み込まれます — インストール済みバッジはOllamaがlocalhost:11434で応答することのみを必要とします。",
+    config_context_memory_section:"コンテキスト & メモリ",
     toast_activated:"モデルを有効化しました", toast_deactivated:"モデルを無効化しました",
     toast_key_saved:"APIキーを保存しました ✓", toast_key_error:"有効なAPIキーを入力してください",
     toast_deleted:"モデルを削除しました", toast_added:"モデルを追加しました ✓",
@@ -976,6 +1132,9 @@ const I18N = {
     temp_saved:"Temperatura salva",
     maxtokens_label:"Máximo de Tokens",
     maxtokens_saved:"Máximo de tokens salvo",
+    maxhistory_label:"Limite do Histórico",
+    maxhistory_sub:"Máx. mensagens por requisição. Menor = menos tokens enviados ao modelo.",
+    maxhistory_saved:"Limite salvo",
     memory_label:"Contexto do Projeto",
     memory_sub:"Escreva uma vez, injetado em cada requisição. Ajuda o Airvo a entender seu stack.",
     memory_enable:"Ativar contexto do projeto",
@@ -1010,6 +1169,7 @@ const I18N = {
     rag_max_mb:"Tamanho máximo do índice (MB)",
     rag_max_kb:"Tamanho máximo por arquivo (KB)",
     rag_top_k:"Resultados por solicitação",
+    rag_max_inject_chars:"Máx. contexto injetado (chars)",
     stats_label:"Estatísticas de Uso",
     stats_requests:"requisições", stats_tokens:"tokens",
     stats_reset:"Resetar estatísticas",
@@ -1062,6 +1222,28 @@ const I18N = {
     help_rag_setup_steps:"1. Vá para Configuração → Memória Inteligente\n2. Ative \"Ativar Memória Inteligente\" (download único de ~90 MB)\n3. Insira o caminho do seu projeto\n4. Clique em \"Indexar Agora\" e aguarde\n5. O badge 🧠 RAG aparece no cabeçalho quando ativo",
     help_rag_privacy_title:"Privacidade e desempenho",
     help_rag_privacy_body:"Tudo roda localmente — embeddings, índice e busca. Nenhum dado é enviado. A indexação é rápida para a maioria dos projetos.",
+    help_hw_title:"Gerenciador de Memória",
+    help_hw_body:"Uso de RAM e GPU em tempo real na página Status. Mostra quais modelos Ollama estão carregados na memória, avisa quando a RAM está sob pressão (>75% AVISO, >90% CRÍTICO) e permite descarregar modelos com um clique — sem terminal.",
+    help_hw_tip_title:"Quando usar",
+    help_hw_tip_body:"Se o Ollama estiver lento ou sem resposta, verifique Status — pode haver vários modelos grandes carregados simultaneamente. Descarregue os não utilizados para liberar RAM.",
+    help_disc_title:"Descoberta de Modelos",
+    help_disc_body:"Na página Modelos, expanda '🔭 Descobrir Modelos'. A aba Local mostra um catálogo Ollama filtrado pelo que cabe na sua RAM — badge verde significa que cabe, vermelho que precisa de mais RAM. A aba Cloud mostra modelos OpenRouter com os gratuitos em destaque.",
+    help_disc_tip_title:"Adição rápida",
+    help_disc_tip_body:"Clique em '+ Adicionar ao Airvo' em qualquer modelo descoberto. Para modelos Ollama, copie o comando pull exibido e execute-o no terminal primeiro.",
+    help_history_title:"Limite de Histórico de Chat",
+    help_history_body:"O Airvo envia apenas as últimas N mensagens da sua conversa por requisição (padrão 10). Diminua se atingir limites de tokens com APIs gratuitas — Groq gratuito permite 6k–12k tokens/min. O histórico completo fica no editor; apenas o que é enviado ao modelo é cortado.",
+    help_trouble_title:"Solução de Problemas",
+    help_trouble_1_q:"Erro de limite de taxa / tokens demais do Groq ou outro provedor",
+    help_trouble_1_a:"Vá em Configuração → Limite de Histórico e defina para 4 ou 6 mensagens. Se o Smart Memory (RAG) estiver ativo, reduza também o limite de contexto RAG para 1000–2000 caracteres.",
+    help_trouble_2_q:"Não consegue conectar ao servidor / dashboard mostra servidor offline",
+    help_trouble_2_a:"Certifique-se de que o Airvo está rodando: abra um terminal e execute 'airvo start'. Verifique se a porta no seu .env (padrão 8765) corresponde às configurações da extensão.",
+    help_trouble_3_q:"Um modelo mostra erro / ícone vermelho",
+    help_trouble_3_a:"Verifique a chave API desse modelo na página Modelos. Para modelos Ollama, certifique-se de que o Ollama está rodando ('ollama serve') e o modelo está baixado ('ollama pull nome').",
+    help_trouble_4_q:"Smart Memory (RAG) não encontra meu código / busca falha",
+    help_trouble_4_a:"Vá em Configuração → Smart Memory → clique em 'Indexar Agora'. Confirme que o caminho aponta para a raiz do projeto. Após adicionar arquivos, re-indexe. Top K em 1–2 é suficiente para a maioria dos projetos.",
+    help_trouble_5_q:"Descoberta de Modelos não mostra modelos Ollama como instalados",
+    help_trouble_5_a:"O Ollama pode não estar rodando. Inicie com 'ollama serve'. O catálogo sempre carrega — o badge Instalado apenas requer que o Ollama responda em localhost:11434.",
+    config_context_memory_section:"Contexto & Memória",
     toast_activated:"Modelo ativado", toast_deactivated:"Modelo desativado",
     toast_key_saved:"Chave API salva ✓", toast_key_error:"Insira uma chave API válida",
     toast_deleted:"Modelo excluído", toast_added:"Modelo adicionado ✓",
@@ -1932,6 +2114,32 @@ export default function AirvoDashboard() {
                 </div>
               </div>
 
+              {/* Chat History Limit */}
+              <div className="card">
+                <div className="card-title">{t("maxhistory_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>
+                  {t("maxhistory_sub")}
+                </p>
+                <div style={{ display:"flex", gap:12, alignItems:"center" }}>
+                  <input type="number" className="form-input" style={{ width:140 }}
+                    value={prefs.max_history_messages ?? 10} min={2} max={50} step={2}
+                    onChange={e => setPrefs(p => ({ ...p, max_history_messages: parseInt(e.target.value) }))}
+                    onBlur={e => { updatePrefs({ max_history_messages: parseInt(e.target.value) }); toast(t("maxhistory_saved"), "success"); }}
+                  />
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                    messages &nbsp;<span style={{ color: (prefs.max_history_messages ?? 10) <= 6 ? "var(--green)" : (prefs.max_history_messages ?? 10) <= 14 ? "var(--yellow)" : "var(--red)" }}>●</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* ── Context & Memory section ── */}
+              <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", fontWeight:700, letterSpacing:2, textTransform:"uppercase" }}>
+                  🧠 {t("config_context_memory_section")}
+                </span>
+                <div style={{ flex:1, height:1, background:"var(--border)" }} />
+              </div>
+
               {/* Project Context / Memory */}
               <div className="card">
                 <div className="card-title">{t("memory_label")}</div>
@@ -2072,6 +2280,14 @@ export default function AirvoDashboard() {
                           value={prefs?.rag_top_k ?? 5} min={1} max={20} step={1}
                           onChange={e => setPrefs(p => ({ ...p, rag_top_k: parseInt(e.target.value) }))}
                           onBlur={e => updatePrefs({ rag_top_k: parseInt(e.target.value) })}
+                        />
+                      </div>
+                      <div>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("rag_max_inject_chars")}</div>
+                        <input type="number" className="form-input" style={{ width:"100%" }}
+                          value={prefs?.rag_max_inject_chars ?? 3000} min={500} max={20000} step={500}
+                          onChange={e => setPrefs(p => ({ ...p, rag_max_inject_chars: parseInt(e.target.value) }))}
+                          onBlur={e => updatePrefs({ rag_max_inject_chars: parseInt(e.target.value) })}
                         />
                       </div>
                     </div>
@@ -2428,6 +2644,61 @@ function HelpPage({ t, setPage }) {
           <div className="help-field-title">{t("help_rag_privacy_title")}</div>
           <div className="help-field-desc">{t("help_rag_privacy_body")}</div>
         </div>
+      </div>
+
+      {/* Memory Manager */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🖥️</span>
+          {t("help_hw_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-desc">{t("help_hw_body")}</div>
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_hw_tip_title")}</div>
+          <div className="help-field-desc">{t("help_hw_tip_body")}</div>
+        </div>
+      </div>
+
+      {/* Model Discovery */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🔭</span>
+          {t("help_disc_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-desc">{t("help_disc_body")}</div>
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-title">{t("help_disc_tip_title")}</div>
+          <div className="help-field-desc">{t("help_disc_tip_body")}</div>
+        </div>
+      </div>
+
+      {/* Chat History Limit */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">💬</span>
+          {t("help_history_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-desc">{t("help_history_body")}</div>
+        </div>
+      </div>
+
+      {/* Troubleshooting */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🔧</span>
+          {t("help_trouble_title")}
+        </div>
+        {[1,2,3,4,5].map(n => (
+          <div key={n} className="faq-item">
+            <div className="faq-q">⚠ {t(`help_trouble_${n}_q`)}</div>
+            <div className="faq-a">{t(`help_trouble_${n}_a`)}</div>
+          </div>
+        ))}
       </div>
 
       <div className="help-section">

@@ -81,6 +81,7 @@ DEFAULT_PREFS = {
     "mode":            "parallel",
     "temperature":     0.7,
     "max_tokens":      4096,
+    "max_history_messages": 10,
     "memory_enabled":  False,
     "memory_text":     "",
     # ── RAG / Smart Memory ───────────────────────────────────────────────────
@@ -89,6 +90,7 @@ DEFAULT_PREFS = {
     "rag_max_index_mb": 200,
     "rag_max_file_kb":  500,
     "rag_top_k":        5,
+    "rag_max_inject_chars": 3000,
     "rag_extensions": [
         ".py", ".js", ".ts", ".jsx", ".tsx",
         ".md", ".go", ".rs", ".java", ".cpp", ".c",
