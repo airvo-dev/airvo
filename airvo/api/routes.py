@@ -541,3 +541,93 @@ async def rag_reset():
         return {"ok": True}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Hardware / Memory Manager endpoints ──────────────────────────────────────
+
+@router.get("/api/hardware/status")
+async def hardware_status():
+    """
+    Return RAM usage, GPU/VRAM info, and currently loaded Ollama models.
+    Works without psutil — returns partial data with available=False.
+    """
+    try:
+        from airvo.hardware.detector import get_hardware_status, is_psutil_available
+        from airvo.hardware.memory_manager import get_memory_pressure, get_suggestions
+
+        prefs   = settings.get_prefs()
+        ollama_url = next(
+            (m.get("base_url", "http://localhost:11434")
+             for m in settings.get_models()
+             if m.get("provider") == "ollama" and m.get("base_url")),
+            "http://localhost:11434",
+        )
+
+        hw = get_hardware_status(ollama_url)
+        pressure    = get_memory_pressure(hw)
+        suggestions = get_suggestions(hw)
+
+        return {
+            "psutil_available": hw.psutil_available,
+            "ram": {
+                "total_mb":  hw.ram_total_mb,
+                "used_mb":   hw.ram_used_mb,
+                "free_mb":   hw.ram_free_mb,
+                "percent":   hw.ram_percent,
+                "pressure":  pressure.value,
+            },
+            "gpus": [
+                {
+                    "name":          g.name,
+                    "vram_total_mb": g.vram_total_mb,
+                    "vram_used_mb":  g.vram_used_mb,
+                    "vram_free_mb":  g.vram_free_mb,
+                    "vram_percent":  g.vram_percent,
+                }
+                for g in hw.gpus
+            ],
+            "ollama": {
+                "running":       hw.ollama_running,
+                "base_url":      hw.ollama_base_url,
+                "loaded_models": [
+                    {
+                        "name":       m.name,
+                        "size_mb":    m.size_mb,
+                        "expires_at": m.expires_at,
+                    }
+                    for m in hw.ollama_loaded_models
+                ],
+            },
+            "suggestions": [
+                {
+                    "action":  s.action,
+                    "model":   s.model,
+                    "reason":  s.reason,
+                    "size_mb": s.size_mb,
+                }
+                for s in suggestions
+            ],
+            "error": hw.error,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class UnloadRequest(BaseModel):
+    model_name: str
+    base_url:   Optional[str] = "http://localhost:11434"
+
+
+@router.post("/api/hardware/unload")
+async def hardware_unload(req: UnloadRequest):
+    """Ask Ollama to unload a specific model from memory (keep_alive=0)."""
+    try:
+        from airvo.hardware.memory_manager import unload_ollama_model
+        ok = unload_ollama_model(req.model_name, req.base_url or "http://localhost:11434")
+        if not ok:
+            raise HTTPException(status_code=502, detail=f"Failed to unload '{req.model_name}'")
+        return {"ok": True, "model": req.model_name}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -29,6 +29,16 @@ const I18N = {
     status_offline_hint:"Make sure Airvo is running with",
     field_version:"Version", field_active:"Active models", field_total:"Total models",
     field_config:"Config file", field_endpoint:"Chat endpoint",
+    hw_label:"System Resources", hw_sub:"RAM, GPU and Ollama models in memory",
+    hw_ram:"RAM", hw_used:"used", hw_free:"free",
+    hw_gpu:"GPU", hw_vram:"VRAM",
+    hw_ollama_models:"Models in memory", hw_ollama_none:"No models loaded",
+    hw_pressure_ok:"Memory OK", hw_pressure_warning:"Memory pressure", hw_pressure_critical:"Memory critical",
+    hw_unload_btn:"Unload", hw_unload_confirm:"Unload this model from memory?",
+    hw_unload_done:"Model unloaded ✓", hw_unload_error:"Failed to unload",
+    hw_no_psutil:"psutil not installed", hw_no_psutil_hint:"Run: pip install airvo[hardware]",
+    hw_suggestions:"Suggestions", hw_loading:"Loading hardware info...",
+    hw_refresh:"Refresh",
     continue_label:"Continue.dev Config", continue_hint:"Add this to your continue.dev config.yaml:",
     copy_config:"Copy config", copied:"Copied ✓",
     config_title:"Configuration", config_sub:"Mode, temperature, memory and preferences",
@@ -187,6 +197,16 @@ const I18N = {
     status_offline_hint:"Asegurate de que Airvo esté corriendo con",
     field_version:"Versión", field_active:"Modelos activos", field_total:"Total modelos",
     field_config:"Archivo de config", field_endpoint:"Endpoint de chat",
+    hw_label:"Recursos del Sistema", hw_sub:"RAM, GPU y modelos Ollama en memoria",
+    hw_ram:"RAM", hw_used:"usada", hw_free:"libre",
+    hw_gpu:"GPU", hw_vram:"VRAM",
+    hw_ollama_models:"Modelos en memoria", hw_ollama_none:"No hay modelos cargados",
+    hw_pressure_ok:"Memoria OK", hw_pressure_warning:"Presión de memoria", hw_pressure_critical:"Memoria crítica",
+    hw_unload_btn:"Descargar", hw_unload_confirm:"¿Descargar este modelo de la memoria?",
+    hw_unload_done:"Modelo descargado ✓", hw_unload_error:"Error al descargar",
+    hw_no_psutil:"psutil no instalado", hw_no_psutil_hint:"Ejecutar: pip install airvo[hardware]",
+    hw_suggestions:"Sugerencias", hw_loading:"Cargando info de hardware...",
+    hw_refresh:"Actualizar",
     continue_label:"Config de Continue.dev", continue_hint:"Pegá esto en tu config.yaml:",
     copy_config:"Copiar config", copied:"Copiado ✓",
     config_title:"Configuración", config_sub:"Modo, temperatura, memoria y preferencias",
@@ -318,6 +338,16 @@ const I18N = {
     status_offline_hint:"Assurez-vous qu'Airvo est lancé avec",
     field_version:"Version", field_active:"Modèles actifs", field_total:"Total modèles",
     field_config:"Fichier de config", field_endpoint:"Endpoint de chat",
+    hw_label:"Ressources Système", hw_sub:"RAM, GPU et modèles Ollama en mémoire",
+    hw_ram:"RAM", hw_used:"utilisée", hw_free:"libre",
+    hw_gpu:"GPU", hw_vram:"VRAM",
+    hw_ollama_models:"Modèles en mémoire", hw_ollama_none:"Aucun modèle chargé",
+    hw_pressure_ok:"Mémoire OK", hw_pressure_warning:"Pression mémoire", hw_pressure_critical:"Mémoire critique",
+    hw_unload_btn:"Décharger", hw_unload_confirm:"Décharger ce modèle de la mémoire ?",
+    hw_unload_done:"Modèle déchargé ✓", hw_unload_error:"Échec du déchargement",
+    hw_no_psutil:"psutil non installé", hw_no_psutil_hint:"Exécuter : pip install airvo[hardware]",
+    hw_suggestions:"Suggestions", hw_loading:"Chargement des infos matérielles...",
+    hw_refresh:"Actualiser",
     continue_label:"Config Continue.dev", continue_hint:"Ajoutez ceci à votre config.yaml :",
     copy_config:"Copier la config", copied:"Copié ✓",
     config_title:"Configuration", config_sub:"Mode, température, mémoire et préférences",
@@ -447,6 +477,16 @@ const I18N = {
     status_offline_hint:"Stellen Sie sicher, dass Airvo läuft mit",
     field_version:"Version", field_active:"Aktive Modelle", field_total:"Modelle gesamt",
     field_config:"Konfigurationsdatei", field_endpoint:"Chat-Endpunkt",
+    hw_label:"Systemressourcen", hw_sub:"RAM, GPU und Ollama-Modelle im Speicher",
+    hw_ram:"RAM", hw_used:"genutzt", hw_free:"frei",
+    hw_gpu:"GPU", hw_vram:"VRAM",
+    hw_ollama_models:"Modelle im Speicher", hw_ollama_none:"Keine Modelle geladen",
+    hw_pressure_ok:"Speicher OK", hw_pressure_warning:"Speicherdruck", hw_pressure_critical:"Speicher kritisch",
+    hw_unload_btn:"Entladen", hw_unload_confirm:"Dieses Modell aus dem Speicher entladen?",
+    hw_unload_done:"Modell entladen ✓", hw_unload_error:"Entladen fehlgeschlagen",
+    hw_no_psutil:"psutil nicht installiert", hw_no_psutil_hint:"Ausführen: pip install airvo[hardware]",
+    hw_suggestions:"Vorschläge", hw_loading:"Hardware-Info wird geladen...",
+    hw_refresh:"Aktualisieren",
     continue_label:"Continue.dev Konfiguration", continue_hint:"Fügen Sie dies zu Ihrer config.yaml hinzu:",
     copy_config:"Konfiguration kopieren", copied:"Kopiert ✓",
     config_title:"Konfiguration", config_sub:"Modus, Temperatur, Speicher und Einstellungen",
@@ -576,6 +616,16 @@ const I18N = {
     status_offline_hint:"请确保 Airvo 正在运行，使用命令",
     field_version:"版本", field_active:"活跃模型", field_total:"模型总数",
     field_config:"配置文件", field_endpoint:"聊天端点",
+    hw_label:"系统资源", hw_sub:"RAM、GPU 和内存中的 Ollama 模型",
+    hw_ram:"内存", hw_used:"已用", hw_free:"空闲",
+    hw_gpu:"GPU", hw_vram:"显存",
+    hw_ollama_models:"内存中的模型", hw_ollama_none:"无已加载模型",
+    hw_pressure_ok:"内存正常", hw_pressure_warning:"内存压力", hw_pressure_critical:"内存严重不足",
+    hw_unload_btn:"卸载", hw_unload_confirm:"从内存中卸载此模型？",
+    hw_unload_done:"模型已卸载 ✓", hw_unload_error:"卸载失败",
+    hw_no_psutil:"psutil 未安装", hw_no_psutil_hint:"运行：pip install airvo[hardware]",
+    hw_suggestions:"建议", hw_loading:"正在加载硬件信息...",
+    hw_refresh:"刷新",
     continue_label:"Continue.dev 配置", continue_hint:"将以下内容添加到您的 config.yaml：",
     copy_config:"复制配置", copied:"已复制 ✓",
     config_title:"配置", config_sub:"模式、温度、记忆和偏好设置",
@@ -705,6 +755,16 @@ const I18N = {
     status_offline_hint:"Airvoが起動していることを確認してください",
     field_version:"バージョン", field_active:"アクティブモデル", field_total:"モデル総数",
     field_config:"設定ファイル", field_endpoint:"チャットエンドポイント",
+    hw_label:"システムリソース", hw_sub:"RAM、GPUおよびメモリ内のOllamaモデル",
+    hw_ram:"RAM", hw_used:"使用中", hw_free:"空き",
+    hw_gpu:"GPU", hw_vram:"VRAM",
+    hw_ollama_models:"メモリ内のモデル", hw_ollama_none:"モデルなし",
+    hw_pressure_ok:"メモリ正常", hw_pressure_warning:"メモリ圧迫", hw_pressure_critical:"メモリ危機的",
+    hw_unload_btn:"アンロード", hw_unload_confirm:"このモデルをメモリからアンロードしますか？",
+    hw_unload_done:"モデルをアンロードしました ✓", hw_unload_error:"アンロード失敗",
+    hw_no_psutil:"psutilが未インストール", hw_no_psutil_hint:"実行: pip install airvo[hardware]",
+    hw_suggestions:"提案", hw_loading:"ハードウェア情報を読み込み中...",
+    hw_refresh:"更新",
     continue_label:"Continue.dev設定", continue_hint:"これをconfig.yamlに追加してください：",
     copy_config:"設定をコピー", copied:"コピー済み ✓",
     config_title:"設定", config_sub:"モード、温度、メモリ、設定",
@@ -834,6 +894,16 @@ const I18N = {
     status_offline_hint:"Certifique-se de que o Airvo está rodando com",
     field_version:"Versão", field_active:"Modelos ativos", field_total:"Total de modelos",
     field_config:"Arquivo de configuração", field_endpoint:"Endpoint de chat",
+    hw_label:"Recursos do Sistema", hw_sub:"RAM, GPU e modelos Ollama na memória",
+    hw_ram:"RAM", hw_used:"usada", hw_free:"livre",
+    hw_gpu:"GPU", hw_vram:"VRAM",
+    hw_ollama_models:"Modelos na memória", hw_ollama_none:"Nenhum modelo carregado",
+    hw_pressure_ok:"Memória OK", hw_pressure_warning:"Pressão de memória", hw_pressure_critical:"Memória crítica",
+    hw_unload_btn:"Descarregar", hw_unload_confirm:"Descarregar este modelo da memória?",
+    hw_unload_done:"Modelo descarregado ✓", hw_unload_error:"Falha ao descarregar",
+    hw_no_psutil:"psutil não instalado", hw_no_psutil_hint:"Execute: pip install airvo[hardware]",
+    hw_suggestions:"Sugestões", hw_loading:"Carregando informações de hardware...",
+    hw_refresh:"Atualizar",
     continue_label:"Configuração Continue.dev", continue_hint:"Adicione isto ao seu config.yaml:",
     copy_config:"Copiar configuração", copied:"Copiado ✓",
     config_title:"Configuração", config_sub:"Modo, temperatura, memória e preferências",
@@ -1200,6 +1270,8 @@ export default function AirvoDashboard() {
   const [ragIndexing, setRagIndexing]   = useState(false);
   const [ragAdvanced, setRagAdvanced]   = useState(false);
   const [showRagWarning, setShowRagWarning] = useState(false);
+  const [hwStatus,  setHwStatus]  = useState(null);
+  const [hwLoading, setHwLoading] = useState(false);
   const { toasts, add: toast } = useToast();
   const { lang, setLang, t }   = useLanguage();
 
@@ -1226,10 +1298,33 @@ export default function AirvoDashboard() {
     } catch {}
   }, []);
 
+  const fetchHardware = useCallback(async () => {
+    setHwLoading(true);
+    try {
+      const res = await fetch(`${API}/api/hardware/status`);
+      if (res.ok) setHwStatus(await res.json());
+    } catch {}
+    finally { setHwLoading(false); }
+  }, []);
+
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
+  useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
 
   const MAX_ACTIVE = 3;
+
+  async function unloadOllamaModel(modelName) {
+    if (!confirm(t("hw_unload_confirm"))) return;
+    try {
+      const res = await fetch(`${API}/api/hardware/unload`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model_name: modelName }),
+      });
+      if (res.ok) { toast(t("hw_unload_done"), "success"); fetchHardware(); }
+      else toast(t("hw_unload_error"), "error");
+    } catch { toast(t("hw_unload_error"), "error"); }
+  }
 
   async function toggleModel(id, current) {
     const active = models.filter(m => m.active);
@@ -1449,6 +1544,121 @@ export default function AirvoDashboard() {
                     </div>
                 }
               </div>
+
+              {/* ── HARDWARE CARD ── */}
+              <div className="card">
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
+                  <div className="card-title" style={{ marginBottom:0 }}>{t("hw_label")}</div>
+                  <button className="btn btn-ghost btn-sm" onClick={fetchHardware} disabled={hwLoading} style={{ fontSize:11 }}>
+                    {hwLoading ? "…" : t("hw_refresh")}
+                  </button>
+                </div>
+                {hwLoading && !hwStatus && (
+                  <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("hw_loading")}</p>
+                )}
+                {hwStatus && (<>
+                  {/* psutil warning */}
+                  {!hwStatus.psutil_available && (
+                    <div style={{ background:"#1a1000", border:"1px solid #a06000", borderRadius:8, padding:"10px 14px", marginBottom:14, fontFamily:"var(--mono)", fontSize:12 }}>
+                      ⚠️ {t("hw_no_psutil")} — <span style={{ color:"var(--text2)" }}>{t("hw_no_psutil_hint")}</span>
+                    </div>
+                  )}
+
+                  {/* RAM */}
+                  {hwStatus.psutil_available && (() => {
+                    const pct  = hwStatus.ram?.percent ?? 0;
+                    const bar  = pct >= 90 ? "var(--red)" : pct >= 75 ? "#f59e0b" : "var(--green)";
+                    const used = ((hwStatus.ram?.used_mb ?? 0) / 1024).toFixed(1);
+                    const total= ((hwStatus.ram?.total_mb ?? 0) / 1024).toFixed(1);
+                    const free = ((hwStatus.ram?.free_mb  ?? 0) / 1024).toFixed(1);
+                    return (
+                      <div style={{ marginBottom:16 }}>
+                        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("hw_ram")}</span>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12 }}>
+                            {used} GB {t("hw_used")} / {total} GB &nbsp;
+                            <span style={{ color:"var(--text2)" }}>({free} GB {t("hw_free")})</span>
+                          </span>
+                        </div>
+                        <div style={{ background:"var(--bg3)", borderRadius:6, height:10, overflow:"hidden", border:"1px solid var(--border)" }}>
+                          <div style={{ width:`${pct}%`, height:"100%", background:bar, borderRadius:6, transition:"width .4s" }}/>
+                        </div>
+                        <div style={{ textAlign:"right", fontFamily:"var(--mono)", fontSize:11, color:bar, marginTop:4 }}>
+                          {pct.toFixed(1)}% — {hwStatus.ram?.pressure === "ok" ? t("hw_pressure_ok") : hwStatus.ram?.pressure === "warning" ? t("hw_pressure_warning") : t("hw_pressure_critical")}
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* GPUs */}
+                  {(hwStatus.gpus ?? []).map((gpu, i) => {
+                    const vp  = gpu.vram_percent ?? 0;
+                    const bar = vp >= 90 ? "var(--red)" : vp >= 75 ? "#f59e0b" : "var(--green)";
+                    return (
+                      <div key={i} style={{ marginBottom:16 }}>
+                        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("hw_gpu")}: {gpu.name}</span>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12 }}>
+                            {t("hw_vram")}: {(gpu.vram_used_mb/1024).toFixed(1)} / {(gpu.vram_total_mb/1024).toFixed(1)} GB
+                          </span>
+                        </div>
+                        <div style={{ background:"var(--bg3)", borderRadius:6, height:10, overflow:"hidden", border:"1px solid var(--border)" }}>
+                          <div style={{ width:`${vp}%`, height:"100%", background:bar, borderRadius:6, transition:"width .4s" }}/>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* Ollama loaded models */}
+                  <div style={{ marginBottom:14 }}>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", marginBottom:8 }}>
+                      {t("hw_ollama_models")}
+                      {hwStatus.ollama?.running === false && <span style={{ marginLeft:8, color:"var(--red)", fontSize:11 }}>(Ollama offline)</span>}
+                    </div>
+                    {(hwStatus.ollama?.loaded_models ?? []).length === 0
+                      ? <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"#555" }}>{t("hw_ollama_none")}</p>
+                      : (hwStatus.ollama.loaded_models.map(m => (
+                          <div key={m.name} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"8px 12px", background:"var(--bg3)", borderRadius:6, marginBottom:6, border:"1px solid var(--border)" }}>
+                            <span style={{ fontFamily:"var(--mono)", fontSize:12 }}>{m.name}</span>
+                            <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                              <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{(m.size_mb/1024).toFixed(2)} GB</span>
+                              <button className="btn btn-ghost btn-sm" style={{ fontSize:11, padding:"3px 10px", color:"var(--accent2)", borderColor:"var(--accent2)" }}
+                                onClick={() => unloadOllamaModel(m.name)}>
+                                {t("hw_unload_btn")}
+                              </button>
+                            </div>
+                          </div>
+                        )))
+                    }
+                  </div>
+
+                  {/* Suggestions */}
+                  {(hwStatus.suggestions ?? []).length > 0 && (
+                    <div>
+                      <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", marginBottom:8 }}>{t("hw_suggestions")}</div>
+                      {hwStatus.suggestions.map((s, i) => {
+                        const bg  = s.action === "critical" || s.action === "unload" ? "#1a0010" : s.action === "warning" ? "#1a1000" : "#001a1a";
+                        const bdr = s.action === "critical" || s.action === "unload" ? "#a00060" : s.action === "warning" ? "#a06000" : "#007070";
+                        return (
+                          <div key={i} style={{ background:bg, border:`1px solid ${bdr}`, borderRadius:8, padding:"9px 13px", marginBottom:6, fontFamily:"var(--mono)", fontSize:12, lineHeight:1.5 }}>
+                            {s.action === "unload" && "⚠️ "}
+                            {s.action === "warning" && "🟡 "}
+                            {s.action === "info" && "ℹ️ "}
+                            {s.reason}
+                            {s.action === "unload" && s.model && (
+                              <button className="btn btn-ghost btn-sm" style={{ marginLeft:12, fontSize:11, color:"var(--accent2)", borderColor:"var(--accent2)" }}
+                                onClick={() => unloadOllamaModel(s.model)}>
+                                {t("hw_unload_btn")} {s.model.split(":")[0]}
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>)}
+              </div>
+
               <div className="card">
                 <div className="card-title">{t("continue_label")}</div>
                 <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", marginBottom:12 }}>{t("continue_hint")}</p>
