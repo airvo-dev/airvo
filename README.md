@@ -60,6 +60,7 @@ Your Editor (VS Code)
 - ✅ Any model, any provider — no lock-in
 - ✅ Up to 3 models simultaneously — parallel, race, vote or review
 - ✅ 4 multi-model modes — Parallel, Race, Vote, Review
+- ✅ Smart Memory (RAG) — semantic search of your codebase, 100% local
 - ✅ Your API keys stored locally — never shared
 - ✅ 100% local option — zero internet, zero cost
 - ✅ Works with free tiers — Groq, Ollama, LM Studio
@@ -118,10 +119,13 @@ Run up to 3 models simultaneously in 4 modes: **Parallel** (see all answers), **
 Use Ollama or LM Studio with no API key, no internet, no cost. Your code never leaves your machine.
 
 **🎛️ Visual Dashboard**
-Manage models, configure API keys, toggle models on/off — all from a clean dark UI at `localhost:8765`.
+Manage models, configure API keys, toggle models on/off — all from a clean dark UI at `localhost:5000`.
 
 **🧠 Project Context**
 Write your stack, preferences and constraints once. Airvo injects it into every request so the model always knows your project — without you repeating yourself.
+
+**🔍 Smart Memory (RAG)**
+Airvo indexes your codebase locally using AI embeddings (`all-MiniLM-L6-v2`). Before each request, it automatically finds the most relevant files and injects them into the context — no copy-pasting. Runs 100% on your machine, nothing sent to the cloud. Enable it in Configuration → Smart Memory.
 
 **🌡️ Tunable Behavior**
 Adjust temperature (0.0 → 1.0) and max tokens per request directly from the dashboard. Precise and deterministic for code, creative for brainstorming.
@@ -166,7 +170,7 @@ The Airvo dashboard runs at `http://localhost:5000` and lets you manage everythi
 
 ![Airvo Dashboard - Models](airvo/docs/assets/screenshot-models.png)
 
-**Configuration page** — set multi-model mode, adjust temperature and max tokens, enable project context, view usage stats.
+**Configuration page** — set multi-model mode, adjust temperature and max tokens, enable project context, configure Smart Memory (RAG), view usage stats.
 
 **Add Model page** — add any model with contextual tooltips on every field.
 
@@ -299,6 +303,14 @@ add ollama/llama3 → no API key, no internet, no cost
 → full AI coding experience with zero data leaving your machine
 ```
 
+**Smart Memory — ask about your own code**
+```
+enable Smart Memory → index your project folder
+→ "how does the authentication flow work in this project?"
+→ Airvo finds the relevant files automatically and answers with context
+→ no copy-pasting, no manual file selection
+```
+
 ---
 
 ## Security
@@ -314,6 +326,12 @@ Airvo is designed with privacy and security in mind:
 ---
 
 ## FAQ
+
+**What is Smart Memory (RAG)?**
+Smart Memory indexes your codebase locally using AI embeddings. Before each request, Airvo finds the most semantically relevant code chunks and injects them into the prompt automatically. Enable it in Configuration → Smart Memory, point it to your project folder, and click Index Now. The embedding model (~90 MB) downloads once and runs entirely on your machine.
+
+**Does Smart Memory send my code to the cloud?**
+Never. The embedding model (`all-MiniLM-L6-v2`) runs 100% on your machine. The index is stored in `~/.airvo/rag/` and your code never leaves your computer.
 
 **How do I add a model?**
 Open the dashboard → Add Model → fill in the Model ID, Provider, and API Key → Save. Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works. Check the Supported Models table for examples.
