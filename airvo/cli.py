@@ -8,6 +8,12 @@ import time
 import webbrowser
 from pathlib import Path
 
+# ── Fix Windows cp1252 encoding — allow ✓ ✗ ║ etc. in terminal output ──
+if sys.platform == "win32" and sys.stdout.encoding not in ("utf-8", "UTF-8"):
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+
 import typer
 import uvicorn
 from dotenv import load_dotenv

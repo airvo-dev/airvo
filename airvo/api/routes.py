@@ -290,8 +290,8 @@ async def chat_completions(request: ChatRequest):
                     chunks = retrieve(last_user_msg, top_k=top_k)
                     ctx    = format_context(chunks)
                     if ctx:
-                        # Hard cap: ~3000 chars ≈ 750 tokens to avoid TPM limits
-                        max_rag_chars = int(prefs.get("rag_max_inject_chars", 3000))
+                        # Hard cap: ~1500 chars ≈ 375 tokens to avoid TPM limits
+                        max_rag_chars = int(prefs.get("rag_max_inject_chars", 1500))
                         if len(ctx) > max_rag_chars:
                             ctx = ctx[:max_rag_chars] + "\n... [RAG context truncated]"
                         system_content += f"\n\n{ctx}"
@@ -309,6 +309,21 @@ async def chat_completions(request: ChatRequest):
         other_msgs  = [m for m in messages if m["role"] != "system"]
         if len(other_msgs) > max_history:
             other_msgs = other_msgs[-max_history:]
+
+        # ── Per-message char cap — truncate long assistant responses ─────────
+        # A single long assistant message (e.g. large code block) can blow
+        # the TPM limit even with few messages. Cap each non-system message
+        # at 2000 chars (~500 tokens) to stay well within Groq free limits.
+        MAX_MSG_CHARS = 2000
+        trimmed = []
+        for m in other_msgs:
+            content = m.get("content") or ""
+            if isinstance(content, str) and len(content) > MAX_MSG_CHARS:
+                m = dict(m)
+                m["content"] = content[:MAX_MSG_CHARS] + " … [trimmed]"
+            trimmed.append(m)
+        other_msgs = trimmed
+
         messages = system_msgs + other_msgs
 
         active = settings.get_active_models()
