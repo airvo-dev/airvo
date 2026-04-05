@@ -19,7 +19,7 @@ router = APIRouter()
 # max_msg_chars : cap per history message content (prevents huge input tokens)
 # Providers NOT listed here are uncapped (OpenAI, Anthropic, Ollama, etc.)
 _PROVIDER_LIMITS: dict[str, dict] = {
-    "groq":       {"max_output": 2000, "max_msg_chars": 2000},  # 6k–14k TPM free
+    "groq":       {"max_output": 1500, "max_msg_chars": 1500},  # 6k TPM free — tight budget
     "together":   {"max_output": 2000, "max_msg_chars": 2000},  # ~10k TPM free
     "cerebras":   {"max_output": 2000, "max_msg_chars": 2000},  # ~10k TPM free
     "novita":     {"max_output": 2000, "max_msg_chars": 2000},  # varies
