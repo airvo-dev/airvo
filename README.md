@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.2.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.3.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -61,6 +61,8 @@ Your Editor (VS Code)
 - ✅ Up to 3 models simultaneously — parallel, race, vote or review
 - ✅ 4 multi-model modes — Parallel, Race, Vote, Review
 - ✅ Smart Memory (RAG) — semantic search of your codebase, 100% local
+- ✅ Memory Manager — real-time RAM/GPU usage, Ollama model rotation
+- ✅ Model Discovery — browse and add Ollama + OpenRouter models in one click
 - ✅ Your API keys stored locally — never shared
 - ✅ 100% local option — zero internet, zero cost
 - ✅ Works with free tiers — Groq, Ollama, LM Studio
@@ -126,6 +128,12 @@ Write your stack, preferences and constraints once. Airvo injects it into every 
 
 **🔍 Smart Memory (RAG)**
 Airvo indexes your codebase locally using AI embeddings (`all-MiniLM-L6-v2`). Before each request, it automatically finds the most relevant files and injects them into the context — no copy-pasting. Runs 100% on your machine, nothing sent to the cloud. Enable it in Configuration → Smart Memory.
+
+**🖥️ Memory Manager**
+Real-time RAM and GPU usage visible right in the Status page. See which Ollama models are currently loaded, get intelligent suggestions when memory is under pressure, and unload models with a single click — no terminal needed.
+
+**🔭 Model Discovery**
+Browse a curated catalog of Ollama-compatible models filtered by what fits in your RAM. Explore OpenRouter's full model library (free models highlighted). Add any model to Airvo with one click.
 
 **🌡️ Tunable Behavior**
 Adjust temperature (0.0 → 1.0) and max tokens per request directly from the dashboard. Precise and deterministic for code, creative for brainstorming.
@@ -365,6 +373,19 @@ Yes — run `airvo start --host 0.0.0.0` and it will be accessible from any devi
 
 **Airvo is not connecting to VS Code — what do I do?**
 Make sure continue.dev is installed in VS Code and that `airvo start` has run at least once to create the config. You can verify the config exists at `~/.continue/config.yaml`.
+
+---
+
+## Changelog
+
+**v0.3.0** — Smart Memory, Memory Manager, Model Discovery
+- **Smart Memory (RAG)** — semantic codebase indexing with `sentence-transformers` + ChromaDB, 100% local. Enable in Configuration.
+- **Memory Manager** — real-time RAM/GPU monitoring via `psutil`, Ollama model detection, intelligent unload suggestions and one-click model rotation in the Status page.
+- **Model Discovery** — curated Ollama catalog with RAM fit detection + full OpenRouter model browser (60 models, free-first sorting). Quick-add any model to Airvo from the Models page.
+
+**v0.2.0** — Multi-model modes, tool calling, continue.dev integration, 7-language dashboard
+
+**v0.1.0** — Initial release: single-model proxy, FastAPI server, basic dashboard
 
 ---
 

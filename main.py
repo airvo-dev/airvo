@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     print(f"""
     ╔══════════════════════════════════╗
-    ║   🚀 Airvo v0.2.0               ║
+    ║   🚀 Airvo v0.3.0               ║
     ║   Server:  localhost:{settings.port}        ║
     ║   {built}
     ╚══════════════════════════════════╝

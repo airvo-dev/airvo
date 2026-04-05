@@ -443,7 +443,7 @@ async def health():
     active = settings.get_active_models()
     return {
         "status":        "ok",
-        "version":       "0.2.0",
+        "version":       "0.3.0",
         "active_models": [m["id"] for m in active],
         "total_models":  len(settings.get_models()),
         "config_file":   "~/.airvo/models.json"
@@ -629,5 +629,82 @@ async def hardware_unload(req: UnloadRequest):
         return {"ok": True, "model": req.model_name}
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Discovery endpoints ───────────────────────────────────────────────────────
+
+@router.get("/api/discovery/ollama")
+async def discovery_ollama(base_url: str = "http://localhost:11434"):
+    """Return the curated Ollama catalog enriched with installed + fits_ram flags."""
+    try:
+        from airvo.discovery.discoverer import get_ollama_discovery
+        from airvo.hardware.detector import get_hardware_status, is_psutil_available
+
+        ram_free_mb = None
+        if is_psutil_available():
+            hw = get_hardware_status(base_url)
+            ram_free_mb = hw.ram_free_mb
+
+        return get_ollama_discovery(base_url, ram_free_mb)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/api/discovery/openrouter")
+async def discovery_openrouter(limit: int = 60):
+    """Return available OpenRouter models (cached 5 min)."""
+    try:
+        from airvo.discovery.discoverer import get_openrouter_models
+        return {"models": get_openrouter_models(limit)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class QuickAddRequest(BaseModel):
+    id:       str
+    name:     str
+    provider: str
+    base_url: Optional[str] = None
+
+
+@router.post("/api/discovery/add")
+async def discovery_add(req: QuickAddRequest):
+    """Quick-add a discovered model to Airvo settings."""
+    try:
+        existing = settings.get_models()
+        ids = [m["id"] for m in existing]
+
+        # Build model id — prefix with provider for litellm routing
+        if req.provider == "ollama":
+            litellm_id  = f"ollama/{req.id}"
+            base_url    = req.base_url or "http://localhost:11434"
+            is_free     = True
+        elif req.provider == "openrouter":
+            litellm_id  = f"openrouter/{req.id}"
+            base_url    = "https://openrouter.ai/api/v1"
+            is_free     = ":free" in req.id
+        else:
+            litellm_id  = req.id
+            base_url    = req.base_url or ""
+            is_free     = False
+
+        if litellm_id in ids:
+            return {"ok": True, "model": litellm_id, "already_existed": True}
+
+        new_model = {
+            "id":       litellm_id,
+            "name":     req.name,
+            "provider": req.provider,
+            "api_key":  "",
+            "base_url": base_url,
+            "active":   False,
+            "free":     is_free,
+            "notes":    f"Added via Model Discovery",
+        }
+        existing.append(new_model)
+        save_models(existing)
+        return {"ok": True, "model": litellm_id, "already_existed": False}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

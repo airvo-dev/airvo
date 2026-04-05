@@ -39,6 +39,14 @@ const I18N = {
     hw_no_psutil:"psutil not installed", hw_no_psutil_hint:"Run: pip install airvo[hardware]",
     hw_suggestions:"Suggestions", hw_loading:"Loading hardware info...",
     hw_refresh:"Refresh",
+    disc_label:"Discover Models", disc_sub:"Browse compatible models based on your hardware",
+    disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Cloud (OpenRouter)",
+    disc_fits:"Fits RAM", disc_too_large:"Needs more RAM", disc_installed:"Installed",
+    disc_pull_cmd:"Pull command", disc_add_btn:"Add to Airvo", disc_added:"Model added ✓",
+    disc_add_error:"Failed to add", disc_loading:"Loading models...",
+    disc_ollama_offline:"Ollama is offline", disc_free_badge:"Free",
+    disc_context:"context", disc_no_results:"No models found", disc_ram_required:"RAM required",
+    disc_already_added:"Already added", disc_open_section:"Discover",
     continue_label:"Continue.dev Config", continue_hint:"Add this to your continue.dev config.yaml:",
     copy_config:"Copy config", copied:"Copied ✓",
     config_title:"Configuration", config_sub:"Mode, temperature, memory and preferences",
@@ -207,6 +215,14 @@ const I18N = {
     hw_no_psutil:"psutil no instalado", hw_no_psutil_hint:"Ejecutar: pip install airvo[hardware]",
     hw_suggestions:"Sugerencias", hw_loading:"Cargando info de hardware...",
     hw_refresh:"Actualizar",
+    disc_label:"Descubrir Modelos", disc_sub:"Explorá modelos compatibles según tu hardware",
+    disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Nube (OpenRouter)",
+    disc_fits:"Entra en RAM", disc_too_large:"Necesita más RAM", disc_installed:"Instalado",
+    disc_pull_cmd:"Comando de descarga", disc_add_btn:"Agregar a Airvo", disc_added:"Modelo agregado ✓",
+    disc_add_error:"Error al agregar", disc_loading:"Cargando modelos...",
+    disc_ollama_offline:"Ollama no disponible", disc_free_badge:"Gratis",
+    disc_context:"contexto", disc_no_results:"No se encontraron modelos", disc_ram_required:"RAM requerida",
+    disc_already_added:"Ya agregado", disc_open_section:"Descubrir",
     continue_label:"Config de Continue.dev", continue_hint:"Pegá esto en tu config.yaml:",
     copy_config:"Copiar config", copied:"Copiado ✓",
     config_title:"Configuración", config_sub:"Modo, temperatura, memoria y preferencias",
@@ -348,6 +364,14 @@ const I18N = {
     hw_no_psutil:"psutil non installé", hw_no_psutil_hint:"Exécuter : pip install airvo[hardware]",
     hw_suggestions:"Suggestions", hw_loading:"Chargement des infos matérielles...",
     hw_refresh:"Actualiser",
+    disc_label:"Découvrir des Modèles", disc_sub:"Parcourez les modèles compatibles avec votre matériel",
+    disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Cloud (OpenRouter)",
+    disc_fits:"Compatible RAM", disc_too_large:"Trop grand pour la RAM", disc_installed:"Installé",
+    disc_pull_cmd:"Commande de téléchargement", disc_add_btn:"Ajouter à Airvo", disc_added:"Modèle ajouté ✓",
+    disc_add_error:"Échec de l'ajout", disc_loading:"Chargement des modèles...",
+    disc_ollama_offline:"Ollama hors ligne", disc_free_badge:"Gratuit",
+    disc_context:"contexte", disc_no_results:"Aucun modèle trouvé", disc_ram_required:"RAM requise",
+    disc_already_added:"Déjà ajouté", disc_open_section:"Découvrir",
     continue_label:"Config Continue.dev", continue_hint:"Ajoutez ceci à votre config.yaml :",
     copy_config:"Copier la config", copied:"Copié ✓",
     config_title:"Configuration", config_sub:"Mode, température, mémoire et préférences",
@@ -487,6 +511,14 @@ const I18N = {
     hw_no_psutil:"psutil nicht installiert", hw_no_psutil_hint:"Ausführen: pip install airvo[hardware]",
     hw_suggestions:"Vorschläge", hw_loading:"Hardware-Info wird geladen...",
     hw_refresh:"Aktualisieren",
+    disc_label:"Modelle entdecken", disc_sub:"Kompatible Modelle für Ihre Hardware durchsuchen",
+    disc_local_tab:"Lokal (Ollama)", disc_cloud_tab:"Cloud (OpenRouter)",
+    disc_fits:"Passt in RAM", disc_too_large:"Benötigt mehr RAM", disc_installed:"Installiert",
+    disc_pull_cmd:"Pull-Befehl", disc_add_btn:"Zu Airvo hinzufügen", disc_added:"Modell hinzugefügt ✓",
+    disc_add_error:"Hinzufügen fehlgeschlagen", disc_loading:"Lade Modelle...",
+    disc_ollama_offline:"Ollama offline", disc_free_badge:"Kostenlos",
+    disc_context:"Kontext", disc_no_results:"Keine Modelle gefunden", disc_ram_required:"RAM erforderlich",
+    disc_already_added:"Bereits hinzugefügt", disc_open_section:"Entdecken",
     continue_label:"Continue.dev Konfiguration", continue_hint:"Fügen Sie dies zu Ihrer config.yaml hinzu:",
     copy_config:"Konfiguration kopieren", copied:"Kopiert ✓",
     config_title:"Konfiguration", config_sub:"Modus, Temperatur, Speicher und Einstellungen",
@@ -626,6 +658,14 @@ const I18N = {
     hw_no_psutil:"psutil 未安装", hw_no_psutil_hint:"运行：pip install airvo[hardware]",
     hw_suggestions:"建议", hw_loading:"正在加载硬件信息...",
     hw_refresh:"刷新",
+    disc_label:"发现模型", disc_sub:"根据您的硬件浏览兼容模型",
+    disc_local_tab:"本地 (Ollama)", disc_cloud_tab:"云端 (OpenRouter)",
+    disc_fits:"内存足够", disc_too_large:"需要更多内存", disc_installed:"已安装",
+    disc_pull_cmd:"拉取命令", disc_add_btn:"添加到 Airvo", disc_added:"模型已添加 ✓",
+    disc_add_error:"添加失败", disc_loading:"正在加载模型...",
+    disc_ollama_offline:"Ollama 离线", disc_free_badge:"免费",
+    disc_context:"上下文", disc_no_results:"未找到模型", disc_ram_required:"所需内存",
+    disc_already_added:"已添加", disc_open_section:"发现",
     continue_label:"Continue.dev 配置", continue_hint:"将以下内容添加到您的 config.yaml：",
     copy_config:"复制配置", copied:"已复制 ✓",
     config_title:"配置", config_sub:"模式、温度、记忆和偏好设置",
@@ -765,6 +805,14 @@ const I18N = {
     hw_no_psutil:"psutilが未インストール", hw_no_psutil_hint:"実行: pip install airvo[hardware]",
     hw_suggestions:"提案", hw_loading:"ハードウェア情報を読み込み中...",
     hw_refresh:"更新",
+    disc_label:"モデルを発見", disc_sub:"ハードウェアに合ったモデルを検索",
+    disc_local_tab:"ローカル (Ollama)", disc_cloud_tab:"クラウド (OpenRouter)",
+    disc_fits:"RAMに入る", disc_too_large:"RAM不足", disc_installed:"インストール済み",
+    disc_pull_cmd:"プルコマンド", disc_add_btn:"Airvoに追加", disc_added:"モデルを追加しました ✓",
+    disc_add_error:"追加失敗", disc_loading:"モデルを読み追み中...",
+    disc_ollama_offline:"Ollamaオフライン", disc_free_badge:"無料",
+    disc_context:"コンテキスト", disc_no_results:"モデルが見つかりません", disc_ram_required:"必要なRAM",
+    disc_already_added:"追加済み", disc_open_section:"発見",
     continue_label:"Continue.dev設定", continue_hint:"これをconfig.yamlに追加してください：",
     copy_config:"設定をコピー", copied:"コピー済み ✓",
     config_title:"設定", config_sub:"モード、温度、メモリ、設定",
@@ -904,6 +952,14 @@ const I18N = {
     hw_no_psutil:"psutil não instalado", hw_no_psutil_hint:"Execute: pip install airvo[hardware]",
     hw_suggestions:"Sugestões", hw_loading:"Carregando informações de hardware...",
     hw_refresh:"Atualizar",
+    disc_label:"Descobrir Modelos", disc_sub:"Explore modelos compatíveis com seu hardware",
+    disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Nuvem (OpenRouter)",
+    disc_fits:"Cabe na RAM", disc_too_large:"Precisa de mais RAM", disc_installed:"Instalado",
+    disc_pull_cmd:"Comando de download", disc_add_btn:"Adicionar ao Airvo", disc_added:"Modelo adicionado ✓",
+    disc_add_error:"Falha ao adicionar", disc_loading:"Carregando modelos...",
+    disc_ollama_offline:"Ollama offline", disc_free_badge:"Grátis",
+    disc_context:"contexto", disc_no_results:"Nenhum modelo encontrado", disc_ram_required:"RAM necessária",
+    disc_already_added:"Já adicionado", disc_open_section:"Descobrir",
     continue_label:"Configuração Continue.dev", continue_hint:"Adicione isto ao seu config.yaml:",
     copy_config:"Copiar configuração", copied:"Copiado ✓",
     config_title:"Configuração", config_sub:"Modo, temperatura, memória e preferências",
@@ -1272,6 +1328,11 @@ export default function AirvoDashboard() {
   const [showRagWarning, setShowRagWarning] = useState(false);
   const [hwStatus,  setHwStatus]  = useState(null);
   const [hwLoading, setHwLoading] = useState(false);
+  const [discOpen,  setDiscOpen]  = useState(false);
+  const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
+  const [discOllama,    setDiscOllama]    = useState(null);
+  const [discOpenRouter,setDiscOpenRouter]= useState(null);
+  const [discLoading,   setDiscLoading]   = useState(false);
   const { toasts, add: toast } = useToast();
   const { lang, setLang, t }   = useLanguage();
 
@@ -1307,9 +1368,23 @@ export default function AirvoDashboard() {
     finally { setHwLoading(false); }
   }, []);
 
+  const fetchDiscovery = useCallback(async () => {
+    setDiscLoading(true);
+    try {
+      const [oRes, crRes] = await Promise.all([
+        fetch(`${API}/api/discovery/ollama`),
+        fetch(`${API}/api/discovery/openrouter`),
+      ]);
+      if (oRes.ok)  setDiscOllama(await oRes.json());
+      if (crRes.ok) setDiscOpenRouter((await crRes.json()).models || []);
+    } catch {}
+    finally { setDiscLoading(false); }
+  }, []);
+
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
   useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
+  useEffect(() => { if (discOpen) fetchDiscovery(); }, [discOpen, fetchDiscovery]);
 
   const MAX_ACTIVE = 3;
 
@@ -1324,6 +1399,23 @@ export default function AirvoDashboard() {
       if (res.ok) { toast(t("hw_unload_done"), "success"); fetchHardware(); }
       else toast(t("hw_unload_error"), "error");
     } catch { toast(t("hw_unload_error"), "error"); }
+  }
+
+  async function quickAddModel(entry) {
+    try {
+      const res = await fetch(`${API}/api/discovery/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: entry.id, name: entry.name, provider: entry.provider }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        toast(data.already_existed ? t("disc_already_added") : t("disc_added"), "success");
+        fetchAll();
+      } else {
+        toast(t("disc_add_error"), "error");
+      }
+    } catch { toast(t("disc_add_error"), "error"); }
   }
 
   async function toggleModel(id, current) {
@@ -1513,6 +1605,108 @@ export default function AirvoDashboard() {
                   ))}
                 </div>
             }
+
+            {/* ── DISCOVER MODELS SECTION ── */}
+            <div style={{ marginTop:28 }}>
+              <button className="btn btn-ghost" style={{ display:"flex", alignItems:"center", gap:8, fontFamily:"var(--mono)", fontSize:13 }}
+                onClick={() => setDiscOpen(p => !p)}>
+                <span style={{ fontSize:16 }}>{discOpen ? "▾" : "▸"}</span>
+                🔭 {t("disc_label")}
+                {discOpen && discLoading && <span style={{ fontSize:11, color:"var(--text2)", marginLeft:6 }}>{t("disc_loading")}</span>}
+              </button>
+
+              {discOpen && (
+                <div className="card" style={{ marginTop:12 }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
+                    <div>
+                      <div className="card-title" style={{ marginBottom:4 }}>{t("disc_label")}</div>
+                      <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_sub")}</p>
+                    </div>
+                    <button className="btn btn-ghost btn-sm" style={{ fontSize:11 }} onClick={fetchDiscovery} disabled={discLoading}>
+                      {discLoading ? "…" : "⟳"}
+                    </button>
+                  </div>
+
+                  {/* Tabs */}
+                  <div style={{ display:"flex", gap:8, marginBottom:18 }}>
+                    {[["local", t("disc_local_tab")], ["cloud", t("disc_cloud_tab")]].map(([id, label]) => (
+                      <button key={id} className={`btn btn-sm ${discTab === id ? "btn-primary" : "btn-ghost"}`}
+                        style={{ fontFamily:"var(--mono)", fontSize:12 }}
+                        onClick={() => setDiscTab(id)}>
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* LOCAL TAB — Ollama catalog */}
+                  {discTab === "local" && (<>
+                    {discLoading && !discOllama && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_loading")}</p>}
+                    {discOllama && (
+                      <div style={{ display:"grid", gap:10 }}>
+                        {(discOllama.catalog || []).map(m => {
+                          const sizeStr = m.size_gb >= 1 ? `${m.size_gb.toFixed(1)} GB` : `${Math.round(m.size_gb * 1024)} MB`;
+                          return (
+                            <div key={m.id} style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"12px 14px", background:"var(--bg3)", borderRadius:8, border:"1px solid var(--border)", opacity: m.fits_ram ? 1 : 0.55 }}>
+                              <div style={{ flex:1, minWidth:0 }}>
+                                <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:4, alignItems:"center" }}>
+                                  <span style={{ fontFamily:"var(--mono)", fontSize:13, fontWeight:700 }}>{m.name}</span>
+                                  {m.installed && <span style={{ fontSize:10, fontFamily:"var(--mono)", background:"#003a10", border:"1px solid var(--green)", color:"var(--green)", borderRadius:4, padding:"1px 6px" }}>✓ {t("disc_installed")}</span>}
+                                  {m.fits_ram ? (
+                                    <span style={{ fontSize:10, fontFamily:"var(--mono)", background:"#001a00", border:"1px solid #2a6a2a", color:"#4ade80", borderRadius:4, padding:"1px 6px" }}>{t("disc_fits")}</span>
+                                  ) : (
+                                    <span style={{ fontSize:10, fontFamily:"var(--mono)", background:"#1a0000", border:"1px solid #6a1a1a", color:"var(--red)", borderRadius:4, padding:"1px 6px" }}>{t("disc_too_large")}</span>
+                                  )}
+                                  {(m.tags || []).map(tag => (
+                                    <span key={tag} style={{ fontSize:10, fontFamily:"var(--mono)", color:"var(--text2)", borderRadius:4, padding:"1px 6px", border:"1px solid var(--border)" }}>{tag}</span>
+                                  ))}
+                                </div>
+                                <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                                  {sizeStr} — {t("disc_pull_cmd")}: <span style={{ color:"var(--accent)" }}>ollama pull {m.id}</span>
+                                </div>
+                              </div>
+                              <button className="btn btn-ghost btn-sm" style={{ fontSize:11, marginLeft:12, whiteSpace:"nowrap", flexShrink:0 }}
+                                onClick={() => quickAddModel({ id: m.id, name: m.name, provider: "ollama" })}>
+                                + {t("disc_add_btn")}
+                              </button>
+                            </div>
+                          );
+                        })}
+                        {!discOllama?.catalog?.length && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_no_results")}</p>}
+                      </div>
+                    )}
+                  </>)}
+
+                  {/* CLOUD TAB — OpenRouter */}
+                  {discTab === "cloud" && (<>
+                    {discLoading && !discOpenRouter && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_loading")}</p>}
+                    {discOpenRouter && (
+                      <div style={{ display:"grid", gap:10 }}>
+                        {(discOpenRouter || []).map(m => (
+                          <div key={m.id} style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"12px 14px", background:"var(--bg3)", borderRadius:8, border:"1px solid var(--border)" }}>
+                            <div style={{ flex:1, minWidth:0 }}>
+                              <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:4, alignItems:"center" }}>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:13, fontWeight:700 }}>{m.name}</span>
+                                {m.is_free && <span style={{ fontSize:10, fontFamily:"var(--mono)", background:"#003a10", border:"1px solid var(--green)", color:"var(--green)", borderRadius:4, padding:"1px 6px" }}>{t("disc_free_badge")}</span>}
+                              </div>
+                              <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                                {m.context_length > 0 && <span>{(m.context_length/1000).toFixed(0)}k {t("disc_context")} · </span>}
+                                {m.is_free ? "Free" : `$${(m.prompt_cost * 1000000).toFixed(2)}/M tokens`}
+                              </div>
+                              {m.description && <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginTop:3, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", maxWidth:380 }}>{m.description}</div>}
+                            </div>
+                            <button className="btn btn-ghost btn-sm" style={{ fontSize:11, marginLeft:12, whiteSpace:"nowrap", flexShrink:0 }}
+                              onClick={() => quickAddModel({ id: m.id, name: m.name, provider: "openrouter" })}>
+                              + {t("disc_add_btn")}
+                            </button>
+                          </div>
+                        ))}
+                        {!discOpenRouter?.length && <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("disc_no_results")}</p>}
+                      </div>
+                    )}
+                  </>)}
+                </div>
+              )}
+            </div>
           </>}
 
           {/* ── STATUS PAGE ── */}
