@@ -2328,11 +2328,14 @@ export default function AirvoDashboard() {
                           {(hwProcesses?.processes ?? []).map((proc, i) => {
                             const pct = proc.memory_percent ?? 0;
                             const bar = pct >= 15 ? "var(--red)" : pct >= 7 ? "#f59e0b" : "var(--accent)";
+                            const memStr = proc.memory_mb >= 1024
+                              ? `${(proc.memory_mb / 1024).toFixed(1)} GB`
+                              : `${proc.memory_mb.toFixed(0)} MB`;
                             return (
                               <div key={proc.pid} style={{ display:"flex", alignItems:"center", gap:10, padding:"6px 10px", background:"var(--bg3)", borderRadius:6, marginBottom:5, border:"1px solid var(--border)" }}>
                                 <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", width:20, textAlign:"right", flexShrink:0 }}>{i+1}</span>
                                 <span style={{ fontFamily:"var(--mono)", fontSize:12, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{proc.name}</span>
-                                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:bar, flexShrink:0 }}>{proc.memory_mb.toFixed(0)} MB</span>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:bar, flexShrink:0 }}>{memStr}</span>
                                 <div style={{ width:60, background:"var(--bg)", borderRadius:4, height:6, overflow:"hidden", flexShrink:0 }}>
                                   <div style={{ width:`${Math.min(pct * 4, 100)}%`, height:"100%", background:bar, borderRadius:4 }}/>
                                 </div>
