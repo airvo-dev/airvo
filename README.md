@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.3.6-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.3.7-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -377,6 +377,9 @@ Make sure continue.dev is installed in VS Code and that `airvo start` has run at
 ---
 
 ## Changelog
+
+**v0.3.7** — README changelog fix
+- Updated changelog on PyPI to include all releases from v0.3.3 onwards. No functional changes.
 
 **v0.3.6** — API docs, architecture rewrite
 - **OpenAPI docs** — all 22 REST endpoints now have tags, summaries, and descriptions. Visit `http://127.0.0.1:8765/docs` for full interactive documentation.
