@@ -46,6 +46,14 @@ class GpuInfo:
 
 
 @dataclass
+class CpuInfo:
+    name:           str
+    physical_cores: int
+    logical_cores:  int
+    usage_percent:  float
+
+
+@dataclass
 class OllamaModel:
     name:       str           # e.g. "llama3:latest"
     size_mb:    float         # model size on disk / in VRAM
@@ -60,6 +68,9 @@ class HardwareStatus:
     ram_used_mb:   float = 0.0
     ram_free_mb:   float = 0.0
     ram_percent:   float = 0.0
+
+    # ── CPU ──────────────────────────────────────────────────────────────────
+    cpu: Optional[CpuInfo] = None
 
     # ── GPU / VRAM ───────────────────────────────────────────────────────────
     gpus: List[GpuInfo] = field(default_factory=list)
@@ -86,6 +97,24 @@ def _ram_info() -> tuple[float, float, float, float]:
         to_mb(mem.used),
         to_mb(mem.available),
         round(mem.percent, 1),
+    )
+
+
+def _cpu_info() -> CpuInfo:
+    """Returns CPU model name, core counts, and current usage %."""
+    import psutil
+    import platform
+    name = platform.processor() or "Unknown CPU"
+    if len(name) > 80:
+        name = name[:80]
+    usage    = psutil.cpu_percent(interval=0.1)
+    physical = psutil.cpu_count(logical=False) or 1
+    logical  = psutil.cpu_count(logical=True) or 1
+    return CpuInfo(
+        name=name,
+        physical_cores=physical,
+        logical_cores=logical,
+        usage_percent=round(usage, 1),
     )
 
 
@@ -163,6 +192,13 @@ def get_hardware_status(ollama_base_url: str = "http://localhost:11434") -> Hard
             status.ram_percent   = p
         except Exception as exc:
             status.error = f"RAM detection failed: {exc}"
+
+    # ── CPU ──────────────────────────────────────────────────────────────────
+    if status.psutil_available:
+        try:
+            status.cpu = _cpu_info()
+        except Exception as exc:
+            logger.debug(f"[HW] CPU detection failed: {exc}")
 
     # ── GPU ──────────────────────────────────────────────────────────────────
     try:

@@ -694,6 +694,12 @@ async def hardware_status():
 
         return {
             "psutil_available": hw.psutil_available,
+            "cpu": {
+                "name":           hw.cpu.name,
+                "physical_cores": hw.cpu.physical_cores,
+                "logical_cores":  hw.cpu.logical_cores,
+                "usage_percent":  hw.cpu.usage_percent,
+            } if hw.cpu else None,
             "ram": {
                 "total_mb":  hw.ram_total_mb,
                 "used_mb":   hw.ram_used_mb,
@@ -760,6 +766,39 @@ async def hardware_unload(req: UnloadRequest):
 
 
 # ── Discovery endpoints ───────────────────────────────────────────────────────
+
+@router.get("/api/hardware/processes", tags=["Hardware"], summary="Top memory consumers",
+    description="Returns the top processes consuming the most RAM, sorted by RSS memory. "
+    "Requires psutil (`pip install airvo[hardware]`). Safe to call — read-only, no killing.")
+async def hardware_processes(limit: int = 8):
+    """
+    Return the top N processes consuming the most RAM.
+    Never raises — returns empty list if psutil is unavailable.
+    """
+    try:
+        import psutil
+        procs = []
+        for p in psutil.process_iter(["pid", "name", "memory_info", "memory_percent"]):
+            try:
+                mi = p.info["memory_info"]
+                if mi is None:
+                    continue
+                procs.append({
+                    "pid":            p.info["pid"],
+                    "name":           p.info["name"] or "Unknown",
+                    "memory_mb":      round(mi.rss / 1024 / 1024, 1),
+                    "memory_percent": round(p.info["memory_percent"] or 0, 1),
+                })
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                continue
+        procs.sort(key=lambda x: x["memory_mb"], reverse=True)
+        return {"processes": procs[:limit]}
+    except ImportError:
+        return {"processes": [], "error": "psutil not available"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 
 @router.get("/api/discovery/ollama", tags=["Discovery"], summary="Ollama model catalog",
     description="Returns a curated catalog of 21 Ollama models organized by size (tiny/small/medium/large). "

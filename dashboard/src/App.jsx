@@ -40,6 +40,9 @@ const I18N = {
     hw_no_psutil:"psutil not installed", hw_no_psutil_hint:"Run: pip install airvo[hardware]",
     hw_suggestions:"Suggestions", hw_loading:"Loading hardware info...",
     hw_refresh:"Refresh",
+    hw_cpu:"CPU", hw_cpu_cores:"cores", hw_cpu_usage:"usage",
+    hw_processes:"Top memory consumers", hw_proc_sub:"Processes using the most RAM",
+    hw_proc_show:"Show processes", hw_proc_hide:"Hide",
     disc_label:"Discover Models", disc_sub:"Browse compatible models based on your hardware",
     disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Cloud (OpenRouter)",
     disc_fits:"Fits RAM", disc_too_large:"Needs more RAM", disc_installed:"Installed",
@@ -266,6 +269,9 @@ const I18N = {
     hw_no_psutil:"psutil no instalado", hw_no_psutil_hint:"Ejecutar: pip install airvo[hardware]",
     hw_suggestions:"Sugerencias", hw_loading:"Cargando info de hardware...",
     hw_refresh:"Actualizar",
+    hw_cpu:"CPU", hw_cpu_cores:"n\u00facleos", hw_cpu_usage:"uso",
+    hw_processes:"Principales consumidores de memoria", hw_proc_sub:"Procesos que m\u00e1s RAM consumen",
+    hw_proc_show:"Ver procesos", hw_proc_hide:"Ocultar",
     disc_label:"Descubrir Modelos", disc_sub:"Explorá modelos compatibles según tu hardware",
     disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Nube (OpenRouter)",
     disc_fits:"Entra en RAM", disc_too_large:"Necesita más RAM", disc_installed:"Instalado",
@@ -465,6 +471,9 @@ const I18N = {
     hw_no_psutil:"psutil non installé", hw_no_psutil_hint:"Exécuter : pip install airvo[hardware]",
     hw_suggestions:"Suggestions", hw_loading:"Chargement des infos matérielles...",
     hw_refresh:"Actualiser",
+    hw_cpu:"CPU", hw_cpu_cores:"cœurs", hw_cpu_usage:"utilisation",
+    hw_processes:"Principaux consommateurs de mémoire", hw_proc_sub:"Processus utilisant le plus de RAM",
+    hw_proc_show:"Afficher les processus", hw_proc_hide:"Masquer",
     disc_label:"Découvrir des Modèles", disc_sub:"Parcourez les modèles compatibles avec votre matériel",
     disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Cloud (OpenRouter)",
     disc_fits:"Compatible RAM", disc_too_large:"Trop grand pour la RAM", disc_installed:"Installé",
@@ -662,6 +671,9 @@ const I18N = {
     hw_no_psutil:"psutil nicht installiert", hw_no_psutil_hint:"Ausführen: pip install airvo[hardware]",
     hw_suggestions:"Vorschläge", hw_loading:"Hardware-Info wird geladen...",
     hw_refresh:"Aktualisieren",
+    hw_cpu:"CPU", hw_cpu_cores:"Kerne", hw_cpu_usage:"Auslastung",
+    hw_processes:"Größte Speicherverbraucher", hw_proc_sub:"Prozesse mit dem höchsten RAM-Verbrauch",
+    hw_proc_show:"Prozesse anzeigen", hw_proc_hide:"Ausblenden",
     disc_label:"Modelle entdecken", disc_sub:"Kompatible Modelle für Ihre Hardware durchsuchen",
     disc_local_tab:"Lokal (Ollama)", disc_cloud_tab:"Cloud (OpenRouter)",
     disc_fits:"Passt in RAM", disc_too_large:"Benötigt mehr RAM", disc_installed:"Installiert",
@@ -859,6 +871,9 @@ const I18N = {
     hw_no_psutil:"psutil 未安装", hw_no_psutil_hint:"运行：pip install airvo[hardware]",
     hw_suggestions:"建议", hw_loading:"正在加载硬件信息...",
     hw_refresh:"刷新",
+    hw_cpu:"处理器", hw_cpu_cores:"核心", hw_cpu_usage:"使用率",
+    hw_processes:"内存占用排行", hw_proc_sub:"占用最多 RAM 的进程",
+    hw_proc_show:"查看进程", hw_proc_hide:"隐藏",
     disc_label:"发现模型", disc_sub:"根据您的硬件浏览兼容模型",
     disc_local_tab:"本地 (Ollama)", disc_cloud_tab:"云端 (OpenRouter)",
     disc_fits:"内存足够", disc_too_large:"需要更多内存", disc_installed:"已安装",
@@ -1056,6 +1071,9 @@ const I18N = {
     hw_no_psutil:"psutilが未インストール", hw_no_psutil_hint:"実行: pip install airvo[hardware]",
     hw_suggestions:"提案", hw_loading:"ハードウェア情報を読み込み中...",
     hw_refresh:"更新",
+    hw_cpu:"CPU", hw_cpu_cores:"コア", hw_cpu_usage:"使用率",
+    hw_processes:"メモリ消費トップ", hw_proc_sub:"最もRAMを使用しているプロセス",
+    hw_proc_show:"プロセスを表示", hw_proc_hide:"非表示",
     disc_label:"モデルを発見", disc_sub:"ハードウェアに合ったモデルを検索",
     disc_local_tab:"ローカル (Ollama)", disc_cloud_tab:"クラウド (OpenRouter)",
     disc_fits:"RAMに入る", disc_too_large:"RAM不足", disc_installed:"インストール済み",
@@ -1253,6 +1271,9 @@ const I18N = {
     hw_no_psutil:"psutil não instalado", hw_no_psutil_hint:"Execute: pip install airvo[hardware]",
     hw_suggestions:"Sugestões", hw_loading:"Carregando informações de hardware...",
     hw_refresh:"Atualizar",
+    hw_cpu:"CPU", hw_cpu_cores:"núcleos", hw_cpu_usage:"uso",
+    hw_processes:"Maiores consumidores de memória", hw_proc_sub:"Processos que mais consomem RAM",
+    hw_proc_show:"Ver processos", hw_proc_hide:"Ocultar",
     disc_label:"Descobrir Modelos", disc_sub:"Explore modelos compatíveis com seu hardware",
     disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Nuvem (OpenRouter)",
     disc_fits:"Cabe na RAM", disc_too_large:"Precisa de mais RAM", disc_installed:"Instalado",
@@ -1678,6 +1699,9 @@ export default function AirvoDashboard() {
   const [showRagWarning, setShowRagWarning] = useState(false);
   const [hwStatus,  setHwStatus]  = useState(null);
   const [hwLoading, setHwLoading] = useState(false);
+  const [hwProcesses,    setHwProcesses]    = useState(null);
+  const [hwProcLoading,  setHwProcLoading]  = useState(false);
+  const [hwProcOpen,     setHwProcOpen]     = useState(false);
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
   const [discOllama,    setDiscOllama]    = useState(null);
@@ -1716,6 +1740,15 @@ export default function AirvoDashboard() {
       if (res.ok) setHwStatus(await res.json());
     } catch {}
     finally { setHwLoading(false); }
+  }, []);
+
+  const fetchProcesses = useCallback(async () => {
+    setHwProcLoading(true);
+    try {
+      const res = await fetch(`${API}/api/hardware/processes`);
+      if (res.ok) setHwProcesses(await res.json());
+    } catch {}
+    finally { setHwProcLoading(false); }
   }, []);
 
   const fetchDiscovery = useCallback(async () => {
@@ -2178,6 +2211,32 @@ export default function AirvoDashboard() {
                     );
                   })()}
 
+                  {/* CPU */}
+                  {hwStatus.psutil_available && hwStatus.cpu && (() => {
+                    const cp  = hwStatus.cpu.usage_percent ?? 0;
+                    const bar = cp >= 90 ? "var(--red)" : cp >= 75 ? "#f59e0b" : "var(--accent)";
+                    return (
+                      <div style={{ marginBottom:16 }}>
+                        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
+                            {t("hw_cpu")}
+                            <span style={{ marginLeft:8, color:"var(--text2)", fontWeight:400 }}>
+                              {hwStatus.cpu.name}
+                            </span>
+                          </span>
+                          <span style={{ fontFamily:"var(--mono)", fontSize:12 }}>
+                            {hwStatus.cpu.logical_cores} {t("hw_cpu_cores")}
+                            &nbsp;&nbsp;
+                            <span style={{ color: bar }}>{cp.toFixed(1)}% {t("hw_cpu_usage")}</span>
+                          </span>
+                        </div>
+                        <div style={{ background:"var(--bg3)", borderRadius:6, height:10, overflow:"hidden", border:"1px solid var(--border)" }}>
+                          <div style={{ width:`${cp}%`, height:"100%", background:bar, borderRadius:6, transition:"width .4s" }}/>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
                   {/* GPUs */}
                   {(hwStatus.gpus ?? []).map((gpu, i) => {
                     const vp  = gpu.vram_percent ?? 0;
@@ -2242,6 +2301,53 @@ export default function AirvoDashboard() {
                           </div>
                         );
                       })}
+                    </div>
+                  )}
+
+                  {/* Top memory consumers */}
+                  {hwStatus.psutil_available && (
+                    <div style={{ marginTop:14 }}>
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        style={{ fontFamily:"var(--mono)", fontSize:11, display:"flex", alignItems:"center", gap:6 }}
+                        onClick={() => {
+                          if (!hwProcOpen) fetchProcesses();
+                          setHwProcOpen(p => !p);
+                        }}>
+                        <span style={{ fontSize:13 }}>{hwProcOpen ? "▾" : "▸"}</span>
+                        📊 {t("hw_processes")}
+                        {hwProcLoading && <span style={{ color:"var(--text2)" }}>…</span>}
+                      </button>
+
+                      {hwProcOpen && (
+                        <div style={{ marginTop:10 }}>
+                          <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:8 }}>{t("hw_proc_sub")}</p>
+                          {hwProcLoading && !hwProcesses && (
+                            <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>…</p>
+                          )}
+                          {(hwProcesses?.processes ?? []).map((proc, i) => {
+                            const pct = proc.memory_percent ?? 0;
+                            const bar = pct >= 15 ? "var(--red)" : pct >= 7 ? "#f59e0b" : "var(--accent)";
+                            return (
+                              <div key={proc.pid} style={{ display:"flex", alignItems:"center", gap:10, padding:"6px 10px", background:"var(--bg3)", borderRadius:6, marginBottom:5, border:"1px solid var(--border)" }}>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", width:20, textAlign:"right", flexShrink:0 }}>{i+1}</span>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:12, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{proc.name}</span>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:bar, flexShrink:0 }}>{proc.memory_mb.toFixed(0)} MB</span>
+                                <div style={{ width:60, background:"var(--bg)", borderRadius:4, height:6, overflow:"hidden", flexShrink:0 }}>
+                                  <div style={{ width:`${Math.min(pct * 4, 100)}%`, height:"100%", background:bar, borderRadius:4 }}/>
+                                </div>
+                              </div>
+                            );
+                          })}
+                          {!hwProcLoading && hwProcesses && hwProcesses.processes.length === 0 && (
+                            <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>—</p>
+                          )}
+                          <button className="btn btn-ghost btn-sm" style={{ fontSize:11, marginTop:6 }}
+                            onClick={fetchProcesses} disabled={hwProcLoading}>
+                            {hwProcLoading ? "…" : t("hw_refresh")}
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>)}
