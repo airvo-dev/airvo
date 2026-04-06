@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.3.2-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.3.6-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -377,6 +377,22 @@ Make sure continue.dev is installed in VS Code and that `airvo start` has run at
 ---
 
 ## Changelog
+
+**v0.3.6** — API docs, architecture rewrite
+- **OpenAPI docs** — all 22 REST endpoints now have tags, summaries, and descriptions. Visit `http://127.0.0.1:8765/docs` for full interactive documentation.
+- **ARCHITECTURE.md** — complete rewrite covering system design, data flow, RAG pipeline, Memory Manager, Model Discovery, multi-model modes, and design decisions with code examples.
+- **FastAPI app description** — rich server description with feature list, quickstart, and links shown in `/docs`.
+
+**v0.3.5** — Models page: Configured vs Suggestions split
+- **Dashboard** — Models page now separates your configured models from discovered suggestions. No more confusion between what's active and what's browsable.
+- **UI polish** — cleaner layout, better empty states, discovery panel always accessible without clutter.
+
+**v0.3.4** — Groq rate-limit guard (TPM)
+- **3-layer TPM defense** — early token cap at request entry, per-message character trimming, and dynamic `max_tokens` ceiling for Groq free tier (6k–12k TPM).
+- Prevents `rate_limit_exceeded` errors when using Groq's free API tier with long conversations or RAG context.
+
+**v0.3.3** — Groq rate-limit fix (initial)
+- First-pass fix for Groq token-per-minute limits. Introduced `max_tokens` cap and message length trimming.
 
 **v0.3.2** — Fix README image URLs for PyPI
 - Fixed all image paths to absolute GitHub raw URLs so screenshots and logo display correctly on PyPI.
