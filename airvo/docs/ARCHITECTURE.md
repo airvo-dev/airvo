@@ -1,9 +1,9 @@
 # Airvo — Architecture Guide
 
-> **Version 0.3.5** · Last updated: July 2025
+> **Version 0.3.7** · Last updated: April 2026
 >
-> This document explains _how_ the system works and _why_ each decision was made.
-> If you can read Python, you can understand the whole codebase.
+> This document explains _how_ the system works and _why_ each design decision was made.
+> It is intended for any developer who wants to understand, extend, or contribute to Airvo.
 
 ---
 
@@ -178,9 +178,9 @@ Here's exactly what happens when continue.dev sends a chat request:
 
 ### Why this order?
 
-- **TPM guard first** (step 2): If we don't cap tokens before any branching, the LLM call fails with `RateLimitError` and the user sees a cryptic error. This was the root cause of the Groq 6006-token bug fixed in v0.3.4.
-- **RAG after system prompt** (step 4): RAG context is injected into the system message, not as a separate message. This keeps the conversation structure clean for the model.
-- **History truncation before dispatch** (step 5): Running multiple models in parallel multiplies the cost of long histories. Trimming first keeps all paths efficient.
+- **Token guard first** (step 2): If we don't cap tokens before any branching, the LLM call can fail with a `RateLimitError` at the provider level and the user sees a cryptic error. Applying the cap unconditionally — before any mode dispatch — ensures every code path stays within the active provider's limits.
+- **RAG injected into system prompt** (step 4): RAG context is added to the system message, not as a separate user message. This keeps the conversation structure clean — the model sees retrieved code as background knowledge, not as something the user said, which produces better-grounded answers.
+- **History truncation before dispatch** (step 5): Running multiple models in parallel multiplies the token cost of long histories. Trimming once before dispatch keeps all paths efficient regardless of how many models are active.
 
 ---
 
@@ -289,7 +289,7 @@ DEFAULT_MODELS = [
 DEFAULT_PREFS = {
     "mode":            "parallel",
     "temperature":     0.7,
-    "max_tokens":      1024,     # keep low: Groq free tier = 6000 TPM total
+    "max_tokens":      1024,     # conservative default — leaves room for input tokens, context, and RAG
     "max_history_messages": 10,
     "memory_enabled":  False,
     "memory_text":     "",
@@ -304,7 +304,7 @@ DEFAULT_PREFS = {
 }
 ```
 
-**Why `max_tokens: 1024`?** This is the default when the IDE doesn't specify. With Groq's 6,000 TPM limit: 1024 output + ~4500 input ≈ 5524 total, safely under the limit. If the IDE sends its own `max_tokens`, the TPM guard caps it separately.
+**Why `max_tokens: 1024`?** This is the default when the IDE doesn't specify a value. A conservative output budget leaves headroom for the input side — system prompt, conversation history, and injected RAG context — without exhausting the active provider's rate limit. If the IDE sends its own `max_tokens`, the guard caps it per-provider independently.
 
 #### Memory Prompt Sanitization
 
@@ -380,9 +380,9 @@ _PROVIDER_LIMITS: dict[str, dict] = {
 }
 ```
 
-**Why a lookup table?** Free-tier providers have strict Tokens-Per-Minute (TPM) limits. Groq's `llama-3.1-8b-instant` allows only 6,000 TPM total (input + output). If continue.dev sends `max_tokens=4096`, that's already 4096 output tokens, leaving almost no room for input. The table lets us cap output tokens per provider without touching providers that have no limits (OpenAI, Anthropic, Ollama).
+**Why a lookup table?** Free-tier providers enforce a strict Tokens-Per-Minute (TPM) budget that covers both input and output combined. When an IDE client sends a high `max_tokens` value (e.g. 4096), that alone can consume most of the provider's per-minute budget, leaving no room for the input side. The table lets Airvo apply conservative output caps only for providers that need them, leaving unconstrained providers (OpenAI, Anthropic, Ollama) untouched.
 
-**Why is Groq capped at 1500?** With a 6,000 TPM budget: 1500 output + ~4000 input (system prompt + RAG + history) ≈ 5500 tokens, safely under the limit.
+**Why cap output to a fraction of the total budget?** A typical request carrying a system prompt, RAG context, and conversation history already consumes a significant portion of the input budget. Capping output at roughly 20–25% of the provider's TPM limit ensures the input side always has room, regardless of how much context is attached to a given request.
 
 #### Key Helper Functions
 
@@ -651,7 +651,7 @@ if len(ctx) > max_rag_chars:
     ctx = ctx[:max_rag_chars] + "\n... [RAG context truncated]"
 ```
 
-**Why 1500 chars?** ~375 tokens. With Groq's 6,000 TPM limit, we budget: 1500 output + 375 RAG + ~4000 for messages = ~5875 total, safely under the limit.
+**Why cap RAG context?** Injected context competes with conversation history and output tokens for the provider's rate limit budget and the model's context window. Without a hard cap, a large codebase could produce thousands of tokens of RAG context, crowding out the user's messages or triggering rate-limit errors. The cap is user-configurable so it can be raised for providers with larger context windows or higher rate limits.
 
 ---
 
@@ -893,7 +893,7 @@ The dashboard divides models into two sections:
 - **Configured:** Models that are either active or have an API key set. These are models the user has intentionally set up.
 - **💡 Suggestions:** Inactive models with no API key. These are templates showing what's available. Users can configure them or remove them.
 
-This split was added in v0.3.5 to prevent confusion — users were seeing 6 models on the stat cards when only 2 were actually working.
+This separation keeps the active surface clean: a user with many model templates can see at a glance which models are actually doing work, without being distracted by unconfigured suggestions.
 
 ---
 
@@ -976,23 +976,13 @@ Sequential chain where each model refines the previous one's output. With 2 mode
 
 ---
 
-## 7. TPM Guard — Rate Limit Protection
+## 7. Provider Rate Limit Management
 
-The TPM (Tokens-Per-Minute) guard is a **defensive layer** that prevents `RateLimitError` on free-tier providers.
+Many AI providers — especially on free tiers — enforce a Tokens-Per-Minute (TPM) budget that covers both input and output tokens combined. IDE clients like continue.dev typically request large output windows (`max_tokens=4096`) without knowledge of the active provider's limits. Without intervention, this silently exhausts the budget before the input side (system prompt, history, RAG context) is even counted, resulting in a `RateLimitError` that the user sees as a mysterious failure.
 
-### The Problem
+Airvo addresses this with **three defensive layers** that work together:
 
-Groq's free tier for `llama-3.1-8b-instant` allows **6,000 TPM total** (input + output). continue.dev sends `max_tokens=4096` by default. With a typical system prompt + history:
-
-```
-Input:  1910 tokens (system prompt + history + RAG context)
-Output: 4096 tokens (continue.dev default max_tokens)
-Total:  6006 tokens → RateLimitError: "Limit 6000, Requested 6006"
-```
-
-This was the exact error we debugged in v0.3.4. The fix required three defensive layers.
-
-### The Solution (Three Layers)
+### The Three Layers
 
 **Layer 1 — Early cap at handler entry (lines ~296-313 of routes.py):**
 
@@ -1277,7 +1267,7 @@ twine upload dist/*
 ```toml
 [project]
 name = "airvo"
-version = "0.3.5"
+version = "0.3.7"
 dependencies = [
     "fastapi>=0.100",
     "uvicorn",
@@ -1298,7 +1288,7 @@ airvo = "airvo.cli:app"
 
 ---
 
-## Metrics (v0.3.5)
+## Metrics (v0.3.7)
 
 | Component | Lines of Code |
 |---|---|
