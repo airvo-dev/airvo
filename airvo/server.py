@@ -17,7 +17,36 @@ _VERSION = _pkg_version("airvo")
 app = FastAPI(
     title="Airvo",
     version=_VERSION,
-    description="Local AI coding copilot — any model, any provider.",
+    description=(
+        "**Your AI. Your Rules.** — Local AI coding copilot that routes to any provider.\n\n"
+        "## Quick Start\n"
+        "```bash\n"
+        "pip install airvo\n"
+        "airvo start\n"
+        "```\n\n"
+        "## Key Features\n"
+        "- **OpenAI-compatible** — works with continue.dev, Cursor, and any OpenAI client\n"
+        "- **Multi-model modes** — Parallel, Race, Vote, Review\n"
+        "- **RAG** — index your codebase and inject relevant context automatically\n"
+        "- **TPM Guard** — automatic rate-limit protection for free-tier providers\n"
+        "- **Hardware Monitor** — RAM/GPU/Ollama status and smart suggestions\n"
+        "- **Model Discovery** — browse Ollama catalog and OpenRouter models\n\n"
+        "## Authentication\n"
+        "No API key needed for the Airvo server itself. "
+        "Provider API keys are configured per-model in the dashboard or via `/api/models`.\n\n"
+        "## Dashboard\n"
+        "Open the root URL (`/`) in a browser to access the React dashboard."
+    ),
+    openapi_tags=[
+        {"name": "Chat", "description": "OpenAI-compatible chat completion endpoint. Connect any IDE or client that speaks the OpenAI protocol."},
+        {"name": "Models", "description": "CRUD operations for model configurations. Manage providers, API keys, and active/inactive status."},
+        {"name": "Preferences", "description": "User preferences: mode (parallel/race/vote/review), temperature, max tokens, RAG settings, memory."},
+        {"name": "Stats", "description": "Per-model usage statistics — request counts and token usage."},
+        {"name": "Health", "description": "Server health check and diagnostics."},
+        {"name": "RAG", "description": "Retrieval-Augmented Generation — index your codebase and inject relevant code into every chat request."},
+        {"name": "Hardware", "description": "System monitoring — RAM, GPU/VRAM, Ollama loaded models, and memory pressure suggestions."},
+        {"name": "Discovery", "description": "Find and add new models — browse the curated Ollama catalog or OpenRouter's model library."},
+    ],
 )
 
 # ── Request size limit middleware ───────────────────────────────────────

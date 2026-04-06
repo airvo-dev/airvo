@@ -290,7 +290,16 @@ async def multi_model_stream(results):
     yield "data: [DONE]\n\n"
 
 # ── Chat endpoint ─────────────────────────────────────────────────────────
-@router.post("/v1/chat/completions")
+@router.post("/v1/chat/completions", tags=["Chat"], summary="Chat completion (streaming)",
+    description="OpenAI-compatible chat completion endpoint with SSE streaming.\n\n"
+    "**Single model:** Real token-by-token streaming.\n"
+    "**Multi-model:** All models run, results combined and streamed.\n"
+    "**Tool calling:** When `tools` is present, uses the configured agent model.\n\n"
+    "The server automatically:\n"
+    "- Caps `max_tokens` for free-tier providers (TPM guard)\n"
+    "- Injects RAG context from your indexed codebase (if enabled)\n"
+    "- Truncates history to the last N messages\n"
+    "- Dispatches to the configured multi-model mode (parallel/race/vote/review)")
 async def chat_completions(request: ChatRequest):
     try:
         # ── EARLY: force-cap max_tokens for ALL Groq-limited providers ───
@@ -465,48 +474,57 @@ async def chat_completions(request: ChatRequest):
 
 # ── Dashboard API — CRUD models ───────────────────────────────────────────
 
-@router.get("/api/models")
+@router.get("/api/models", tags=["Models"], summary="List all models",
+    description="Returns all configured models including inactive ones and suggestions.")
 async def get_models():
     return {"models": settings.get_models()}
 
-@router.get("/api/models/active")
+@router.get("/api/models/active", tags=["Models"], summary="List active models",
+    description="Returns only models with `active: true`. These are the models used for chat completions.")
 async def get_active():
     return {"models": settings.get_active_models()}
 
-@router.post("/api/models")
+@router.post("/api/models", tags=["Models"], summary="Add a new model",
+    description="Add a new model configuration. The model ID should follow the `provider/model-name` format (e.g. `groq/llama-3.1-8b-instant`).")
 async def add_model(model: NewModel):
     settings.add_model(model.model_dump())
     return {"ok": True, "model": model.id}
 
 # IMPORTANT: /toggle and /key must be BEFORE /{model_id:path}
-@router.patch("/api/models/{model_id:path}/toggle")
+@router.patch("/api/models/{model_id:path}/toggle", tags=["Models"], summary="Toggle model active/inactive",
+    description="Enable or disable a model. Only active models are used for chat completions.")
 async def toggle_model(model_id: str, active: bool):
     settings.toggle_model(model_id, active)
     return {"ok": True, "active": active}
 
-@router.patch("/api/models/{model_id:path}/key")
+@router.patch("/api/models/{model_id:path}/key", tags=["Models"], summary="Set API key",
+    description="Set or update the API key for a specific model. The key is stored locally in `~/.airvo/models.json`.")
 async def set_api_key(model_id: str, api_key: str):
     settings.set_api_key(model_id, api_key)
     return {"ok": True}
 
-@router.patch("/api/models/{model_id:path}")
+@router.patch("/api/models/{model_id:path}", tags=["Models"], summary="Update model fields",
+    description="Partially update a model's configuration (name, base_url, notes, etc.). Only provided fields are updated.")
 async def update_model(model_id: str, updates: ModelUpdate):
     data = {k: v for k, v in updates.model_dump().items() if v is not None}
     settings.update_model(model_id, data)
     return {"ok": True}
 
-@router.delete("/api/models/{model_id:path}")
+@router.delete("/api/models/{model_id:path}", tags=["Models"], summary="Delete a model",
+    description="Permanently remove a model configuration. This cannot be undone.")
 async def delete_model(model_id: str):
     settings.delete_model(model_id)
     return {"ok": True}
 
 # ── Preferences endpoints ─────────────────────────────────────────────────
 
-@router.get("/api/prefs")
+@router.get("/api/prefs", tags=["Preferences"], summary="Get preferences",
+    description="Returns all current preferences including mode, temperature, max_tokens, RAG settings, and memory configuration.")
 async def get_prefs():
     return settings.get_prefs()
 
-@router.patch("/api/prefs")
+@router.patch("/api/prefs", tags=["Preferences"], summary="Update preferences",
+    description="Partially update preferences. Only provided fields are changed. Supports: mode, temperature, max_tokens, RAG settings, memory, agent_model.")
 async def update_prefs(updates: PrefsUpdate):
     data = {k: v for k, v in updates.model_dump().items() if v is not None}
     settings.update_prefs(data)
@@ -514,25 +532,29 @@ async def update_prefs(updates: PrefsUpdate):
 
 # ── Stats endpoints ───────────────────────────────────────────────────────
 
-@router.get("/api/stats")
+@router.get("/api/stats", tags=["Stats"], summary="Get usage statistics",
+    description="Returns per-model usage stats: `{model_id: {requests: N, tokens: N}}`. Persisted in `~/.airvo/stats.json`.")
 async def get_stats():
     return {"stats": settings.get_stats()}
 
-@router.delete("/api/stats")
+@router.delete("/api/stats", tags=["Stats"], summary="Reset statistics",
+    description="Reset all usage statistics to zero for every model.")
 async def reset_stats():
     settings.reset_stats()
     return {"ok": True}
 
 # ── Standard endpoints ────────────────────────────────────────────────────
 
-@router.get("/v1/models")
+@router.get("/v1/models", tags=["Chat"], summary="List models (OpenAI compat)",
+    description="OpenAI-compatible model list. Returns `airvo-auto` as the virtual model that Airvo routes to your configured providers.")
 async def list_models():
     return {
         "object": "list",
         "data": [{"id": "airvo-auto", "object": "model", "owned_by": "airvo"}]
     }
 
-@router.get("/api/health")
+@router.get("/api/health", tags=["Health"], summary="Health check",
+    description="Returns server status, version, active models, total model count, config file path, and last request diagnostics.")
 async def health():
     from importlib.metadata import version as _v
     active = settings.get_active_models()
@@ -555,7 +577,9 @@ class RagIndexRequest(BaseModel):
     exclude_dirs:   Optional[List[str]] = None
 
 
-@router.get("/api/rag/status")
+@router.get("/api/rag/status", tags=["RAG"], summary="RAG index status",
+    description="Returns current index statistics and whether RAG dependencies (chromadb, sentence-transformers) are installed. "
+    "Install with: `pip install airvo[rag]`.")
 async def rag_status():
     """Return current index stats + whether RAG deps are installed."""
     try:
@@ -584,7 +608,9 @@ async def rag_status():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/api/rag/index")
+@router.post("/api/rag/index", tags=["RAG"], summary="Index a directory",
+    description="Trigger indexing of a codebase directory. Walks the directory recursively, chunks text files, generates embeddings, "
+    "and stores them in a local ChromaDB collection. Can take 10-60 seconds depending on project size.")
 async def rag_index(req: RagIndexRequest):
     """Trigger a (re)index of the configured directory. May take a while."""
     try:
@@ -628,7 +654,8 @@ async def rag_index(req: RagIndexRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.delete("/api/rag/reset")
+@router.delete("/api/rag/reset", tags=["RAG"], summary="Reset RAG index",
+    description="Wipe the entire ChromaDB collection — all embeddings and metadata are deleted. You'll need to re-index afterwards.")
 async def rag_reset():
     """Wipe the entire RAG index (all embeddings and metadata)."""
     try:
@@ -641,7 +668,9 @@ async def rag_reset():
 
 # ── Hardware / Memory Manager endpoints ──────────────────────────────────────
 
-@router.get("/api/hardware/status")
+@router.get("/api/hardware/status", tags=["Hardware"], summary="Hardware status",
+    description="Returns RAM usage, GPU/VRAM info, loaded Ollama models, memory pressure level, and smart suggestions. "
+    "Works without psutil (returns partial data). Install with: `pip install airvo[hardware]`.")
 async def hardware_status():
     """
     Return RAM usage, GPU/VRAM info, and currently loaded Ollama models.
@@ -714,7 +743,8 @@ class UnloadRequest(BaseModel):
     base_url:   Optional[str] = "http://localhost:11434"
 
 
-@router.post("/api/hardware/unload")
+@router.post("/api/hardware/unload", tags=["Hardware"], summary="Unload Ollama model",
+    description="Ask Ollama to unload a specific model from RAM/VRAM by sending `keep_alive=0`. Frees memory immediately.")
 async def hardware_unload(req: UnloadRequest):
     """Ask Ollama to unload a specific model from memory (keep_alive=0)."""
     try:
@@ -731,7 +761,9 @@ async def hardware_unload(req: UnloadRequest):
 
 # ── Discovery endpoints ───────────────────────────────────────────────────────
 
-@router.get("/api/discovery/ollama")
+@router.get("/api/discovery/ollama", tags=["Discovery"], summary="Ollama model catalog",
+    description="Returns a curated catalog of 21 Ollama models organized by size (tiny/small/medium/large). "
+    "Each entry includes `installed` (already pulled) and `fits_ram` (enough free memory) flags.")
 async def discovery_ollama(base_url: str = "http://localhost:11434"):
     """Return the curated Ollama catalog enriched with installed + fits_ram flags."""
     try:
@@ -748,7 +780,9 @@ async def discovery_ollama(base_url: str = "http://localhost:11434"):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/api/discovery/openrouter")
+@router.get("/api/discovery/openrouter", tags=["Discovery"], summary="OpenRouter models",
+    description="Fetches available models from OpenRouter's public API. Results are cached for 5 minutes. "
+    "Free models are listed first. Returns: id, name, description, context_length, is_free, prompt_cost.")
 async def discovery_openrouter(limit: int = 60):
     """Return available OpenRouter models (cached 5 min)."""
     try:
@@ -765,7 +799,9 @@ class QuickAddRequest(BaseModel):
     base_url: Optional[str] = None
 
 
-@router.post("/api/discovery/add")
+@router.post("/api/discovery/add", tags=["Discovery"], summary="Quick-add model",
+    description="Add a discovered model (Ollama or OpenRouter) to your Airvo configuration. "
+    "The model is added as inactive — enable it in the dashboard or via PATCH /api/models/{id}/toggle.")
 async def discovery_add(req: QuickAddRequest):
     """Quick-add a discovered model to Airvo settings."""
     try:
