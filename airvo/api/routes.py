@@ -6,6 +6,7 @@ import litellm
 import asyncio
 import json
 import logging
+import os
 import time
 from collections import deque
 
@@ -13,7 +14,27 @@ from airvo.config.settings import settings, save_models
 
 logger = logging.getLogger(__name__)
 
-_compare_store: deque = deque(maxlen=10)   # holds last 10 multi-model responses for Compare view
+_HISTORY_FILE = os.path.normpath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "compare_history.json")
+)
+
+def _load_history() -> deque:
+    try:
+        if os.path.exists(_HISTORY_FILE):
+            with open(_HISTORY_FILE, "r", encoding="utf-8") as f:
+                return deque(json.load(f), maxlen=10)
+    except Exception:
+        pass
+    return deque(maxlen=10)
+
+def _save_history() -> None:
+    try:
+        with open(_HISTORY_FILE, "w", encoding="utf-8") as f:
+            json.dump(list(_compare_store), f, ensure_ascii=False, indent=2)
+    except Exception as _e:
+        logger.warning("[Compare] Failed to save history: %s", _e)
+
+_compare_store: deque = _load_history()  # persisted across restarts
 
 router = APIRouter()
 
@@ -492,6 +513,7 @@ async def chat_completions(request: ChatRequest):
                 for r in results
             ],
         })
+        _save_history()
 
         settings.record_last_request("multi", mode=mode)
         return StreamingResponse(
@@ -904,12 +926,129 @@ async def compare_run(req: CompareRunRequest):
             ],
         }
         _compare_store.appendleft(entry)
+        _save_history()
         settings.record_last_request("multi", mode=mode)
         return {"data": entry}
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Per-model SSE streaming helper ───────────────────────────────────────
+async def _stream_one_model(model_cfg: dict, messages: list, req_obj, idx: int, queue: asyncio.Queue):
+    """Stream one model's tokens into a shared queue for SSE."""
+    t0 = time.time()
+    content = ""
+    tokens = 0
+    try:
+        prefs = settings.get_prefs()
+        _raw_max = req_obj.max_tokens or prefs.get("max_tokens", settings.max_tokens)
+        kwargs = dict(
+            model       = model_cfg["id"],
+            messages    = messages,
+            max_tokens  = _safe_max_tokens(model_cfg["id"], _raw_max),
+            temperature = req_obj.temperature or prefs.get("temperature", settings.temperature),
+            stream      = True,
+            api_key     = model_cfg.get("api_key"),
+        )
+        if model_cfg.get("base_url"):
+            kwargs["api_base"] = model_cfg["base_url"]
+        await queue.put(json.dumps({
+            "type": "start", "model_idx": idx,
+            "name": model_cfg.get("name", model_cfg["id"]),
+            "model": model_cfg["id"],
+        }))
+        response = await litellm.acompletion(**kwargs)
+        async for chunk in response:
+            if chunk.choices:
+                delta = chunk.choices[0].delta.content or ""
+                if delta:
+                    content += delta
+                    await queue.put(json.dumps({"type": "delta", "model_idx": idx, "delta": delta}))
+            if hasattr(chunk, "usage") and chunk.usage and chunk.usage.total_tokens:
+                tokens = chunk.usage.total_tokens
+        elapsed = round(time.time() - t0, 2)
+        if tokens == 0:
+            tokens = max(1, len(content.split()))
+        settings.record_usage(model_cfg["id"], tokens)
+        await queue.put(json.dumps({
+            "type": "done", "model_idx": idx,
+            "tokens": tokens, "elapsed_s": elapsed, "content": content,
+        }))
+    except Exception as e:
+        await queue.put(json.dumps({
+            "type": "error", "model_idx": idx, "error": str(e), "content": content,
+        }))
+
+
+@router.post("/api/compare/stream", tags=["Compare"],
+    summary="Streaming comparison (SSE)",
+    description="Like /api/compare/run but streams each model's tokens in real time via SSE. "
+    "Events: start | delta | done | error | complete.")
+async def compare_stream_run(req: CompareRunRequest):
+    """Run a comparison and stream each model's tokens as SSE events."""
+    active = settings.get_active_models()
+    if len(active) < 2:
+        raise HTTPException(status_code=400, detail="Need at least 2 active models.")
+    prefs = settings.get_prefs()
+    mode  = prefs.get("mode", "parallel")
+    messages = [
+        {"role": "system", "content": settings.system_prompt},
+        {"role": "user",   "content": req.prompt},
+    ]
+
+    class _FakeReq:
+        max_tokens  = req.max_tokens
+        temperature = req.temperature
+
+    async def event_gen():
+        queue   = asyncio.Queue()
+        tasks   = [
+            asyncio.create_task(_stream_one_model(m, messages, _FakeReq(), i, queue))
+            for i, m in enumerate(active)
+        ]
+        results  = [None] * len(active)
+        finished = 0
+        total    = len(active)
+
+        while finished < total:
+            try:
+                evt_json = await asyncio.wait_for(queue.get(), timeout=120.0)
+                yield f"data: {evt_json}\n\n"
+                evt = json.loads(evt_json)
+                if evt["type"] in ("done", "error"):
+                    idx = evt["model_idx"]
+                    m   = active[idx]
+                    results[idx] = {
+                        "model":     m["id"],
+                        "name":      m.get("name", m["id"]),
+                        "content":   evt.get("content", ""),
+                        "error":     evt.get("error"),
+                        "tokens":    evt.get("tokens", 0),
+                        "elapsed_s": evt.get("elapsed_s"),
+                    }
+                    finished += 1
+            except asyncio.TimeoutError:
+                break
+
+        entry = {
+            "id":        str(time.time()),
+            "timestamp": time.time(),
+            "mode":      mode,
+            "prompt":    req.prompt[:500],
+            "results":   [r or {"model":"","name":"","content":"","error":"timeout","tokens":0,"elapsed_s":None} for r in results],
+        }
+        _compare_store.appendleft(entry)
+        _save_history()
+        settings.record_last_request("multi", mode=mode)
+        yield f"data: {json.dumps({'type': 'complete', 'entry': entry})}\n\n"
+
+    return StreamingResponse(
+        event_gen(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @router.get("/api/discovery/ollama", tags=["Discovery"], summary="Ollama model catalog",
