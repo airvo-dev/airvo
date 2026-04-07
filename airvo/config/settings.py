@@ -160,13 +160,41 @@ def save_stats(stats: dict):
         json.dump(stats, f, indent=2, ensure_ascii=False)
 
 
-def record_usage(model_id: str, tokens_used: int):
-    """Increment request count and token usage for a model"""
+def record_usage(model_id: str, tokens_used: int, elapsed_s: float = None):
+    """Increment request count and token usage for a model.
+    Also records daily breakdown and a rolling latency window (last 50)."""
+    from datetime import date
+    today = date.today().isoformat()
     stats = load_stats()
     if model_id not in stats:
-        stats[model_id] = {"requests": 0, "tokens": 0}
-    stats[model_id]["requests"] += 1
-    stats[model_id]["tokens"]   += tokens_used
+        stats[model_id] = {"requests": 0, "tokens": 0, "copies": 0, "daily": {}, "latency": []}
+    m = stats[model_id]
+    # ensure new fields exist on older entries
+    m.setdefault("copies", 0)
+    m.setdefault("daily", {})
+    m.setdefault("latency", [])
+    m["requests"] += 1
+    m["tokens"]   += tokens_used
+    # daily breakdown
+    if today not in m["daily"]:
+        m["daily"][today] = {"requests": 0, "tokens": 0}
+    m["daily"][today]["requests"] += 1
+    m["daily"][today]["tokens"]   += tokens_used
+    # rolling latency (last 50 values)
+    if elapsed_s is not None:
+        m["latency"].append(round(elapsed_s, 3))
+        if len(m["latency"]) > 50:
+            m["latency"] = m["latency"][-50:]
+    save_stats(stats)
+
+
+def record_copy(model_id: str):
+    """Increment copy count for a model (quality signal)."""
+    stats = load_stats()
+    if model_id not in stats:
+        stats[model_id] = {"requests": 0, "tokens": 0, "copies": 0, "daily": {}, "latency": []}
+    stats[model_id].setdefault("copies", 0)
+    stats[model_id]["copies"] += 1
     save_stats(stats)
 
 
@@ -269,8 +297,11 @@ class Settings(BaseSettings):
     def get_stats(self) -> dict:
         return load_stats()
 
-    def record_usage(self, model_id: str, tokens_used: int):
-        record_usage(model_id, tokens_used)
+    def record_usage(self, model_id: str, tokens_used: int, elapsed_s: float = None):
+        record_usage(model_id, tokens_used, elapsed_s)
+
+    def record_copy(self, model_id: str):
+        record_copy(model_id)
 
     def reset_stats(self):
         save_stats({})

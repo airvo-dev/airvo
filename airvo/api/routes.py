@@ -147,7 +147,7 @@ async def call_model(model_config: dict, messages: list, request):
         # Record usage stats
         usage  = response.usage
         tokens = (usage.total_tokens if usage and usage.total_tokens else 0)
-        settings.record_usage(model_config["id"], tokens)
+        settings.record_usage(model_config["id"], tokens, elapsed_s=_elapsed)
 
         return {
             "model":     model_config["id"],
@@ -286,12 +286,14 @@ async def review_mode(models: list, messages: list, request) -> list:
 # ── Streaming helpers ─────────────────────────────────────────────────────
 async def single_model_stream(response, model_id: str):
     total_tokens = 0
+    t0 = time.time()
     async for chunk in response:
         if hasattr(chunk, "usage") and chunk.usage:
             total_tokens = chunk.usage.total_tokens or 0
         yield f"data: {json.dumps(chunk.model_dump())}\n\n"
+    elapsed = round(time.time() - t0, 2)
     if total_tokens > 0:
-        settings.record_usage(model_id, total_tokens)
+        settings.record_usage(model_id, total_tokens, elapsed_s=elapsed)
     yield "data: [DONE]\n\n"
 
 async def multi_model_stream(results):
@@ -593,6 +595,15 @@ async def get_stats():
     description="Reset all usage statistics to zero for every model.")
 async def reset_stats():
     settings.reset_stats()
+    return {"ok": True}
+
+class CopyEventRequest(BaseModel):
+    model_id: str
+
+@router.post("/api/stats/copy", tags=["Stats"], summary="Record a copy event",
+    description="Increment the copy counter for a model — used as a quality signal in the Stats tab.")
+async def record_copy(req: CopyEventRequest):
+    settings.record_copy(req.model_id)
     return {"ok": True}
 
 # ── Standard endpoints ────────────────────────────────────────────────────

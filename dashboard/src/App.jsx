@@ -149,6 +149,15 @@ const I18N = {
     stats_reset_confirm:"Reset all usage stats?",
     stats_reset_done:"Stats reset",
     stats_empty:"No usage data yet. Start coding!",
+    stats_tab_title:"Usage Analytics", stats_tab_sub:"Token usage, estimated cost, quality ranking and latency per model",
+    stats_section_tokens:"Tokens by Model", stats_section_cost:"Estimated Cost", stats_section_quality:"Quality Ranking",
+    stats_section_latency:"Avg Latency", stats_section_daily:"Daily Activity — Last 7 Days",
+    stats_copies:"copies", stats_free:"Free", stats_local:"Local",
+    stats_latency_avg:"avg", stats_latency_unit:"s",
+    stats_cost_note:"* Estimates based on typical API pricing. Actual costs may vary.",
+    stats_quality_note:"Based on how many times you copied a model's response",
+    stats_no_history:"No daily data yet",
+    stats_total_tokens:"Total tokens", stats_total_requests:"Total requests",
     add_title:"Add Model", add_sub:"Any model compatible with LiteLLM — any provider, any API",
     new_model:"New Model",
     field_id:"Model ID", field_name:"Display Name", field_provider:"Provider",
@@ -287,7 +296,7 @@ const I18N = {
     auto_detected:"Auto-detected",
     auto_local_hint:"Local model — no API cost",
     auto_cloud_hint:"Cloud model — API usage billed by provider",
-    nav_compare:"Compare",
+    nav_compare:"Compare", nav_stats:"Stats",
     compare_title:"Response Comparison",
     compare_sub:"Last multi-model responses side by side — copy and pick the best",
     compare_empty:"No multi-model responses yet",
@@ -452,6 +461,15 @@ const I18N = {
     stats_reset_confirm:"¿Resetear todas las estadísticas?",
     stats_reset_done:"Estadísticas reseteadas",
     stats_empty:"Sin datos aún. ¡Empezá a programar!",
+    stats_tab_title:"Analytics de Uso", stats_tab_sub:"Tokens usados, costo estimado, ranking de calidad y latencia por modelo",
+    stats_section_tokens:"Tokens por Modelo", stats_section_cost:"Costo Estimado", stats_section_quality:"Ranking de Calidad",
+    stats_section_latency:"Latencia Promedio", stats_section_daily:"Actividad Diaria — Últimos 7 Días",
+    stats_copies:"copias", stats_free:"Gratis", stats_local:"Local",
+    stats_latency_avg:"prom", stats_latency_unit:"s",
+    stats_cost_note:"* Estimaciones basadas en precios típicos de API. El costo real puede variar.",
+    stats_quality_note:"Basado en cuántas veces copiaste la respuesta de cada modelo",
+    stats_no_history:"Sin datos diarios aún",
+    stats_total_tokens:"Total de tokens", stats_total_requests:"Total de requests",
     add_title:"Agregar Modelo", add_sub:"Cualquier modelo compatible con LiteLLM",
     new_model:"Nuevo Modelo",
     field_id:"ID del Modelo", field_name:"Nombre", field_provider:"Proveedor",
@@ -564,7 +582,7 @@ const I18N = {
     auto_detected:"Detectado automáticamente",
     auto_local_hint:"Modelo local — sin costo de API",
     auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
-    nav_compare:"Comparar",
+    nav_compare:"Comparar", nav_stats:"Stats",
     compare_title:"Comparación de Respuestas",
     compare_sub:"Últimas respuestas multi-modelo lado a lado — copiá y elegí la mejor",
     compare_empty:"Sin respuestas multi-modelo todavía",
@@ -726,6 +744,15 @@ const I18N = {
     stats_reset_confirm:"Réinitialiser toutes les statistiques ?",
     stats_reset_done:"Statistiques réinitialisées",
     stats_empty:"Aucune donnée pour l'instant. Commencez à coder !",
+    stats_tab_title:"Analytiques d'Utilisation", stats_tab_sub:"Tokens utilisés, coût estimé, classement qualité et latence par modèle",
+    stats_section_tokens:"Tokens par Modèle", stats_section_cost:"Coût Estimé", stats_section_quality:"Classement Qualité",
+    stats_section_latency:"Latence Moyenne", stats_section_daily:"Activité Quotidienne — 7 Derniers Jours",
+    stats_copies:"copies", stats_free:"Gratuit", stats_local:"Local",
+    stats_latency_avg:"moy", stats_latency_unit:"s",
+    stats_cost_note:"* Estimations basées sur les tarifs API typiques. Les coûts réels peuvent varier.",
+    stats_quality_note:"Basé sur le nombre de fois que vous avez copié la réponse",
+    stats_no_history:"Pas encore de données quotidiennes",
+    stats_total_tokens:"Total tokens", stats_total_requests:"Total requêtes",
     add_title:"Ajouter un Modèle", add_sub:"Tout modèle compatible LiteLLM — n'importe quel fournisseur",
     new_model:"Nouveau Modèle",
     field_id:"ID du Modèle", field_name:"Nom affiché", field_provider:"Fournisseur",
@@ -838,7 +865,7 @@ const I18N = {
     auto_detected:"Détecté automatiquement",
     auto_local_hint:"Modèle local — sans coût d'API",
     auto_cloud_hint:"Modèle cloud — facturation par le fournisseur",
-    nav_compare:"Comparer",
+    nav_compare:"Comparer", nav_stats:"Stats",
     compare_title:"Comparaison des Réponses",
     compare_sub:"Dernières réponses multi-modèles côte à côte — copiez et choisissez la meilleure",
     compare_empty:"Aucune réponse multi-modèle pour l'instant",
@@ -1000,6 +1027,15 @@ const I18N = {
     stats_reset_confirm:"Alle Nutzungsstatistiken zurücksetzen?",
     stats_reset_done:"Statistiken zurückgesetzt",
     stats_empty:"Noch keine Daten. Fangen Sie an zu programmieren!",
+    stats_tab_title:"Nutzungsanalyse", stats_tab_sub:"Token-Nutzung, geschätzte Kosten, Qualitätsranking und Latenz pro Modell",
+    stats_section_tokens:"Tokens nach Modell", stats_section_cost:"Geschätzte Kosten", stats_section_quality:"Qualitätsranking",
+    stats_section_latency:"Durchschnittliche Latenz", stats_section_daily:"Tägliche Aktivität — Letzte 7 Tage",
+    stats_copies:"Kopien", stats_free:"Kostenlos", stats_local:"Lokal",
+    stats_latency_avg:"Ø", stats_latency_unit:"s",
+    stats_cost_note:"* Schätzungen basieren auf typischen API-Preisen. Tatsächliche Kosten können abweichen.",
+    stats_quality_note:"Basiert darauf, wie oft Sie eine Antwort kopiert haben",
+    stats_no_history:"Noch keine täglichen Daten",
+    stats_total_tokens:"Tokens gesamt", stats_total_requests:"Anfragen gesamt",
     add_title:"Modell Hinzufügen", add_sub:"Jedes LiteLLM-kompatible Modell — jeder Anbieter",
     new_model:"Neues Modell",
     field_id:"Modell-ID", field_name:"Anzeigename", field_provider:"Anbieter",
@@ -1112,7 +1148,7 @@ const I18N = {
     auto_detected:"Automatisch erkannt",
     auto_local_hint:"Lokales Modell — keine API-Kosten",
     auto_cloud_hint:"Cloud-Modell — Abrechnung durch den Anbieter",
-    nav_compare:"Vergleich",
+    nav_compare:"Vergleich", nav_stats:"Stats",
     compare_title:"Antwort-Vergleich",
     compare_sub:"Letzte Multi-Modell-Antworten nebeneinander — kopieren und die beste wählen",
     compare_empty:"Noch keine Multi-Modell-Antworten",
@@ -1274,6 +1310,15 @@ const I18N = {
     stats_reset_confirm:"重置所有使用统计？",
     stats_reset_done:"统计已重置",
     stats_empty:"暂无数据。开始编程吧！",
+    stats_tab_title:"使用分析", stats_tab_sub:"每个模型的令牌使用量、预估成本、质量排名和延迟",
+    stats_section_tokens:"按模型统计令牌", stats_section_cost:"预估成本", stats_section_quality:"质量排名",
+    stats_section_latency:"平均延迟", stats_section_daily:"每日活动 — 最近7天",
+    stats_copies:"复制次数", stats_free:"免费", stats_local:"本地",
+    stats_latency_avg:"均", stats_latency_unit:"秒",
+    stats_cost_note:"* 基于典型API定价的估算，实际费用可能有所不同。",
+    stats_quality_note:"基于复制该模型回复的次数",
+    stats_no_history:"暂无每日数据",
+    stats_total_tokens:"总令牌数", stats_total_requests:"总请求数",
     add_title:"添加模型", add_sub:"任何 LiteLLM 兼容模型 — 任何提供商",
     new_model:"新模型",
     field_id:"模型 ID", field_name:"显示名称", field_provider:"提供商",
@@ -1386,7 +1431,7 @@ const I18N = {
     auto_detected:"自动检测",
     auto_local_hint:"本地模型 — 无 API 费用",
     auto_cloud_hint:"云端模型 — 由提供商计费",
-    nav_compare:"对比",
+    nav_compare:"对比", nav_stats:"统计",
     compare_title:"响应对比",
     compare_sub:"最新多模型响应并排显示 — 复制并选择最佳答案",
     compare_empty:"暂无多模型响应",
@@ -1548,6 +1593,15 @@ const I18N = {
     stats_reset_confirm:"すべての使用統計をリセットしますか？",
     stats_reset_done:"統計をリセットしました",
     stats_empty:"データがまだありません。コーディングを始めましょう！",
+    stats_tab_title:"使用状況分析", stats_tab_sub:"モデルごとのトークン使用量、推定コスト、品質ランキング、レイテンシ",
+    stats_section_tokens:"モデル別トークン", stats_section_cost:"推定コスト", stats_section_quality:"品質ランキング",
+    stats_section_latency:"平均レイテンシ", stats_section_daily:"日別アクティビティ — 過去7日間",
+    stats_copies:"コピー数", stats_free:"無料", stats_local:"ローカル",
+    stats_latency_avg:"平均", stats_latency_unit:"秒",
+    stats_cost_note:"* 一般的なAPI料金に基づく推定です。実際のコストは異なる場合があります。",
+    stats_quality_note:"モデルの回答をコピーした回数に基づく",
+    stats_no_history:"日別データがまだありません",
+    stats_total_tokens:"合計トークン", stats_total_requests:"合計リクエスト",
     add_title:"モデルを追加", add_sub:"LiteLLM互換のモデル — あらゆるプロバイダー",
     new_model:"新しいモデル",
     field_id:"モデルID", field_name:"表示名", field_provider:"プロバイダー",
@@ -1660,7 +1714,7 @@ const I18N = {
     auto_detected:"自動検出",
     auto_local_hint:"ローカルモデル — APIコストなし",
     auto_cloud_hint:"クラウドモデル — プロバイダーによる課金",
-    nav_compare:"比較",
+    nav_compare:"比較", nav_stats:"統計",
     compare_title:"レスポンス比較",
     compare_sub:"最新のマルチモデルレスポンスを並べて表示 — コピーして最良を選択",
     compare_empty:"マルチモデルレスポンスはまだありません",
@@ -1822,6 +1876,15 @@ const I18N = {
     stats_reset_confirm:"Resetar todas as estatísticas de uso?",
     stats_reset_done:"Estatísticas resetadas",
     stats_empty:"Sem dados ainda. Comece a programar!",
+    stats_tab_title:"Análise de Uso", stats_tab_sub:"Tokens usados, custo estimado, ranking de qualidade e latência por modelo",
+    stats_section_tokens:"Tokens por Modelo", stats_section_cost:"Custo Estimado", stats_section_quality:"Ranking de Qualidade",
+    stats_section_latency:"Latência Média", stats_section_daily:"Atividade Diária — Últimos 7 Dias",
+    stats_copies:"cópias", stats_free:"Grátis", stats_local:"Local",
+    stats_latency_avg:"méd", stats_latency_unit:"s",
+    stats_cost_note:"* Estimativas baseadas em preços típicos de API. Os custos reais podem variar.",
+    stats_quality_note:"Baseado em quantas vezes você copiou a resposta do modelo",
+    stats_no_history:"Sem dados diários ainda",
+    stats_total_tokens:"Total de tokens", stats_total_requests:"Total de requisições",
     add_title:"Adicionar Modelo", add_sub:"Qualquer modelo compatível com LiteLLM — qualquer provedor",
     new_model:"Novo Modelo",
     field_id:"ID do Modelo", field_name:"Nome de Exibição", field_provider:"Provedor",
@@ -1934,7 +1997,7 @@ const I18N = {
     auto_detected:"Detectado automaticamente",
     auto_local_hint:"Modelo local — sem custo de API",
     auto_cloud_hint:"Modelo cloud — faturamento pelo provedor",
-    nav_compare:"Comparar",
+    nav_compare:"Comparar", nav_stats:"Stats",
     compare_title:"Comparação de Respostas",
     compare_sub:"Últimas respostas multi-modelo lado a lado — copie e escolha a melhor",
     compare_empty:"Sem respostas multi-modelo ainda",
@@ -2351,7 +2414,7 @@ function CodeBlock({ block, t }) {
   );
 }
 
-function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, onExpand, streaming, diffTokens, isPinned, onPin }) {
+function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, onExpand, streaming, diffTokens, isPinned, onPin, onCopy }) {
   const [copied, setCopied] = useState(false);
   const color = COMPARE_COLORS[index % COMPARE_COLORS.length];
 
@@ -2360,6 +2423,7 @@ function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, on
     navigator.clipboard.writeText(result.content).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      onCopy?.();
     });
   }
 
@@ -2532,6 +2596,8 @@ export default function AirvoDashboard() {
   const [compareTemplates,  setCompareTemplates]  = useState(() => {
     try { return JSON.parse(localStorage.getItem("airvo_compare_templates") || "[]"); } catch { return []; }
   });
+  const [statsData,   setStatsData]   = useState({});
+  const [statsResetting, setStatsResetting] = useState(false);
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
   const [discOllama,    setDiscOllama]    = useState(null);
@@ -2605,6 +2671,21 @@ export default function AirvoDashboard() {
     } catch {}
     finally { if (!silent) setCompareLoading(false); }
   }, []);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await fetch(`${API}/api/stats`);
+      if (res.ok) {
+        const data = await res.json();
+        setStatsData(data.stats || {});
+      }
+    } catch {}
+  }, []);
+
+  async function recordCopy(modelId) {
+    try { await fetch(`${API}/api/stats/copy`, { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ model_id: modelId }) }); }
+    catch {}
+  }
 
   async function streamCompare(overridePrompt) {
     const prompt = (overridePrompt !== undefined ? overridePrompt : comparePrompt).trim();
@@ -2725,6 +2806,7 @@ export default function AirvoDashboard() {
   useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
   useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
   useEffect(() => { if (page === "compare") fetchCompare(); }, [page, fetchCompare]);
+  useEffect(() => { if (page === "stats") fetchStats(); }, [page, fetchStats]);
   useEffect(() => {
     if (page !== "compare" || !compareAutoRefresh) return;
     const interval = setInterval(() => fetchCompare(true), 3000);
@@ -2901,6 +2983,7 @@ export default function AirvoDashboard() {
               { id:"models",  icon:"◈", label:t("nav_models"), badge:models.length||null },
               { id:"status",  icon:"◎", label:t("nav_status")  },
               { id:"compare", icon:"⊞", label:t("nav_compare") },
+              { id:"stats",   icon:"📊", label:t("nav_stats")  },
               { id:"config",  icon:"⊙", label:t("nav_config")  },
               { id:"add",     icon:"+", label:t("nav_add")     },
               { id:"help",    icon:"?", label:t("nav_help")    },
@@ -3634,6 +3717,7 @@ export default function AirvoDashboard() {
                         isFastest={false} isMostTokens={false}
                         isExpanded={false} onExpand={() => {}}
                         streaming={true}
+                        onCopy={() => slot.model && recordCopy(slot.model)}
                       />
                     ))}
                   </div>
@@ -3718,6 +3802,7 @@ export default function AirvoDashboard() {
                             diffTokens={_diffTokens && !result.error ? _diffTokens[realIdx] : null}
                             isPinned={comparePinnedIdx === realIdx}
                             onPin={validResults.length > 1 ? () => setComparePinnedIdx(comparePinnedIdx === realIdx ? null : realIdx) : null}
+                            onCopy={() => result.model && recordCopy(result.model)}
                           />
                         ))}
                       </div>
@@ -4141,6 +4226,19 @@ export default function AirvoDashboard() {
             <AddModelForm onAdd={addModel} t={t} />
           </>}
 
+          {/* ── STATS PAGE ── */}
+          {page === "stats" && (
+            <StatsPage
+              t={t}
+              statsData={statsData}
+              models={models}
+              onReset={async () => {
+                await fetch(`${API}/api/stats`, { method:"DELETE" });
+                setStatsData({});
+              }}
+            />
+          )}
+
           {/* ── HELP PAGE ── */}
           {page === "help" && <HelpPage t={t} setPage={setPage} />}
 
@@ -4245,6 +4343,244 @@ function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete }) {
       </>}
       <div style={{ marginTop:12, display:"flex", justifyContent:"flex-end" }}>
         <button className="btn btn-danger btn-sm" onClick={onDelete}>{t("delete_btn")}</button>
+      </div>
+    </div>
+  );
+}
+
+// ── Model price table ($/1M tokens, simplified average) ──────────────────
+const MODEL_PRICES = {
+  openai: 5, anthropic: 9, groq: 0, ollama: 0, lmstudio: 0,
+  together: 0.2, cerebras: 0.1, openrouter: 1, mistral: 0.5,
+  deepseek: 0.1, gemini: 0.35, cohere: 0.5, fireworks: 0.5, novita: 0.5,
+};
+
+function StatsPage({ t, statsData, models, onReset }) {
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [resetDone,    setResetDone]    = useState(false);
+
+  const getProvider = (id) => (id || "").split("/")[0].toLowerCase();
+  const getPrice    = (id) => MODEL_PRICES[getProvider(id)] ?? 1;
+  const getCost     = (id, tokens) => (tokens / 1_000_000) * getPrice(id);
+  const isLocal     = (id) => ["ollama","lmstudio"].includes(getProvider(id));
+  const isFree      = (id) => getPrice(id) === 0;
+  const fmtCost     = (c) => c < 0.001 ? (isFree ? "" : "<$0.001") : `$${c.toFixed(4)}`;
+  const fmtTokens   = (n) => n >= 1_000_000 ? `${(n/1_000_000).toFixed(1)}M` : n >= 1000 ? `${(n/1000).toFixed(1)}k` : String(n);
+
+  const entries = Object.entries(statsData);
+
+  // last 7 calendar days
+  const last7 = Array.from({length:7}, (_,i) => {
+    const d = new Date(); d.setDate(d.getDate() - (6-i));
+    return d.toISOString().split("T")[0];
+  });
+  const dayLabel = (iso) => { const d = new Date(iso); return ["Su","Mo","Tu","We","Th","Fr","Sa"][d.getDay()]; };
+
+  if (entries.length === 0) {
+    return (
+      <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:300, gap:12 }}>
+        <div style={{ fontSize:32 }}>📊</div>
+        <div style={{ color:"var(--text2)", fontSize:14 }}>{t("stats_empty")}</div>
+      </div>
+    );
+  }
+
+  const maxTokens  = Math.max(...entries.map(([,s]) => s.tokens || 0), 1);
+  const maxCopies  = Math.max(...entries.map(([,s]) => s.copies || 0), 1);
+  const totalTokens = entries.reduce((a,[,s]) => a + (s.tokens||0), 0);
+  const totalCost   = entries.reduce((a,[id,s]) => a + getCost(id, s.tokens||0), 0);
+  const totalReqs   = entries.reduce((a,[,s]) => a + (s.requests||0), 0);
+
+  const byTokens  = [...entries].sort((a,b) => (b[1].tokens||0)  - (a[1].tokens||0));
+  const byQuality = [...entries].sort((a,b) => (b[1].copies||0)  - (a[1].copies||0));
+  const byLatency = [...entries].filter(([,s]) => (s.latency||[]).length > 0)
+                                .sort((a,b) => {
+                                  const avg = (arr) => arr.reduce((s,v)=>s+v,0)/arr.length;
+                                  return avg(a[1].latency) - avg(b[1].latency);
+                                });
+
+  const maxDayTokens = Math.max(...entries.flatMap(([,s]) =>
+    last7.map(d => s.daily?.[d]?.tokens || 0)
+  ), 1);
+
+  const sectionStyle = { marginBottom: 28 };
+  const sectionHead  = { fontFamily:"var(--mono)", fontSize:11, fontWeight:700, letterSpacing:"0.08em",
+                          color:"var(--text2)", textTransform:"uppercase", marginBottom:14 };
+  const rowStyle     = { display:"flex", alignItems:"center", gap:10, marginBottom:10 };
+  const nameStyle    = { minWidth:130, maxWidth:130, overflow:"hidden", textOverflow:"ellipsis",
+                          whiteSpace:"nowrap", fontSize:12, color:"var(--text)", fontFamily:"var(--mono)" };
+  const barTrack     = { flex:1, height:10, borderRadius:5, background:"rgba(255,255,255,0.06)", overflow:"hidden" };
+  const numStyle     = { minWidth:54, textAlign:"right", fontSize:12, fontFamily:"var(--mono)", color:"var(--text2)" };
+
+  const modelName = (id) => models.find(m=>m.id===id)?.name || id.split("/")[1] || id;
+
+  return (
+    <div style={{ maxWidth:780 }}>
+      <h1 className="page-title">{t("stats_tab_title")}</h1>
+      <p className="page-sub">{t("stats_tab_sub")}</p>
+
+      {/* ── Summary chips ── */}
+      <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:28 }}>
+        {[
+          { label: t("stats_total_tokens"), value: fmtTokens(totalTokens), color:"var(--accent)" },
+          { label: t("stats_total_requests"), value: totalReqs.toLocaleString(), color:"var(--green)" },
+          { label: t("stats_section_cost"),
+            value: totalCost < 0.001 ? (totalCost === 0 ? t("stats_free") : "<$0.001") : `$${totalCost.toFixed(4)}`,
+            color:"var(--yellow)" },
+        ].map(c => (
+          <div key={c.label} style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:8,
+                                      padding:"10px 16px", display:"flex", flexDirection:"column", gap:2 }}>
+            <div style={{ fontSize:10, color:"var(--text2)", fontFamily:"var(--mono)", textTransform:"uppercase", letterSpacing:"0.07em" }}>{c.label}</div>
+            <div style={{ fontSize:20, fontWeight:700, color:c.color, fontFamily:"var(--mono)" }}>{c.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Tokens by model ── */}
+      <div style={sectionStyle}>
+        <div style={sectionHead}>📊 {t("stats_section_tokens")}</div>
+        {byTokens.map(([id, s]) => (
+          <div key={id} style={rowStyle}>
+            <div style={nameStyle} title={id}>{modelName(id)}</div>
+            <div style={barTrack}>
+              <div style={{ height:"100%", borderRadius:5, background:"var(--accent)",
+                            width:`${Math.max(2,Math.round(((s.tokens||0)/maxTokens)*100))}%`,
+                            transition:"width 0.4s ease" }} />
+            </div>
+            <div style={numStyle}>{fmtTokens(s.tokens||0)}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Estimated cost ── */}
+      <div style={sectionStyle}>
+        <div style={sectionHead}>💰 {t("stats_section_cost")}</div>
+        {byTokens.map(([id, s]) => {
+          const cost = getCost(id, s.tokens||0);
+          const free = isFree(id);
+          const local = isLocal(id);
+          return (
+            <div key={id} style={rowStyle}>
+              <div style={nameStyle} title={id}>{modelName(id)}</div>
+              <div style={{ flex:1, display:"flex", alignItems:"center", gap:6 }}>
+                {free
+                  ? <span style={{ fontSize:11, padding:"2px 7px", borderRadius:4,
+                                   background:"rgba(0,200,100,0.12)", color:"var(--green)",
+                                   fontFamily:"var(--mono)", fontWeight:700 }}>
+                      {local ? t("stats_local") : t("stats_free")}
+                    </span>
+                  : <>
+                      <div style={barTrack}>
+                        <div style={{ height:"100%", borderRadius:5, background:"var(--yellow)",
+                                      width:`${Math.max(2,Math.round((cost/Math.max(totalCost,0.0001))*100))}%`,
+                                      transition:"width 0.4s ease" }} />
+                      </div>
+                      <div style={{ minWidth:70, textAlign:"right", fontSize:12, fontFamily:"var(--mono)", color:"var(--yellow)" }}>
+                        {fmtCost(cost)}
+                      </div>
+                    </>
+                }
+              </div>
+            </div>
+          );
+        })}
+        <div style={{ fontSize:10, color:"var(--text2)", marginTop:6, fontFamily:"var(--mono)" }}>{t("stats_cost_note")}</div>
+      </div>
+
+      {/* ── Quality ranking ── */}
+      <div style={sectionStyle}>
+        <div style={sectionHead}>⭐ {t("stats_section_quality")}</div>
+        <div style={{ fontSize:11, color:"var(--text2)", marginBottom:10 }}>{t("stats_quality_note")}</div>
+        {byQuality.map(([id, s], i) => {
+          const copies = s.copies || 0;
+          return (
+            <div key={id} style={rowStyle}>
+              <div style={{ minWidth:22, fontSize:12, color:"var(--text2)", fontFamily:"var(--mono)" }}>
+                {i === 0 && copies > 0 ? "🥇" : i === 1 && copies > 0 ? "🥈" : i === 2 && copies > 0 ? "🥉" : `${i+1}.`}
+              </div>
+              <div style={{...nameStyle, minWidth:110, maxWidth:110}} title={id}>{modelName(id)}</div>
+              <div style={barTrack}>
+                <div style={{ height:"100%", borderRadius:5,
+                              background: i === 0 && copies > 0 ? "var(--yellow)" : "rgba(255,255,255,0.15)",
+                              width:`${copies > 0 ? Math.max(4,Math.round((copies/maxCopies)*100)) : 1}%`,
+                              transition:"width 0.4s ease" }} />
+              </div>
+              <div style={numStyle}>{copies} {t("stats_copies")}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Avg latency ── */}
+      {byLatency.length > 0 && (
+        <div style={sectionStyle}>
+          <div style={sectionHead}>⚡ {t("stats_section_latency")}</div>
+          {byLatency.map(([id, s]) => {
+            const avg = s.latency.reduce((a,v)=>a+v,0)/s.latency.length;
+            const minLat = byLatency[0] ? byLatency[0][1].latency.reduce((a,v)=>a+v,0)/byLatency[0][1].latency.length : 1;
+            const maxLat = Math.max(...byLatency.map(([,x]) => x.latency.reduce((a,v)=>a+v,0)/x.latency.length), 1);
+            const pct = Math.max(4, Math.round((avg / maxLat) * 100));
+            const color = avg <= minLat * 1.5 ? "var(--green)" : avg <= minLat * 3 ? "var(--yellow)" : "var(--red)";
+            return (
+              <div key={id} style={rowStyle}>
+                <div style={nameStyle} title={id}>{modelName(id)}</div>
+                <div style={barTrack}>
+                  <div style={{ height:"100%", borderRadius:5, background:color, width:`${pct}%`, transition:"width 0.4s ease" }} />
+                </div>
+                <div style={{ minWidth:70, textAlign:"right", fontSize:12, fontFamily:"var(--mono)", color }}>
+                  {avg.toFixed(2)}{t("stats_latency_unit")} {t("stats_latency_avg")}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ── Daily sparklines ── */}
+      <div style={sectionStyle}>
+        <div style={sectionHead}>📅 {t("stats_section_daily")}</div>
+        {byTokens.map(([id, s]) => {
+          const hasDailyData = last7.some(d => (s.daily?.[d]?.tokens || 0) > 0);
+          return (
+            <div key={id} style={{ marginBottom:14 }}>
+              <div style={{ fontSize:11, color:"var(--text)", fontFamily:"var(--mono)", marginBottom:5 }}>{modelName(id)}</div>
+              {!hasDailyData
+                ? <div style={{ fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", paddingLeft:2 }}>{t("stats_no_history")}</div>
+                : <div style={{ display:"flex", gap:4, alignItems:"flex-end", height:36 }}>
+                    {last7.map(d => {
+                      const tok = s.daily?.[d]?.tokens || 0;
+                      const h = maxDayTokens > 0 ? Math.max(3, Math.round((tok / maxDayTokens) * 32)) : 3;
+                      return (
+                        <div key={d} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
+                          <div title={`${d}: ${tok.toLocaleString()} tokens`}
+                               style={{ width:22, height:`${h}px`, borderRadius:"3px 3px 0 0",
+                                        background: tok > 0 ? "var(--accent)" : "rgba(255,255,255,0.07)",
+                                        transition:"height 0.3s ease", cursor:"default" }} />
+                          <div style={{ fontSize:9, color:"var(--text2)", fontFamily:"var(--mono)" }}>{dayLabel(d)}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+              }
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Reset button ── */}
+      <div style={{ marginTop:8, paddingTop:20, borderTop:"1px solid var(--border)" }}>
+        {!confirmReset
+          ? <button className="btn btn-ghost btn-sm" onClick={() => setConfirmReset(true)}>🗑 {t("stats_reset")}</button>
+          : <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+              <span style={{ fontSize:13, color:"var(--text2)" }}>{t("stats_reset_confirm")}</span>
+              <button className="btn btn-sm" style={{ background:"var(--red)", color:"#fff", border:"none" }}
+                      onClick={async () => { await onReset(); setConfirmReset(false); setResetDone(true); setTimeout(()=>setResetDone(false),2500); }}>
+                ✓ {t("stats_reset")}
+              </button>
+              <button className="btn btn-ghost btn-sm" onClick={() => setConfirmReset(false)}>✕</button>
+            </div>
+        }
+        {resetDone && <div style={{ fontSize:12, color:"var(--green)", marginTop:8, fontFamily:"var(--mono)" }}>✓ {t("stats_reset_done")}</div>}
       </div>
     </div>
   );
