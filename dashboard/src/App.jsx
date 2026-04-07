@@ -284,6 +284,18 @@ const I18N = {
     help_compare_export_body:"Exports the full comparison as a .md file including the prompt, each model's full response, response time, token count, and the exact model ID (provider/version). Useful for documenting benchmarks or sharing results with your team.",
     help_compare_sort_title:"Sort & Focus",
     help_compare_sort_body:"Sort cards by ⚡ Speed (fastest first) or 📝 Tokens (most tokens first). Use ⛶ Focus to expand a single card to full width for easier reading. Click again to return to the grid.",
+    help_stats_title:"Stats — Usage Analytics",
+    help_stats_intro:"The Stats tab tracks your actual usage across all models — tokens consumed, estimated API cost, response quality (based on what you copy), and latency trends. All data is stored locally in ~/.airvo/stats.json.",
+    help_stats_tokens_title:"📊 Tokens by Model",
+    help_stats_tokens_body:"Horizontal bars showing total tokens generated per model since stats were last reset. Useful for understanding which models you rely on most.",
+    help_stats_cost_title:"💰 Estimated Cost",
+    help_stats_cost_body:"Estimated API spend per model based on typical pricing (e.g. OpenAI ~$5/1M tokens, Anthropic ~$9/1M). Local models (Ollama, LM Studio) always show Free. These are estimates — check your provider dashboard for exact billing.",
+    help_stats_quality_title:"⭐ Quality Ranking",
+    help_stats_quality_body:"Models ranked by how many times you clicked Copy on their responses. This is an implicit quality signal — if you copy a model's answer, it was useful. 🥇🥈🥉 medals go to the top 3.",
+    help_stats_latency_title:"⚡ Avg Latency",
+    help_stats_latency_body:"Average response time per model across all recorded requests. Green = fastest relative to others, yellow = moderate, red = slowest. Useful for choosing the right model when speed matters.",
+    help_stats_daily_title:"📅 Daily Activity",
+    help_stats_daily_body:"Sparkline bars showing token usage per day over the last 7 days. Helps you spot patterns — e.g. which models you use more on heavy coding days.",
     config_context_memory_section:"Context & Memory",
     toast_activated:"Model activated", toast_deactivated:"Model deactivated",
     toast_key_saved:"API key saved ✓", toast_key_error:"Enter a valid API key",
@@ -570,6 +582,18 @@ const I18N = {
     help_compare_export_body:"Exporta la comparación completa como .md incluyendo el prompt, la respuesta de cada modelo, tiempo de respuesta, cantidad de tokens y el ID exacto del modelo (proveedor/versión).",
     help_compare_sort_title:"Ordenar y Focus",
     help_compare_sort_body:"Ordená las cards por ⚡ Velocidad o 📝 Tokens. Usá ⛶ Focus para expandir una sola card al ancho completo para leer con más comodidad.",
+    help_stats_title:"Stats — Análisis de Uso",
+    help_stats_intro:"La pestaña Stats registra tu uso real en todos los modelos — tokens consumidos, costo estimado de API, calidad de respuesta (basado en lo que copiás) y tendencias de latencia. Todos los datos se guardan localmente en ~/.airvo/stats.json.",
+    help_stats_tokens_title:"📊 Tokens por Modelo",
+    help_stats_tokens_body:"Barras horizontales que muestran los tokens totales generados por modelo desde el último reset. Útil para entender en qué modelos te apoyás más.",
+    help_stats_cost_title:"💰 Costo Estimado",
+    help_stats_cost_body:"Gasto estimado de API por modelo basado en precios típicos (ej. OpenAI ~$5/1M tokens, Anthropic ~$9/1M). Los modelos locales (Ollama, LM Studio) siempre muestran Gratis. Son estimaciones — consultá tu dashboard del proveedor para facturación exacta.",
+    help_stats_quality_title:"⭐ Ranking de Calidad",
+    help_stats_quality_body:"Modelos rankeados por cuántas veces hiciste clic en Copiar en sus respuestas. Es una señal implícita de calidad — si copiás la respuesta de un modelo, fue útil. Las medallas 🥇🥈🥉 van al top 3.",
+    help_stats_latency_title:"⚡ Latencia Promedio",
+    help_stats_latency_body:"Tiempo de respuesta promedio por modelo en todas las solicitudes registradas. Verde = más rápido relativo a los demás, amarillo = moderado, rojo = más lento. Útil para elegir el modelo correcto cuando la velocidad importa.",
+    help_stats_daily_title:"📅 Actividad Diaria",
+    help_stats_daily_body:"Barras sparkline que muestran el uso de tokens por día en los últimos 7 días. Ayuda a detectar patrones — ej. qué modelos usás más en días de mucho código.",
     config_context_memory_section:"Contexto & Memoria",
     toast_activated:"Modelo activado", toast_deactivated:"Modelo desactivado",
     toast_key_saved:"API key guardada ✓", toast_key_error:"Ingresá una API key válida",
@@ -853,6 +877,18 @@ const I18N = {
     help_compare_export_body:"Exporte la comparaison complète en .md incluant le prompt, la réponse de chaque modèle, le temps de réponse, le nombre de tokens et l'ID exact du modèle.",
     help_compare_sort_title:"Trier & Focus",
     help_compare_sort_body:"Triez les cartes par ⚡ Vitesse ou 📝 Tokens. Utilisez ⛶ Focus pour agrandir une seule carte.",
+    help_stats_title:"Stats — Analyses d'Utilisation",
+    help_stats_intro:"L'onglet Stats suit votre utilisation réelle sur tous les modèles — tokens consommés, coût estimé de l'API, qualité des réponses (basée sur ce que vous copiez) et tendances de latence. Toutes les données sont stockées localement dans ~/.airvo/stats.json.",
+    help_stats_tokens_title:"📊 Tokens par Modèle",
+    help_stats_tokens_body:"Barres horizontales indiquant le total des tokens générés par modèle depuis la dernière réinitialisation. Utile pour comprendre quels modèles vous utilisez le plus.",
+    help_stats_cost_title:"💰 Coût Estimé",
+    help_stats_cost_body:"Dépenses API estimées par modèle selon les tarifs typiques (ex. OpenAI ~5$/1M tokens, Anthropic ~9$/1M). Les modèles locaux (Ollama, LM Studio) affichent toujours Gratuit. Ce sont des estimations — consultez votre tableau de bord fournisseur pour la facturation exacte.",
+    help_stats_quality_title:"⭐ Classement Qualité",
+    help_stats_quality_body:"Modèles classés par nombre de clics sur Copier dans leurs réponses. C'est un signal de qualité implicite — si vous copiez la réponse d'un modèle, elle était utile. Les médailles 🥇🥈🥉 vont au top 3.",
+    help_stats_latency_title:"⚡ Latence Moyenne",
+    help_stats_latency_body:"Temps de réponse moyen par modèle sur toutes les requêtes enregistrées. Vert = le plus rapide, jaune = modéré, rouge = le plus lent. Utile pour choisir le bon modèle quand la vitesse compte.",
+    help_stats_daily_title:"📅 Activité Quotidienne",
+    help_stats_daily_body:"Barres sparkline montrant l'utilisation des tokens par jour sur les 7 derniers jours. Aide à identifier des tendances — ex. quels modèles vous utilisez le plus lors des journées intenses.",
     config_context_memory_section:"Contexte & Mémoire",
     toast_activated:"Modèle activé", toast_deactivated:"Modèle désactivé",
     toast_key_saved:"Clé API enregistrée ✓", toast_key_error:"Entrez une clé API valide",
@@ -1136,6 +1172,18 @@ const I18N = {
     help_compare_export_body:"Exportiert den vollständigen Vergleich als .md-Datei inkl. Prompt, Antworten, Antwortzeit, Token-Anzahl und exakter Modell-ID.",
     help_compare_sort_title:"Sortieren & Focus",
     help_compare_sort_body:"Karten nach ⚡ Geschwindigkeit oder 📝 Tokens sortieren. ⛶ Focus vergrößert eine einzelne Karte.",
+    help_stats_title:"Stats — Nutzungsanalyse",
+    help_stats_intro:"Die Stats-Registerkarte verfolgt Ihre tatsächliche Nutzung über alle Modelle — verbrauchte Tokens, geschätzte API-Kosten, Antwortqualität (basierend auf dem, was Sie kopieren) und Latenztrends. Alle Daten werden lokal in ~/.airvo/stats.json gespeichert.",
+    help_stats_tokens_title:"📊 Tokens pro Modell",
+    help_stats_tokens_body:"Horizontale Balken, die die seit dem letzten Reset erzeugten Tokens pro Modell anzeigen. Nützlich, um zu verstehen, welche Modelle Sie am meisten nutzen.",
+    help_stats_cost_title:"💰 Geschätzte Kosten",
+    help_stats_cost_body:"Geschätzte API-Ausgaben pro Modell basierend auf typischen Preisen (z.B. OpenAI ~5$/1M Tokens, Anthropic ~9$/1M). Lokale Modelle (Ollama, LM Studio) zeigen immer Kostenlos. Dies sind Schätzungen — prüfen Sie Ihr Anbieter-Dashboard für genaue Abrechnung.",
+    help_stats_quality_title:"⭐ Qualitätsranking",
+    help_stats_quality_body:"Modelle nach Anzahl der Klicks auf Kopieren bei ihren Antworten bewertet. Dies ist ein implizites Qualitätssignal — wenn Sie die Antwort eines Modells kopieren, war sie nützlich. Die Medaillen 🥇🥈🥉 gehen an die Top 3.",
+    help_stats_latency_title:"⚡ Durchschn. Latenz",
+    help_stats_latency_body:"Durchschnittliche Antwortzeit pro Modell über alle aufgezeichneten Anfragen. Grün = am schnellsten, gelb = moderat, rot = am langsamsten. Nützlich, wenn Geschwindigkeit entscheidend ist.",
+    help_stats_daily_title:"📅 Tägliche Aktivität",
+    help_stats_daily_body:"Sparkline-Balken, die die Token-Nutzung pro Tag über die letzten 7 Tage zeigen. Hilft Muster zu erkennen — z.B. welche Modelle Sie an intensiven Coding-Tagen mehr nutzen.",
     config_context_memory_section:"Kontext & Speicher",
     toast_activated:"Modell aktiviert", toast_deactivated:"Modell deaktiviert",
     toast_key_saved:"API-Schlüssel gespeichert ✓", toast_key_error:"Geben Sie einen gültigen API-Schlüssel ein",
@@ -1419,6 +1467,18 @@ const I18N = {
     help_compare_export_body:"将完整比较导出为 .md 文件，包括提示词、每个模型的回答、响应时间、token 数量和精确模型 ID。",
     help_compare_sort_title:"排序与专注模式",
     help_compare_sort_body:"按 ⚡ 速度或 📝 Token 数量排序卡片。⛶ 专注模式将单张卡片扩展至全宽。",
+    help_stats_title:"统计 — 使用分析",
+    help_stats_intro:"统计标签页追踪所有模型的实际使用情况——消耗的 token、估算的 API 费用、回答质量（基于您的复制行为）和延迟趋势。所有数据本地存储在 ~/.airvo/stats.json 中。",
+    help_stats_tokens_title:"📊 各模型 Token 用量",
+    help_stats_tokens_body:"水平条形图显示自上次重置以来每个模型生成的总 token 数。有助于了解您最依赖哪些模型。",
+    help_stats_cost_title:"💰 估算费用",
+    help_stats_cost_body:"基于典型定价估算每个模型的 API 支出（如 OpenAI ~$5/1M tokens，Anthropic ~$9/1M）。本地模型（Ollama、LM Studio）始终显示免费。这些是估算值——请查看您的服务商控制台了解确切账单。",
+    help_stats_quality_title:"⭐ 质量排名",
+    help_stats_quality_body:"按您点击复制该模型回答的次数对模型进行排名。这是隐式质量信号——如果您复制了某个模型的答案，说明它有用。🥇🥈🥉 奖牌授予前三名。",
+    help_stats_latency_title:"⚡ 平均延迟",
+    help_stats_latency_body:"所有记录请求中每个模型的平均响应时间。绿色 = 相对最快，黄色 = 中等，红色 = 最慢。在速度重要时选择合适模型时很有用。",
+    help_stats_daily_title:"📅 每日活动",
+    help_stats_daily_body:"迷你条形图显示过去 7 天每天的 token 使用情况。帮助发现规律——例如在高强度编码日您更多使用哪些模型。",
     config_context_memory_section:"上下文与内存",
     toast_activated:"模型已激活", toast_deactivated:"模型已停用",
     toast_key_saved:"API 密钥已保存 ✓", toast_key_error:"请输入有效的 API 密钥",
@@ -1702,6 +1762,18 @@ const I18N = {
     help_compare_export_body:"プロンプト、各モデルの回答、応答時間、トークン数、正確なモデルIDを含む完全な比較を.mdファイルとしてエクスポートします。",
     help_compare_sort_title:"並び替えとフォーカス",
     help_compare_sort_body:"⚡速度または📝トークン数でカードを並び替え。⛶フォーカスで1枚のカードを全幅に拡大できます。",
+    help_stats_title:"Stats — 使用状況アナリティクス",
+    help_stats_intro:"Statsタブは全モデルの実際の使用状況を追跡します——消費トークン、推定APIコスト、回答品質（コピーした内容に基づく）、レイテンシの傾向。すべてのデータは~/.airvo/stats.jsonにローカル保存されます。",
+    help_stats_tokens_title:"📊 モデル別トークン",
+    help_stats_tokens_body:"統計をリセットしてからモデルごとに生成された総トークン数を示す横棒グラフ。どのモデルを最も多く使っているかを把握するのに役立ちます。",
+    help_stats_cost_title:"💰 推定コスト",
+    help_stats_cost_body:"一般的な料金に基づくモデルごとの推定API支出（例：OpenAI ~$5/1Mトークン、Anthropic ~$9/1M）。ローカルモデル（Ollama、LM Studio）は常に無料と表示。これらは推定値です——正確な請求はプロバイダーのダッシュボードを確認してください。",
+    help_stats_quality_title:"⭐ 品質ランキング",
+    help_stats_quality_body:"回答に対してコピーをクリックした回数でモデルをランキング。これは暗黙的な品質シグナルです——モデルの回答をコピーしたなら、それは有用だったということ。🥇🥈🥉はトップ3に授与されます。",
+    help_stats_latency_title:"⚡ 平均レイテンシ",
+    help_stats_latency_body:"記録された全リクエストのモデルごとの平均応答時間。緑 = 他より最速、黄 = 中程度、赤 = 最遅。速度が重要な場面で適切なモデルを選ぶのに役立ちます。",
+    help_stats_daily_title:"📅 日別アクティビティ",
+    help_stats_daily_body:"過去7日間の日ごとのトークン使用量を示すスパークライン棒グラフ。傾向を発見するのに役立ちます——例えばコーディング集中日にどのモデルをより多く使うかなど。",
     config_context_memory_section:"コンテキスト & メモリ",
     toast_activated:"モデルを有効化しました", toast_deactivated:"モデルを無効化しました",
     toast_key_saved:"APIキーを保存しました ✓", toast_key_error:"有効なAPIキーを入力してください",
@@ -1985,6 +2057,18 @@ const I18N = {
     help_compare_export_body:"Exporta a comparação completa como .md incluindo o prompt, resposta de cada modelo, tempo de resposta, contagem de tokens e ID exato do modelo.",
     help_compare_sort_title:"Ordenar e Foco",
     help_compare_sort_body:"Ordene os cards por ⚡ Velocidade ou 📝 Tokens. Use ⛶ Foco para expandir um único card para largura total.",
+    help_stats_title:"Stats — Análise de Uso",
+    help_stats_intro:"A aba Stats rastreia seu uso real em todos os modelos — tokens consumidos, custo estimado de API, qualidade das respostas (baseado no que você copia) e tendências de latência. Todos os dados são armazenados localmente em ~/.airvo/stats.json.",
+    help_stats_tokens_title:"📊 Tokens por Modelo",
+    help_stats_tokens_body:"Barras horizontais mostrando o total de tokens gerados por modelo desde o último reset. Útil para entender em quais modelos você mais se apoia.",
+    help_stats_cost_title:"💰 Custo Estimado",
+    help_stats_cost_body:"Gasto estimado de API por modelo com base em preços típicos (ex. OpenAI ~$5/1M tokens, Anthropic ~$9/1M). Modelos locais (Ollama, LM Studio) sempre mostram Grátis. São estimativas — consulte o painel do seu provedor para faturamento exato.",
+    help_stats_quality_title:"⭐ Ranking de Qualidade",
+    help_stats_quality_body:"Modelos classificados por quantas vezes você clicou em Copiar nas respostas deles. Este é um sinal implícito de qualidade — se você copia a resposta de um modelo, ela foi útil. As medalhas 🥇🥈🥉 vão para o top 3.",
+    help_stats_latency_title:"⚡ Latência Média",
+    help_stats_latency_body:"Tempo médio de resposta por modelo em todas as requisições registradas. Verde = mais rápido em relação aos outros, amarelo = moderado, vermelho = mais lento. Útil para escolher o modelo certo quando a velocidade importa.",
+    help_stats_daily_title:"📅 Atividade Diária",
+    help_stats_daily_body:"Barras sparkline mostrando o uso de tokens por dia nos últimos 7 dias. Ajuda a identificar padrões — ex. quais modelos você usa mais em dias intensos de programação.",
     config_context_memory_section:"Contexto & Memória",
     toast_activated:"Modelo ativado", toast_deactivated:"Modelo desativado",
     toast_key_saved:"Chave API salva ✓", toast_key_error:"Insira uma chave API válida",
@@ -2479,23 +2563,23 @@ function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, on
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:6, flexShrink:0 }}>
           {result.error ? (
-            <span className="compare-badge" style={{ background:"#2a1a1a", color:"var(--red)", border:"1px solid #4a2a2a" }}>
+            <span className="compare-badge" title={result.error} style={{ background:"#2a1a1a", color:"var(--red)", border:"1px solid #4a2a2a" }}>
               {t("compare_error_badge")}
             </span>
           ) : (
             <>
               {result.elapsed_s != null && (
-                <span className="compare-badge" style={{ background:"#0a1a0a", color:"var(--green)", border:"1px solid #2a4a2a" }}>
+                <span className="compare-badge" title={`Response time: ${result.elapsed_s}s — how long this model took to generate the full response`} style={{ background:"#0a1a0a", color:"var(--green)", border:"1px solid #2a4a2a" }}>
                   ⚡ {result.elapsed_s}{t("compare_elapsed")}
                 </span>
               )}
               {result.tokens > 0 && (
-                <span className="compare-badge" style={{ background:"var(--bg3)", color:"var(--text2)", border:"1px solid var(--border)" }}>
+                <span className="compare-badge" title={`${result.tokens} output tokens generated by this model`} style={{ background:"var(--bg3)", color:"var(--text2)", border:"1px solid var(--border)" }}>
                   {result.tokens} {t("compare_tokens")}
                 </span>
               )}
               {result.tokens > 0 && result.elapsed_s > 0 && (
-                <span className="compare-badge" style={{ background:"#0a0a1a", color:"var(--accent)", border:"1px solid #2a2a4a" }}>
+                <span className="compare-badge" title={`${(result.tokens / result.elapsed_s).toFixed(0)} tokens per second — generation speed. Higher = faster model`} style={{ background:"#0a0a1a", color:"var(--accent)", border:"1px solid #2a2a4a" }}>
                   {(result.tokens / result.elapsed_s).toFixed(0)} {t("compare_tok_s")}
                 </span>
               )}
@@ -4862,6 +4946,32 @@ function HelpPage({ t, setPage }) {
         ))}
         <div style={{ marginTop:16 }}>
           <button className="btn btn-primary" onClick={() => setPage("compare")}>⊞ {t("nav_compare")}</button>
+        </div>
+      </div>
+
+      {/* Stats tab */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">📊</span>
+          {t("help_stats_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-desc" style={{ lineHeight:1.8 }}>{t("help_stats_intro")}</div>
+        </div>
+        {[
+          { icon:"📊", tk:"tokens"  },
+          { icon:"💰", tk:"cost"    },
+          { icon:"⭐", tk:"quality" },
+          { icon:"⚡", tk:"latency" },
+          { icon:"📅", tk:"daily"   },
+        ].map(({ icon, tk }) => (
+          <div key={tk} className="help-field-block">
+            <div className="help-field-title">{icon} {t(`help_stats_${tk}_title`)}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{t(`help_stats_${tk}_body`)}</div>
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("stats")}>📊 {t("nav_stats")}</button>
         </div>
       </div>
 
