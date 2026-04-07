@@ -7,12 +7,13 @@ import asyncio
 import json
 import logging
 import time
+from collections import deque
 
 from airvo.config.settings import settings, save_models
 
 logger = logging.getLogger(__name__)
 
-_compare_store: list = []   # holds last multi-model response for Compare view
+_compare_store: deque = deque(maxlen=10)   # holds last 10 multi-model responses for Compare view
 
 router = APIRouter()
 
@@ -120,7 +121,9 @@ async def call_model(model_config: dict, messages: list, request):
         if model_config.get("base_url"):
             kwargs["api_base"] = model_config["base_url"]
 
+        _t0 = time.time()
         response = await litellm.acompletion(**kwargs)
+        _elapsed = round(time.time() - _t0, 2)
 
         # Record usage stats
         usage  = response.usage
@@ -128,19 +131,21 @@ async def call_model(model_config: dict, messages: list, request):
         settings.record_usage(model_config["id"], tokens)
 
         return {
-            "model":   model_config["id"],
-            "name":    model_config.get("name", model_config["id"]),
-            "content": response.choices[0].message.content,
-            "error":   None,
-            "tokens":  tokens
+            "model":     model_config["id"],
+            "name":      model_config.get("name", model_config["id"]),
+            "content":   response.choices[0].message.content,
+            "error":     None,
+            "tokens":    tokens,
+            "elapsed_s": _elapsed,
         }
     except Exception as e:
         return {
-            "model":   model_config["id"],
-            "name":    model_config.get("name", model_config["id"]),
-            "content": None,
-            "error":   str(e),
-            "tokens":  0
+            "model":     model_config["id"],
+            "name":      model_config.get("name", model_config["id"]),
+            "content":   None,
+            "error":     str(e),
+            "tokens":    0,
+            "elapsed_s": None,
         }
 
 # ── Multi-model modes ────────────────────────────────────────────────────
@@ -470,19 +475,19 @@ async def chat_completions(request: ChatRequest):
              if m["role"] == "user" and isinstance(m.get("content"), str)),
             "",
         )
-        _compare_store.clear()
-        _compare_store.append({
+        _compare_store.appendleft({
             "id":        str(time.time()),
             "timestamp": time.time(),
             "mode":      mode,
             "prompt":    _last_prompt[:500],
             "results": [
                 {
-                    "model":   r["model"],
-                    "name":    r["name"],
-                    "content": r["content"],
-                    "error":   r["error"],
-                    "tokens":  r["tokens"],
+                    "model":     r["model"],
+                    "name":      r["name"],
+                    "content":   r["content"],
+                    "error":     r["error"],
+                    "tokens":    r["tokens"],
+                    "elapsed_s": r.get("elapsed_s"),
                 }
                 for r in results
             ],
@@ -836,6 +841,13 @@ async def compare_latest():
     if not _compare_store:
         return {"data": None}
     return {"data": _compare_store[0]}
+
+
+@router.get("/api/compare/history", tags=["Compare"], summary="Compare history (last 10)",
+    description="Returns the last 10 multi-model comparisons in reverse chronological order.")
+async def compare_history():
+    """Return up to the last 10 multi-model responses."""
+    return {"history": list(_compare_store)}
 
 
 

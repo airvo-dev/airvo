@@ -281,6 +281,11 @@ const I18N = {
     compare_error_badge:"Error",
     compare_at:"Last updated",
     compare_auto:"Auto",
+    compare_elapsed:"s",
+    compare_history_label:"History",
+    compare_of:"of",
+    compare_export:"Export MD",
+    compare_export_done:"Exported ✓",
   },
   es: {
     nav_models:"Modelos", nav_status:"Estado", nav_config:"Configuración",
@@ -498,6 +503,11 @@ const I18N = {
     compare_error_badge:"Error",
     compare_at:"Última actualización",
     compare_auto:"Auto",
+    compare_elapsed:"s",
+    compare_history_label:"Historial",
+    compare_of:"de",
+    compare_export:"Exportar MD",
+    compare_export_done:"Exportado ✓",
   },
   fr: {
     nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun",
@@ -712,6 +722,11 @@ const I18N = {
     compare_error_badge:"Erreur",
     compare_at:"Dernière mise à jour",
     compare_auto:"Auto",
+    compare_elapsed:"s",
+    compare_history_label:"Historique",
+    compare_of:"sur",
+    compare_export:"Exporter MD",
+    compare_export_done:"Exporté ✓",
   },
   de: {
     nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine",
@@ -926,6 +941,11 @@ const I18N = {
     compare_error_badge:"Fehler",
     compare_at:"Zuletzt aktualisiert",
     compare_auto:"Auto",
+    compare_elapsed:"s",
+    compare_history_label:"Verlauf",
+    compare_of:"von",
+    compare_export:"MD exportieren",
+    compare_export_done:"Exportiert ✓",
   },
   zh: {
     nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无",
@@ -1140,6 +1160,11 @@ const I18N = {
     compare_error_badge:"错误",
     compare_at:"最后更新",
     compare_auto:"自动",
+    compare_elapsed:"s",
+    compare_history_label:"历史",
+    compare_of:"/",
+    compare_export:"导出 MD",
+    compare_export_done:"已导出 ✓",
   },
   ja: {
     nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし",
@@ -1354,6 +1379,11 @@ const I18N = {
     compare_error_badge:"エラー",
     compare_at:"最終更新",
     compare_auto:"自動",
+    compare_elapsed:"s",
+    compare_history_label:"履歴",
+    compare_of:"/",
+    compare_export:"MD エクスポート",
+    compare_export_done:"エクスポート済み ✓",
   },
   pt: {
     nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum",
@@ -1568,6 +1598,11 @@ const I18N = {
     compare_error_badge:"Erro",
     compare_at:"Última atualização",
     compare_auto:"Auto",
+    compare_elapsed:"s",
+    compare_history_label:"Histórico",
+    compare_of:"de",
+    compare_export:"Exportar MD",
+    compare_export_done:"Exportado ✓",
   },
 };
 
@@ -1888,11 +1923,20 @@ function CompareCard({ result, index, t }) {
           <span className="compare-badge" style={{ background:"#2a1a1a", color:"var(--red)", border:"1px solid #4a2a2a" }}>
             {t("compare_error_badge")}
           </span>
-        ) : result.tokens > 0 ? (
-          <span className="compare-badge" style={{ background:"var(--bg3)", color:"var(--text2)", border:"1px solid var(--border)" }}>
-            {result.tokens} {t("compare_tokens")}
-          </span>
-        ) : null}
+        ) : (
+          <div style={{ display:"flex", gap:6, alignItems:"center", flexShrink:0 }}>
+            {result.elapsed_s != null && (
+              <span className="compare-badge" style={{ background:"#0a1a0a", color:"var(--green)", border:"1px solid #2a4a2a" }}>
+                ⚡ {result.elapsed_s}{t("compare_elapsed")}
+              </span>
+            )}
+            {result.tokens > 0 && (
+              <span className="compare-badge" style={{ background:"var(--bg3)", color:"var(--text2)", border:"1px solid var(--border)" }}>
+                {result.tokens} {t("compare_tokens")}
+              </span>
+            )}
+          </div>
+        )}
       </div>
       <div className="compare-card-body">
         {result.error
@@ -1965,6 +2009,9 @@ export default function AirvoDashboard() {
   const [compareData,    setCompareData]    = useState(null);
   const [compareLoading, setCompareLoading] = useState(false);
   const [compareAutoRefresh, setCompareAutoRefresh] = useState(false);
+  const [compareHistory, setCompareHistory] = useState([]);
+  const [compareHistIdx, setCompareHistIdx] = useState(0);
+  const [compareExportDone, setCompareExportDone] = useState(false);
   const compareLastId = useRef(null);
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
@@ -2018,15 +2065,23 @@ export default function AirvoDashboard() {
   const fetchCompare = useCallback(async (silent = false) => {
     if (!silent) setCompareLoading(true);
     try {
-      const res = await fetch(`${API}/api/compare/latest`);
-      if (res.ok) {
-        const data = await res.json();
+      const [latestRes, histRes] = await Promise.all([
+        fetch(`${API}/api/compare/latest`),
+        fetch(`${API}/api/compare/history`),
+      ]);
+      if (latestRes.ok) {
+        const data = await latestRes.json();
         const newData = data.data || null;
         const newId = newData?.id ?? null;
         if (newId !== compareLastId.current) {
           compareLastId.current = newId;
           setCompareData(newData);
+          setCompareHistIdx(0);
         }
+      }
+      if (histRes.ok) {
+        const h = await histRes.json();
+        setCompareHistory(h.history || []);
       }
     } catch {}
     finally { if (!silent) setCompareLoading(false); }
