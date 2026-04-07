@@ -2469,7 +2469,8 @@ export default function AirvoDashboard() {
   async function streamCompare(overridePrompt) {
     const prompt = (overridePrompt !== undefined ? overridePrompt : comparePrompt).trim();
     if (!prompt) return;
-    if (overridePrompt !== undefined) setComparePrompt(overridePrompt);
+    const hadOverride = overridePrompt !== undefined;
+    if (hadOverride) setComparePrompt(overridePrompt);
     const active = models.filter(m => m.active);
     if (active.length < 2) { toast(t("compare_run_error"), "error"); return; }
     setCompareRunning(true);
@@ -2526,7 +2527,7 @@ export default function AirvoDashboard() {
                 return next;
               });
             } else if (ev.type === "complete") {
-              setComparePrompt("");
+              if (!hadOverride) setComparePrompt("");
               await fetchCompare(false);
               setCompareStreamSlots([]);
             }

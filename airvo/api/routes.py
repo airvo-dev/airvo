@@ -1009,8 +1009,9 @@ async def compare_stream_run(req: CompareRunRequest):
     ]
 
     class _FakeReq:
-        max_tokens  = req.max_tokens
-        temperature = req.temperature
+        max_tokens         = req.max_tokens
+        temperature        = req.temperature
+        model_temperatures = req.model_temperatures
 
     async def event_gen():
         queue   = asyncio.Queue()

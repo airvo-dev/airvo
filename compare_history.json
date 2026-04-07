@@ -1,5 +1,53 @@
 [
   {
+    "id": "1775540141.4126806",
+    "timestamp": 1775540141.4126806,
+    "mode": "parallel",
+    "prompt": "Que es un lista en python",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "En Python, una lista es un tipo de dato que almacena una colección de valores, que pueden ser de cualquier tipo, como números, cadenas de texto, booleanos, etc. Las listas se representan con corchetes cuadrados `[]` y se pueden crear de varias maneras.\n\nPor ejemplo:\n\n- `mi_lista = []` crea una lista vacía.\n- `mi_lista = [1, 2, 3, 4, 5]` crea una lista con los valores 1, 2, 3, 4 y 5.\n- `mi_lista = [\"hola\", \"mundo\"]` crea una lista con las cadenas de texto \"hola\" y \"mundo\".\n\nLas listas en Python son mutables, lo que significa que se pueden modificar después de su creación. Puedes agregar o eliminar elementos de una lista utilizando métodos como `append()`, `insert()`, `remove()`, etc.\n\nAquí hay algunos ejemplos de cómo trabajar con listas en Python:\n\n```python\n# Crear una lista vacía\nmi_lista = []\n\n# Agregar elementos a la lista\nmi_lista.append(1)\nmi_lista.append(2)\nmi_lista.append(3)\n\n# Imprimir la lista\nprint(mi_lista)  # [1, 2, 3]\n\n# Eliminar un elemento de la lista\nmi_lista.remove(2)\n\n# Imprimir la lista\nprint(mi_lista)  # [1, 3]\n\n# Acceder a un elemento de la lista\nprint(mi_lista[0])  # 1\n```\n\nEspero que esto te haya ayudado a entender qué es una lista en Python. ¿Tienes alguna otra pregunta sobre listas en Python?",
+        "error": null,
+        "tokens": 209,
+        "elapsed_s": 0.9
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "En Python, una lista (list) es una estructura de datos que permite almacenar una colección de elementos de diferentes tipos, como números, cadenas de texto, booleanos, etc. Las listas son mutables, lo que significa que se pueden modificar después de su creación.\n\n**Características de las listas en Python:**\n\n1. **Ordenadas**: Las listas mantienen el orden en el que se agregan los elementos.\n2. **Indexadas**: Cada elemento de la lista tiene un índice asociado, que se utiliza para acceder a ese elemento.\n3. **Mutables**: Las listas se pueden modificar después de su creación.\n4. **Dinámicas**: Las listas pueden crecer o disminuir en tamaño según sea necesario.\n\n**Sintaxis básica:**\n\nUna lista en Python se define utilizando corchetes `[]` y separando los elementos con comas `,`. Por ejemplo:\n```python\nmi_lista = [1, 2, 3, \"hola\", True]\n```\n**Métodos comunes:**\n\n* `append()`: Agrega un elemento al final de la lista.\n* `insert()`: Inserta un elemento en una posición específica de la lista.\n* `remove()`: Elimina el primer elemento que coincide con el valor especificado.\n* `sort()`: Ordena la lista en orden ascendente o descendente.\n* `index()`: Devuelve el índice del primer elemento que coincide con el valor especificado.\n\n**Ejemplos:**\n```python\n# Crear una lista\nmi_lista = [1, 2, 3]\n\n# Agregar un elemento al final de la lista\nmi_lista.append(4)\nprint(mi_lista)  # [1, 2, 3, 4]\n\n# Insertar un elemento en una posición específica\nmi_lista.insert(1, \"hola\")\nprint(mi_lista)  # [1, 'hola', 2, 3, 4]\n\n# Eliminar un elemento\nmi_lista.remove(2)\nprint(mi_lista)  # [1, 'hola', 3, 4]\n```\nEspero que esto te haya ayudado a entender mejor las listas en Python. ¿Tienes alguna pregunta adicional?",
+        "error": null,
+        "tokens": 267,
+        "elapsed_s": 1.74
+      }
+    ]
+  },
+  {
+    "id": "1775540023.1482072",
+    "timestamp": 1775540023.1482072,
+    "mode": "parallel",
+    "prompt": "What is a tuple in Python ?",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "A tuple in Python is an immutable, ordered collection of elements that can be of any data type, including strings, integers, floats, and other tuples. It is similar to a list, but tuples cannot be modified after they are created. Tuples are defined by enclosing elements in parentheses `()` instead of square brackets `[]` used for lists.",
+        "error": null,
+        "tokens": 57,
+        "elapsed_s": 0.49
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "**Tuple Definition**\n======================\n\nIn Python, a tuple is a collection of objects that are ordered and immutable. Tuples are defined by enclosing a sequence of values in parentheses `()`.\n\n**Key Characteristics**\n--------------------\n\n*   **Ordered**: Tuples maintain the order in which elements were added.\n*   **Immutable**: Tuples cannot be modified after creation.\n*   **Indexed**: Tuples are indexed, meaning each element can be accessed using its index.\n\n**Example**\n-----------\n\n```python\n# Create a tuple\nmy_tuple = (1, 2, 3, 4, 5)\n\n# Accessing elements\nprint(my_tuple[0])  # Output: 1\n\n# Trying to modify a tuple will result in an error\ntry:\n    my_tuple[0] = 10\nexcept TypeError as e:\n    print(e)  # Output: 'tuple' object does not support item assignment\n```\n\n**Use Cases**\n-------------\n\nTuples are useful when you need to store a collection of objects that should not be changed, such as:\n\n*   Representing a record or a row in a database\n*   Returning multiple values from a function\n*   Using as dictionary keys (since tuples are immutable)",
+        "error": null,
+        "tokens": 164,
+        "elapsed_s": 0.93
+      }
+    ]
+  },
+  {
     "id": "1775538419.4327805",
     "timestamp": 1775538419.4327805,
     "mode": "parallel",
