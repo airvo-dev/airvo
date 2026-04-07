@@ -1720,8 +1720,10 @@ const css = `
   .compare-pre { font-family:var(--mono); font-size:12px; color:var(--text); white-space:pre-wrap; word-break:break-word; line-height:1.7; margin:0; }
   .compare-badge { font-family:var(--mono); font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; flex-shrink:0; }
   .compare-code-block { position:relative; margin:10px 0; border-radius:8px; overflow:hidden; background:#0d0d16; border:1px solid #2a2a3a; }
-  .compare-code-block pre { margin:0; padding:28px 16px 12px; overflow-x:auto; font-family:var(--mono); font-size:12px; line-height:1.7; color:var(--text); }
-  .compare-code-lang { position:absolute; top:7px; right:12px; font-family:var(--mono); font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; pointer-events:none; }
+  .compare-code-block pre { margin:0; padding:12px 16px 12px; overflow-x:auto; font-family:var(--mono); font-size:12px; line-height:1.7; color:var(--text); }
+  .compare-code-header { display:flex; align-items:center; justify-content:space-between; padding:6px 12px; border-bottom:1px solid #2a2a3a; background:#0a0a12; }
+  .compare-code-copy { background:transparent; border:1px solid #2a2a3a; border-radius:4px; color:var(--text2); font-family:var(--mono); font-size:10px; padding:2px 8px; cursor:pointer; transition:all .15s; }
+  .compare-code-copy:hover { border-color:var(--accent); color:var(--accent); }
   .hljs-keyword,.hljs-operator,.hljs-selector-tag,.hljs-built_in { color:#7c6dfa; font-weight:700; }
   .hljs-string,.hljs-attr,.hljs-attribute { color:#4ade80; }
   .hljs-comment,.hljs-quote { color:#8888aa; font-style:italic; }
@@ -1836,6 +1838,29 @@ function highlightCode(code, lang) {
 
 const COMPARE_COLORS = ["var(--accent)", "var(--accent2)", "var(--green)", "var(--yellow)"];
 
+function CodeBlock({ block, t }) {
+  const [copied, setCopied] = useState(false);
+  function handleCopy() {
+    navigator.clipboard.writeText(block.content).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+  return (
+    <div className="compare-code-block">
+      <div className="compare-code-header">
+        <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1 }}>
+          {block.lang || "code"}
+        </span>
+        <button className="compare-code-copy" onClick={handleCopy}>
+          {copied ? t("compare_copied") : t("compare_copy")}
+        </button>
+      </div>
+      <pre dangerouslySetInnerHTML={{ __html: highlightCode(block.content, block.lang) }} />
+    </div>
+  );
+}
+
 function CompareCard({ result, index, t }) {
   const [copied, setCopied] = useState(false);
   const color = COMPARE_COLORS[index % COMPARE_COLORS.length];
@@ -1874,10 +1899,7 @@ function CompareCard({ result, index, t }) {
           ? <div style={{ color:"var(--red)", fontFamily:"var(--mono)", fontSize:12, lineHeight:1.7 }}>✗ {result.error}</div>
           : parseBlocks(result.content || "").map((block, i) =>
               block.type === "code" ? (
-                <div key={i} className="compare-code-block">
-                  {block.lang && <span className="compare-code-lang">{block.lang}</span>}
-                  <pre dangerouslySetInnerHTML={{ __html: highlightCode(block.content, block.lang) }} />
-                </div>
+                <CodeBlock key={i} block={block} t={t} />
               ) : (
                 <pre key={i} className="compare-pre">{block.content}</pre>
               )
