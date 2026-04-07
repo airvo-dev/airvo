@@ -306,6 +306,21 @@ const I18N = {
     compare_diff_tip:"Highlight words unique to each model",
     compare_streaming:"Streaming…",
     compare_stream_done:"Done",
+    compare_rerun:"🔁 Re-run",
+    compare_clear:"🗑 Clear history",
+    compare_clear_confirm:"Clear all compare history? This cannot be undone.",
+    compare_cleared:"History cleared",
+    compare_template_save:"💾 Save",
+    compare_template_saved:"Template saved ✓",
+    compare_templates:"Saved prompts",
+    compare_similarity:"Similarity",
+    compare_diff_word:"Word",
+    compare_diff_sentence:"Sentence",
+    compare_temps:"Per-model temp",
+    compare_temp_reset:"Reset",
+    compare_pin:"Pin as reference",
+    compare_unpin:"Unpin",
+    compare_pinned:"Reference",
   },
   es: {
     nav_models:"Modelos", nav_status:"Estado", nav_config:"Configuración",
@@ -548,6 +563,21 @@ const I18N = {
     compare_diff_tip:"Resaltar palabras únicas de cada modelo",
     compare_streaming:"Streaming…",
     compare_stream_done:"Listo",
+    compare_rerun:"🔁 Repetir",
+    compare_clear:"🗑 Borrar historial",
+    compare_clear_confirm:"¿Borrar todo el historial? Esta acción no se puede deshacer.",
+    compare_cleared:"Historial borrado",
+    compare_template_save:"💾 Guardar",
+    compare_template_saved:"Plantilla guardada ✓",
+    compare_templates:"Prompts guardados",
+    compare_similarity:"Similitud",
+    compare_diff_word:"Palabras",
+    compare_diff_sentence:"Frases",
+    compare_temps:"Temp. por modelo",
+    compare_temp_reset:"Restablecer",
+    compare_pin:"Anclar como referencia",
+    compare_unpin:"Desanclar",
+    compare_pinned:"Referencia",
   },
   fr: {
     nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun",
@@ -787,6 +817,21 @@ const I18N = {
     compare_diff_tip:"Surligner les mots uniques à chaque modèle",
     compare_streaming:"Streaming…",
     compare_stream_done:"Terminé",
+    compare_rerun:"🔁 Relancer",
+    compare_clear:"🗑 Effacer l'historique",
+    compare_clear_confirm:"Effacer tout l'historique ? Action irréversible.",
+    compare_cleared:"Historique effacé",
+    compare_template_save:"💾 Sauvegarder",
+    compare_template_saved:"Modèle sauvegardé ✓",
+    compare_templates:"Prompts sauvegardés",
+    compare_similarity:"Similarité",
+    compare_diff_word:"Mots",
+    compare_diff_sentence:"Phrases",
+    compare_temps:"Temp. par modèle",
+    compare_temp_reset:"Réinitialiser",
+    compare_pin:"Épingler comme référence",
+    compare_unpin:"Désépingler",
+    compare_pinned:"Référence",
   },
   de: {
     nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine",
@@ -1026,6 +1071,21 @@ const I18N = {
     compare_diff_tip:"Einzigartige Wörter je Modell hervorheben",
     compare_streaming:"Streaming…",
     compare_stream_done:"Fertig",
+    compare_rerun:"🔁 Wiederholen",
+    compare_clear:"🗑 Verlauf löschen",
+    compare_clear_confirm:"Gesamten Verlauf löschen? Dies kann nicht rückgängig gemacht werden.",
+    compare_cleared:"Verlauf gelöscht",
+    compare_template_save:"💾 Speichern",
+    compare_template_saved:"Vorlage gespeichert ✓",
+    compare_templates:"Gespeicherte Prompts",
+    compare_similarity:"Ähnlichkeit",
+    compare_diff_word:"Wörter",
+    compare_diff_sentence:"Sätze",
+    compare_temps:"Temp. je Modell",
+    compare_temp_reset:"Zurücksetzen",
+    compare_pin:"Als Referenz anheften",
+    compare_unpin:"Lösen",
+    compare_pinned:"Referenz",
   },
   zh: {
     nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无",
@@ -1265,6 +1325,21 @@ const I18N = {
     compare_diff_tip:"高亮每个模型独有的词语",
     compare_streaming:"流式输出…",
     compare_stream_done:"完成",
+    compare_rerun:"🔁 重新运行",
+    compare_clear:"🗑 清除历史",
+    compare_clear_confirm:"清除所有比较历史？此操作无法撤销。",
+    compare_cleared:"历史已清除",
+    compare_template_save:"💾 保存",
+    compare_template_saved:"模板已保存 ✓",
+    compare_templates:"已保存的提示词",
+    compare_similarity:"相似度",
+    compare_diff_word:"词语",
+    compare_diff_sentence:"句子",
+    compare_temps:"每模型温度",
+    compare_temp_reset:"重置",
+    compare_pin:"设为参考",
+    compare_unpin:"取消固定",
+    compare_pinned:"参考",
   },
   ja: {
     nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし",
@@ -1504,6 +1579,21 @@ const I18N = {
     compare_diff_tip:"各モデルに固有の言葉をハイライト",
     compare_streaming:"ストリーミング中…",
     compare_stream_done:"完了",
+    compare_rerun:"🔁 再実行",
+    compare_clear:"🗑 履歴をクリア",
+    compare_clear_confirm:"全ての比較履歴をクリアしますか？この操作は元に戻せません。",
+    compare_cleared:"履歴をクリアしました",
+    compare_template_save:"💾 保存",
+    compare_template_saved:"テンプレート保存 ✓",
+    compare_templates:"保存済みプロンプト",
+    compare_similarity:"類似度",
+    compare_diff_word:"単語",
+    compare_diff_sentence:"文",
+    compare_temps:"モデル別温度",
+    compare_temp_reset:"リセット",
+    compare_pin:"参照としてピン",
+    compare_unpin:"ピン解除",
+    compare_pinned:"参照",
   },
   pt: {
     nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum",
@@ -1743,6 +1833,21 @@ const I18N = {
     compare_diff_tip:"Destacar palavras únicas de cada modelo",
     compare_streaming:"Streaming…",
     compare_stream_done:"Concluído",
+    compare_rerun:"🔁 Reexecutar",
+    compare_clear:"🗑 Limpar histórico",
+    compare_clear_confirm:"Limpar todo o histórico? Esta ação não pode ser desfeita.",
+    compare_cleared:"Histórico limpo",
+    compare_template_save:"💾 Salvar",
+    compare_template_saved:"Template salvo ✓",
+    compare_templates:"Prompts salvos",
+    compare_similarity:"Similaridade",
+    compare_diff_word:"Palavra",
+    compare_diff_sentence:"Frase",
+    compare_temps:"Temp. por modelo",
+    compare_temp_reset:"Redefinir",
+    compare_pin:"Fixar como referência",
+    compare_unpin:"Desafixar",
+    compare_pinned:"Referência",
   },
 };
 
@@ -2020,8 +2125,18 @@ const COMPARE_COLORS = ["var(--accent)", "var(--accent2)", "var(--green)", "var(
 
 /** Word-level diff: for each text returns [{token, unique}] where unique=true means the word
  *  does NOT appear in any other response — i.e. it's distinctive to this model. */
-function computeWordDiff(results) {
+function computeWordDiff(results, pinnedIdx = null) {
   const texts = results.map(r => r.content || "");
+  if (pinnedIdx !== null && pinnedIdx >= 0 && pinnedIdx < texts.length && texts[pinnedIdx]) {
+    const pinnedWords = new Set((texts[pinnedIdx].toLowerCase().match(/\b[a-z]{3,}\b/g) || []));
+    return texts.map((txt, i) => {
+      if (i === pinnedIdx) return txt.split(/(\s+)/).map(token => ({ token, unique: false }));
+      return txt.split(/(\s+)/).map(token => {
+        const word = token.toLowerCase().replace(/[^a-z]/g, "");
+        return { token, unique: word.length >= 3 && !pinnedWords.has(word) };
+      });
+    });
+  }
   const bags = texts.map(txt => {
     const s = new Set();
     (txt.toLowerCase().match(/\b[a-z]{3,}\b/g) || []).forEach(w => s.add(w));
@@ -2035,6 +2150,42 @@ function computeWordDiff(results) {
       return { token, unique: word.length >= 3 && !others.has(word) };
     });
   });
+}
+
+function computeSentenceDiff(results, pinnedIdx = null) {
+  const texts = results.map(r => r.content || "");
+  const splitSents = txt => (txt.match(/[^.!?\n]+[.!?\n]?/g) || [txt]).map(s => s.trim()).filter(Boolean);
+  const norm = s => s.toLowerCase().replace(/\s+/g, " ");
+  if (pinnedIdx !== null && pinnedIdx >= 0 && pinnedIdx < texts.length) {
+    const refSet = new Set(splitSents(texts[pinnedIdx]).map(norm));
+    return texts.map((txt, i) => {
+      if (i === pinnedIdx) return splitSents(txt).map(s => ({ token: s + " ", unique: false }));
+      return splitSents(txt).map(s => ({ token: s + " ", unique: !refSet.has(norm(s)) }));
+    });
+  }
+  const bags = texts.map(txt => new Set(splitSents(txt).map(norm)));
+  return texts.map((txt, i) => {
+    const others = new Set();
+    bags.forEach((b, j) => { if (j !== i) b.forEach(s => others.add(s)); });
+    return splitSents(txt).map(s => ({ token: s + " ", unique: !others.has(norm(s)) }));
+  });
+}
+
+function computeJaccard(results) {
+  const bags = results.map(r => {
+    const s = new Set();
+    ((r.content || "").toLowerCase().match(/\b[a-z]{3,}\b/g) || []).forEach(w => s.add(w));
+    return s;
+  });
+  const pairs = [];
+  for (let i = 0; i < bags.length; i++) {
+    for (let j = i + 1; j < bags.length; j++) {
+      const inter = [...bags[i]].filter(w => bags[j].has(w)).length;
+      const union = new Set([...bags[i], ...bags[j]]).size;
+      pairs.push({ a: results[i].name, b: results[j].name, score: union > 0 ? Math.round((inter / union) * 100) : 0 });
+    }
+  }
+  return pairs;
 }
 
 function CodeBlock({ block, t }) {
@@ -2060,7 +2211,7 @@ function CodeBlock({ block, t }) {
   );
 }
 
-function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, onExpand, streaming, diffTokens }) {
+function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, onExpand, streaming, diffTokens, isPinned, onPin }) {
   const [copied, setCopied] = useState(false);
   const color = COMPARE_COLORS[index % COMPARE_COLORS.length];
 
@@ -2108,6 +2259,9 @@ function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, on
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom:2 }}>
             <span style={{ fontWeight:700, fontSize:14 }}>{result.name}</span>
+            {isPinned && (
+              <span className="compare-badge" style={{ background:"#1a0a1a", color:"#c084fc", border:"1px solid #4a2a5a" }}>📌 {t("compare_pinned")}</span>
+            )}
             {isFastest && (
               <span className="compare-badge" style={{ background:"#001a0a", color:"var(--green)", border:"1px solid #2a5a2a" }}>⚡ {t("compare_fastest")}</span>
             )}
@@ -2147,6 +2301,13 @@ function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, on
             title={isExpanded ? t("compare_collapse") : t("compare_expand")}>
             {isExpanded ? "⊡" : "⛶"}
           </button>
+          {onPin && (
+            <button className="compare-expand-btn" onClick={onPin}
+              title={isPinned ? t("compare_unpin") : t("compare_pin")}
+              style={{ color: isPinned ? "#c084fc" : undefined }}>
+              📌
+            </button>
+          )}
         </div>
       </div>
       <div className="compare-card-body">
@@ -2224,6 +2385,13 @@ export default function AirvoDashboard() {
   const [compareStreamSlots, setCompareStreamSlots] = useState([]);
   const [compareDiffMode,  setCompareDiffMode]  = useState(false);
   const compareLastId = useRef(null);
+  const [comparePinnedIdx,  setComparePinnedIdx]  = useState(null);
+  const [compareDiffLevel,  setCompareDiffLevel]  = useState("word");   // "word" | "sentence"
+  const [compareModelTemps, setCompareModelTemps] = useState({});        // {modelId: 0.0-1.0}
+  const [compareShowTemps,  setCompareShowTemps]  = useState(false);
+  const [compareTemplates,  setCompareTemplates]  = useState(() => {
+    try { return JSON.parse(localStorage.getItem("airvo_compare_templates") || "[]"); } catch { return []; }
+  });
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
   const [discOllama,    setDiscOllama]    = useState(null);
@@ -2298,22 +2466,26 @@ export default function AirvoDashboard() {
     finally { if (!silent) setCompareLoading(false); }
   }, []);
 
-  async function streamCompare() {
-    if (!comparePrompt.trim()) return;
+  async function streamCompare(overridePrompt) {
+    const prompt = (overridePrompt !== undefined ? overridePrompt : comparePrompt).trim();
+    if (!prompt) return;
+    if (overridePrompt !== undefined) setComparePrompt(overridePrompt);
     const active = models.filter(m => m.active);
     if (active.length < 2) { toast(t("compare_run_error"), "error"); return; }
-    const prompt = comparePrompt.trim();
     setCompareRunning(true);
     setCompareDiffMode(false);
+    setComparePinnedIdx(null);
     // Pre-fill slots so cards appear immediately
     setCompareStreamSlots(active.map(m => ({
       name: m.name, model: m.id, content: "", done: false, error: null, tokens: 0, elapsed_s: null,
     })));
     try {
+      const body = { prompt };
+      if (Object.keys(compareModelTemps).length > 0) body.model_temperatures = compareModelTemps;
       const res = await fetch(`${API}/api/compare/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -2367,6 +2539,33 @@ export default function AirvoDashboard() {
 
   // keep old runCompare as fallback (unused but safe)
   async function runCompare() { return streamCompare(); }
+
+  async function clearCompareHistory() {
+    if (!confirm(t("compare_clear_confirm"))) return;
+    try {
+      await fetch(`${API}/api/compare/history`, { method: "DELETE" });
+      setCompareData(null);
+      setCompareHistory([]);
+      setCompareHistIdx(0);
+      compareLastId.current = null;
+      toast(t("compare_cleared"), "success");
+    } catch { toast(t("compare_run_error"), "error"); }
+  }
+
+  function saveTemplate(promptText) {
+    const txt = (promptText || comparePrompt).trim();
+    if (!txt) return;
+    const newList = [txt, ...compareTemplates.filter(x => x !== txt)].slice(0, 10);
+    setCompareTemplates(newList);
+    localStorage.setItem("airvo_compare_templates", JSON.stringify(newList));
+    toast(t("compare_template_saved"), "success");
+  }
+
+  function deleteTemplate(tpl) {
+    const newList = compareTemplates.filter(x => x !== tpl);
+    setCompareTemplates(newList);
+    localStorage.setItem("airvo_compare_templates", JSON.stringify(newList));
+  }
 
   const fetchDiscovery = useCallback(async () => {
     setDiscLoading(true);
@@ -3061,7 +3260,10 @@ export default function AirvoDashboard() {
               ];
               viewData.results.forEach((r, i) => {
                 lines.push(`## ${i + 1}. ${r.name}`); lines.push(``);
-                if (r.elapsed_s) lines.push(`*Response time: ${r.elapsed_s}s · ${r.tokens} tokens*`);
+                const meta = [`Model: \`${r.model}\``];
+                if (r.elapsed_s) meta.push(`${r.elapsed_s}s`);
+                if (r.tokens)    meta.push(`${r.tokens} tokens`);
+                if (meta.length) lines.push(`*${meta.join(" · ")}*`);
                 lines.push(``);
                 if (r.error) { lines.push(`> ✗ Error: ${r.error}`); }
                 else { lines.push(r.content || ""); }
@@ -3122,12 +3324,34 @@ export default function AirvoDashboard() {
                     </div>
                   )}
                   {viewData && viewData.results.filter(r=>!r.error).length > 1 && (
-                    <button
-                      className={`btn btn-sm ${compareDiffMode ? "btn-primary" : "btn-ghost"}`}
-                      onClick={() => setCompareDiffMode(p => !p)}
-                      title={t("compare_diff_tip")}
-                      style={{ fontFamily:"var(--mono)", fontSize:12, padding:"2px 10px" }}>
-                      ▨ {t("compare_diff")}
+                    <div style={{ display:"flex", gap:3, background:"var(--bg3)", borderRadius:6, padding:3, border:"1px solid var(--border)" }}>
+                      <button
+                        className={`btn btn-sm ${!compareDiffMode ? "btn-primary" : "btn-ghost"}`}
+                        onClick={() => setCompareDiffMode(false)}
+                        style={{ fontFamily:"var(--mono)", fontSize:11, padding:"2px 8px", lineHeight:1.3 }}
+                        title="No diff">
+                        ▭
+                      </button>
+                      <button
+                        className={`btn btn-sm ${compareDiffMode && compareDiffLevel==="word" ? "btn-primary" : "btn-ghost"}`}
+                        onClick={() => { setCompareDiffMode(true); setCompareDiffLevel("word"); }}
+                        style={{ fontFamily:"var(--mono)", fontSize:11, padding:"2px 8px", lineHeight:1.3 }}
+                        title={t("compare_diff_tip")}>
+                        ▨ {t("compare_diff_word")}
+                      </button>
+                      <button
+                        className={`btn btn-sm ${compareDiffMode && compareDiffLevel==="sentence" ? "btn-primary" : "btn-ghost"}`}
+                        onClick={() => { setCompareDiffMode(true); setCompareDiffLevel("sentence"); }}
+                        style={{ fontFamily:"var(--mono)", fontSize:11, padding:"2px 8px", lineHeight:1.3 }}
+                        title={t("compare_diff_sentence")}>
+                        ≡ {t("compare_diff_sentence")}
+                      </button>
+                    </div>
+                  )}
+                  {compareHistory.length > 0 && (
+                    <button className="btn btn-ghost btn-sm" onClick={clearCompareHistory}
+                      style={{ fontFamily:"var(--mono)", fontSize:12 }}>
+                      {t("compare_clear")}
                     </button>
                   )}
                   {viewData && (
@@ -3149,9 +3373,37 @@ export default function AirvoDashboard() {
 
               {/* Ask models panel */}
               <div style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:10, padding:"14px 18px" }}>
-                <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:10 }}>
-                  {t("compare_ask")}
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+                  <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1 }}>
+                    {t("compare_ask")}
+                  </div>
+                  <button className={`btn btn-sm ${compareShowTemps ? "btn-primary" : "btn-ghost"}`}
+                    onClick={() => setCompareShowTemps(p => !p)}
+                    style={{ fontFamily:"var(--mono)", fontSize:10, padding:"2px 8px" }}
+                    title={t("compare_temps")}>
+                    🌡 {t("compare_temps")}
+                  </button>
                 </div>
+                {/* Prompt templates */}
+                {compareTemplates.length > 0 && (
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:5, marginBottom:10 }}>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", display:"flex", alignItems:"center", marginRight:2 }}>
+                      {t("compare_templates")}:
+                    </span>
+                    {compareTemplates.map((tpl, i) => (
+                      <div key={i} style={{ display:"flex", alignItems:"center", background:"var(--bg)", border:"1px solid var(--border)", borderRadius:12, overflow:"hidden" }}>
+                        <button
+                          style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", border:"none", background:"none", cursor:"pointer", padding:"2px 8px", maxWidth:180, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}
+                          onClick={() => setComparePrompt(tpl)} title={tpl}>
+                          {tpl.length > 28 ? tpl.slice(0, 28) + "…" : tpl}
+                        </button>
+                        <button
+                          style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", border:"none", borderLeft:"1px solid var(--border)", background:"none", cursor:"pointer", padding:"2px 6px", opacity:0.6, flexShrink:0 }}
+                          onClick={() => deleteTemplate(tpl)}>×</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div style={{ display:"flex", gap:8, alignItems:"flex-end" }}>
                   <textarea
                     className="form-input"
@@ -3162,14 +3414,60 @@ export default function AirvoDashboard() {
                     onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") streamCompare(); }}
                     disabled={compareRunning}
                   />
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={streamCompare}
-                    disabled={compareRunning || !comparePrompt.trim()}
-                    style={{ fontFamily:"var(--mono)", fontSize:12, padding:"8px 16px", flexShrink:0 }}>
-                    {compareRunning ? t("compare_sending") : t("compare_send")}
-                  </button>
+                  <div style={{ display:"flex", flexDirection:"column", gap:6, flexShrink:0 }}>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => streamCompare()}
+                      disabled={compareRunning || !comparePrompt.trim()}
+                      style={{ fontFamily:"var(--mono)", fontSize:12, padding:"8px 16px" }}>
+                      {compareRunning ? t("compare_sending") : t("compare_send")}
+                    </button>
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => saveTemplate()}
+                      disabled={!comparePrompt.trim()}
+                      style={{ fontFamily:"var(--mono)", fontSize:10, padding:"4px 8px" }}
+                      title={t("compare_template_save")}>
+                      {t("compare_template_save")}
+                    </button>
+                  </div>
                 </div>
+                {/* Per-model temperature panel */}
+                {compareShowTemps && models.filter(m => m.active).length > 0 && (
+                  <div style={{ marginTop:12, borderTop:"1px solid var(--border)", paddingTop:10 }}>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>
+                      🌡 {t("compare_temps")}
+                    </div>
+                    <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(220px, 1fr))", gap:8 }}>
+                      {models.filter(m => m.active).map(m => {
+                        const temp = compareModelTemps[m.id] ?? null;
+                        const globalTemp = prefs?.temperature ?? 0.7;
+                        return (
+                          <div key={m.id} style={{ display:"flex", alignItems:"center", gap:8, background:"var(--bg)", border:"1px solid var(--border)", borderRadius:6, padding:"6px 10px" }}>
+                            <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }} title={m.name}>
+                              {m.name.split("/").pop()}
+                            </span>
+                            <span style={{ fontFamily:"var(--mono)", fontSize:11, color: temp !== null ? "var(--accent)" : "var(--text2)", minWidth:26, textAlign:"right" }}>
+                              {temp !== null ? temp.toFixed(1) : `${globalTemp.toFixed(1)}*`}
+                            </span>
+                            <input type="range" min="0" max="1" step="0.1"
+                              value={temp ?? globalTemp}
+                              onChange={e => setCompareModelTemps(p => ({ ...p, [m.id]: parseFloat(e.target.value) }))}
+                              style={{ width:72 }}
+                            />
+                            {temp !== null && (
+                              <button
+                                style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", border:"none", background:"none", cursor:"pointer", padding:"0 2px", opacity:0.7 }}
+                                onClick={() => setCompareModelTemps(p => { const n = { ...p }; delete n[m.id]; return n; })}
+                                title={t("compare_temp_reset")}>↺</button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", marginTop:6, opacity:0.6 }}>* {t("compare_temp_reset")} (global)</div>
+                  </div>
+                )}
               </div>
 
               {/* Live streaming grid */}
@@ -3220,6 +3518,13 @@ export default function AirvoDashboard() {
                     <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
                       {viewData.results.length} {viewData.results.length === 1 ? "model" : "models"}
                     </span>
+                    {viewData.prompt && !compareRunning && (
+                      <button className="btn btn-ghost btn-sm"
+                        onClick={() => streamCompare(viewData.prompt)}
+                        style={{ fontFamily:"var(--mono)", fontSize:11, marginLeft:"auto" }}>
+                        {t("compare_rerun")}
+                      </button>
+                    )}
                   </div>
 
                   {/* Prompt preview */}
@@ -3240,8 +3545,11 @@ export default function AirvoDashboard() {
 
                   {/* Response cards grid */}
                   {(() => {
-                    const _diffTokens = compareDiffMode && viewData.results.filter(r=>!r.error).length > 1
-                      ? computeWordDiff(viewData.results)
+                    const validResults = viewData.results.filter(r => !r.error);
+                    const _diffTokens = compareDiffMode && validResults.length > 1
+                      ? (compareDiffLevel === "sentence"
+                          ? computeSentenceDiff(viewData.results, comparePinnedIdx)
+                          : computeWordDiff(viewData.results, comparePinnedIdx))
                       : null;
                     return (
                       <div className="compare-grid" style={{
@@ -3260,6 +3568,8 @@ export default function AirvoDashboard() {
                             isExpanded={compareExpandIdx === realIdx}
                             onExpand={() => setCompareExpandIdx(compareExpandIdx === realIdx ? null : realIdx)}
                             diffTokens={_diffTokens && !result.error ? _diffTokens[realIdx] : null}
+                            isPinned={comparePinnedIdx === realIdx}
+                            onPin={validResults.length > 1 ? () => setComparePinnedIdx(comparePinnedIdx === realIdx ? null : realIdx) : null}
                           />
                         ))}
                       </div>
@@ -3311,6 +3621,30 @@ export default function AirvoDashboard() {
                             </div>
                           );
                         })}
+                        {/* Jaccard similarity */}
+                        {(() => {
+                          const validContent = valid.filter(r => r.content);
+                          if (validContent.length < 2) return null;
+                          const pairs = computeJaccard(validContent);
+                          if (pairs.length === 0) return null;
+                          return (
+                            <div style={{ marginTop:14, borderTop:"1px solid var(--border)", paddingTop:10 }}>
+                              <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>
+                                {t("compare_similarity")}
+                              </div>
+                              <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+                                {pairs.map((p, i) => (
+                                  <div key={i} style={{ display:"flex", alignItems:"center", gap:6, background:"var(--bg)", border:"1px solid var(--border)", borderRadius:6, padding:"4px 10px" }}>
+                                    <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)" }}>{p.a} ↔ {p.b}</span>
+                                    <span style={{ fontFamily:"var(--mono)", fontSize:12, fontWeight:700, color: p.score >= 60 ? "var(--green)" : p.score >= 35 ? "var(--yellow)" : "var(--red)" }}>
+                                      {p.score}%
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })()}
                       </div>
                     );
                   })()}

@@ -870,10 +870,20 @@ async def compare_history():
     return {"history": list(_compare_store)}
 
 
+@router.delete("/api/compare/history", tags=["Compare"], summary="Clear compare history",
+    description="Clears all compare history entries from memory and from disk.")
+async def compare_clear_history():
+    """Clear all compare history."""
+    _compare_store.clear()
+    _save_history()
+    return {"ok": True}
+
+
 class CompareRunRequest(BaseModel):
-    prompt:      str
-    max_tokens:  Optional[int]   = None
-    temperature: Optional[float] = None
+    prompt:             str
+    max_tokens:         Optional[int]   = None
+    temperature:        Optional[float] = None
+    model_temperatures: Optional[dict]  = None  # {model_id: temperature}
 
 
 @router.post("/api/compare/run", tags=["Compare"], summary="Run a comparison from the dashboard",
@@ -942,11 +952,13 @@ async def _stream_one_model(model_cfg: dict, messages: list, req_obj, idx: int, 
     try:
         prefs = settings.get_prefs()
         _raw_max = req_obj.max_tokens or prefs.get("max_tokens", settings.max_tokens)
+        _model_temps = getattr(req_obj, "model_temperatures", None) or {}
+        _temp = _model_temps.get(model_cfg["id"])
         kwargs = dict(
             model       = model_cfg["id"],
             messages    = messages,
             max_tokens  = _safe_max_tokens(model_cfg["id"], _raw_max),
-            temperature = req_obj.temperature or prefs.get("temperature", settings.temperature),
+            temperature = _temp if _temp is not None else (req_obj.temperature or prefs.get("temperature", settings.temperature)),
             stream      = True,
             api_key     = model_cfg.get("api_key"),
         )
