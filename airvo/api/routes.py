@@ -850,6 +850,67 @@ async def compare_history():
     return {"history": list(_compare_store)}
 
 
+class CompareRunRequest(BaseModel):
+    prompt:      str
+    max_tokens:  Optional[int]   = None
+    temperature: Optional[float] = None
+
+
+@router.post("/api/compare/run", tags=["Compare"], summary="Run a comparison from the dashboard",
+    description="Send a prompt directly from the Compare tab. All active models respond in parallel "
+    "(or the configured mode). Result is saved to compare history and returned immediately.")
+async def compare_run(req: CompareRunRequest):
+    """Fire a comparison from the dashboard without an external chat client."""
+    try:
+        active = settings.get_active_models()
+        if len(active) < 2:
+            raise HTTPException(status_code=400,
+                detail="Need at least 2 active models to compare.")
+        prefs = settings.get_prefs()
+        messages = [
+            {"role": "system", "content": settings.system_prompt},
+            {"role": "user",   "content": req.prompt},
+        ]
+
+        class _FakeReq:
+            max_tokens  = req.max_tokens
+            temperature = req.temperature
+
+        mode = prefs.get("mode", "parallel")
+        if mode == "race":
+            results = await race_mode(active, messages, _FakeReq())
+        elif mode == "vote":
+            results = await vote_mode(active, messages, _FakeReq())
+        elif mode == "review":
+            results = await review_mode(active, messages, _FakeReq())
+        else:
+            results = await parallel_mode(active, messages, _FakeReq())
+
+        entry = {
+            "id":        str(time.time()),
+            "timestamp": time.time(),
+            "mode":      mode,
+            "prompt":    req.prompt[:500],
+            "results": [
+                {
+                    "model":     r["model"],
+                    "name":      r["name"],
+                    "content":   r["content"],
+                    "error":     r["error"],
+                    "tokens":    r["tokens"],
+                    "elapsed_s": r.get("elapsed_s"),
+                }
+                for r in results
+            ],
+        }
+        _compare_store.appendleft(entry)
+        settings.record_last_request("multi", mode=mode)
+        return {"data": entry}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/api/discovery/ollama", tags=["Discovery"], summary="Ollama model catalog",
     description="Returns a curated catalog of 21 Ollama models organized by size (tiny/small/medium/large). "

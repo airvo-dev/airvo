@@ -293,6 +293,15 @@ const I18N = {
     compare_copy_prompt:"Copy prompt",
     compare_stats:"Performance",
     compare_time:"Time",
+    compare_tok_s:"tok/s",
+    compare_ask:"Ask models",
+    compare_send:"⊞ Compare",
+    compare_sending:"Running…",
+    compare_send_placeholder:"Type a prompt to compare all active models… (Ctrl+Enter)",
+    compare_sort_default:"Default",
+    compare_sort_speed:"⚡ Speed",
+    compare_sort_tokens:"📝 Tokens",
+    compare_run_error:"Need 2+ active models to compare",
   },
   es: {
     nav_models:"Modelos", nav_status:"Estado", nav_config:"Configuración",
@@ -522,6 +531,15 @@ const I18N = {
     compare_copy_prompt:"Copiar prompt",
     compare_stats:"Rendimiento",
     compare_time:"Tiempo",
+    compare_tok_s:"tok/s",
+    compare_ask:"Preguntar a los modelos",
+    compare_send:"⊞ Comparar",
+    compare_sending:"Ejecutando…",
+    compare_send_placeholder:"Escribí un prompt para comparar todos los modelos activos… (Ctrl+Enter)",
+    compare_sort_default:"Predeterminado",
+    compare_sort_speed:"⚡ Velocidad",
+    compare_sort_tokens:"📝 Tokens",
+    compare_run_error:"Necesitás 2+ modelos activos para comparar",
   },
   fr: {
     nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun",
@@ -748,6 +766,15 @@ const I18N = {
     compare_copy_prompt:"Copier le prompt",
     compare_stats:"Performance",
     compare_time:"Temps",
+    compare_tok_s:"tok/s",
+    compare_ask:"Interroger les modèles",
+    compare_send:"⊞ Comparer",
+    compare_sending:"En cours…",
+    compare_send_placeholder:"Tapez un prompt pour comparer tous les modèles actifs… (Ctrl+Entrée)",
+    compare_sort_default:"Défaut",
+    compare_sort_speed:"⚡ Vitesse",
+    compare_sort_tokens:"📝 Tokens",
+    compare_run_error:"Il faut 2+ modèles actifs pour comparer",
   },
   de: {
     nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine",
@@ -974,6 +1001,15 @@ const I18N = {
     compare_copy_prompt:"Prompt kopieren",
     compare_stats:"Leistung",
     compare_time:"Zeit",
+    compare_tok_s:"Tok/s",
+    compare_ask:"Modelle befragen",
+    compare_send:"⊞ Vergleichen",
+    compare_sending:"Läuft…",
+    compare_send_placeholder:"Prompt eingeben, um alle aktiven Modelle zu vergleichen… (Strg+Enter)",
+    compare_sort_default:"Standard",
+    compare_sort_speed:"⚡ Geschwindigkeit",
+    compare_sort_tokens:"📝 Tokens",
+    compare_run_error:"Mindestens 2 aktive Modelle erforderlich",
   },
   zh: {
     nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无",
@@ -1200,6 +1236,15 @@ const I18N = {
     compare_copy_prompt:"复制提示",
     compare_stats:"性能",
     compare_time:"时间",
+    compare_tok_s:"tok/s",
+    compare_ask:"向模型提问",
+    compare_send:"⊞ 比较",
+    compare_sending:"运行中…",
+    compare_send_placeholder:"输入提示词以比较所有活跃模型… (Ctrl+Enter)",
+    compare_sort_default:"默认",
+    compare_sort_speed:"⚡ 速度",
+    compare_sort_tokens:"📝 Tokens",
+    compare_run_error:"需要 2+ 个活跃模型才能比较",
   },
   ja: {
     nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし",
@@ -1426,6 +1471,15 @@ const I18N = {
     compare_copy_prompt:"プロンプトをコピー",
     compare_stats:"パフォーマンス",
     compare_time:"時間",
+    compare_tok_s:"tok/s",
+    compare_ask:"モデルに質問",
+    compare_send:"⊞ 比較",
+    compare_sending:"実行中…",
+    compare_send_placeholder:"全アクティブモデルを比較するプロンプトを入力… (Ctrl+Enter)",
+    compare_sort_default:"デフォルト",
+    compare_sort_speed:"⚡ 速度",
+    compare_sort_tokens:"📝 Tokens",
+    compare_run_error:"比較には2つ以上のアクティブモデルが必要です",
   },
   pt: {
     nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum",
@@ -1652,6 +1706,15 @@ const I18N = {
     compare_copy_prompt:"Copiar prompt",
     compare_stats:"Desempenho",
     compare_time:"Tempo",
+    compare_tok_s:"tok/s",
+    compare_ask:"Perguntar aos modelos",
+    compare_send:"⊞ Comparar",
+    compare_sending:"Executando…",
+    compare_send_placeholder:"Digite um prompt para comparar todos os modelos ativos… (Ctrl+Enter)",
+    compare_sort_default:"Padrão",
+    compare_sort_speed:"⚡ Velocidade",
+    compare_sort_tokens:"📝 Tokens",
+    compare_run_error:"Precisa de 2+ modelos ativos para comparar",
   },
 };
 
@@ -1993,6 +2056,11 @@ function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, on
                   {result.tokens} {t("compare_tokens")}
                 </span>
               )}
+              {result.tokens > 0 && result.elapsed_s > 0 && (
+                <span className="compare-badge" style={{ background:"#0a0a1a", color:"var(--accent)", border:"1px solid #2a2a4a" }}>
+                  {(result.tokens / result.elapsed_s).toFixed(0)} {t("compare_tok_s")}
+                </span>
+              )}
             </>
           )}
           <button className="compare-expand-btn" onClick={onExpand}
@@ -2076,6 +2144,9 @@ export default function AirvoDashboard() {
   const [compareHistIdx, setCompareHistIdx] = useState(0);
   const [compareExportDone, setCompareExportDone] = useState(false);
   const [compareExpandIdx, setCompareExpandIdx] = useState(null);
+  const [compareSortBy,    setCompareSortBy]    = useState("default");
+  const [comparePrompt,    setComparePrompt]    = useState("");
+  const [compareRunning,   setCompareRunning]   = useState(false);
   const compareLastId = useRef(null);
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
@@ -2150,6 +2221,28 @@ export default function AirvoDashboard() {
     } catch {}
     finally { if (!silent) setCompareLoading(false); }
   }, []);
+
+  async function runCompare() {
+    if (!comparePrompt.trim()) return;
+    const active = models.filter(m => m.active);
+    if (active.length < 2) { toast(t("compare_run_error"), "error"); return; }
+    setCompareRunning(true);
+    try {
+      const res = await fetch(`${API}/api/compare/run`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: comparePrompt.trim() }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast(err.detail || t("compare_run_error"), "error");
+        return;
+      }
+      setComparePrompt("");
+      await fetchCompare(false);
+    } catch { toast(t("compare_run_error"), "error"); }
+    finally { setCompareRunning(false); }
+  }
 
   const fetchDiscovery = useCallback(async () => {
     setDiscLoading(true);
@@ -2865,6 +2958,11 @@ export default function AirvoDashboard() {
             const _validTok = viewData ? viewData.results.filter(r => !r.error && r.tokens > 0) : [];
             const mostTokensIdx = _validTok.length > 1
               ? viewData.results.indexOf(_validTok.reduce((a, b) => a.tokens > b.tokens ? a : b)) : -1;
+            const _sortedResults = viewData ? [...viewData.results].sort((a, b) => {
+              if (compareSortBy === "speed")  return (a.elapsed_s ?? 9999) - (b.elapsed_s ?? 9999);
+              if (compareSortBy === "tokens") return (b.tokens ?? 0) - (a.tokens ?? 0);
+              return 0;
+            }) : [];
 
             return <>
               <h1 className="page-title">{t("compare_title")}</h1>
@@ -2885,7 +2983,20 @@ export default function AirvoDashboard() {
                   </div>
                 ) : <div />}
 
-                <div style={{ display:"flex", gap:8 }}>
+                <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+                  {viewData && viewData.results.length > 1 && (
+                    <div style={{ display:"flex", gap:3, background:"var(--bg3)", borderRadius:6, padding:3, border:"1px solid var(--border)" }}>
+                      {[["default","—","compare_sort_default"],["speed","⚡","compare_sort_speed"],["tokens","📝","compare_sort_tokens"]].map(([id, icon, key]) => (
+                        <button key={id}
+                          className={`btn btn-sm ${compareSortBy===id?"btn-primary":"btn-ghost"}`}
+                          onClick={() => setCompareSortBy(id)}
+                          style={{ fontFamily:"var(--mono)", fontSize:11, padding:"2px 8px", lineHeight:1.3 }}
+                          title={t(key)}>
+                          {icon}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   {viewData && (
                     <button className="btn btn-ghost btn-sm" onClick={exportMarkdown}
                       style={{ fontFamily:"var(--mono)", fontSize:12 }}>
@@ -2899,6 +3010,31 @@ export default function AirvoDashboard() {
                   </button>
                   <button className="btn btn-ghost btn-sm" onClick={() => fetchCompare(false)} disabled={compareLoading}>
                     {compareLoading ? "…" : "⟳"} {t("compare_refresh")}
+                  </button>
+                </div>
+              </div>
+
+              {/* Ask models panel */}
+              <div style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:10, padding:"14px 18px" }}>
+                <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:10 }}>
+                  {t("compare_ask")}
+                </div>
+                <div style={{ display:"flex", gap:8, alignItems:"flex-end" }}>
+                  <textarea
+                    className="form-input"
+                    style={{ flex:1, resize:"vertical", minHeight:56, maxHeight:160, fontFamily:"var(--mono)", fontSize:12, lineHeight:1.6 }}
+                    placeholder={t("compare_send_placeholder")}
+                    value={comparePrompt}
+                    onChange={e => setComparePrompt(e.target.value)}
+                    onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") runCompare(); }}
+                    disabled={compareRunning}
+                  />
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={runCompare}
+                    disabled={compareRunning || !comparePrompt.trim()}
+                    style={{ fontFamily:"var(--mono)", fontSize:12, padding:"8px 16px", flexShrink:0 }}>
+                    {compareRunning ? t("compare_sending") : t("compare_send")}
                   </button>
                 </div>
               </div>
@@ -2954,10 +3090,9 @@ export default function AirvoDashboard() {
                       : "repeat(3, 1fr)"
                   }}>
                     {(compareExpandIdx !== null
-                      ? viewData.results.slice(compareExpandIdx, compareExpandIdx + 1)
-                      : viewData.results
-                    ).map((result, i) => {
-                      const realIdx = compareExpandIdx !== null ? compareExpandIdx : i;
+                      ? [{ r: viewData.results[compareExpandIdx], origIdx: compareExpandIdx }]
+                      : _sortedResults.map(r => ({ r, origIdx: viewData.results.indexOf(r) }))
+                    ).map(({ r: result, origIdx: realIdx }, i) => {
                       return (
                         <CompareCard key={realIdx} result={result} index={realIdx} t={t}
                           isFastest={fastestIdx === realIdx}
