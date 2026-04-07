@@ -14,9 +14,7 @@ from airvo.config.settings import settings, save_models
 
 logger = logging.getLogger(__name__)
 
-_HISTORY_FILE = os.path.normpath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "compare_history.json")
-)
+_HISTORY_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "compare_history.json")
 
 def _load_history() -> deque:
     try:
