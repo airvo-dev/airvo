@@ -254,6 +254,7 @@ const I18N = {
     compare_tokens:"tokens",
     compare_error_badge:"Error",
     compare_at:"Last updated",
+    compare_auto:"Auto",
   },
   es: {
     nav_models:"Modelos", nav_status:"Estado", nav_config:"Configuración",
@@ -470,6 +471,7 @@ const I18N = {
     compare_tokens:"tokens",
     compare_error_badge:"Error",
     compare_at:"Última actualización",
+    compare_auto:"Auto",
   },
   fr: {
     nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun",
@@ -683,6 +685,7 @@ const I18N = {
     compare_tokens:"tokens",
     compare_error_badge:"Erreur",
     compare_at:"Dernière mise à jour",
+    compare_auto:"Auto",
   },
   de: {
     nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine",
@@ -896,6 +899,7 @@ const I18N = {
     compare_tokens:"Token",
     compare_error_badge:"Fehler",
     compare_at:"Zuletzt aktualisiert",
+    compare_auto:"Auto",
   },
   zh: {
     nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无",
@@ -1109,6 +1113,7 @@ const I18N = {
     compare_tokens:"令牌",
     compare_error_badge:"错误",
     compare_at:"最后更新",
+    compare_auto:"自动",
   },
   ja: {
     nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし",
@@ -1322,6 +1327,7 @@ const I18N = {
     compare_tokens:"トークン",
     compare_error_badge:"エラー",
     compare_at:"最終更新",
+    compare_auto:"自動",
   },
   pt: {
     nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum",
@@ -1535,6 +1541,7 @@ const I18N = {
     compare_tokens:"tokens",
     compare_error_badge:"Erro",
     compare_at:"Última atualização",
+    compare_auto:"Auto",
   },
 };
 
@@ -1860,6 +1867,8 @@ export default function AirvoDashboard() {
   const [hwProcOpen,     setHwProcOpen]     = useState(false);
   const [compareData,    setCompareData]    = useState(null);
   const [compareLoading, setCompareLoading] = useState(false);
+  const [compareAutoRefresh, setCompareAutoRefresh] = useState(false);
+  const compareLastId = useRef(null);
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
   const [discOllama,    setDiscOllama]    = useState(null);
@@ -1909,16 +1918,21 @@ export default function AirvoDashboard() {
     finally { setHwProcLoading(false); }
   }, []);
 
-  const fetchCompare = useCallback(async () => {
-    setCompareLoading(true);
+  const fetchCompare = useCallback(async (silent = false) => {
+    if (!silent) setCompareLoading(true);
     try {
       const res = await fetch(`${API}/api/compare/latest`);
       if (res.ok) {
         const data = await res.json();
-        setCompareData(data.data || null);
+        const newData = data.data || null;
+        const newId = newData?.id ?? null;
+        if (newId !== compareLastId.current) {
+          compareLastId.current = newId;
+          setCompareData(newData);
+        }
       }
     } catch {}
-    finally { setCompareLoading(false); }
+    finally { if (!silent) setCompareLoading(false); }
   }, []);
 
   const fetchDiscovery = useCallback(async () => {
@@ -1938,6 +1952,11 @@ export default function AirvoDashboard() {
   useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
   useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
   useEffect(() => { if (page === "compare") fetchCompare(); }, [page, fetchCompare]);
+  useEffect(() => {
+    if (page !== "compare" || !compareAutoRefresh) return;
+    const interval = setInterval(() => fetchCompare(true), 3000);
+    return () => clearInterval(interval);
+  }, [page, compareAutoRefresh, fetchCompare]);
   useEffect(() => { if (discOpen) fetchDiscovery(); }, [discOpen, fetchDiscovery]);
 
   const MAX_ACTIVE = 3;
@@ -2599,8 +2618,15 @@ export default function AirvoDashboard() {
             <h1 className="page-title">{t("compare_title")}</h1>
             <p className="page-sub">{t("compare_sub")}</p>
 
-            <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:16 }}>
-              <button className="btn btn-ghost btn-sm" onClick={fetchCompare} disabled={compareLoading}>
+            <div style={{ display:"flex", justifyContent:"flex-end", gap:8, marginBottom:16 }}>
+              <button
+                className={`btn btn-sm ${compareAutoRefresh ? "btn-primary" : "btn-ghost"}`}
+                onClick={() => setCompareAutoRefresh(p => !p)}
+                style={{ fontFamily:"var(--mono)", fontSize:12 }}
+              >
+                {compareAutoRefresh ? "⏺ " : "⏸ "}{t("compare_auto")}
+              </button>
+              <button className="btn btn-ghost btn-sm" onClick={() => fetchCompare(false)} disabled={compareLoading}>
                 {compareLoading ? "…" : "⟳"} {t("compare_refresh")}
               </button>
             </div>
