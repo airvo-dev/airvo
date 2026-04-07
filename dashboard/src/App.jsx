@@ -2766,73 +2766,123 @@ export default function AirvoDashboard() {
           </>}
 
           {/* ── COMPARE PAGE ── */}
-          {page === "compare" && <>
-            <h1 className="page-title">{t("compare_title")}</h1>
-            <p className="page-sub">{t("compare_sub")}</p>
+          {page === "compare" && (() => {
+            const viewData = compareHistory[compareHistIdx] ?? compareData;
 
-            <div style={{ display:"flex", justifyContent:"flex-end", gap:8, marginBottom:16 }}>
-              <button
-                className={`btn btn-sm ${compareAutoRefresh ? "btn-primary" : "btn-ghost"}`}
-                onClick={() => setCompareAutoRefresh(p => !p)}
-                style={{ fontFamily:"var(--mono)", fontSize:12 }}
-              >
-                {compareAutoRefresh ? "⏺ " : "⏸ "}{t("compare_auto")}
-              </button>
-              <button className="btn btn-ghost btn-sm" onClick={() => fetchCompare(false)} disabled={compareLoading}>
-                {compareLoading ? "…" : "⟳"} {t("compare_refresh")}
-              </button>
-            </div>
+            function exportMarkdown() {
+              if (!viewData) return;
+              const lines = [
+                `# Airvo Response Comparison`, ``,
+                `**Mode:** ${viewData.mode}  `,
+                `**Date:** ${new Date(viewData.timestamp * 1000).toLocaleString()}`,
+                ``, `## Prompt`, ``,
+                `> ${viewData.prompt.replace(/\n/g, "\n> ")}`, ``,
+              ];
+              viewData.results.forEach((r, i) => {
+                lines.push(`## ${i + 1}. ${r.name}`); lines.push(``);
+                if (r.elapsed_s) lines.push(`*Response time: ${r.elapsed_s}s · ${r.tokens} tokens*`);
+                lines.push(``);
+                if (r.error) { lines.push(`> ✗ Error: ${r.error}`); }
+                else { lines.push(r.content || ""); }
+                lines.push(``); lines.push(`---`); lines.push(``);
+              });
+              const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
+              const a = document.createElement("a");
+              a.href = URL.createObjectURL(blob);
+              a.download = `airvo-compare-${Date.now()}.md`;
+              a.click();
+              setCompareExportDone(true);
+              setTimeout(() => setCompareExportDone(false), 2500);
+            }
 
-            {compareLoading ? (
-              <div className="empty">{t("hw_loading")}</div>
-            ) : !compareData ? (
-              <div className="card" style={{ textAlign:"center", padding:"56px 24px" }}>
-                <div style={{ fontSize:40, marginBottom:16, opacity:0.3 }}>⊞</div>
-                <div style={{ fontFamily:"var(--mono)", fontSize:14, color:"var(--text2)", marginBottom:10, fontWeight:700 }}>
-                  {t("compare_empty")}
-                </div>
-                <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", opacity:0.7, maxWidth:500, margin:"0 auto", lineHeight:1.9 }}>
-                  {t("compare_empty_hint")}
-                </div>
-              </div>
-            ) : (
-              <div style={{ display:"grid", gap:20 }}>
-                {/* Metadata row */}
-                <div style={{ display:"flex", gap:12, alignItems:"center", flexWrap:"wrap" }}>
-                  <span style={{ background:"#1a1a2a", border:"1px solid var(--border)", borderRadius:6, padding:"4px 12px", fontFamily:"var(--mono)", fontSize:11, fontWeight:700, textTransform:"uppercase", letterSpacing:1, color:"var(--accent)" }}>
-                    {t("compare_mode")}: {compareData.mode}
-                  </span>
-                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
-                    {t("compare_at")}: {new Date(compareData.timestamp * 1000).toLocaleTimeString()}
-                  </span>
-                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
-                    {compareData.results.length} {compareData.results.length === 1 ? "model" : "models"}
-                  </span>
-                </div>
+            return <>
+              <h1 className="page-title">{t("compare_title")}</h1>
+              <p className="page-sub">{t("compare_sub")}</p>
 
-                {/* Prompt preview */}
-                {compareData.prompt && (
-                  <div style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:10, padding:"14px 18px" }}>
-                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>{t("compare_prompt")}</div>
-                    <div style={{ fontFamily:"var(--mono)", fontSize:13, color:"var(--text)", lineHeight:1.7, whiteSpace:"pre-wrap", wordBreak:"break-word", maxHeight:72, overflow:"hidden", WebkitMaskImage:"linear-gradient(to bottom, black 50%, transparent 100%)" }}>
-                      {compareData.prompt}
-                    </div>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16, flexWrap:"wrap", gap:8 }}>
+                {compareHistory.length > 1 ? (
+                  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                    <button className="btn btn-ghost btn-sm"
+                      onClick={() => setCompareHistIdx(i => Math.min(i + 1, compareHistory.length - 1))}
+                      disabled={compareHistIdx >= compareHistory.length - 1}>←</button>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
+                      {t("compare_history_label")} {compareHistIdx + 1} {t("compare_of")} {compareHistory.length}
+                    </span>
+                    <button className="btn btn-ghost btn-sm"
+                      onClick={() => setCompareHistIdx(i => Math.max(i - 1, 0))}
+                      disabled={compareHistIdx === 0}>→</button>
                   </div>
-                )}
+                ) : <div />}
 
-                {/* Response cards grid */}
-                <div className="compare-grid" style={{
-                  gridTemplateColumns: compareData.results.length === 1 ? "1fr"
-                    : compareData.results.length === 2 ? "1fr 1fr"
-                    : "repeat(3, 1fr)"
-                }}>
-                  {compareData.results.map((result, i) => (
-                    <CompareCard key={i} result={result} index={i} t={t} />
-                  ))}
+                <div style={{ display:"flex", gap:8 }}>
+                  {viewData && (
+                    <button className="btn btn-ghost btn-sm" onClick={exportMarkdown}
+                      style={{ fontFamily:"var(--mono)", fontSize:12 }}>
+                      📄 {compareExportDone ? t("compare_export_done") : t("compare_export")}
+                    </button>
+                  )}
+                  <button className={`btn btn-sm ${compareAutoRefresh ? "btn-primary" : "btn-ghost"}`}
+                    onClick={() => setCompareAutoRefresh(p => !p)}
+                    style={{ fontFamily:"var(--mono)", fontSize:12 }}>
+                    {compareAutoRefresh ? "⏹ " : "⏸ "}{t("compare_auto")}
+                  </button>
+                  <button className="btn btn-ghost btn-sm" onClick={() => fetchCompare(false)} disabled={compareLoading}>
+                    {compareLoading ? "…" : "⟳"} {t("compare_refresh")}
+                  </button>
                 </div>
               </div>
-            )}
-          </>}
+
+              {compareLoading ? (
+                <div className="empty">{t("hw_loading")}</div>
+              ) : !viewData ? (
+                <div className="card" style={{ textAlign:"center", padding:"56px 24px" }}>
+                  <div style={{ fontSize:40, marginBottom:16, opacity:0.3 }}>⊞</div>
+                  <div style={{ fontFamily:"var(--mono)", fontSize:14, color:"var(--text2)", marginBottom:10, fontWeight:700 }}>
+                    {t("compare_empty")}
+                  </div>
+                  <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", opacity:0.7, maxWidth:500, margin:"0 auto", lineHeight:1.9 }}>
+                    {t("compare_empty_hint")}
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display:"grid", gap:20 }}>
+                  {/* Metadata row */}
+                  <div style={{ display:"flex", gap:12, alignItems:"center", flexWrap:"wrap" }}>
+                    <span style={{ background:"#1a1a2a", border:"1px solid var(--border)", borderRadius:6, padding:"4px 12px", fontFamily:"var(--mono)", fontSize:11, fontWeight:700, textTransform:"uppercase", letterSpacing:1, color:"var(--accent)" }}>
+                      {t("compare_mode")}: {viewData.mode}
+                    </span>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                      {t("compare_at")}: {new Date(viewData.timestamp * 1000).toLocaleTimeString()}
+                    </span>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                      {viewData.results.length} {viewData.results.length === 1 ? "model" : "models"}
+                    </span>
+                  </div>
+
+                  {/* Prompt preview */}
+                  {viewData.prompt && (
+                    <div style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:10, padding:"14px 18px" }}>
+                      <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>{t("compare_prompt")}</div>
+                      <div style={{ fontFamily:"var(--mono)", fontSize:13, color:"var(--text)", lineHeight:1.7, whiteSpace:"pre-wrap", wordBreak:"break-word", maxHeight:72, overflow:"hidden", WebkitMaskImage:"linear-gradient(to bottom, black 50%, transparent 100%)" }}>
+                        {viewData.prompt}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Response cards grid */}
+                  <div className="compare-grid" style={{
+                    gridTemplateColumns: viewData.results.length === 1 ? "1fr"
+                      : viewData.results.length === 2 ? "1fr 1fr"
+                      : "repeat(3, 1fr)"
+                  }}>
+                    {viewData.results.map((result, i) => (
+                      <CompareCard key={i} result={result} index={i} t={t} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>;
+          })()}
 
           {/* ── CONFIG PAGE ── */}
           {page === "config" && prefs && <>
