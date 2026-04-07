@@ -6,10 +6,13 @@ import litellm
 import asyncio
 import json
 import logging
+import time
 
 from airvo.config.settings import settings, save_models
 
 logger = logging.getLogger(__name__)
+
+_compare_store: list = []   # holds last multi-model response for Compare view
 
 router = APIRouter()
 
@@ -461,6 +464,30 @@ async def chat_completions(request: ChatRequest):
         else:  # parallel (default)
             results = await parallel_mode(active, messages, request)
 
+        # ── Save for Compare view ─────────────────────────────────────────
+        _last_prompt = next(
+            (m["content"] for m in reversed(messages)
+             if m["role"] == "user" and isinstance(m.get("content"), str)),
+            "",
+        )
+        _compare_store.clear()
+        _compare_store.append({
+            "id":        str(time.time()),
+            "timestamp": time.time(),
+            "mode":      mode,
+            "prompt":    _last_prompt[:500],
+            "results": [
+                {
+                    "model":   r["model"],
+                    "name":    r["name"],
+                    "content": r["content"],
+                    "error":   r["error"],
+                    "tokens":  r["tokens"],
+                }
+                for r in results
+            ],
+        })
+
         settings.record_last_request("multi", mode=mode)
         return StreamingResponse(
             multi_model_stream(results),
@@ -797,6 +824,18 @@ async def hardware_processes(limit: int = 8):
         return {"processes": [], "error": "psutil not available"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Compare endpoint ──────────────────────────────────────────────────────
+
+@router.get("/api/compare/latest", tags=["Compare"], summary="Last multi-model comparison",
+    description="Returns the most recent multi-model response data for side-by-side comparison "
+    "in the Airvo dashboard. Updated automatically after every multi-model chat completion.")
+async def compare_latest():
+    """Return the last multi-model response for the Compare view."""
+    if not _compare_store:
+        return {"data": None}
+    return {"data": _compare_store[0]}
 
 
 

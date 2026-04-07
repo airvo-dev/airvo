@@ -241,6 +241,19 @@ const I18N = {
     auto_detected:"Auto-detected",
     auto_local_hint:"Local model — no API cost",
     auto_cloud_hint:"Cloud model — API usage billed by provider",
+    nav_compare:"Compare",
+    compare_title:"Response Comparison",
+    compare_sub:"Last multi-model responses side by side — copy and pick the best",
+    compare_empty:"No multi-model responses yet",
+    compare_empty_hint:"Use Parallel, Vote or Review mode with 2+ active models, then send a message from your IDE",
+    compare_refresh:"Refresh",
+    compare_mode:"Mode",
+    compare_prompt:"Prompt",
+    compare_copy:"Copy",
+    compare_copied:"Copied ✓",
+    compare_tokens:"tokens",
+    compare_error_badge:"Error",
+    compare_at:"Last updated",
   },
   es: {
     nav_models:"Modelos", nav_status:"Estado", nav_config:"Configuración",
@@ -444,6 +457,19 @@ const I18N = {
     auto_detected:"Detectado automáticamente",
     auto_local_hint:"Modelo local — sin costo de API",
     auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
+    nav_compare:"Comparar",
+    compare_title:"Comparación de Respuestas",
+    compare_sub:"Últimas respuestas multi-modelo lado a lado — copiá y elegí la mejor",
+    compare_empty:"Sin respuestas multi-modelo todavía",
+    compare_empty_hint:"Usá modo Paralelo, Voto o Revisión con 2+ modelos activos, luego enviá un mensaje desde tu IDE",
+    compare_refresh:"Actualizar",
+    compare_mode:"Modo",
+    compare_prompt:"Prompt",
+    compare_copy:"Copiar",
+    compare_copied:"Copiado ✓",
+    compare_tokens:"tokens",
+    compare_error_badge:"Error",
+    compare_at:"Última actualización",
   },
   fr: {
     nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun",
@@ -644,6 +670,19 @@ const I18N = {
     auto_detected:"Détecté automatiquement",
     auto_local_hint:"Modèle local — sans coût d'API",
     auto_cloud_hint:"Modèle cloud — facturation par le fournisseur",
+    nav_compare:"Comparer",
+    compare_title:"Comparaison des Réponses",
+    compare_sub:"Dernières réponses multi-modèles côte à côte — copiez et choisissez la meilleure",
+    compare_empty:"Aucune réponse multi-modèle pour l'instant",
+    compare_empty_hint:"Utilisez le mode Parallèle, Vote ou Révision avec 2+ modèles actifs, puis envoyez un message depuis votre IDE",
+    compare_refresh:"Actualiser",
+    compare_mode:"Mode",
+    compare_prompt:"Invite",
+    compare_copy:"Copier",
+    compare_copied:"Copié ✓",
+    compare_tokens:"tokens",
+    compare_error_badge:"Erreur",
+    compare_at:"Dernière mise à jour",
   },
   de: {
     nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine",
@@ -844,6 +883,19 @@ const I18N = {
     auto_detected:"Automatisch erkannt",
     auto_local_hint:"Lokales Modell — keine API-Kosten",
     auto_cloud_hint:"Cloud-Modell — Abrechnung durch den Anbieter",
+    nav_compare:"Vergleich",
+    compare_title:"Antwort-Vergleich",
+    compare_sub:"Letzte Multi-Modell-Antworten nebeneinander — kopieren und die beste wählen",
+    compare_empty:"Noch keine Multi-Modell-Antworten",
+    compare_empty_hint:"Nutze Parallel-, Abstimmungs- oder Überprüfungsmodus mit 2+ aktiven Modellen, dann sende eine Nachricht aus deiner IDE",
+    compare_refresh:"Aktualisieren",
+    compare_mode:"Modus",
+    compare_prompt:"Prompt",
+    compare_copy:"Kopieren",
+    compare_copied:"Kopiert ✓",
+    compare_tokens:"Token",
+    compare_error_badge:"Fehler",
+    compare_at:"Zuletzt aktualisiert",
   },
   zh: {
     nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无",
@@ -1044,6 +1096,19 @@ const I18N = {
     auto_detected:"自动检测",
     auto_local_hint:"本地模型 — 无 API 费用",
     auto_cloud_hint:"云端模型 — 由提供商计费",
+    nav_compare:"对比",
+    compare_title:"响应对比",
+    compare_sub:"最新多模型响应并排显示 — 复制并选择最佳答案",
+    compare_empty:"暂无多模型响应",
+    compare_empty_hint:"使用并行、投票或审阅模式，激浂2个以上模型，然后从 IDE 发送消息",
+    compare_refresh:"刷新",
+    compare_mode:"模式",
+    compare_prompt:"提示词",
+    compare_copy:"复制",
+    compare_copied:"已复制 ✓",
+    compare_tokens:"令牌",
+    compare_error_badge:"错误",
+    compare_at:"最后更新",
   },
   ja: {
     nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし",
@@ -1244,6 +1309,19 @@ const I18N = {
     auto_detected:"自動検出",
     auto_local_hint:"ローカルモデル — APIコストなし",
     auto_cloud_hint:"クラウドモデル — プロバイダーによる課金",
+    nav_compare:"比較",
+    compare_title:"レスポンス比較",
+    compare_sub:"最新のマルチモデルレスポンスを並べて表示 — コピーして最良を選択",
+    compare_empty:"マルチモデルレスポンスはまだありません",
+    compare_empty_hint:"2つ以上のモデルを有効にしてParallel/Vote/Reviewモードを使用し、IDEからメッセージを送信してください",
+    compare_refresh:"更新",
+    compare_mode:"モード",
+    compare_prompt:"プロンプト",
+    compare_copy:"コピー",
+    compare_copied:"コピー済み ✓",
+    compare_tokens:"トークン",
+    compare_error_badge:"エラー",
+    compare_at:"最終更新",
   },
   pt: {
     nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum",
@@ -1444,6 +1522,19 @@ const I18N = {
     auto_detected:"Detectado automaticamente",
     auto_local_hint:"Modelo local — sem custo de API",
     auto_cloud_hint:"Modelo cloud — faturamento pelo provedor",
+    nav_compare:"Comparar",
+    compare_title:"Comparação de Respostas",
+    compare_sub:"Últimas respostas multi-modelo lado a lado — copie e escolha a melhor",
+    compare_empty:"Sem respostas multi-modelo ainda",
+    compare_empty_hint:"Use o modo Paralelo, Votação ou Revisão com 2+ modelos ativos, depois envie uma mensagem do seu IDE",
+    compare_refresh:"Atualizar",
+    compare_mode:"Modo",
+    compare_prompt:"Prompt",
+    compare_copy:"Copiar",
+    compare_copied:"Copiado ✓",
+    compare_tokens:"tokens",
+    compare_error_badge:"Erro",
+    compare_at:"Última atualização",
   },
 };
 
@@ -1588,6 +1679,13 @@ const css = `
   .toast { padding:12px 18px; border-radius:10px; font-family:var(--mono); font-size:13px; border:1px solid; animation:slideIn .2s ease; }
   @keyframes slideIn { from{transform:translateX(20px);opacity:0} to{transform:translateX(0);opacity:1} }
   .toast.success{background:#0a1a0a;color:var(--green);border-color:#2a4a2a;} .toast.error{background:#1a0a0a;color:var(--red);border-color:#4a2a2a;} .toast.info{background:#0a0a1a;color:var(--accent);border-color:#2a2a4a;} .toast.warning{background:#1a1500;color:var(--yellow);border-color:#4a3a00;}
+  .compare-grid { display:grid; gap:16px; }
+  .compare-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; min-height:200px; }
+  .compare-card-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .compare-card-body { padding:16px 18px; flex:1; overflow-y:auto; max-height:440px; }
+  .compare-card-footer { padding:10px 18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .compare-pre { font-family:var(--mono); font-size:12px; color:var(--text); white-space:pre-wrap; word-break:break-word; line-height:1.7; margin:0; }
+  .compare-badge { font-family:var(--mono); font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; flex-shrink:0; }
 `;
 
 function getProviderClass(p) {
@@ -1663,6 +1761,64 @@ function LangDropdown({ lang, setLang }) {
   );
 }
 
+const COMPARE_COLORS = ["var(--accent)", "var(--accent2)", "var(--green)", "var(--yellow)"];
+
+function CompareCard({ result, index, t }) {
+  const [copied, setCopied] = useState(false);
+  const color = COMPARE_COLORS[index % COMPARE_COLORS.length];
+
+  function handleCopy() {
+    if (!result.content) return;
+    navigator.clipboard.writeText(result.content).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  return (
+    <div className="compare-card" style={{ borderTop:`3px solid ${color}` }}>
+      <div className="compare-card-header">
+        <div style={{ flex:1, minWidth:0 }}>
+          <div style={{ fontWeight:700, fontSize:14, marginBottom:2, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+            {result.name}
+          </div>
+          <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+            {result.model}
+          </div>
+        </div>
+        {result.error ? (
+          <span className="compare-badge" style={{ background:"#2a1a1a", color:"var(--red)", border:"1px solid #4a2a2a" }}>
+            {t("compare_error_badge")}
+          </span>
+        ) : result.tokens > 0 ? (
+          <span className="compare-badge" style={{ background:"var(--bg3)", color:"var(--text2)", border:"1px solid var(--border)" }}>
+            {result.tokens} {t("compare_tokens")}
+          </span>
+        ) : null}
+      </div>
+      <div className="compare-card-body">
+        {result.error
+          ? <div style={{ color:"var(--red)", fontFamily:"var(--mono)", fontSize:12, lineHeight:1.7 }}>✗ {result.error}</div>
+          : <pre className="compare-pre">{result.content || ""}</pre>
+        }
+      </div>
+      <div className="compare-card-footer">
+        <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+          {result.tokens > 0 ? `${result.tokens} ${t("compare_tokens")}` : ""}
+        </div>
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={handleCopy}
+          disabled={!result.content || copied}
+          style={{ fontFamily:"var(--mono)", fontSize:12 }}
+        >
+          {copied ? t("compare_copied") : t("compare_copy")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Tooltip({ title, body, examples, flip = false }) {
   const [visible, setVisible] = useState(false);
   return (
@@ -1702,6 +1858,8 @@ export default function AirvoDashboard() {
   const [hwProcesses,    setHwProcesses]    = useState(null);
   const [hwProcLoading,  setHwProcLoading]  = useState(false);
   const [hwProcOpen,     setHwProcOpen]     = useState(false);
+  const [compareData,    setCompareData]    = useState(null);
+  const [compareLoading, setCompareLoading] = useState(false);
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
   const [discOllama,    setDiscOllama]    = useState(null);
@@ -1751,6 +1909,18 @@ export default function AirvoDashboard() {
     finally { setHwProcLoading(false); }
   }, []);
 
+  const fetchCompare = useCallback(async () => {
+    setCompareLoading(true);
+    try {
+      const res = await fetch(`${API}/api/compare/latest`);
+      if (res.ok) {
+        const data = await res.json();
+        setCompareData(data.data || null);
+      }
+    } catch {}
+    finally { setCompareLoading(false); }
+  }, []);
+
   const fetchDiscovery = useCallback(async () => {
     setDiscLoading(true);
     try {
@@ -1767,6 +1937,7 @@ export default function AirvoDashboard() {
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
   useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
+  useEffect(() => { if (page === "compare") fetchCompare(); }, [page, fetchCompare]);
   useEffect(() => { if (discOpen) fetchDiscovery(); }, [discOpen, fetchDiscovery]);
 
   const MAX_ACTIVE = 3;
@@ -1935,11 +2106,12 @@ export default function AirvoDashboard() {
         <aside className="sidebar">
           <div className="nav-section">
             {[
-              { id:"models", icon:"◈", label:t("nav_models"), badge:models.length||null },
-              { id:"status", icon:"◎", label:t("nav_status") },
-              { id:"config", icon:"⊙", label:t("nav_config") },
-              { id:"add",    icon:"+", label:t("nav_add")    },
-              { id:"help",   icon:"?", label:t("nav_help")   },
+              { id:"models",  icon:"◈", label:t("nav_models"), badge:models.length||null },
+              { id:"status",  icon:"◎", label:t("nav_status")  },
+              { id:"compare", icon:"⊞", label:t("nav_compare") },
+              { id:"config",  icon:"⊙", label:t("nav_config")  },
+              { id:"add",     icon:"+", label:t("nav_add")     },
+              { id:"help",    icon:"?", label:t("nav_help")    },
             ].map(n => (
               <div key={n.id} className={`nav-item ${page===n.id?"active":""}`} onClick={() => setPage(n.id)}>
                 <span className="nav-icon">{n.icon}</span>
@@ -2331,10 +2503,63 @@ export default function AirvoDashboard() {
                             const memStr = proc.memory_mb >= 1024
                               ? `${(proc.memory_mb / 1024).toFixed(1)} GB`
                               : `${proc.memory_mb.toFixed(0)} MB`;
+                            const FRIENDLY = {
+                              "code.exe":                           "VS Code",
+                              "code - insiders.exe":                "VS Code Insiders",
+                              "devenv.exe":                         "Visual Studio",
+                              "servicehub.datawarehousehost.exe":   "Visual Studio (ServiceHub)",
+                              "servicehub.host.dotnet.x64.exe":     "Visual Studio (ServiceHub)",
+                              "servicehub.indexingservice.exe":     "Visual Studio (Indexer)",
+                              "servicehub.settingshost.exe":        "Visual Studio (Settings)",
+                              "msedge.exe":                         "Microsoft Edge",
+                              "chrome.exe":                         "Google Chrome",
+                              "firefox.exe":                        "Firefox",
+                              "safari.exe":                         "Safari",
+                              "brave.exe":                          "Brave",
+                              "slack.exe":                          "Slack",
+                              "discord.exe":                        "Discord",
+                              "teams.exe":                          "Microsoft Teams",
+                              "outlook.exe":                        "Outlook",
+                              "winword.exe":                        "Microsoft Word",
+                              "excel.exe":                          "Microsoft Excel",
+                              "powerpnt.exe":                       "Microsoft PowerPoint",
+                              "explorer.exe":                       "Windows Explorer",
+                              "taskhostw.exe":                      "Windows Task Host",
+                              "svchost.exe":                        "Windows Service Host",
+                              "memcompression":                     "Windows Memory Compression (system)",
+                              "registry":                           "Windows Registry (system)",
+                              "system":                             "Windows System (kernel)",
+                              "smss.exe":                           "Windows Session Manager",
+                              "csrss.exe":                          "Windows Client/Server Runtime",
+                              "lsass.exe":                          "Windows Security (LSASS)",
+                              "wininit.exe":                        "Windows Initialization",
+                              "python.exe":                         "Python",
+                              "python3.exe":                        "Python 3",
+                              "pythonw.exe":                        "Python (windowed)",
+                              "node.exe":                           "Node.js",
+                              "ollama.exe":                         "Ollama",
+                              "ollama_llama_server.exe":            "Ollama (model runner)",
+                              "docker desktop.exe":                 "Docker Desktop",
+                              "dockerd.exe":                        "Docker Daemon",
+                              "wslhost.exe":                        "WSL",
+                              "wsl.exe":                            "WSL",
+                              "cursor.exe":                         "Cursor",
+                              "windsurf.exe":                       "Windsurf",
+                              "figma.exe":                          "Figma",
+                              "zoom.exe":                           "Zoom",
+                              "spotify.exe":                        "Spotify",
+                              "postman.exe":                        "Postman",
+                              "gitkraken.exe":                      "GitKraken",
+                              "github desktop.exe":                 "GitHub Desktop",
+                            };
+                            const friendly = FRIENDLY[proc.name.toLowerCase()];
+                            const displayName = friendly
+                              ? <><span style={{ color:"var(--text)" }}>{friendly}</span><span style={{ color:"var(--text2)", marginLeft:5, fontSize:10 }}>({proc.name})</span></>
+                              : proc.name;
                             return (
                               <div key={proc.pid} style={{ display:"flex", alignItems:"center", gap:10, padding:"6px 10px", background:"var(--bg3)", borderRadius:6, marginBottom:5, border:"1px solid var(--border)" }}>
                                 <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", width:20, textAlign:"right", flexShrink:0 }}>{i+1}</span>
-                                <span style={{ fontFamily:"var(--mono)", fontSize:12, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{proc.name}</span>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:12, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{displayName}</span>
                                 <span style={{ fontFamily:"var(--mono)", fontSize:11, color:bar, flexShrink:0 }}>{memStr}</span>
                                 <div style={{ width:60, background:"var(--bg)", borderRadius:4, height:6, overflow:"hidden", flexShrink:0 }}>
                                   <div style={{ width:`${Math.min(pct * 4, 100)}%`, height:"100%", background:bar, borderRadius:4 }}/>
@@ -2367,6 +2592,68 @@ export default function AirvoDashboard() {
                 </div>
               </div>
             </div>
+          </>}
+
+          {/* ── COMPARE PAGE ── */}
+          {page === "compare" && <>
+            <h1 className="page-title">{t("compare_title")}</h1>
+            <p className="page-sub">{t("compare_sub")}</p>
+
+            <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:16 }}>
+              <button className="btn btn-ghost btn-sm" onClick={fetchCompare} disabled={compareLoading}>
+                {compareLoading ? "…" : "⟳"} {t("compare_refresh")}
+              </button>
+            </div>
+
+            {compareLoading ? (
+              <div className="empty">{t("hw_loading")}</div>
+            ) : !compareData ? (
+              <div className="card" style={{ textAlign:"center", padding:"56px 24px" }}>
+                <div style={{ fontSize:40, marginBottom:16, opacity:0.3 }}>⊞</div>
+                <div style={{ fontFamily:"var(--mono)", fontSize:14, color:"var(--text2)", marginBottom:10, fontWeight:700 }}>
+                  {t("compare_empty")}
+                </div>
+                <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", opacity:0.7, maxWidth:500, margin:"0 auto", lineHeight:1.9 }}>
+                  {t("compare_empty_hint")}
+                </div>
+              </div>
+            ) : (
+              <div style={{ display:"grid", gap:20 }}>
+                {/* Metadata row */}
+                <div style={{ display:"flex", gap:12, alignItems:"center", flexWrap:"wrap" }}>
+                  <span style={{ background:"#1a1a2a", border:"1px solid var(--border)", borderRadius:6, padding:"4px 12px", fontFamily:"var(--mono)", fontSize:11, fontWeight:700, textTransform:"uppercase", letterSpacing:1, color:"var(--accent)" }}>
+                    {t("compare_mode")}: {compareData.mode}
+                  </span>
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                    {t("compare_at")}: {new Date(compareData.timestamp * 1000).toLocaleTimeString()}
+                  </span>
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                    {compareData.results.length} {compareData.results.length === 1 ? "model" : "models"}
+                  </span>
+                </div>
+
+                {/* Prompt preview */}
+                {compareData.prompt && (
+                  <div style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:10, padding:"14px 18px" }}>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>{t("compare_prompt")}</div>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:13, color:"var(--text)", lineHeight:1.7, whiteSpace:"pre-wrap", wordBreak:"break-word", maxHeight:72, overflow:"hidden", WebkitMaskImage:"linear-gradient(to bottom, black 50%, transparent 100%)" }}>
+                      {compareData.prompt}
+                    </div>
+                  </div>
+                )}
+
+                {/* Response cards grid */}
+                <div className="compare-grid" style={{
+                  gridTemplateColumns: compareData.results.length === 1 ? "1fr"
+                    : compareData.results.length === 2 ? "1fr 1fr"
+                    : "repeat(3, 1fr)"
+                }}>
+                  {compareData.results.map((result, i) => (
+                    <CompareCard key={i} result={result} index={i} t={t} />
+                  ))}
+                </div>
+              </div>
+            )}
           </>}
 
           {/* ── CONFIG PAGE ── */}
