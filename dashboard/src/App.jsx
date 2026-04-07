@@ -2748,7 +2748,7 @@ export default function AirvoDashboard() {
                 return next;
               });
             } else if (ev.type === "complete") {
-              if (!hadOverride) setComparePrompt("");
+              // Keep the prompt so the user can save it as a template or re-use it
               await fetchCompare(false);
               setCompareStreamSlots([]);
             }
