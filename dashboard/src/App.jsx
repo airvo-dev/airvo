@@ -2584,7 +2584,9 @@ export default function AirvoDashboard() {
   const [compareExportDone, setCompareExportDone] = useState(false);
   const [compareExpandIdx, setCompareExpandIdx] = useState(null);
   const [compareSortBy,    setCompareSortBy]    = useState("default");
-  const [comparePrompt,    setComparePrompt]    = useState("");
+  const [comparePrompt,    setComparePrompt]    = useState(() => {
+    try { return localStorage.getItem("airvo_compare_prompt") || ""; } catch { return ""; }
+  });
   const [compareRunning,   setCompareRunning]   = useState(false);
   const [compareStreamSlots, setCompareStreamSlots] = useState([]);
   const [compareDiffMode,  setCompareDiffMode]  = useState(false);
@@ -2807,6 +2809,9 @@ export default function AirvoDashboard() {
   useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
   useEffect(() => { if (page === "compare") fetchCompare(); }, [page, fetchCompare]);
   useEffect(() => { if (page === "stats") fetchStats(); }, [page, fetchStats]);
+  useEffect(() => {
+    try { localStorage.setItem("airvo_compare_prompt", comparePrompt); } catch {}
+  }, [comparePrompt]);
   useEffect(() => {
     if (page !== "compare" || !compareAutoRefresh) return;
     const interval = setInterval(() => fetchCompare(true), 3000);
@@ -3635,15 +3640,26 @@ export default function AirvoDashboard() {
                   </div>
                 )}
                 <div style={{ display:"flex", gap:8, alignItems:"flex-end" }}>
-                  <textarea
-                    className="form-input"
-                    style={{ flex:1, resize:"vertical", minHeight:56, maxHeight:160, fontFamily:"var(--mono)", fontSize:12, lineHeight:1.6 }}
-                    placeholder={t("compare_send_placeholder")}
-                    value={comparePrompt}
-                    onChange={e => setComparePrompt(e.target.value)}
-                    onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") streamCompare(); }}
-                    disabled={compareRunning}
-                  />
+                  <div style={{ flex:1, position:"relative" }}>
+                    <textarea
+                      className="form-input"
+                      style={{ width:"100%", resize:"vertical", minHeight:56, maxHeight:160, fontFamily:"var(--mono)", fontSize:12, lineHeight:1.6, paddingRight: comparePrompt ? 28 : undefined }}
+                      placeholder={t("compare_send_placeholder")}
+                      value={comparePrompt}
+                      onChange={e => setComparePrompt(e.target.value)}
+                      onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") streamCompare(); }}
+                      disabled={compareRunning}
+                    />
+                    {comparePrompt && !compareRunning && (
+                      <button
+                        onClick={() => setComparePrompt("")}
+                        title="Clear prompt"
+                        style={{ position:"absolute", top:6, right:6, background:"none", border:"none",
+                                 color:"var(--text2)", cursor:"pointer", fontSize:14, lineHeight:1,
+                                 padding:"2px 4px", borderRadius:4, opacity:0.6 }}
+                      >✕</button>
+                    )}
+                  </div>
                   <div style={{ display:"flex", flexDirection:"column", gap:6, flexShrink:0 }}>
                     <button
                       className="btn btn-primary btn-sm"
