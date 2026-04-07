@@ -255,6 +255,26 @@ const I18N = {
     help_trouble_4_a:"Go to Configuration → Smart Memory → click 'Index Now'. Confirm the path points to your project root. After adding new files, re-index. Setting Top K to 1–2 is enough for most projects.",
     help_trouble_5_q:"Model Discovery shows no Ollama models as installed",
     help_trouble_5_a:"Ollama may not be running. Start it with 'ollama serve'. The catalog always loads — the Installed badge just requires Ollama to respond on localhost:11434.",
+    help_compare_title:"Compare Tab — Feature Guide",
+    help_compare_intro:"The Compare tab is the most powerful feature in Airvo. It lets you run the same prompt against all your active models simultaneously, in real time, and analyse the results with visual tools not found in any other AI client.",
+    help_compare_streaming_title:"⊞ Real-time parallel streaming",
+    help_compare_streaming_body:"When you type a prompt and click Compare (or press Ctrl+Enter), all active models start generating at exactly the same time. You see each model's tokens appearing live, side by side. The ⚡ Fastest and 📝 Most tokens badges are awarded automatically when each stream finishes.",
+    help_compare_diff_title:"▨ Diff modes — Word & Sentence",
+    help_compare_diff_body:"Word diff highlights every word that appears in one model's response but not in the others — uniqueness at a glance. Sentence diff compares whole sentences: a sentence is highlighted if no other model said roughly the same thing. Both modes are computed in the browser, no backend call needed.",
+    help_compare_pin_title:"📌 Pin as reference",
+    help_compare_pin_body:"Click the 📌 button on any card to set that model as the baseline. In diff mode, all other models are compared against the pinned one — ideal when you want GPT-4o as the gold standard and you want to see exactly where a free model diverges.",
+    help_compare_similarity_title:"Similarity score (Jaccard)",
+    help_compare_similarity_body:"At the bottom of the Performance bar you'll see pairwise similarity percentages between models. It uses Jaccard similarity on the word sets of each response. Green ≥ 60% means the models largely agree. Red < 35% means they gave fundamentally different answers — that's where it's most interesting.",
+    help_compare_templates_title:"💾 Prompt templates",
+    help_compare_templates_body:"Click Save next to the textarea to store the current prompt. Saved templates appear as clickable chips above the input — click one to fill the textarea instantly. Up to 10 templates are stored locally in your browser. Use this for repeated benchmarks like 'Write unit tests for:' or 'Explain like I\'m 5'.",
+    help_compare_temps_title:"🌡 Per-model temperature",
+    help_compare_temps_body:"Click the 🌡 button to expand individual temperature sliders for each active model. This lets you compare the same model at different creativity levels, or test one model at 0.0 (deterministic) against another at 0.9 (creative) in the same run. Values with * mean the model uses the global temperature from Configuration.",
+    help_compare_history_title:"History & Re-run",
+    help_compare_history_body:"Airvo keeps the last 10 comparisons in ~/.airvo/compare_history.json — they survive server restarts. Navigate with the ← → arrows in the toolbar. Click 🔁 Re-run on any past entry to re-send that exact prompt through all currently active models. Use 🗑 Clear history to wipe everything.",
+    help_compare_export_title:"📄 Export to Markdown",
+    help_compare_export_body:"Exports the full comparison as a .md file including the prompt, each model's full response, response time, token count, and the exact model ID (provider/version). Useful for documenting benchmarks or sharing results with your team.",
+    help_compare_sort_title:"Sort & Focus",
+    help_compare_sort_body:"Sort cards by ⚡ Speed (fastest first) or 📝 Tokens (most tokens first). Use ⛶ Focus to expand a single card to full width for easier reading. Click again to return to the grid.",
     config_context_memory_section:"Context & Memory",
     toast_activated:"Model activated", toast_deactivated:"Model deactivated",
     toast_key_saved:"API key saved ✓", toast_key_error:"Enter a valid API key",
@@ -512,6 +532,26 @@ const I18N = {
     help_trouble_4_a:"Andá a Configuración → Smart Memory → hacé click en 'Indexar Ahora'. Confirmá que la ruta apunta a la raíz de tu proyecto. Luego de agregar archivos, reindexá. Top K en 1–2 es suficiente para la mayoría.",
     help_trouble_5_q:"Descubrimiento de Modelos no muestra modelos Ollama como instalados",
     help_trouble_5_a:"Ollama puede no estar corriendo. Inicialo con 'ollama serve'. El catálogo siempre carga — la insignia Instalado requiere que Ollama responda en localhost:11434.",
+    help_compare_title:"Tab Compare — Guía de funciones",
+    help_compare_intro:"El tab Compare es la función más poderosa de Airvo. Te permite enviar el mismo prompt a todos tus modelos activos al mismo tiempo, en tiempo real, y analizar los resultados con herramientas visuales que no existen en ningún otro cliente de IA.",
+    help_compare_streaming_title:"⊞ Streaming paralelo en tiempo real",
+    help_compare_streaming_body:"Cuando escribís un prompt y hacés click en Comparar (o presionás Ctrl+Enter), todos los modelos activos empiezan a generar al mismo tiempo. Ves los tokens de cada modelo aparecer en vivo, uno al lado del otro. Las badges ⚡ Más rápido y 📝 Más tokens se asignan automáticamente cuando termina cada stream.",
+    help_compare_diff_title:"▨ Modos diff — Palabras y Frases",
+    help_compare_diff_body:"El diff de palabras resalta cada palabra que aparece en la respuesta de un modelo pero no en los demás. El diff de frases compara oraciones completas. Ambos modos se calculan en el navegador, sin llamadas al servidor.",
+    help_compare_pin_title:"📌 Anclar como referencia",
+    help_compare_pin_body:"Hacé click en 📌 en cualquier card para fijar ese modelo como baseline. En modo diff, todos los demás se comparan contra el anclado — ideal para usar GPT-4o como estándar y ver exactamente dónde diverge un modelo gratuito.",
+    help_compare_similarity_title:"Similarity score (Jaccard)",
+    help_compare_similarity_body:"Al final de la barra de Performance verás porcentajes de similitud entre pares de modelos. Usa similitud Jaccard sobre el conjunto de palabras de cada respuesta. Verde ≥ 60% significa que los modelos coinciden. Rojo < 35% significa respuestas fundamentalmente distintas.",
+    help_compare_templates_title:"💾 Prompt templates",
+    help_compare_templates_body:"Hacé click en Guardar junto al textarea para almacenar el prompt actual. Los templates guardados aparecen como chips clickeables sobre el input. Hasta 10 templates se guardan en el navegador. Útil para benchmarks repetidos.",
+    help_compare_temps_title:"🌡 Temperatura por modelo",
+    help_compare_temps_body:"Hacé click en 🌡 para expandir sliders individuales de temperatura para cada modelo activo. Podés comparar el mismo modelo a distintos niveles de creatividad en la misma corrida. Los valores con * usan la temperatura global de Configuración.",
+    help_compare_history_title:"Historial y Re-run",
+    help_compare_history_body:"Airvo guarda las últimas 10 comparaciones en ~/.airvo/compare_history.json — sobreviven reinicios del servidor. Navegá con las flechas ← →. Hacé click en 🔁 Re-run para reenviar ese prompt exacto. Usá 🗑 Borrar historial para limpiar todo.",
+    help_compare_export_title:"📄 Exportar a Markdown",
+    help_compare_export_body:"Exporta la comparación completa como .md incluyendo el prompt, la respuesta de cada modelo, tiempo de respuesta, cantidad de tokens y el ID exacto del modelo (proveedor/versión).",
+    help_compare_sort_title:"Ordenar y Focus",
+    help_compare_sort_body:"Ordená las cards por ⚡ Velocidad o 📝 Tokens. Usá ⛶ Focus para expandir una sola card al ancho completo para leer con más comodidad.",
     config_context_memory_section:"Contexto & Memoria",
     toast_activated:"Modelo activado", toast_deactivated:"Modelo desactivado",
     toast_key_saved:"API key guardada ✓", toast_key_error:"Ingresá una API key válida",
@@ -766,6 +806,26 @@ const I18N = {
     help_trouble_4_a:"Allez dans Configuration → Smart Memory → cliquez sur 'Indexer Maintenant'. Confirmez que le chemin pointe vers la racine de votre projet. Après avoir ajouté des fichiers, ré-indexez. Top K à 1–2 suffit pour la plupart des projets.",
     help_trouble_5_q:"La Découverte de Modèles ne montre pas les modèles Ollama comme installés",
     help_trouble_5_a:"Ollama n'est peut-être pas lancé. Démarrez-le avec 'ollama serve'. Le catalogue se charge toujours — le badge Installé nécessite qu'Ollama réponde sur localhost:11434.",
+    help_compare_title:"Onglet Compare — Guide des fonctionnalités",
+    help_compare_intro:"L'onglet Compare est la fonctionnalité la plus puissante d'Airvo. Il vous permet d'envoyer le même prompt à tous vos modèles actifs simultanément, en temps réel, et d'analyser les résultats avec des outils visuels introuvables dans tout autre client IA.",
+    help_compare_streaming_title:"⊞ Streaming parallèle en temps réel",
+    help_compare_streaming_body:"Quand vous tapez un prompt et cliquez sur Comparer (ou appuyez sur Ctrl+Entrée), tous les modèles actifs commencent à générer en même temps. Vous voyez les tokens de chaque modèle apparaître en direct, côte à côte.",
+    help_compare_diff_title:"▨ Modes diff — Mots & Phrases",
+    help_compare_diff_body:"Le diff de mots surligne chaque mot présent dans la réponse d'un modèle mais pas dans les autres. Le diff de phrases compare des phrases entières. Les deux modes sont calculés dans le navigateur, sans appel serveur.",
+    help_compare_pin_title:"📌 Épingler comme référence",
+    help_compare_pin_body:"Cliquez sur 📌 sur n'importe quelle carte pour définir ce modèle comme référence. En mode diff, tous les autres sont comparés au modèle épinglé.",
+    help_compare_similarity_title:"Score de similarité (Jaccard)",
+    help_compare_similarity_body:"En bas de la barre Performance, vous verrez des pourcentages de similarité par paire de modèles. Vert ≥ 60% signifie que les modèles sont d'accord. Rouge < 35% indique des réponses fondamentalement différentes.",
+    help_compare_templates_title:"💾 Modèles de prompts",
+    help_compare_templates_body:"Cliquez sur Sauvegarder à côté de la zone de texte pour mémoriser le prompt actuel. Les modèles sauvegardés apparaissent comme des chips cliquables. Jusqu'à 10 modèles sont stockés localement dans le navigateur.",
+    help_compare_temps_title:"🌡 Température par modèle",
+    help_compare_temps_body:"Cliquez sur 🌡 pour afficher des curseurs de température individuels pour chaque modèle actif. Les valeurs avec * utilisent la température globale de la Configuration.",
+    help_compare_history_title:"Historique & Re-run",
+    help_compare_history_body:"Airvo conserve les 10 dernières comparaisons dans ~/.airvo/compare_history.json. Naviguez avec les flèches ← →. Cliquez sur 🔁 Re-run pour renvoyer le même prompt. Utilisez 🗑 Effacer pour tout supprimer.",
+    help_compare_export_title:"📄 Exporter en Markdown",
+    help_compare_export_body:"Exporte la comparaison complète en .md incluant le prompt, la réponse de chaque modèle, le temps de réponse, le nombre de tokens et l'ID exact du modèle.",
+    help_compare_sort_title:"Trier & Focus",
+    help_compare_sort_body:"Triez les cartes par ⚡ Vitesse ou 📝 Tokens. Utilisez ⛶ Focus pour agrandir une seule carte.",
     config_context_memory_section:"Contexte & Mémoire",
     toast_activated:"Modèle activé", toast_deactivated:"Modèle désactivé",
     toast_key_saved:"Clé API enregistrée ✓", toast_key_error:"Entrez une clé API valide",
@@ -1020,6 +1080,26 @@ const I18N = {
     help_trouble_4_a:"Gehen Sie zu Konfiguration → Smart Memory → klicken Sie auf 'Jetzt Indexieren'. Bestätigen Sie, dass der Pfad auf Ihr Projektstamm zeigt. Nach neuen Dateien re-indexieren. Top K auf 1–2 reicht für die meisten Projekte.",
     help_trouble_5_q:"Modell-Entdeckung zeigt keine Ollama-Modelle als installiert",
     help_trouble_5_a:"Ollama läuft möglicherweise nicht. Starten Sie es mit 'ollama serve'. Der Katalog lädt immer — das Installiert-Badge erfordert nur, dass Ollama auf localhost:11434 antwortet.",
+    help_compare_title:"Compare-Tab — Funktionsübersicht",
+    help_compare_intro:"Der Compare-Tab ist die leistungsstärkste Funktion von Airvo. Er ermöglicht es, denselben Prompt gleichzeitig an alle aktiven Modelle zu senden und die Ergebnisse mit visuellen Werkzeugen zu analysieren.",
+    help_compare_streaming_title:"⊞ Echtzeit-Parallel-Streaming",
+    help_compare_streaming_body:"Wenn Sie einen Prompt eingeben und auf Vergleichen klicken (oder Strg+Eingabe drücken), beginnen alle aktiven Modelle gleichzeitig zu generieren. Sie sehen die Tokens jedes Modells live nebeneinander.",
+    help_compare_diff_title:"▨ Diff-Modi — Wörter & Sätze",
+    help_compare_diff_body:"Wort-Diff hebt jedes Wort hervor, das in einer Modellantwort vorkommt, aber nicht in den anderen. Satz-Diff vergleicht ganze Sätze. Beide Modi werden im Browser berechnet.",
+    help_compare_pin_title:"📌 Als Referenz anheften",
+    help_compare_pin_body:"Klicken Sie auf 📌 auf einer Karte, um dieses Modell als Baseline festzulegen. Im Diff-Modus werden alle anderen mit dem angehefteten Modell verglichen.",
+    help_compare_similarity_title:"Ähnlichkeitswert (Jaccard)",
+    help_compare_similarity_body:"Am Ende der Performance-Leiste sehen Sie paarweise Ähnlichkeitsprozentsätze. Grün ≥ 60% bedeutet Übereinstimmung. Rot < 35% bedeutet grundlegend unterschiedliche Antworten.",
+    help_compare_templates_title:"💾 Prompt-Vorlagen",
+    help_compare_templates_body:"Klicken Sie auf Speichern neben dem Textfeld, um den aktuellen Prompt zu speichern. Gespeicherte Vorlagen erscheinen als anklickbare Chips. Bis zu 10 Vorlagen werden lokal im Browser gespeichert.",
+    help_compare_temps_title:"🌡 Temperatur pro Modell",
+    help_compare_temps_body:"Klicken Sie auf 🌡, um individuelle Temperatur-Schieberegler für jedes aktive Modell einzublenden. Werte mit * verwenden die globale Temperatur aus der Konfiguration.",
+    help_compare_history_title:"Verlauf & Wiederholen",
+    help_compare_history_body:"Airvo speichert die letzten 10 Vergleiche in ~/.airvo/compare_history.json. Navigieren Sie mit ← →. Klicken Sie auf 🔁 Wiederholen, um denselben Prompt erneut zu senden.",
+    help_compare_export_title:"📄 Als Markdown exportieren",
+    help_compare_export_body:"Exportiert den vollständigen Vergleich als .md-Datei inkl. Prompt, Antworten, Antwortzeit, Token-Anzahl und exakter Modell-ID.",
+    help_compare_sort_title:"Sortieren & Focus",
+    help_compare_sort_body:"Karten nach ⚡ Geschwindigkeit oder 📝 Tokens sortieren. ⛶ Focus vergrößert eine einzelne Karte.",
     config_context_memory_section:"Kontext & Speicher",
     toast_activated:"Modell aktiviert", toast_deactivated:"Modell deaktiviert",
     toast_key_saved:"API-Schlüssel gespeichert ✓", toast_key_error:"Geben Sie einen gültigen API-Schlüssel ein",
@@ -1274,6 +1354,26 @@ const I18N = {
     help_trouble_4_a:"前往配置 → 智能记忆 → 点击「立即索引」。确认路径指向项目根目录。添加新文件后请重新索引。对大多数项目，Top K 设为 1–2 就足够了。",
     help_trouble_5_q:"模型发现未显示 Ollama 模型为已安装",
     help_trouble_5_a:"Ollama 可能未运行。使用 'ollama serve' 启动它。目录始终加载——已安装标记仅需要 Ollama 在 localhost:11434 上响应。",
+    help_compare_title:"Compare 标签 — 功能指南",
+    help_compare_intro:"Compare 标签是 Airvo 最强大的功能。它允许你同时向所有活跃模型发送相同的提示词，实时查看结果，并使用其他 AI 客户端没有的可视化工具分析差异。",
+    help_compare_streaming_title:"⊞ 实时并行流式输出",
+    help_compare_streaming_body:"输入提示词并点击比较（或按 Ctrl+Enter）后，所有活跃模型同时开始生成。你可以看到每个模型的 token 实时并排出现。",
+    help_compare_diff_title:"▨ Diff 模式 — 词语与句子",
+    help_compare_diff_body:"词语 diff 高亮每个只出现在某个模型回答中的词。句子 diff 比较完整句子。两种模式均在浏览器中计算，无需服务器调用。",
+    help_compare_pin_title:"📌 设为参考基准",
+    help_compare_pin_body:"点击任意卡片上的 📌 将该模型设为基准。在 diff 模式下，所有其他模型都与该基准进行比较。",
+    help_compare_similarity_title:"相似度分数（Jaccard）",
+    help_compare_similarity_body:"在性能栏底部可看到模型对之间的相似度百分比。绿色 ≥ 60% 表示模型基本一致，红色 < 35% 表示回答根本不同。",
+    help_compare_templates_title:"💾 提示词模板",
+    help_compare_templates_body:"点击文本框旁的保存按钮保存当前提示词。最多 10 个模板存储在浏览器本地，点击即可填充。",
+    help_compare_temps_title:"🌡 每模型温度",
+    help_compare_temps_body:"点击 🌡 展开每个活跃模型的独立温度滑块。带 * 的值使用配置中的全局温度。",
+    help_compare_history_title:"历史记录与重新运行",
+    help_compare_history_body:"Airvo 将最近 10 次比较保存在 ~/.airvo/compare_history.json 中，服务器重启后仍保留。用 ← → 导航，点击 🔁 重新运行以重发相同提示词。",
+    help_compare_export_title:"📄 导出为 Markdown",
+    help_compare_export_body:"将完整比较导出为 .md 文件，包括提示词、每个模型的回答、响应时间、token 数量和精确模型 ID。",
+    help_compare_sort_title:"排序与专注模式",
+    help_compare_sort_body:"按 ⚡ 速度或 📝 Token 数量排序卡片。⛶ 专注模式将单张卡片扩展至全宽。",
     config_context_memory_section:"上下文与内存",
     toast_activated:"模型已激活", toast_deactivated:"模型已停用",
     toast_key_saved:"API 密钥已保存 ✓", toast_key_error:"请输入有效的 API 密钥",
@@ -1528,6 +1628,26 @@ const I18N = {
     help_trouble_4_a:"設定 → スマートメモリ → 「今すぐインデックス」をクリック。パスがプロジェクトルートを指しているか確認。新しいファイル追加後は再インデックスしてください。Top K 1〜2がほとんどのプロジェクトで十分です。",
     help_trouble_5_q:"モデル検出がOllamaモデルをインストール済みとして表示しない",
     help_trouble_5_a:"Ollamaが実行されていない可能性があります。'ollama serve' で起動してください。カタログは常に読み込まれます — インストール済みバッジはOllamaがlocalhost:11434で応答することのみを必要とします。",
+    help_compare_title:"Compareタブ — 機能ガイド",
+    help_compare_intro:"CompareタブはAirvoの最も強力な機能です。すべてのアクティブモデルに同じプロンプトを同時に送信し、リアルタイムで結果を視覚的に分析できます。",
+    help_compare_streaming_title:"⊞ リアルタイム並列ストリーミング",
+    help_compare_streaming_body:"プロンプトを入力して比較をクリック（またはCtrl+Enter）すると、すべてのアクティブモデルが同時に生成を開始します。各モデルのトークンがリアルタイムで並んで表示されます。",
+    help_compare_diff_title:"▨ Diffモード — 単語と文",
+    help_compare_diff_body:"単語Diffは、あるモデルの回答にのみ出現する単語を強調表示します。文Diffは文全体を比較します。どちらもブラウザ内で計算され、サーバー呼び出し不要です。",
+    help_compare_pin_title:"📌 参照としてピン",
+    help_compare_pin_body:"任意のカードの📌をクリックしてそのモデルをベースラインに設定します。Diffモードでは、他のすべてのモデルがピンされたモデルと比較されます。",
+    help_compare_similarity_title:"類似度スコア（Jaccard）",
+    help_compare_similarity_body:"パフォーマンスバーの下部にモデルペア間の類似度パーセントが表示されます。緑≥60%はモデルがほぼ一致、赤<35%は根本的に異なる回答を意味します。",
+    help_compare_templates_title:"💾 プロンプトテンプレート",
+    help_compare_templates_body:"テキストエリア横の保存ボタンで現在のプロンプトを保存。最大10件のテンプレートがブラウザにローカル保存され、クリックで入力できます。",
+    help_compare_temps_title:"🌡 モデル別温度",
+    help_compare_temps_body:"🌡をクリックして各アクティブモデルの個別温度スライダーを表示します。*付きの値は設定のグローバル温度を使用します。",
+    help_compare_history_title:"履歴と再実行",
+    help_compare_history_body:"Airvoは最新10件の比較を~/.airvo/compare_history.jsonに保存します（再起動後も残ります）。← →で移動、🔁再実行で同じプロンプトを再送信できます。",
+    help_compare_export_title:"📄 Markdownにエクスポート",
+    help_compare_export_body:"プロンプト、各モデルの回答、応答時間、トークン数、正確なモデルIDを含む完全な比較を.mdファイルとしてエクスポートします。",
+    help_compare_sort_title:"並び替えとフォーカス",
+    help_compare_sort_body:"⚡速度または📝トークン数でカードを並び替え。⛶フォーカスで1枚のカードを全幅に拡大できます。",
     config_context_memory_section:"コンテキスト & メモリ",
     toast_activated:"モデルを有効化しました", toast_deactivated:"モデルを無効化しました",
     toast_key_saved:"APIキーを保存しました ✓", toast_key_error:"有効なAPIキーを入力してください",
@@ -1782,6 +1902,26 @@ const I18N = {
     help_trouble_4_a:"Vá em Configuração → Smart Memory → clique em 'Indexar Agora'. Confirme que o caminho aponta para a raiz do projeto. Após adicionar arquivos, re-indexe. Top K em 1–2 é suficiente para a maioria dos projetos.",
     help_trouble_5_q:"Descoberta de Modelos não mostra modelos Ollama como instalados",
     help_trouble_5_a:"O Ollama pode não estar rodando. Inicie com 'ollama serve'. O catálogo sempre carrega — o badge Instalado apenas requer que o Ollama responda em localhost:11434.",
+    help_compare_title:"Aba Compare — Guia de Funcionalidades",
+    help_compare_intro:"A aba Compare é o recurso mais poderoso do Airvo. Ela permite enviar o mesmo prompt para todos os modelos ativos simultaneamente, em tempo real, e analisar os resultados com ferramentas visuais que não existem em nenhum outro cliente de IA.",
+    help_compare_streaming_title:"⊞ Streaming paralelo em tempo real",
+    help_compare_streaming_body:"Ao digitar um prompt e clicar em Comparar (ou pressionar Ctrl+Enter), todos os modelos ativos começam a gerar ao mesmo tempo. Você vê os tokens de cada modelo aparecendo ao vivo, lado a lado.",
+    help_compare_diff_title:"▨ Modos diff — Palavras e Frases",
+    help_compare_diff_body:"O diff de palavras destaca cada palavra que aparece na resposta de um modelo mas não nos outros. O diff de frases compara sentenças inteiras. Ambos são calculados no navegador, sem chamadas ao servidor.",
+    help_compare_pin_title:"📌 Fixar como referência",
+    help_compare_pin_body:"Clique em 📌 em qualquer card para definir aquele modelo como baseline. No modo diff, todos os outros são comparados com o modelo fixado.",
+    help_compare_similarity_title:"Score de similaridade (Jaccard)",
+    help_compare_similarity_body:"No final da barra de Performance você verá porcentagens de similaridade entre pares de modelos. Verde ≥ 60% significa que os modelos concordam. Vermelho < 35% indica respostas fundamentalmente diferentes.",
+    help_compare_templates_title:"💾 Templates de prompt",
+    help_compare_templates_body:"Clique em Salvar ao lado do textarea para guardar o prompt atual. Até 10 templates são armazenados localmente no navegador e aparecem como chips clicáveis.",
+    help_compare_temps_title:"🌡 Temperatura por modelo",
+    help_compare_temps_body:"Clique em 🌡 para expandir sliders individuais de temperatura para cada modelo ativo. Valores com * usam a temperatura global da Configuração.",
+    help_compare_history_title:"Histórico e Re-run",
+    help_compare_history_body:"O Airvo salva as últimas 10 comparações em ~/.airvo/compare_history.json — sobrevivem a reinicializações. Navegue com ← →. Clique em 🔁 Re-run para reenviar o mesmo prompt. Use 🗑 Limpar para apagar tudo.",
+    help_compare_export_title:"📄 Exportar para Markdown",
+    help_compare_export_body:"Exporta a comparação completa como .md incluindo o prompt, resposta de cada modelo, tempo de resposta, contagem de tokens e ID exato do modelo.",
+    help_compare_sort_title:"Ordenar e Foco",
+    help_compare_sort_body:"Ordene os cards por ⚡ Velocidade ou 📝 Tokens. Use ⛶ Foco para expandir um único card para largura total.",
     config_context_memory_section:"Contexto & Memória",
     toast_activated:"Modelo ativado", toast_deactivated:"Modelo desativado",
     toast_key_saved:"Chave API salva ✓", toast_key_error:"Insira uma chave API válida",
@@ -3299,12 +3439,14 @@ export default function AirvoDashboard() {
                 {compareHistory.length > 1 ? (
                   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
                     <button className="btn btn-ghost btn-sm"
+                      title={t("compare_history_label") + " ←"}
                       onClick={() => { setCompareHistIdx(i => Math.min(i + 1, compareHistory.length - 1)); setCompareExpandIdx(null); }}
                       disabled={compareHistIdx >= compareHistory.length - 1}>←</button>
                     <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
                       {t("compare_history_label")} {compareHistIdx + 1} {t("compare_of")} {compareHistory.length}
                     </span>
                     <button className="btn btn-ghost btn-sm"
+                      title={t("compare_history_label") + " →"}
                       onClick={() => { setCompareHistIdx(i => Math.max(i - 1, 0)); setCompareExpandIdx(null); }}
                       disabled={compareHistIdx === 0}>→</button>
                   </div>
@@ -3337,36 +3479,40 @@ export default function AirvoDashboard() {
                         className={`btn btn-sm ${compareDiffMode && compareDiffLevel==="word" ? "btn-primary" : "btn-ghost"}`}
                         onClick={() => { setCompareDiffMode(true); setCompareDiffLevel("word"); }}
                         style={{ fontFamily:"var(--mono)", fontSize:11, padding:"2px 8px", lineHeight:1.3 }}
-                        title={t("compare_diff_tip")}>
+                        title={t("compare_diff_tip") + " — " + t("compare_diff_word")}>
                         ▨ {t("compare_diff_word")}
                       </button>
                       <button
                         className={`btn btn-sm ${compareDiffMode && compareDiffLevel==="sentence" ? "btn-primary" : "btn-ghost"}`}
                         onClick={() => { setCompareDiffMode(true); setCompareDiffLevel("sentence"); }}
                         style={{ fontFamily:"var(--mono)", fontSize:11, padding:"2px 8px", lineHeight:1.3 }}
-                        title={t("compare_diff_sentence")}>
+                        title={t("compare_diff_sentence") + ": " + "Highlights sentences unique to each model"}>
                         ≡ {t("compare_diff_sentence")}
                       </button>
                     </div>
                   )}
                   {compareHistory.length > 0 && (
                     <button className="btn btn-ghost btn-sm" onClick={clearCompareHistory}
+                      title={t("compare_clear_confirm")}
                       style={{ fontFamily:"var(--mono)", fontSize:12 }}>
                       {t("compare_clear")}
                     </button>
                   )}
                   {viewData && (
                     <button className="btn btn-ghost btn-sm" onClick={exportMarkdown}
+                      title="Export full comparison as .md file (includes model ID, time, tokens)"
                       style={{ fontFamily:"var(--mono)", fontSize:12 }}>
                       📄 {compareExportDone ? t("compare_export_done") : t("compare_export")}
                     </button>
                   )}
                   <button className={`btn btn-sm ${compareAutoRefresh ? "btn-primary" : "btn-ghost"}`}
                     onClick={() => setCompareAutoRefresh(p => !p)}
+                    title="Auto-refresh: polls for new comparisons every 3 seconds from your IDE"
                     style={{ fontFamily:"var(--mono)", fontSize:12 }}>
                     {compareAutoRefresh ? "⏹ " : "⏸ "}{t("compare_auto")}
                   </button>
-                  <button className="btn btn-ghost btn-sm" onClick={() => fetchCompare(false)} disabled={compareLoading}>
+                  <button className="btn btn-ghost btn-sm" onClick={() => fetchCompare(false)} disabled={compareLoading}
+                    title="Refresh comparison data now">
                     {compareLoading ? "…" : "⟳"} {t("compare_refresh")}
                   </button>
                 </div>
@@ -3381,7 +3527,7 @@ export default function AirvoDashboard() {
                   <button className={`btn btn-sm ${compareShowTemps ? "btn-primary" : "btn-ghost"}`}
                     onClick={() => setCompareShowTemps(p => !p)}
                     style={{ fontFamily:"var(--mono)", fontSize:10, padding:"2px 8px" }}
-                    title={t("compare_temps")}>
+                    title={"Set individual temperature per model. * = uses global temperature from Configuration"}>
                     🌡 {t("compare_temps")}
                   </button>
                 </div>
@@ -3428,7 +3574,7 @@ export default function AirvoDashboard() {
                       onClick={() => saveTemplate()}
                       disabled={!comparePrompt.trim()}
                       style={{ fontFamily:"var(--mono)", fontSize:10, padding:"4px 8px" }}
-                      title={t("compare_template_save")}>
+                      title={"Save this prompt as a template chip — click any chip to reuse it instantly"}>
                       {t("compare_template_save")}
                     </button>
                   </div>
@@ -3522,6 +3668,7 @@ export default function AirvoDashboard() {
                     {viewData.prompt && !compareRunning && (
                       <button className="btn btn-ghost btn-sm"
                         onClick={() => streamCompare(viewData.prompt)}
+                        title={"Re-send this exact prompt through all currently active models: " + viewData.prompt.slice(0, 60) + (viewData.prompt.length > 60 ? "…" : "")}
                         style={{ fontFamily:"var(--mono)", fontSize:11, marginLeft:"auto" }}>
                         {t("compare_rerun")}
                       </button>
@@ -4333,6 +4480,36 @@ function HelpPage({ t, setPage }) {
         <div className="help-field-block">
           <div className="help-field-title">💡 {t("help_agent_tip_title")}</div>
           <div className="help-field-desc">{t("help_agent_tip_body")}</div>
+        </div>
+      </div>
+
+      {/* Compare tab */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">⊞</span>
+          {t("help_compare_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-desc" style={{ lineHeight:1.8 }}>{t("help_compare_intro")}</div>
+        </div>
+        {[
+          { icon:"⊞", tk:"streaming"  },
+          { icon:"▨", tk:"diff"       },
+          { icon:"📌", tk:"pin"        },
+          { icon:"📊", tk:"similarity" },
+          { icon:"💾", tk:"templates"  },
+          { icon:"🌡", tk:"temps"      },
+          { icon:"←→", tk:"history"    },
+          { icon:"📄", tk:"export"     },
+          { icon:"↓📄", tk:"sort"       },
+        ].map(({ icon, tk }) => (
+          <div key={tk} className="help-field-block">
+            <div className="help-field-title">{icon} {t(`help_compare_${tk}_title`)}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{t(`help_compare_${tk}_body`)}</div>
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("compare")}>⊞ {t("nav_compare")}</button>
         </div>
       </div>
 
