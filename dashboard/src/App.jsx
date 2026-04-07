@@ -286,6 +286,13 @@ const I18N = {
     compare_of:"of",
     compare_export:"Export MD",
     compare_export_done:"Exported ✓",
+    compare_fastest:"Fastest",
+    compare_most_tokens:"Most",
+    compare_expand:"Focus",
+    compare_collapse:"Show all",
+    compare_copy_prompt:"Copy prompt",
+    compare_stats:"Performance",
+    compare_time:"Time",
   },
   es: {
     nav_models:"Modelos", nav_status:"Estado", nav_config:"Configuración",
@@ -508,6 +515,13 @@ const I18N = {
     compare_of:"de",
     compare_export:"Exportar MD",
     compare_export_done:"Exportado ✓",
+    compare_fastest:"Más rápido",
+    compare_most_tokens:"Más tokens",
+    compare_expand:"Foco",
+    compare_collapse:"Ver todos",
+    compare_copy_prompt:"Copiar prompt",
+    compare_stats:"Rendimiento",
+    compare_time:"Tiempo",
   },
   fr: {
     nav_models:"Modèles", nav_status:"Statut", nav_config:"Configuration", nav_add:"Ajouter Modèle", nav_help:"Aide", nav_active:"ACTIFS", nav_none:"aucun",
@@ -727,6 +741,13 @@ const I18N = {
     compare_of:"sur",
     compare_export:"Exporter MD",
     compare_export_done:"Exporté ✓",
+    compare_fastest:"Le plus rapide",
+    compare_most_tokens:"Le plus",
+    compare_expand:"Focus",
+    compare_collapse:"Voir tout",
+    compare_copy_prompt:"Copier le prompt",
+    compare_stats:"Performance",
+    compare_time:"Temps",
   },
   de: {
     nav_models:"Modelle", nav_status:"Status", nav_config:"Konfiguration", nav_add:"Modell Hinzufügen", nav_help:"Hilfe", nav_active:"AKTIV", nav_none:"keine",
@@ -946,6 +967,13 @@ const I18N = {
     compare_of:"von",
     compare_export:"MD exportieren",
     compare_export_done:"Exportiert ✓",
+    compare_fastest:"Schnellste",
+    compare_most_tokens:"Meiste",
+    compare_expand:"Fokus",
+    compare_collapse:"Alle anzeigen",
+    compare_copy_prompt:"Prompt kopieren",
+    compare_stats:"Leistung",
+    compare_time:"Zeit",
   },
   zh: {
     nav_models:"模型", nav_status:"状态", nav_config:"配置", nav_add:"添加模型", nav_help:"帮助", nav_active:"已激活", nav_none:"无",
@@ -1165,6 +1193,13 @@ const I18N = {
     compare_of:"/",
     compare_export:"导出 MD",
     compare_export_done:"已导出 ✓",
+    compare_fastest:"最快",
+    compare_most_tokens:"最多",
+    compare_expand:"专注",
+    compare_collapse:"显示全部",
+    compare_copy_prompt:"复制提示",
+    compare_stats:"性能",
+    compare_time:"时间",
   },
   ja: {
     nav_models:"モデル", nav_status:"ステータス", nav_config:"設定", nav_add:"モデルを追加", nav_help:"ヘルプ", nav_active:"アクティブ", nav_none:"なし",
@@ -1384,6 +1419,13 @@ const I18N = {
     compare_of:"/",
     compare_export:"MD エクスポート",
     compare_export_done:"エクスポート済み ✓",
+    compare_fastest:"最速",
+    compare_most_tokens:"最多",
+    compare_expand:"フォーカス",
+    compare_collapse:"全て表示",
+    compare_copy_prompt:"プロンプトをコピー",
+    compare_stats:"パフォーマンス",
+    compare_time:"時間",
   },
   pt: {
     nav_models:"Modelos", nav_status:"Status", nav_config:"Configuração", nav_add:"Adicionar Modelo", nav_help:"Ajuda", nav_active:"ATIVOS", nav_none:"nenhum",
@@ -1603,6 +1645,13 @@ const I18N = {
     compare_of:"de",
     compare_export:"Exportar MD",
     compare_export_done:"Exportado ✓",
+    compare_fastest:"Mais rápido",
+    compare_most_tokens:"Mais tokens",
+    compare_expand:"Foco",
+    compare_collapse:"Ver todos",
+    compare_copy_prompt:"Copiar prompt",
+    compare_stats:"Desempenho",
+    compare_time:"Tempo",
   },
 };
 
@@ -1759,6 +1808,8 @@ const css = `
   .compare-code-header { display:flex; align-items:center; justify-content:space-between; padding:6px 12px; border-bottom:1px solid #2a2a3a; background:#0a0a12; }
   .compare-code-copy { background:transparent; border:1px solid #2a2a3a; border-radius:4px; color:var(--text2); font-family:var(--mono); font-size:10px; padding:2px 8px; cursor:pointer; transition:all .15s; }
   .compare-code-copy:hover { border-color:var(--accent); color:var(--accent); }
+  .compare-expand-btn { background:transparent; border:1px solid var(--border); border-radius:4px; color:var(--text2); font-family:var(--mono); font-size:12px; padding:2px 7px; cursor:pointer; transition:all .15s; line-height:1; flex-shrink:0; }
+  .compare-expand-btn:hover { border-color:var(--accent); color:var(--accent); }
   .hljs-keyword,.hljs-operator,.hljs-selector-tag,.hljs-built_in { color:#7c6dfa; font-weight:700; }
   .hljs-string,.hljs-attr,.hljs-attribute { color:#4ade80; }
   .hljs-comment,.hljs-quote { color:#8888aa; font-style:italic; }
@@ -1896,7 +1947,7 @@ function CodeBlock({ block, t }) {
   );
 }
 
-function CompareCard({ result, index, t }) {
+function CompareCard({ result, index, t, isFastest, isMostTokens, isExpanded, onExpand }) {
   const [copied, setCopied] = useState(false);
   const color = COMPARE_COLORS[index % COMPARE_COLORS.length];
 
@@ -1912,31 +1963,43 @@ function CompareCard({ result, index, t }) {
     <div className="compare-card" style={{ borderTop:`3px solid ${color}` }}>
       <div className="compare-card-header">
         <div style={{ flex:1, minWidth:0 }}>
-          <div style={{ fontWeight:700, fontSize:14, marginBottom:2, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
-            {result.name}
+          <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom:2 }}>
+            <span style={{ fontWeight:700, fontSize:14 }}>{result.name}</span>
+            {isFastest && (
+              <span className="compare-badge" style={{ background:"#001a0a", color:"var(--green)", border:"1px solid #2a5a2a" }}>⚡ {t("compare_fastest")}</span>
+            )}
+            {isMostTokens && (
+              <span className="compare-badge" style={{ background:"#1a1500", color:"var(--yellow)", border:"1px solid #5a4a0a" }}>📝 {t("compare_most_tokens")}</span>
+            )}
           </div>
           <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
             {result.model}
           </div>
         </div>
-        {result.error ? (
-          <span className="compare-badge" style={{ background:"#2a1a1a", color:"var(--red)", border:"1px solid #4a2a2a" }}>
-            {t("compare_error_badge")}
-          </span>
-        ) : (
-          <div style={{ display:"flex", gap:6, alignItems:"center", flexShrink:0 }}>
-            {result.elapsed_s != null && (
-              <span className="compare-badge" style={{ background:"#0a1a0a", color:"var(--green)", border:"1px solid #2a4a2a" }}>
-                ⚡ {result.elapsed_s}{t("compare_elapsed")}
-              </span>
-            )}
-            {result.tokens > 0 && (
-              <span className="compare-badge" style={{ background:"var(--bg3)", color:"var(--text2)", border:"1px solid var(--border)" }}>
-                {result.tokens} {t("compare_tokens")}
-              </span>
-            )}
-          </div>
-        )}
+        <div style={{ display:"flex", alignItems:"center", gap:6, flexShrink:0 }}>
+          {result.error ? (
+            <span className="compare-badge" style={{ background:"#2a1a1a", color:"var(--red)", border:"1px solid #4a2a2a" }}>
+              {t("compare_error_badge")}
+            </span>
+          ) : (
+            <>
+              {result.elapsed_s != null && (
+                <span className="compare-badge" style={{ background:"#0a1a0a", color:"var(--green)", border:"1px solid #2a4a2a" }}>
+                  ⚡ {result.elapsed_s}{t("compare_elapsed")}
+                </span>
+              )}
+              {result.tokens > 0 && (
+                <span className="compare-badge" style={{ background:"var(--bg3)", color:"var(--text2)", border:"1px solid var(--border)" }}>
+                  {result.tokens} {t("compare_tokens")}
+                </span>
+              )}
+            </>
+          )}
+          <button className="compare-expand-btn" onClick={onExpand}
+            title={isExpanded ? t("compare_collapse") : t("compare_expand")}>
+            {isExpanded ? "⊡" : "⛶"}
+          </button>
+        </div>
       </div>
       <div className="compare-card-body">
         {result.error
@@ -2012,6 +2075,7 @@ export default function AirvoDashboard() {
   const [compareHistory, setCompareHistory] = useState([]);
   const [compareHistIdx, setCompareHistIdx] = useState(0);
   const [compareExportDone, setCompareExportDone] = useState(false);
+  const [compareExpandIdx, setCompareExpandIdx] = useState(null);
   const compareLastId = useRef(null);
   const [discOpen,  setDiscOpen]  = useState(false);
   const [discTab,   setDiscTab]   = useState("local");   // "local" | "cloud"
@@ -2795,6 +2859,13 @@ export default function AirvoDashboard() {
               setTimeout(() => setCompareExportDone(false), 2500);
             }
 
+            const _validTime = viewData ? viewData.results.filter(r => !r.error && r.elapsed_s != null) : [];
+            const fastestIdx = _validTime.length > 1
+              ? viewData.results.indexOf(_validTime.reduce((a, b) => a.elapsed_s < b.elapsed_s ? a : b)) : -1;
+            const _validTok = viewData ? viewData.results.filter(r => !r.error && r.tokens > 0) : [];
+            const mostTokensIdx = _validTok.length > 1
+              ? viewData.results.indexOf(_validTok.reduce((a, b) => a.tokens > b.tokens ? a : b)) : -1;
+
             return <>
               <h1 className="page-title">{t("compare_title")}</h1>
               <p className="page-sub">{t("compare_sub")}</p>
@@ -2803,13 +2874,13 @@ export default function AirvoDashboard() {
                 {compareHistory.length > 1 ? (
                   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
                     <button className="btn btn-ghost btn-sm"
-                      onClick={() => setCompareHistIdx(i => Math.min(i + 1, compareHistory.length - 1))}
+                      onClick={() => { setCompareHistIdx(i => Math.min(i + 1, compareHistory.length - 1)); setCompareExpandIdx(null); }}
                       disabled={compareHistIdx >= compareHistory.length - 1}>←</button>
                     <span style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
                       {t("compare_history_label")} {compareHistIdx + 1} {t("compare_of")} {compareHistory.length}
                     </span>
                     <button className="btn btn-ghost btn-sm"
-                      onClick={() => setCompareHistIdx(i => Math.max(i - 1, 0))}
+                      onClick={() => { setCompareHistIdx(i => Math.max(i - 1, 0)); setCompareExpandIdx(null); }}
                       disabled={compareHistIdx === 0}>→</button>
                   </div>
                 ) : <div />}
@@ -2862,7 +2933,13 @@ export default function AirvoDashboard() {
                   {/* Prompt preview */}
                   {viewData.prompt && (
                     <div style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:10, padding:"14px 18px" }}>
-                      <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>{t("compare_prompt")}</div>
+                      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1 }}>{t("compare_prompt")}</div>
+                        <button className="btn btn-ghost btn-sm" style={{ fontFamily:"var(--mono)", fontSize:10, padding:"1px 7px" }}
+                          onClick={() => { navigator.clipboard.writeText(viewData.prompt); toast(t("copied"), "success"); }}>
+                          {t("compare_copy_prompt")}
+                        </button>
+                      </div>
                       <div style={{ fontFamily:"var(--mono)", fontSize:13, color:"var(--text)", lineHeight:1.7, whiteSpace:"pre-wrap", wordBreak:"break-word", maxHeight:72, overflow:"hidden", WebkitMaskImage:"linear-gradient(to bottom, black 50%, transparent 100%)" }}>
                         {viewData.prompt}
                       </div>
@@ -2871,14 +2948,75 @@ export default function AirvoDashboard() {
 
                   {/* Response cards grid */}
                   <div className="compare-grid" style={{
-                    gridTemplateColumns: viewData.results.length === 1 ? "1fr"
+                    gridTemplateColumns: compareExpandIdx !== null ? "1fr"
+                      : viewData.results.length === 1 ? "1fr"
                       : viewData.results.length === 2 ? "1fr 1fr"
                       : "repeat(3, 1fr)"
                   }}>
-                    {viewData.results.map((result, i) => (
-                      <CompareCard key={i} result={result} index={i} t={t} />
-                    ))}
+                    {(compareExpandIdx !== null
+                      ? viewData.results.slice(compareExpandIdx, compareExpandIdx + 1)
+                      : viewData.results
+                    ).map((result, i) => {
+                      const realIdx = compareExpandIdx !== null ? compareExpandIdx : i;
+                      return (
+                        <CompareCard key={realIdx} result={result} index={realIdx} t={t}
+                          isFastest={fastestIdx === realIdx}
+                          isMostTokens={mostTokensIdx === realIdx}
+                          isExpanded={compareExpandIdx === realIdx}
+                          onExpand={() => setCompareExpandIdx(compareExpandIdx === realIdx ? null : realIdx)}
+                        />
+                      );
+                    })}
                   </div>
+
+                  {/* Stats performance bar */}
+                  {viewData.results.filter(r => !r.error).length > 1 && (() => {
+                    const valid = viewData.results.filter(r => !r.error);
+                    const maxTime = Math.max(...valid.map(r => r.elapsed_s ?? 0));
+                    const maxTok  = Math.max(...valid.map(r => r.tokens ?? 0));
+                    if (maxTime === 0 && maxTok === 0) return null;
+                    return (
+                      <div style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:10, padding:"14px 18px" }}>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:12 }}>
+                          {t("compare_stats")}
+                        </div>
+                        {valid.map(r => {
+                          const ri = viewData.results.indexOf(r);
+                          const col = COMPARE_COLORS[ri % COMPARE_COLORS.length];
+                          const tp = maxTime > 0 ? ((r.elapsed_s ?? 0) / maxTime) * 100 : 0;
+                          const kp = maxTok  > 0 ? ((r.tokens  ?? 0) / maxTok)  * 100 : 0;
+                          return (
+                            <div key={ri} style={{ marginBottom:10 }}>
+                              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:5 }}>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:11, fontWeight:700, color:col }}>{r.name}</span>
+                                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+                                  {r.elapsed_s != null ? `${r.elapsed_s}s` : "—"} · {r.tokens > 0 ? `${r.tokens} tok` : "—"}
+                                </span>
+                              </div>
+                              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:6 }}>
+                                {maxTime > 0 && (
+                                  <div>
+                                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", marginBottom:3 }}>⚡ {t("compare_time")}</div>
+                                    <div style={{ background:"var(--bg)", borderRadius:4, height:5, overflow:"hidden" }}>
+                                      <div style={{ width:`${tp}%`, height:"100%", background:col, borderRadius:4, transition:"width .4s" }}/>
+                                    </div>
+                                  </div>
+                                )}
+                                {maxTok > 0 && (
+                                  <div>
+                                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", marginBottom:3 }}>📝 {t("compare_tokens")}</div>
+                                    <div style={{ background:"var(--bg)", borderRadius:4, height:5, overflow:"hidden" }}>
+                                      <div style={{ width:`${kp}%`, height:"100%", background:col, opacity:0.6, borderRadius:4, transition:"width .4s" }}/>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </>;
