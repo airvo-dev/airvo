@@ -185,7 +185,7 @@ class Settings(BaseSettings):
     timeout:             int   = 30
 
     # ── System prompt ─────────────────────────────────────
-    system_prompt: str = "You are an expert software development assistant."
+    system_prompt: str = "You are an expert software development assistant. Always respond in the language of the user's most recent message."
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 

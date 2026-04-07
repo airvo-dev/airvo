@@ -1,4 +1,30 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import hljs from "highlight.js/lib/core";
+import _hljsPY   from "highlight.js/lib/languages/python";
+import _hljsJS   from "highlight.js/lib/languages/javascript";
+import _hljsTS   from "highlight.js/lib/languages/typescript";
+import _hljsJAVA from "highlight.js/lib/languages/java";
+import _hljsCPP  from "highlight.js/lib/languages/cpp";
+import _hljsCS   from "highlight.js/lib/languages/csharp";
+import _hljsGO   from "highlight.js/lib/languages/go";
+import _hljsRUST from "highlight.js/lib/languages/rust";
+import _hljsSH   from "highlight.js/lib/languages/bash";
+import _hljsJSON from "highlight.js/lib/languages/json";
+import _hljsXML  from "highlight.js/lib/languages/xml";
+import _hljsCSS  from "highlight.js/lib/languages/css";
+import _hljsSQL  from "highlight.js/lib/languages/sql";
+import _hljsYAML from "highlight.js/lib/languages/yaml";
+import _hljsKT   from "highlight.js/lib/languages/kotlin";
+import _hljsRB   from "highlight.js/lib/languages/ruby";
+[["python",_hljsPY],["py",_hljsPY],["javascript",_hljsJS],["js",_hljsJS],["jsx",_hljsJS],
+ ["typescript",_hljsTS],["ts",_hljsTS],["tsx",_hljsTS],["java",_hljsJAVA],
+ ["cpp",_hljsCPP],["c",_hljsCPP],["csharp",_hljsCS],["cs",_hljsCS],
+ ["go",_hljsGO],["rust",_hljsRUST],["rs",_hljsRUST],
+ ["bash",_hljsSH],["sh",_hljsSH],["shell",_hljsSH],
+ ["json",_hljsJSON],["xml",_hljsXML],["html",_hljsXML],
+ ["css",_hljsCSS],["sql",_hljsSQL],["yaml",_hljsYAML],["yml",_hljsYAML],
+ ["kotlin",_hljsKT],["kt",_hljsKT],["ruby",_hljsRB],["rb",_hljsRB],
+].forEach(([alias, lang]) => { if (!hljs.getLanguage(alias)) hljs.registerLanguage(alias, lang); });
 
 const API = import.meta.env.DEV ? "" : "";
 
@@ -1693,6 +1719,22 @@ const css = `
   .compare-card-footer { padding:10px 18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:8px; }
   .compare-pre { font-family:var(--mono); font-size:12px; color:var(--text); white-space:pre-wrap; word-break:break-word; line-height:1.7; margin:0; }
   .compare-badge { font-family:var(--mono); font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; flex-shrink:0; }
+  .compare-code-block { position:relative; margin:10px 0; border-radius:8px; overflow:hidden; background:#0d0d16; border:1px solid #2a2a3a; }
+  .compare-code-block pre { margin:0; padding:28px 16px 12px; overflow-x:auto; font-family:var(--mono); font-size:12px; line-height:1.7; color:var(--text); }
+  .compare-code-lang { position:absolute; top:7px; right:12px; font-family:var(--mono); font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; pointer-events:none; }
+  .hljs-keyword,.hljs-operator,.hljs-selector-tag,.hljs-built_in { color:#7c6dfa; font-weight:700; }
+  .hljs-string,.hljs-attr,.hljs-attribute { color:#4ade80; }
+  .hljs-comment,.hljs-quote { color:#8888aa; font-style:italic; }
+  .hljs-number,.hljs-literal { color:#fbbf24; }
+  .hljs-type,.hljs-class .hljs-title,.hljs-title.class_ { color:#74c69d; }
+  .hljs-function .hljs-title,.hljs-title.function_ { color:#fa6d8f; }
+  .hljs-variable,.hljs-params { color:#e8e8f0; }
+  .hljs-name,.hljs-selector-id,.hljs-selector-class { color:#7c6dfa; }
+  .hljs-meta { color:#8888aa; }
+  .hljs-addition { background:#0a2a0a; color:#4ade80; }
+  .hljs-deletion { background:#2a0a0a; color:#f87171; }
+  .hljs-emphasis { font-style:italic; }
+  .hljs-strong { font-weight:700; }
 `;
 
 function getProviderClass(p) {
@@ -1768,6 +1810,30 @@ function LangDropdown({ lang, setLang }) {
   );
 }
 
+function parseBlocks(text) {
+  if (!text) return [];
+  const parts = [];
+  const regex = /```(\w*)\n?([\s\S]*?)```/g;
+  let lastIndex = 0, match;
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex)
+      parts.push({ type:"text", content:text.slice(lastIndex, match.index) });
+    parts.push({ type:"code", lang:(match[1]||"").toLowerCase(), content:match[2] });
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < text.length)
+    parts.push({ type:"text", content:text.slice(lastIndex) });
+  return parts.length ? parts : [{ type:"text", content:text }];
+}
+
+function highlightCode(code, lang) {
+  if (lang && hljs.getLanguage(lang)) {
+    try { return hljs.highlight(code, { language: lang }).value; } catch {}
+  }
+  try { return hljs.highlightAuto(code).value; } catch {}
+  return code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 const COMPARE_COLORS = ["var(--accent)", "var(--accent2)", "var(--green)", "var(--yellow)"];
 
 function CompareCard({ result, index, t }) {
@@ -1806,7 +1872,16 @@ function CompareCard({ result, index, t }) {
       <div className="compare-card-body">
         {result.error
           ? <div style={{ color:"var(--red)", fontFamily:"var(--mono)", fontSize:12, lineHeight:1.7 }}>✗ {result.error}</div>
-          : <pre className="compare-pre">{result.content || ""}</pre>
+          : parseBlocks(result.content || "").map((block, i) =>
+              block.type === "code" ? (
+                <div key={i} className="compare-code-block">
+                  {block.lang && <span className="compare-code-lang">{block.lang}</span>}
+                  <pre dangerouslySetInnerHTML={{ __html: highlightCode(block.content, block.lang) }} />
+                </div>
+              ) : (
+                <pre key={i} className="compare-pre">{block.content}</pre>
+              )
+            )
         }
       </div>
       <div className="compare-card-footer">
