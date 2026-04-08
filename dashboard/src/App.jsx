@@ -322,6 +322,9 @@ const I18N = {
     bench_export_md:"Export .md", bench_export_csv:"Export .csv", bench_copy_json:"Copy JSON",
     bench_compare_runs:"Compare Runs", bench_run_a:"Run A", bench_run_b:"Run B",
     bench_no_history:"Need 2+ runs to compare",
+    bench_accuracy:"Accuracy", bench_accuracy_pass:"✓ correct", bench_accuracy_fail:"✗ incorrect",
+    bench_modal_title:"New model activated!", bench_modal_body:"Run a quick Speed Test to see how it compares?",
+    bench_modal_go:"▶ Run Speed Test", bench_modal_skip:"Skip",
     compare_title:"Response Comparison",
     compare_sub:"Last multi-model responses side by side — copy and pick the best",
     compare_empty:"No multi-model responses yet",
@@ -633,6 +636,9 @@ const I18N = {
     bench_export_md:"Exportar .md", bench_export_csv:"Exportar .csv", bench_copy_json:"Copiar JSON",
     bench_compare_runs:"Comparar Ejecuciones", bench_run_a:"Ejecución A", bench_run_b:"Ejecución B",
     bench_no_history:"Necesitás 2+ ejecuciones para comparar",
+    bench_accuracy:"Precisión", bench_accuracy_pass:"✓ correcto", bench_accuracy_fail:"✗ incorrecto",
+    bench_modal_title:"¡Modelo activado!", bench_modal_body:"¿Querés correr un Speed Test rápido para ver cómo se compara?",
+    bench_modal_go:"▶ Correr Speed Test", bench_modal_skip:"Omitir",
     compare_title:"Comparación de Respuestas",
     compare_sub:"Últimas respuestas multi-modelo lado a lado — copiá y elegí la mejor",
     compare_empty:"Sin respuestas multi-modelo todavía",
@@ -941,6 +947,9 @@ const I18N = {
     bench_export_md:"Exporter .md", bench_export_csv:"Exporter .csv", bench_copy_json:"Copier JSON",
     bench_compare_runs:"Comparer les Exécutions", bench_run_a:"Exécution A", bench_run_b:"Exécution B",
     bench_no_history:"2+ exécutions nécessaires pour comparer",
+    bench_accuracy:"Précision", bench_accuracy_pass:"✓ correct", bench_accuracy_fail:"✗ incorrect",
+    bench_modal_title:"Nouveau modèle activé !", bench_modal_body:"Lancer un Speed Test rapide pour voir comment il se compare ?",
+    bench_modal_go:"▶ Lancer Speed Test", bench_modal_skip:"Ignorer",
     compare_title:"Comparaison des Réponses",
     compare_sub:"Dernières réponses multi-modèles côte à côte — copiez et choisissez la meilleure",
     compare_empty:"Aucune réponse multi-modèle pour l'instant",
@@ -1249,6 +1258,9 @@ const I18N = {
     bench_export_md:".md exportieren", bench_export_csv:".csv exportieren", bench_copy_json:"JSON kopieren",
     bench_compare_runs:"Ausführungen vergleichen", bench_run_a:"Ausführung A", bench_run_b:"Ausführung B",
     bench_no_history:"2+ Ausführungen zum Vergleichen erforderlich",
+    bench_accuracy:"Genauigkeit", bench_accuracy_pass:"✓ korrekt", bench_accuracy_fail:"✗ falsch",
+    bench_modal_title:"Neues Modell aktiviert!", bench_modal_body:"Schnellen Speed Test ausführen um zu vergleichen?",
+    bench_modal_go:"▶ Speed Test starten", bench_modal_skip:"Überspringen",
     compare_title:"Antwort-Vergleich",
     compare_sub:"Letzte Multi-Modell-Antworten nebeneinander — kopieren und die beste wählen",
     compare_empty:"Noch keine Multi-Modell-Antworten",
@@ -1557,6 +1569,9 @@ const I18N = {
     bench_export_md:"导出 .md", bench_export_csv:"导出 .csv", bench_copy_json:"复制 JSON",
     bench_compare_runs:"比较运行", bench_run_a:"运行 A", bench_run_b:"运行 B",
     bench_no_history:"需要 2+ 次运行才能比较",
+    bench_accuracy:"准确率", bench_accuracy_pass:"✓ 正确", bench_accuracy_fail:"✗ 错误",
+    bench_modal_title:"新模型已激活！", bench_modal_body:"运行快速 Speed Test 来比较效果？",
+    bench_modal_go:"▶ 运行 Speed Test", bench_modal_skip:"跳过",
     compare_title:"响应对比",
     compare_sub:"最新多模型响应并排显示 — 复制并选择最佳答案",
     compare_empty:"暂无多模型响应",
@@ -1865,6 +1880,9 @@ const I18N = {
     bench_export_md:".md をエクスポート", bench_export_csv:".csv をエクスポート", bench_copy_json:"JSONをコピー",
     bench_compare_runs:"実行を比較", bench_run_a:"実行 A", bench_run_b:"実行 B",
     bench_no_history:"比較には2回以上の実行が必要です",
+    bench_accuracy:"正確性", bench_accuracy_pass:"✓ 正解", bench_accuracy_fail:"✗ 不正解",
+    bench_modal_title:"新しいモデルが有効化されました！", bench_modal_body:"スピードテストで比較しますか？",
+    bench_modal_go:"▶ Speed Test実行", bench_modal_skip:"スキップ",
     compare_title:"レスポンス比較",
     compare_sub:"最新のマルチモデルレスポンスを並べて表示 — コピーして最良を選択",
     compare_empty:"マルチモデルレスポンスはまだありません",
@@ -2173,6 +2191,9 @@ const I18N = {
     bench_export_md:"Exportar .md", bench_export_csv:"Exportar .csv", bench_copy_json:"Copiar JSON",
     bench_compare_runs:"Comparar Execuções", bench_run_a:"Execução A", bench_run_b:"Execução B",
     bench_no_history:"Necessário 2+ execuções para comparar",
+    bench_accuracy:"Precisão", bench_accuracy_pass:"✓ correto", bench_accuracy_fail:"✗ incorreto",
+    bench_modal_title:"Novo modelo ativado!", bench_modal_body:"Executar um Speed Test rápido para comparar?",
+    bench_modal_go:"▶ Executar Speed Test", bench_modal_skip:"Pular",
     compare_title:"Comparação de Respostas",
     compare_sub:"Últimas respostas multi-modelo lado a lado — copie e escolha a melhor",
     compare_empty:"Sem respostas multi-modelo ainda",
@@ -2746,6 +2767,8 @@ export default function AirvoDashboard() {
   const [ragIndexing, setRagIndexing]   = useState(false);
   const [ragAdvanced, setRagAdvanced]   = useState(false);
   const [showRagWarning, setShowRagWarning] = useState(false);
+  const [showBenchModal, setShowBenchModal] = useState(false);
+  const [benchModalModel, setBenchModalModel] = useState("");
   const [hwStatus,  setHwStatus]  = useState(null);
   const [hwLoading, setHwLoading] = useState(false);
   const [hwProcesses,    setHwProcesses]    = useState(null);
@@ -3036,6 +3059,10 @@ export default function AirvoDashboard() {
       await fetch(`${API}/api/models/${encodeURIComponent(id)}/toggle?active=${!current}`, { method:"PATCH" });
       setModels(prev => prev.map(m => m.id===id ? { ...m, active:!current } : m));
       toast(t(!current?"toast_activated":"toast_deactivated"), !current?"success":"info");
+      if (!current && active.length >= 1) {
+        setBenchModalModel(models.find(m => m.id===id)?.name || id);
+        setShowBenchModal(true);
+      }
     } catch { toast(t("toast_error_toggle"), "error"); }
   }
 
@@ -4449,7 +4476,28 @@ export default function AirvoDashboard() {
         {toasts.map(x => <div key={x.id} className={`toast ${x.type}`}>{x.msg}</div>)}
       </div>
 
-      {/* RAG first-enable warning modal */}
+      {/* Benchmark-on-activate modal */}
+      {showBenchModal && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:500 }}>
+          <div style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:16, padding:32, maxWidth:400, width:"90%", boxShadow:"0 16px 64px rgba(0,0,0,0.8)" }}>
+            <div style={{ fontSize:32, marginBottom:12 }}>🏆</div>
+            <div style={{ fontSize:17, fontWeight:800, marginBottom:8 }}>{t("bench_modal_title")}</div>
+            <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--accent)", marginBottom:8 }}>{benchModalModel}</div>
+            <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", lineHeight:1.8, marginBottom:24 }}>
+              {t("bench_modal_body")}
+            </p>
+            <div style={{ display:"flex", gap:12 }}>
+              <button className="btn btn-primary" style={{ flex:1 }} onClick={() => {
+                setShowBenchModal(false);
+                setPage("bench");
+              }}>{t("bench_modal_go")}</button>
+              <button className="btn btn-ghost" onClick={() => setShowBenchModal(false)}>{t("bench_modal_skip")}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* RAG first-enable warning modal */}}
       {showRagWarning && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:500 }}>
           <div style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:16, padding:32, maxWidth:420, width:"90%", boxShadow:"0 16px 64px rgba(0,0,0,0.8)" }}>
@@ -4556,14 +4604,20 @@ const BENCH_SUITES = {
     { id:"sp3", label:"Colors", text:"List exactly 5 colors, one per line." },
   ]},
   coding:    { icon:"💻", key:"coding",    prompts:[
-    { id:"co1", label:"FizzBuzz",   text:"Write a Python FizzBuzz for 1 to 20. Return only the code, no explanation." },
-    { id:"co2", label:"Palindrome", text:"Write a Python function is_palindrome(s) returning True or False. Code only." },
-    { id:"co3", label:"Fibonacci",  text:"Write a Python function fib(n) returning the nth Fibonacci number. Code only." },
+    { id:"co1", label:"FizzBuzz",   text:"Write a Python FizzBuzz for 1 to 20. Return only the code, no explanation.",
+      check: (r) => r.includes("FizzBuzz") && r.includes("Fizz") && r.includes("Buzz") },
+    { id:"co2", label:"Palindrome", text:"Write a Python function is_palindrome(s) returning True or False. Code only.",
+      check: (r) => r.includes("is_palindrome") && (r.includes("True") || r.includes("true")) },
+    { id:"co3", label:"Fibonacci",  text:"Write a Python function fib(n) returning the nth Fibonacci number. Code only.",
+      check: (r) => r.includes("fib") && r.includes("return") },
   ]},
   reasoning: { icon:"🧠", key:"reasoning", prompts:[
-    { id:"re1", label:"Syllogism", text:"All bloops are razzles. All razzles are lazzles. Are all bloops lazzles? Answer Yes or No and explain in one sentence." },
-    { id:"re2", label:"Math",      text:"Calculate: (17 × 23) + (456 / 8). Show your working." },
-    { id:"re3", label:"Sequence",  text:"What comes next: 2, 4, 8, 16, 32, ___? Give the answer and explain in one sentence." },
+    { id:"re1", label:"Syllogism", text:"All bloops are razzles. All razzles are lazzles. Are all bloops lazzles? Answer Yes or No and explain in one sentence.",
+      check: (r) => /\byes\b/i.test(r) },
+    { id:"re2", label:"Math",      text:"Calculate: (17 × 23) + (456 / 8). Show your working.",
+      check: (r) => r.includes("448") },
+    { id:"re3", label:"Sequence",  text:"What comes next: 2, 4, 8, 16, 32, ___? Give the answer and explain in one sentence.",
+      check: (r) => r.includes("64") },
   ]},
   creative:  { icon:"🎨", key:"creative",  prompts:[
     { id:"cr1", label:"Haiku",    text:"Write a haiku about artificial intelligence." },
@@ -4652,12 +4706,25 @@ function BenchmarkPage({ t, activeModels }) {
     const sc = {};
     allModels.forEach(id => {
       const nr = run.results[0]?.modelResults?.find(r => r.model === id);
-      sc[id] = { name:nr?.name||id, totE:0, totT:0, totTS:0, n:0, errors:0, speedPts:0, tokenPts:0 };
+      sc[id] = { name:nr?.name||id, totE:0, totT:0, totTS:0, n:0, errors:0, speedPts:0, tokenPts:0, correct:0, checkable:0 };
     });
     const nP = run.results.length;
-    for (const { modelResults } of run.results) {
+    // get the suite's prompt list for check functions
+    const suitePrompts = BENCH_SUITES[run.suite]?.prompts || [];
+    for (let pi = 0; pi < run.results.length; pi++) {
+      const { modelResults } = run.results[pi];
+      const prompt = suitePrompts[pi];
       if (!modelResults?.length) continue;
       modelResults.forEach(r => { if (r.error && sc[r.model]) sc[r.model].errors++; });
+      // accuracy check
+      if (prompt?.check) {
+        modelResults.forEach(r => {
+          if (!r.error && sc[r.model]) {
+            sc[r.model].checkable++;
+            try { if (prompt.check(r.content || "")) sc[r.model].correct++; } catch {}
+          }
+        });
+      }
       const valid   = modelResults.filter(r => !r.error && r.elapsed_s);
       const sortedE = [...valid].sort((a,b) => a.elapsed_s - b.elapsed_s);
       const sortedT = [...valid].sort((a,b) => (b.tokens||0) - (a.tokens||0));
@@ -4675,12 +4742,20 @@ function BenchmarkPage({ t, activeModels }) {
     const maxPts = nP * allModels.size || 1;
     return Object.entries(sc).map(([id, s]) => {
       const consistency = s.n > 0 ? 1 - (s.errors / nP) : 0;
-      const score = Math.round(((s.speedPts/maxPts)*0.4 + (s.tokenPts/maxPts)*0.3 + consistency*0.3) * 100);
+      const accPct      = s.checkable > 0 ? s.correct / s.checkable : null;
+      const accW        = accPct !== null ? accPct * 0.25 : 0;
+      const accBase     = accPct !== null ? 0.25 : 0;
+      const denom       = 0.35 + 0.20 + 0.20 + accBase || 1;
+      const score = Math.round(
+        (((s.speedPts/maxPts)*0.35 + (s.tokenPts/maxPts)*0.20 + consistency*0.20 + accW) / denom) * 100
+      );
       return {
         id, name:s.name, score, errors:s.errors,
         avgE:  s.n ? (s.totE/s.n).toFixed(2) : "—",
         avgT:  s.n ? Math.round(s.totT/s.n)  : 0,
         avgTS: s.n ? Math.round(s.totTS/s.n) : 0,
+        accuracy: accPct !== null ? `${s.correct}/${s.checkable}` : null,
+        accPct,
       };
     }).sort((a,b) => b.score - a.score);
   }
@@ -4908,6 +4983,15 @@ function BenchmarkPage({ t, activeModels }) {
                       </div>
                       <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", width:44, textAlign:"right" }}>{m.avgTS} t/s</span>
                     </div>
+                    {/* Accuracy badge */}
+                    {m.accuracy && (
+                      <div style={{ marginTop:5, display:"flex", alignItems:"center", gap:8 }}>
+                        <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", width:28 }}>🎯</span>
+                        <span style={{ fontFamily:"var(--mono)", fontSize:11,
+                          color: m.accPct >= 0.7 ? "var(--green)" : m.accPct >= 0.4 ? "var(--yellow)" : "var(--red)"
+                        }}>{m.accuracy} {t("bench_accuracy").toLowerCase()}</span>
+                      </div>
+                    )}
                     {/* Sparkline */}
                     {spark.some(Boolean) && (
                       <div style={{ display:"flex", alignItems:"center", gap:8 }}>
@@ -4931,7 +5015,9 @@ function BenchmarkPage({ t, activeModels }) {
             <table style={{ width:"100%", borderCollapse:"collapse", background:"var(--bg2)", borderRadius:10, overflow:"hidden", marginBottom:24 }}>
               <thead>
                 <tr style={{ borderBottom:"1px solid var(--border)" }}>
-                  {["#","Model",t("bench_score"),"Avg ⚡","Avg 📝","Avg 🚀","⚠ Err"].map((h,hi) => (
+                  {["#","Model",t("bench_score"),"Avg ⚡","Avg 📝","Avg 🚀","⚠ Err",
+                    ...(BENCH_SUITES[suite]?.prompts?.some(p => p.check) ? [t("bench_accuracy")] : [])
+                  ].map((h,hi) => (
                     <th key={hi} style={{ textAlign: hi<2?"left":"right", padding:"8px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)" }}>{h}</th>
                   ))}
                 </tr>
@@ -4946,6 +5032,13 @@ function BenchmarkPage({ t, activeModels }) {
                     <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{m.avgT}</td>
                     <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--yellow)" }}>{m.avgTS}</td>
                     <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, color:m.errors>0?"var(--red)":"var(--text2)" }}>{m.errors||"—"}</td>
+                    {BENCH_SUITES[suite]?.prompts?.some(p => p.check) && (
+                      <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12,
+                        color: m.accuracy ? (m.accPct >= 0.7 ? "var(--green)" : m.accPct >= 0.4 ? "var(--yellow)" : "var(--red)") : "var(--text2)"
+                      }}>
+                        {m.accuracy ?? "—"}
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -5021,7 +5114,7 @@ function BenchmarkPage({ t, activeModels }) {
                   : <table style={{ width:"100%", borderCollapse:"collapse" }}>
                       <thead>
                         <tr style={{ borderBottom:"1px solid var(--border)" }}>
-                          {["Model","Elapsed","Tokens","Tok/s"].map((h,hi) => (
+                          {["Model","Elapsed","Tokens","Tok/s", prompt.check ? t("bench_accuracy") : null].filter(Boolean).map((h,hi) => (
                             <th key={hi} style={{ textAlign:hi===0?"left":"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>{h}</th>
                           ))}
                         </tr>
@@ -5029,6 +5122,14 @@ function BenchmarkPage({ t, activeModels }) {
                       <tbody>
                         {[...modelResults].sort((a,b)=>(a.elapsed_s||99)-(b.elapsed_s||99)).map((r,ri) => {
                           const ts = r.elapsed_s>0 ? Math.round(r.tokens/r.elapsed_s) : 0;
+                          let accBadge = null;
+                          if (prompt.check && !r.error) {
+                            let pass = false;
+                            try { pass = prompt.check(r.content || ""); } catch {}
+                            accBadge = pass
+                              ? <span style={{ color:"var(--green)", fontWeight:700 }}>✓</span>
+                              : <span style={{ color:"var(--red)",   fontWeight:700 }}>✗</span>;
+                          }
                           return (
                             <tr key={r.model} style={{ borderBottom:ri<modelResults.length-1?"1px solid var(--border)":"none" }}>
                               <td style={{ padding:"7px 14px", fontSize:12 }}>
@@ -5039,6 +5140,7 @@ function BenchmarkPage({ t, activeModels }) {
                               <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:ri===0&&!r.error?"var(--green)":"var(--text2)" }}>{r.elapsed_s?`${r.elapsed_s}s`:"—"}</td>
                               <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{r.tokens||"—"}</td>
                               <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{ts||"—"}</td>
+                              {prompt.check && <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:13 }}>{r.error ? <span style={{ color:"var(--text2)" }}>—</span> : accBadge}</td>}
                             </tr>
                           );
                         })}
