@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.5.6-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.5.7-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -398,6 +398,11 @@ Make sure continue.dev is installed in VS Code and that `airvo start` has run at
 ---
 
 ## Changelog
+
+**v0.5.7** — Benchmark suites backend persistence
+- Custom benchmark suites now saved to `~/.airvo/bench_suites.json` via `GET/PUT /api/bench/suites`. Suites survive browser clears, browser changes, and reinstalls.
+- Automatic migration: existing suites in localStorage are moved to the backend on first load.
+- Fallback to localStorage if server is unreachable.
 
 **v0.5.6** — API key test, model notes, help docs update
 - **API key test** — click 🔌 Test on any model card with a configured key; Airvo makes a minimal call and shows ✓ latency ms or ✗ error message.
