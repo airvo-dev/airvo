@@ -4,3 +4,6 @@ recursive-include airvo/dashboard/dist *
 # Include README and license
 include README.md
 include LICENSE
+
+# Exclude local documentation from PyPI package
+exclude _local_docs
