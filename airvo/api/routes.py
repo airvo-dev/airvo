@@ -34,6 +34,26 @@ def _save_history() -> None:
 
 _compare_store: deque = _load_history()  # persisted across restarts
 
+# ── Bench suites persistence ───────────────────────────────────────────────
+_BENCH_SUITES_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "bench_suites.json")
+
+def _load_bench_suites() -> dict:
+    try:
+        if os.path.exists(_BENCH_SUITES_FILE):
+            with open(_BENCH_SUITES_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return {}
+
+def _save_bench_suites(data: dict) -> None:
+    try:
+        os.makedirs(os.path.dirname(_BENCH_SUITES_FILE), exist_ok=True)
+        with open(_BENCH_SUITES_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception as _e:
+        logger.warning("[Bench] Failed to save suites: %s", _e)
+
 router = APIRouter()
 
 # ── Per-provider TPM / context limits ────────────────────────────────────
@@ -643,6 +663,21 @@ async def list_models():
         "object": "list",
         "data": [{"id": "airvo-auto", "object": "model", "owned_by": "airvo"}]
     }
+
+# ── Bench suites endpoints ────────────────────────────────────────────────
+
+@router.get("/api/bench/suites", tags=["Benchmarks"], summary="Get custom benchmark suites",
+    description="Returns all user-defined benchmark suites stored in ~/.airvo/bench_suites.json.")
+async def get_bench_suites():
+    return _load_bench_suites()
+
+@router.put("/api/bench/suites", tags=["Benchmarks"], summary="Save custom benchmark suites",
+    description="Persists all user-defined benchmark suites to ~/.airvo/bench_suites.json.")
+async def put_bench_suites(data: dict):
+    _save_bench_suites(data)
+    return {"ok": True}
+
+# ─────────────────────────────────────────────────────────────────────────
 
 @router.get("/api/health", tags=["Health"], summary="Health check",
     description="Returns server status, version, active models, total model count, config file path, and last request diagnostics.")

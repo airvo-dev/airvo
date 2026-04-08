@@ -4720,7 +4720,7 @@ export default function AirvoDashboard() {
         </div>
       )}
 
-      {/* RAG first-enable warning modal */}}
+      {/* RAG first-enable warning modal */}
       {showRagWarning && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:500 }}>
           <div style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:16, padding:32, maxWidth:420, width:"90%", boxShadow:"0 16px 64px rgba(0,0,0,0.8)" }}>
@@ -4929,21 +4929,41 @@ function BenchmarkPage({ t, activeModels }) {
   const [compareMode,   setCompareMode]  = useState(false);
   const [cmpIdxA,       setCmpIdxA]      = useState(0);
   const [cmpIdxB,       setCmpIdxB]      = useState(1);
-  const [customPrompts, setCustomPrompts] = useState(() => {
-    // migrate old flat array to named suites format
-    const legacy = tryLS("airvo_bench_custom", null);
-    const suites = tryLS("airvo_bench_custom_suites", null);
-    if (suites) return suites;
-    if (Array.isArray(legacy) && legacy.length) return { "My Suite": legacy };
-    return {};
-  });
-  const [activeSuiteName, setActiveSuiteName] = useState(() => {
-    const suites = tryLS("airvo_bench_custom_suites", null);
-    const legacy = tryLS("airvo_bench_custom", null);
-    if (suites) return Object.keys(suites)[0] || "";
-    if (Array.isArray(legacy) && legacy.length) return "My Suite";
-    return "";
-  });
+  const [customPrompts, setCustomPrompts] = useState({});
+  const [activeSuiteName, setActiveSuiteName] = useState("");
+  const [suitesLoaded, setSuitesLoaded] = useState(false);
+
+  // Load custom suites from backend on mount
+  useEffect(() => {
+    fetch(`${API}/api/bench/suites`)
+      .then(r => r.json())
+      .then(data => {
+        // migrate old localStorage data if backend is empty
+        const legacy = tryLS("airvo_bench_custom", null);
+        const lsNew  = tryLS("airvo_bench_custom_suites", null);
+        if (Object.keys(data).length === 0 && (lsNew || legacy)) {
+          const migrated = lsNew || (Array.isArray(legacy) && legacy.length ? { "My Suite": legacy } : {});
+          setCustomPrompts(migrated);
+          setActiveSuiteName(Object.keys(migrated)[0] || "");
+          // push migration to backend
+          fetch(`${API}/api/bench/suites`, { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(migrated) }).catch(()=>{});
+          localStorage.removeItem("airvo_bench_custom");
+          localStorage.removeItem("airvo_bench_custom_suites");
+        } else {
+          setCustomPrompts(data);
+          setActiveSuiteName(Object.keys(data)[0] || "");
+        }
+      })
+      .catch(() => {
+        // fallback to localStorage if server unreachable
+        const legacy = tryLS("airvo_bench_custom", null);
+        const lsNew  = tryLS("airvo_bench_custom_suites", null);
+        const data   = lsNew || (Array.isArray(legacy) && legacy.length ? { "My Suite": legacy } : {});
+        setCustomPrompts(data);
+        setActiveSuiteName(Object.keys(data)[0] || "");
+      })
+      .finally(() => setSuitesLoaded(true));
+  }, []);
   const [newSuiteName,  setNewSuiteName]  = useState("");
   const [showNewSuite,  setShowNewSuite]  = useState(false);
   const [runNote,       setRunNote]       = useState("");
@@ -4994,7 +5014,14 @@ function BenchmarkPage({ t, activeModels }) {
     localStorage.removeItem("airvo_bench_history");
   }
 
-  function saveCustomSuites(next) { setCustomPrompts(next); saveLS("airvo_bench_custom_suites", next); }
+  function saveCustomSuites(next) {
+    setCustomPrompts(next);
+    fetch(`${API}/api/bench/suites`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(next),
+    }).catch(() => saveLS("airvo_bench_custom_suites", next)); // fallback
+  }
 
   function addCustomSuite() {
     const name = newSuiteName.trim();
@@ -6303,7 +6330,7 @@ function HelpPage({ t, setPage }) {
         </div>
       </div>
 
-      {/* Troubleshooting */}}
+      {/* Troubleshooting */}
       <div className="help-section">
         <div className="help-section-title">
           <span className="help-section-icon">🔧</span>
