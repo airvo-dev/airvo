@@ -316,6 +316,12 @@ const I18N = {
     bench_no_results:"No benchmark run yet — select a suite and click Run Benchmark.",
     bench_leaderboard:"Overall Leaderboard", bench_results:"Results per Prompt",
     bench_clear:"Clear History", bench_history_title:"Run History",
+    bench_suite_custom:"Custom", bench_score:"Score", bench_view_bars:"Bar view", bench_view_table:"Table view",
+    bench_custom_add:"Add Prompt", bench_custom_label:"Label (short name)", bench_custom_text:"Prompt text",
+    bench_custom_empty:"No custom prompts yet. Add your own.",
+    bench_export_md:"Export .md", bench_export_csv:"Export .csv", bench_copy_json:"Copy JSON",
+    bench_compare_runs:"Compare Runs", bench_run_a:"Run A", bench_run_b:"Run B",
+    bench_no_history:"Need 2+ runs to compare",
     compare_title:"Response Comparison",
     compare_sub:"Last multi-model responses side by side — copy and pick the best",
     compare_empty:"No multi-model responses yet",
@@ -621,6 +627,12 @@ const I18N = {
     bench_no_results:"Aún no hay resultados — seleccioná un suite y hacé clic en Ejecutar Benchmark.",
     bench_leaderboard:"Ranking General", bench_results:"Resultados por Prompt",
     bench_clear:"Limpiar Historial", bench_history_title:"Historial de Ejecuciones",
+    bench_suite_custom:"Personalizado", bench_score:"Puntos", bench_view_bars:"Vista de barras", bench_view_table:"Vista de tabla",
+    bench_custom_add:"Agregar Prompt", bench_custom_label:"Etiqueta (nombre corto)", bench_custom_text:"Texto del prompt",
+    bench_custom_empty:"Sin prompts personalizados. Agregá los tuyos.",
+    bench_export_md:"Exportar .md", bench_export_csv:"Exportar .csv", bench_copy_json:"Copiar JSON",
+    bench_compare_runs:"Comparar Ejecuciones", bench_run_a:"Ejecución A", bench_run_b:"Ejecución B",
+    bench_no_history:"Necesitás 2+ ejecuciones para comparar",
     compare_title:"Comparación de Respuestas",
     compare_sub:"Últimas respuestas multi-modelo lado a lado — copiá y elegí la mejor",
     compare_empty:"Sin respuestas multi-modelo todavía",
@@ -923,6 +935,12 @@ const I18N = {
     bench_no_results:"Aucun résultat pour l'instant — sélectionnez une suite et cliquez sur Lancer le Benchmark.",
     bench_leaderboard:"Classement Général", bench_results:"Résultats par Prompt",
     bench_clear:"Effacer l'Historique", bench_history_title:"Historique des Exécutions",
+    bench_suite_custom:"Personnalisé", bench_score:"Score", bench_view_bars:"Vue barres", bench_view_table:"Vue tableau",
+    bench_custom_add:"Ajouter Prompt", bench_custom_label:"Étiquette (nom court)", bench_custom_text:"Texte du prompt",
+    bench_custom_empty:"Aucun prompt personnalisé. Ajoutez les vôtres.",
+    bench_export_md:"Exporter .md", bench_export_csv:"Exporter .csv", bench_copy_json:"Copier JSON",
+    bench_compare_runs:"Comparer les Exécutions", bench_run_a:"Exécution A", bench_run_b:"Exécution B",
+    bench_no_history:"2+ exécutions nécessaires pour comparer",
     compare_title:"Comparaison des Réponses",
     compare_sub:"Dernières réponses multi-modèles côte à côte — copiez et choisissez la meilleure",
     compare_empty:"Aucune réponse multi-modèle pour l'instant",
@@ -1225,6 +1243,12 @@ const I18N = {
     bench_no_results:"Noch keine Ergebnisse — Suite auswählen und Benchmark starten klicken.",
     bench_leaderboard:"Gesamtrangliste", bench_results:"Ergebnisse pro Prompt",
     bench_clear:"Verlauf löschen", bench_history_title:"Ausführungsverlauf",
+    bench_suite_custom:"Benutzerdefiniert", bench_score:"Punkte", bench_view_bars:"Balkenansicht", bench_view_table:"Tabellenansicht",
+    bench_custom_add:"Prompt hinzufügen", bench_custom_label:"Bezeichnung (Kurzname)", bench_custom_text:"Prompt-Text",
+    bench_custom_empty:"Keine benutzerdefinierten Prompts. Fügen Sie Ihre eigenen hinzu.",
+    bench_export_md:".md exportieren", bench_export_csv:".csv exportieren", bench_copy_json:"JSON kopieren",
+    bench_compare_runs:"Ausführungen vergleichen", bench_run_a:"Ausführung A", bench_run_b:"Ausführung B",
+    bench_no_history:"2+ Ausführungen zum Vergleichen erforderlich",
     compare_title:"Antwort-Vergleich",
     compare_sub:"Letzte Multi-Modell-Antworten nebeneinander — kopieren und die beste wählen",
     compare_empty:"Noch keine Multi-Modell-Antworten",
@@ -1527,6 +1551,12 @@ const I18N = {
     bench_no_results:"尚无结果 — 选择测试套件并点击运行基准测试。",
     bench_leaderboard:"总体排行榜", bench_results:"各提示词结果",
     bench_clear:"清除历史", bench_history_title:"运行历史",
+    bench_suite_custom:"自定义", bench_score:"得分", bench_view_bars:"条形图视图", bench_view_table:"表格视图",
+    bench_custom_add:"添加提示词", bench_custom_label:"标签（简短名称）", bench_custom_text:"提示词文本",
+    bench_custom_empty:"还没有自定义提示词。添加您自己的。",
+    bench_export_md:"导出 .md", bench_export_csv:"导出 .csv", bench_copy_json:"复制 JSON",
+    bench_compare_runs:"比较运行", bench_run_a:"运行 A", bench_run_b:"运行 B",
+    bench_no_history:"需要 2+ 次运行才能比较",
     compare_title:"响应对比",
     compare_sub:"最新多模型响应并排显示 — 复制并选择最佳答案",
     compare_empty:"暂无多模型响应",
@@ -1829,6 +1859,12 @@ const I18N = {
     bench_no_results:"まだ結果がありません — スイートを選択してベンチマーク実行をクリックしてください。",
     bench_leaderboard:"総合リーダーボード", bench_results:"プロンプト別結果",
     bench_clear:"履歴をクリア", bench_history_title:"実行履歴",
+    bench_suite_custom:"カスタム", bench_score:"スコア", bench_view_bars:"バー表示", bench_view_table:"テーブル表示",
+    bench_custom_add:"プロンプト追加", bench_custom_label:"ラベル（短い名前）", bench_custom_text:"プロンプトテキスト",
+    bench_custom_empty:"カスタムプロンプトがありません。追加してください。",
+    bench_export_md:".md をエクスポート", bench_export_csv:".csv をエクスポート", bench_copy_json:"JSONをコピー",
+    bench_compare_runs:"実行を比較", bench_run_a:"実行 A", bench_run_b:"実行 B",
+    bench_no_history:"比較には2回以上の実行が必要です",
     compare_title:"レスポンス比較",
     compare_sub:"最新のマルチモデルレスポンスを並べて表示 — コピーして最良を選択",
     compare_empty:"マルチモデルレスポンスはまだありません",
@@ -2131,6 +2167,12 @@ const I18N = {
     bench_no_results:"Nenhum resultado ainda — selecione uma suite e clique em Executar Benchmark.",
     bench_leaderboard:"Ranking Geral", bench_results:"Resultados por Prompt",
     bench_clear:"Limpar Histórico", bench_history_title:"Histórico de Execuções",
+    bench_suite_custom:"Personalizado", bench_score:"Pontos", bench_view_bars:"Visualização em barras", bench_view_table:"Visualização em tabela",
+    bench_custom_add:"Adicionar Prompt", bench_custom_label:"Rótulo (nome curto)", bench_custom_text:"Texto do prompt",
+    bench_custom_empty:"Sem prompts personalizados. Adicione os seus.",
+    bench_export_md:"Exportar .md", bench_export_csv:"Exportar .csv", bench_copy_json:"Copiar JSON",
+    bench_compare_runs:"Comparar Execuções", bench_run_a:"Execução A", bench_run_b:"Execução B",
+    bench_no_history:"Necessário 2+ execuções para comparar",
     compare_title:"Comparação de Respostas",
     compare_sub:"Últimas respostas multi-modelo lado a lado — copie e escolha a melhor",
     compare_empty:"Sem respostas multi-modelo ainda",
@@ -4530,30 +4572,42 @@ const BENCH_SUITES = {
   ]},
 };
 
+function tryLS(key, def) { try { return JSON.parse(localStorage.getItem(key) || "null") ?? def; } catch { return def; } }
+function saveLS(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+
 function BenchmarkPage({ t, activeModels }) {
-  const [suite,    setSuite]    = useState("speed");
-  const [running,  setRunning]  = useState(false);
-  const [progress, setProgress] = useState({ n:0, total:0, label:"" });
-  const [results,  setResults]  = useState(() => {
-    try { return JSON.parse(localStorage.getItem("airvo_bench_results") || "null"); } catch { return null; }
-  });
-  const [history,  setHistory]  = useState(() => {
-    try { return JSON.parse(localStorage.getItem("airvo_bench_history") || "[]"); } catch { return []; }
-  });
+  const [suite,         setSuite]        = useState("speed");
+  const [running,       setRunning]      = useState(false);
+  const [progress,      setProgress]     = useState({ n:0, total:0, label:"" });
+  const [results,       setResults]      = useState(() => tryLS("airvo_bench_results", null));
+  const [history,       setHistory]      = useState(() => tryLS("airvo_bench_history", []));
+  const [viewMode,      setViewMode]     = useState("bars");
+  const [compareMode,   setCompareMode]  = useState(false);
+  const [cmpIdxA,       setCmpIdxA]      = useState(0);
+  const [cmpIdxB,       setCmpIdxB]      = useState(1);
+  const [customPrompts, setCustomPrompts] = useState(() => tryLS("airvo_bench_custom", []));
+  const [addLabel,      setAddLabel]     = useState("");
+  const [addText,       setAddText]      = useState("");
+  const [showAddForm,   setShowAddForm]  = useState(false);
+  const [copied,        setCopied]       = useState(false);
+
+  const suiteDef = suite === "custom"
+    ? { icon:"✏️", key:"custom", prompts: customPrompts }
+    : BENCH_SUITES[suite];
 
   async function runBenchmark() {
-    if (activeModels.length < 2 || running) return;
+    if (activeModels.length < 2 || running || !suiteDef?.prompts?.length) return;
     setRunning(true);
-    const s = BENCH_SUITES[suite];
+    const prompts = suiteDef.prompts;
     const runResults = [];
-    for (let i = 0; i < s.prompts.length; i++) {
-      const p = s.prompts[i];
-      setProgress({ n: i + 1, total: s.prompts.length, label: p.label });
+    for (let i = 0; i < prompts.length; i++) {
+      const p = prompts[i];
+      setProgress({ n: i + 1, total: prompts.length, label: p.label });
       try {
         const resp = await fetch(`${API}/api/compare/run`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: p.text, max_tokens: 512, temperature: 0.3 }),
+          body: JSON.stringify({ prompt: p.text, max_tokens: 512, temperature: suite === "creative" ? 0.8 : 0.1 }),
         });
         const data = await resp.json();
         runResults.push({ prompt: p, modelResults: data.data?.results || [] });
@@ -4563,10 +4617,10 @@ function BenchmarkPage({ t, activeModels }) {
     }
     const run = { id: Date.now(), suite, timestamp: Date.now(), results: runResults };
     setResults(run);
-    const newHist = [run, ...history].slice(0, 5);
+    const newHist = [run, ...history].slice(0, 10);
     setHistory(newHist);
-    localStorage.setItem("airvo_bench_results", JSON.stringify(run));
-    localStorage.setItem("airvo_bench_history", JSON.stringify(newHist));
+    saveLS("airvo_bench_results", run);
+    saveLS("airvo_bench_history", newHist);
     setRunning(false);
     setProgress({ n:0, total:0, label:"" });
   }
@@ -4577,35 +4631,140 @@ function BenchmarkPage({ t, activeModels }) {
     localStorage.removeItem("airvo_bench_history");
   }
 
+  function addCustomPrompt() {
+    if (!addLabel.trim() || !addText.trim()) return;
+    const p = { id:`cu${Date.now()}`, label:addLabel.trim(), text:addText.trim() };
+    const next = [...customPrompts, p];
+    setCustomPrompts(next); saveLS("airvo_bench_custom", next);
+    setAddLabel(""); setAddText(""); setShowAddForm(false);
+  }
+
+  function deleteCustomPrompt(id) {
+    const next = customPrompts.filter(p => p.id !== id);
+    setCustomPrompts(next); saveLS("airvo_bench_custom", next);
+  }
+
+  // ── Weighted leaderboard: speed 40% + tokens 30% + consistency 30% ──
   function computeLeaderboard(run) {
-    if (!run) return [];
-    const scores = {};
+    if (!run?.results?.length) return [];
+    const allModels = new Set();
+    run.results.forEach(({ modelResults }) => (modelResults||[]).forEach(r => allModels.add(r.model)));
+    const sc = {};
+    allModels.forEach(id => {
+      const nr = run.results[0]?.modelResults?.find(r => r.model === id);
+      sc[id] = { name:nr?.name||id, totE:0, totT:0, totTS:0, n:0, errors:0, speedPts:0, tokenPts:0 };
+    });
+    const nP = run.results.length;
     for (const { modelResults } of run.results) {
       if (!modelResults?.length) continue;
-      const valid  = modelResults.filter(r => !r.error && r.elapsed_s);
-      const sorted = [...valid].sort((a, b) => (a.elapsed_s||99) - (b.elapsed_s||99));
-      sorted.forEach((r, rank) => {
-        if (!scores[r.model]) scores[r.model] = { name:r.name||r.model, pts:0, totE:0, totT:0, totTS:0, n:0 };
-        scores[r.model].pts   += sorted.length - rank;
-        scores[r.model].totE  += r.elapsed_s || 0;
-        scores[r.model].totT  += r.tokens    || 0;
-        scores[r.model].totTS += r.elapsed_s > 0 ? (r.tokens / r.elapsed_s) : 0;
-        scores[r.model].n     += 1;
+      modelResults.forEach(r => { if (r.error && sc[r.model]) sc[r.model].errors++; });
+      const valid   = modelResults.filter(r => !r.error && r.elapsed_s);
+      const sortedE = [...valid].sort((a,b) => a.elapsed_s - b.elapsed_s);
+      const sortedT = [...valid].sort((a,b) => (b.tokens||0) - (a.tokens||0));
+      sortedE.forEach((r, rank) => {
+        sc[r.model].speedPts += valid.length - rank;
+        sc[r.model].totE     += r.elapsed_s;
+        sc[r.model].totTS    += r.tokens / r.elapsed_s;
+        sc[r.model].n        += 1;
+      });
+      sortedT.forEach((r, rank) => {
+        sc[r.model].tokenPts += valid.length - rank;
+        sc[r.model].totT     += r.tokens || 0;
       });
     }
-    return Object.entries(scores)
-      .map(([id, s]) => ({
-        id, name:s.name, pts:s.pts,
-        avgE:  s.n ? (s.totE  / s.n).toFixed(2) : "—",
-        avgT:  s.n ? Math.round(s.totT  / s.n)  : 0,
-        avgTS: s.n ? Math.round(s.totTS / s.n)  : 0,
-      }))
-      .sort((a, b) => b.pts - a.pts);
+    const maxPts = nP * allModels.size || 1;
+    return Object.entries(sc).map(([id, s]) => {
+      const consistency = s.n > 0 ? 1 - (s.errors / nP) : 0;
+      const score = Math.round(((s.speedPts/maxPts)*0.4 + (s.tokenPts/maxPts)*0.3 + consistency*0.3) * 100);
+      return {
+        id, name:s.name, score, errors:s.errors,
+        avgE:  s.n ? (s.totE/s.n).toFixed(2) : "—",
+        avgT:  s.n ? Math.round(s.totT/s.n)  : 0,
+        avgTS: s.n ? Math.round(s.totTS/s.n) : 0,
+      };
+    }).sort((a,b) => b.score - a.score);
   }
+
+  // ── Sparklines: last N runs of same suite → avgE per model ──
+  function modelSparkline(modelId) {
+    return history.filter(h => h.suite === suite).slice(0,7).reverse().map(run => {
+      const vals = [];
+      for (const { modelResults } of run.results) {
+        const r = (modelResults||[]).find(r => r.model === modelId);
+        if (r && !r.error && r.elapsed_s) vals.push(r.elapsed_s);
+      }
+      return vals.length ? vals.reduce((a,b) => a+b,0)/vals.length : null;
+    });
+  }
+
+  // ── Export helpers ──
+  function exportMD() {
+    if (!results) return;
+    const lb = computeLeaderboard(results);
+    let md = `# Airvo Benchmark — ${suite} (${new Date(results.timestamp).toLocaleString()})\n\n`;
+    md += `## 🏆 Leaderboard\n\n| Rank | Model | Score | Avg ⚡ | Avg Tok | Avg Tok/s | Errors |\n|------|-------|-------|--------|---------|-----------|--------|\n`;
+    lb.forEach((m,i) => { md += `| ${["🥇","🥈","🥉"][i]||`#${i+1}`} | ${m.name} | ${m.score} | ${m.avgE}s | ${m.avgT} | ${m.avgTS} | ${m.errors} |\n`; });
+    md += `\n## 📋 Results per Prompt\n\n`;
+    results.results.forEach(({ prompt, modelResults, error }) => {
+      md += `### ${prompt.label}\n> ${prompt.text}\n\n`;
+      if (error) { md += `⚠ ${error}\n\n`; return; }
+      md += `| Model | Elapsed | Tokens | Tok/s |\n|-------|---------|--------|-------|\n`;
+      [...modelResults].sort((a,b)=>(a.elapsed_s||99)-(b.elapsed_s||99)).forEach(r => {
+        const ts = r.elapsed_s > 0 ? Math.round(r.tokens/r.elapsed_s) : "—";
+        md += `| ${r.name||r.model} | ${r.elapsed_s ? r.elapsed_s+"s":"—"} | ${r.tokens||"—"} | ${ts} |\n`;
+      });
+      md += "\n";
+    });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([md], { type:"text/markdown" }));
+    a.download = `airvo-bench-${suite}-${Date.now()}.md`; a.click();
+  }
+
+  function exportCSV() {
+    if (!results) return;
+    let csv = "Prompt,Model,Elapsed (s),Tokens,Tok/s,Error\n";
+    results.results.forEach(({ prompt, modelResults, error }) => {
+      if (error) { csv += `"${prompt.label}",,,,,"${error}"\n`; return; }
+      [...modelResults].sort((a,b)=>(a.elapsed_s||99)-(b.elapsed_s||99)).forEach(r => {
+        const ts = r.elapsed_s > 0 ? Math.round(r.tokens/r.elapsed_s) : "";
+        csv += `"${prompt.label}","${r.name||r.model}",${r.elapsed_s||""},${r.tokens||""},${ts},"${r.error||""}"\n`;
+      });
+    });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type:"text/csv" }));
+    a.download = `airvo-bench-${suite}-${Date.now()}.csv`; a.click();
+  }
+
+  function copyJSON() {
+    if (!results) return;
+    navigator.clipboard.writeText(JSON.stringify(results, null, 2));
+    setCopied(true); setTimeout(() => setCopied(false), 1500);
+  }
+
+  // ── Run comparison helpers ──
+  const sameSuiteHistory = history.filter(h => h.suite === suite);
+  function getAvgE(run, modelId) {
+    let total=0, n=0;
+    for (const { modelResults } of run.results) {
+      const r = (modelResults||[]).find(r => r.model === modelId);
+      if (r && !r.error && r.elapsed_s) { total += r.elapsed_s; n++; }
+    }
+    return n ? total/n : null;
+  }
+  const runA = sameSuiteHistory[cmpIdxA];
+  const runB = sameSuiteHistory[cmpIdxB];
+  const allCmpModels = runA && runB
+    ? [...new Set([
+        ...runA.results.flatMap(r => (r.modelResults||[]).map(m => m.model)),
+        ...runB.results.flatMap(r => (r.modelResults||[]).map(m => m.model)),
+      ])]
+    : [];
 
   const leaderboard = computeLeaderboard(results?.suite === suite ? results : null);
   const medals      = ["🥇","🥈","🥉"];
-  const suiteDef    = BENCH_SUITES[suite];
+  const maxAvgE     = leaderboard.length ? Math.max(...leaderboard.map(m => parseFloat(m.avgE)||0), 0.01) : 1;
+  const maxAvgTS    = leaderboard.length ? Math.max(...leaderboard.map(m => m.avgTS||0), 1) : 1;
+  const selectStyle = { background:"var(--bg3)", border:"1px solid var(--border)", color:"var(--text1)", borderRadius:6, padding:"4px 8px", fontSize:12, fontFamily:"var(--mono)" };
 
   return (
     <div>
@@ -4614,7 +4773,7 @@ function BenchmarkPage({ t, activeModels }) {
 
       {/* Suite selector */}
       <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:20 }}>
-        {Object.values(BENCH_SUITES).map(s => (
+        {[...Object.values(BENCH_SUITES), { icon:"✏️", key:"custom" }].map(s => (
           <button key={s.key} disabled={running}
             className={`btn ${suite === s.key ? "btn-primary" : "btn-ghost"}`}
             onClick={() => setSuite(s.key)}>
@@ -4623,18 +4782,48 @@ function BenchmarkPage({ t, activeModels }) {
         ))}
       </div>
 
-      {/* Prompts preview */}
+      {/* Prompts preview / custom editor */}
       <div style={{ marginBottom:20, background:"var(--bg2)", borderRadius:12, border:"1px solid var(--border)", padding:"12px 16px" }}>
-        <div style={{ fontSize:11, fontWeight:700, color:"var(--text2)", marginBottom:10, textTransform:"uppercase", letterSpacing:1 }}>
-          {suiteDef.icon} {t(`bench_suite_${suite}`)} · {suiteDef.prompts.length} prompts
-        </div>
-        {suiteDef.prompts.map((p, i) => (
-          <div key={p.id} style={{ display:"flex", gap:10, alignItems:"baseline", padding:"5px 0", borderBottom: i < suiteDef.prompts.length-1 ? "1px solid var(--border)" : "none" }}>
-            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", minWidth:16 }}>{i+1}.</span>
-            <span style={{ fontWeight:700, fontSize:12, color:"var(--accent)", minWidth:82 }}>{p.label}</span>
-            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", lineHeight:1.5 }}>{p.text}</span>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+          <div style={{ fontSize:11, fontWeight:700, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1 }}>
+            {suiteDef.icon} {t(`bench_suite_${suite}`)} · {suiteDef.prompts.length} prompts
           </div>
-        ))}
+          {suite === "custom" && (
+            <button className="btn btn-ghost btn-sm" onClick={() => setShowAddForm(!showAddForm)}>
+              + {t("bench_custom_add")}
+            </button>
+          )}
+        </div>
+
+        {suite === "custom" && showAddForm && (
+          <div style={{ padding:12, background:"var(--bg3)", borderRadius:8, marginBottom:12, display:"flex", flexDirection:"column", gap:8 }}>
+            <input className="key-input" placeholder={t("bench_custom_label")} value={addLabel}
+              onChange={e => setAddLabel(e.target.value)}
+              style={{ fontFamily:"var(--mono)", fontSize:12 }} />
+            <textarea placeholder={t("bench_custom_text")} value={addText}
+              onChange={e => setAddText(e.target.value)}
+              style={{ background:"var(--bg)", border:"1px solid var(--border)", borderRadius:6, padding:"8px 10px", color:"var(--text1)", fontFamily:"var(--mono)", fontSize:12, resize:"vertical", minHeight:60 }} />
+            <div style={{ display:"flex", gap:8 }}>
+              <button className="btn btn-primary btn-sm" onClick={addCustomPrompt}>+ {t("bench_custom_add")}</button>
+              <button className="btn btn-ghost btn-sm" onClick={() => setShowAddForm(false)}>✕</button>
+            </div>
+          </div>
+        )}
+
+        {suiteDef.prompts.length === 0
+          ? <div style={{ color:"var(--text2)", fontFamily:"var(--mono)", fontSize:12, padding:"8px 0" }}>{t("bench_custom_empty")}</div>
+          : suiteDef.prompts.map((p, i) => (
+            <div key={p.id} style={{ display:"flex", gap:10, alignItems:"baseline", padding:"5px 0", borderBottom: i < suiteDef.prompts.length-1 ? "1px solid var(--border)" : "none" }}>
+              <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", minWidth:16 }}>{i+1}.</span>
+              <span style={{ fontWeight:700, fontSize:12, color:"var(--accent)", minWidth:82 }}>{p.label}</span>
+              <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", flex:1, lineHeight:1.5 }}>{p.text}</span>
+              {suite === "custom" && (
+                <button className="btn btn-danger btn-sm" style={{ padding:"2px 7px", flexShrink:0 }}
+                  onClick={() => deleteCustomPrompt(p.id)}>✕</button>
+              )}
+            </div>
+          ))
+        }
       </div>
 
       {/* Run controls */}
@@ -4643,45 +4832,180 @@ function BenchmarkPage({ t, activeModels }) {
           ⚠ {t("bench_no_active")}
         </div>
       ) : (
-        <div style={{ display:"flex", alignItems:"center", gap:16, marginBottom:20 }}>
-          <button className="btn btn-primary" onClick={runBenchmark} disabled={running} style={{ minWidth:180 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", marginBottom:20 }}>
+          <button className="btn btn-primary" onClick={runBenchmark}
+            disabled={running || (suite === "custom" && customPrompts.length === 0)}
+            style={{ minWidth:185 }}>
             {running
               ? `⏳ ${t("bench_running")} ${progress.n}/${progress.total}: ${progress.label}`
               : `▶ ${t("bench_run")}`}
           </button>
           {running && (
-            <div style={{ flex:1, maxWidth:300, height:6, background:"var(--bg3)", borderRadius:3, overflow:"hidden" }}>
+            <div style={{ flex:1, maxWidth:260, height:6, background:"var(--bg3)", borderRadius:3, overflow:"hidden" }}>
               <div style={{ height:"100%", width:`${(progress.n/progress.total)*100}%`, background:"var(--accent)", transition:"width 0.5s", borderRadius:3 }} />
+            </div>
+          )}
+          {results?.suite === suite && !running && (
+            <div style={{ display:"flex", gap:6, marginLeft:"auto", flexWrap:"wrap" }}>
+              <button className="btn btn-ghost btn-sm" title={t("bench_view_bars")}
+                style={{ background: viewMode==="bars"?"var(--bg3)":undefined }}
+                onClick={() => setViewMode("bars")}>📊</button>
+              <button className="btn btn-ghost btn-sm" title={t("bench_view_table")}
+                style={{ background: viewMode==="table"?"var(--bg3)":undefined }}
+                onClick={() => setViewMode("table")}>☰</button>
+              <button className="btn btn-ghost btn-sm" onClick={exportMD} title={t("bench_export_md")}>📄 .md</button>
+              <button className="btn btn-ghost btn-sm" onClick={exportCSV} title={t("bench_export_csv")}>📊 .csv</button>
+              <button className="btn btn-ghost btn-sm" onClick={copyJSON}>{copied ? "✓" : "{}"} JSON</button>
             </div>
           )}
         </div>
       )}
 
-      {/* Results for current suite */}
+      {/* Results */}
       {results?.suite === suite && (
         <>
-          {/* Leaderboard */}
-          <div style={{ marginBottom:24 }}>
-            <div style={{ fontSize:12, fontWeight:800, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+          {/* Leaderboard header + compare toggle */}
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+            <div style={{ fontSize:12, fontWeight:800, color:"var(--text1)", textTransform:"uppercase", letterSpacing:1 }}>
               🏆 {t("bench_leaderboard")}
             </div>
-            <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
-              {leaderboard.map((m, i) => (
-                <div key={m.id} style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:12, padding:"14px 20px", minWidth:170, position:"relative" }}>
-                  <div style={{ fontSize:26, marginBottom:4 }}>{medals[i] || `#${i+1}`}</div>
-                  <div style={{ fontWeight:700, fontSize:13, color:"var(--text1)", marginBottom:6 }}>{m.name}</div>
-                  <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--green)" }}>⚡ {m.avgE}s</span>
-                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)" }}>📝 {m.avgT} tok</span>
-                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--yellow)" }}>🚀 {m.avgTS} t/s</span>
-                  </div>
-                  <span style={{ position:"absolute", top:10, right:12, fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{m.pts}pts</span>
-                </div>
-              ))}
-            </div>
+            {sameSuiteHistory.length >= 2 && (
+              <button className="btn btn-ghost btn-sm"
+                style={{ background: compareMode ? "var(--bg3)" : undefined }}
+                onClick={() => setCompareMode(!compareMode)}>
+                🔁 {t("bench_compare_runs")}
+              </button>
+            )}
           </div>
 
-          {/* Per-prompt table */}
+          {/* Bar view */}
+          {viewMode === "bars" ? (
+            <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:24 }}>
+              {leaderboard.map((m, i) => {
+                const spark    = modelSparkline(m.id);
+                const sparkMax = Math.max(...spark.filter(Boolean), 0.01);
+                return (
+                  <div key={m.id} style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, padding:"12px 16px" }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                      <span style={{ fontSize:20 }}>{medals[i] || `#${i+1}`}</span>
+                      <span style={{ fontWeight:700, fontSize:13, color:"var(--text1)", flex:1 }}>{m.name}</span>
+                      <span style={{ fontFamily:"var(--mono)", fontSize:13, fontWeight:800, color:"var(--accent)" }}>{m.score}pts</span>
+                      {m.errors > 0 && <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--red)" }}>⚠ {m.errors} err</span>}
+                    </div>
+                    {/* Elapsed bar */}
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:5 }}>
+                      <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", width:28 }}>⚡</span>
+                      <div style={{ flex:1, height:8, background:"var(--bg3)", borderRadius:4, overflow:"hidden" }}>
+                        <div style={{ height:"100%", width:`${Math.min((parseFloat(m.avgE)||0)/maxAvgE*100,100)}%`, background:"var(--green)", borderRadius:4 }} />
+                      </div>
+                      <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--green)", width:44, textAlign:"right" }}>{m.avgE}s</span>
+                    </div>
+                    {/* Tok/s bar */}
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom: spark.some(Boolean) ? 8 : 0 }}>
+                      <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", width:28 }}>🚀</span>
+                      <div style={{ flex:1, height:8, background:"var(--bg3)", borderRadius:4, overflow:"hidden" }}>
+                        <div style={{ height:"100%", width:`${Math.min((m.avgTS||0)/maxAvgTS*100,100)}%`, background:"var(--accent)", borderRadius:4 }} />
+                      </div>
+                      <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", width:44, textAlign:"right" }}>{m.avgTS} t/s</span>
+                    </div>
+                    {/* Sparkline */}
+                    {spark.some(Boolean) && (
+                      <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                        <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", width:28 }}>📈</span>
+                        <div style={{ display:"flex", gap:2, alignItems:"flex-end", height:20 }} title="Avg elapsed — last runs">
+                          {spark.map((v, si) => v !== null
+                            ? <div key={si} title={`${v.toFixed(2)}s`}
+                                style={{ width:6, height:`${Math.round((v/sparkMax)*20)}px`, minHeight:2, background:"var(--yellow)", borderRadius:1, opacity:0.6+si/spark.length*0.4 }} />
+                            : <div key={si} style={{ width:6, height:2, background:"var(--bg3)", borderRadius:1 }} />
+                          )}
+                        </div>
+                        <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)" }}>trend</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            /* Table view */
+            <table style={{ width:"100%", borderCollapse:"collapse", background:"var(--bg2)", borderRadius:10, overflow:"hidden", marginBottom:24 }}>
+              <thead>
+                <tr style={{ borderBottom:"1px solid var(--border)" }}>
+                  {["#","Model",t("bench_score"),"Avg ⚡","Avg 📝","Avg 🚀","⚠ Err"].map((h,hi) => (
+                    <th key={hi} style={{ textAlign: hi<2?"left":"right", padding:"8px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboard.map((m, i) => (
+                  <tr key={m.id} style={{ borderBottom: i < leaderboard.length-1 ? "1px solid var(--border)" : "none" }}>
+                    <td style={{ padding:"8px 14px", fontSize:16 }}>{medals[i]||`#${i+1}`}</td>
+                    <td style={{ padding:"8px 14px", fontSize:12, fontWeight:600, color:"var(--text1)" }}>{m.name}</td>
+                    <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, fontWeight:800, color:"var(--accent)" }}>{m.score}</td>
+                    <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--green)" }}>{m.avgE}s</td>
+                    <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{m.avgT}</td>
+                    <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--yellow)" }}>{m.avgTS}</td>
+                    <td style={{ textAlign:"right", padding:"8px 14px", fontFamily:"var(--mono)", fontSize:12, color:m.errors>0?"var(--red)":"var(--text2)" }}>{m.errors||"—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {/* Run A vs B comparison */}
+          {compareMode && sameSuiteHistory.length >= 2 && (
+            <div style={{ marginBottom:24, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, padding:16 }}>
+              <div style={{ fontWeight:800, fontSize:12, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+                🔁 {t("bench_compare_runs")}
+              </div>
+              <div style={{ display:"flex", gap:12, marginBottom:14, flexWrap:"wrap", alignItems:"center" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{t("bench_run_a")}:</span>
+                  <select value={cmpIdxA} onChange={e => setCmpIdxA(+e.target.value)} style={selectStyle}>
+                    {sameSuiteHistory.map((h,i) => <option key={h.id} value={i}>{new Date(h.timestamp).toLocaleString()}</option>)}
+                  </select>
+                </div>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{t("bench_run_b")}:</span>
+                  <select value={cmpIdxB} onChange={e => setCmpIdxB(+e.target.value)} style={selectStyle}>
+                    {sameSuiteHistory.map((h,i) => <option key={h.id} value={i}>{new Date(h.timestamp).toLocaleString()}</option>)}
+                  </select>
+                </div>
+              </div>
+              {runA && runB && (
+                <table style={{ width:"100%", borderCollapse:"collapse" }}>
+                  <thead>
+                    <tr style={{ borderBottom:"1px solid var(--border)" }}>
+                      {["Model","Run A ⚡","Run B ⚡","Δ elapsed"].map((h,hi) => (
+                        <th key={hi} style={{ textAlign:hi===0?"left":"right", padding:"7px 10px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)" }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allCmpModels.map((mid, mi) => {
+                      const eA   = getAvgE(runA, mid);
+                      const eB   = getAvgE(runB, mid);
+                      const diff = eA !== null && eB !== null ? eB - eA : null;
+                      const nameR = runA.results[0]?.modelResults?.find(r=>r.model===mid) || runB.results[0]?.modelResults?.find(r=>r.model===mid);
+                      return (
+                        <tr key={mid} style={{ borderBottom: mi<allCmpModels.length-1?"1px solid var(--border)":"none" }}>
+                          <td style={{ padding:"7px 10px", fontSize:12, fontWeight:600, color:"var(--text1)" }}>{nameR?.name||mid}</td>
+                          <td style={{ textAlign:"right", padding:"7px 10px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{eA!==null?`${eA.toFixed(2)}s`:"—"}</td>
+                          <td style={{ textAlign:"right", padding:"7px 10px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{eB!==null?`${eB.toFixed(2)}s`:"—"}</td>
+                          <td style={{ textAlign:"right", padding:"7px 10px", fontFamily:"var(--mono)", fontSize:12, fontWeight:700,
+                            color: diff===null?"var(--text2)":diff<0?"var(--green)":diff>0?"var(--red)":"var(--text2)" }}>
+                            {diff!==null?`${diff>0?"+":""}${diff.toFixed(2)}s`:"—"}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
+          {/* Per-prompt detail */}
           <div style={{ marginBottom:24 }}>
             <div style={{ fontSize:12, fontWeight:800, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
               📋 {t("bench_results")}
@@ -4690,38 +5014,31 @@ function BenchmarkPage({ t, activeModels }) {
               <div key={prompt.id} style={{ marginBottom:12, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, overflow:"hidden" }}>
                 <div style={{ padding:"8px 14px", background:"var(--bg3)", borderBottom:"1px solid var(--border)", display:"flex", gap:10, alignItems:"center" }}>
                   <span style={{ fontWeight:700, color:"var(--accent)", fontSize:12 }}>{prompt.label}</span>
-                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{prompt.text.length > 70 ? prompt.text.slice(0,70)+"…" : prompt.text}</span>
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{prompt.text.length>70?prompt.text.slice(0,70)+"…":prompt.text}</span>
                 </div>
                 {error
                   ? <div style={{ padding:10, color:"var(--red)", fontFamily:"var(--mono)", fontSize:12 }}>⚠ {error}</div>
                   : <table style={{ width:"100%", borderCollapse:"collapse" }}>
                       <thead>
                         <tr style={{ borderBottom:"1px solid var(--border)" }}>
-                          <th style={{ textAlign:"left",  padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Model</th>
-                          <th style={{ textAlign:"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Elapsed</th>
-                          <th style={{ textAlign:"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Tokens</th>
-                          <th style={{ textAlign:"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Tok/s</th>
+                          {["Model","Elapsed","Tokens","Tok/s"].map((h,hi) => (
+                            <th key={hi} style={{ textAlign:hi===0?"left":"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>{h}</th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {[...modelResults].sort((a,b) => (a.elapsed_s||99)-(b.elapsed_s||99)).map((r, ri) => {
-                          const ts = r.elapsed_s > 0 ? Math.round(r.tokens / r.elapsed_s) : 0;
+                        {[...modelResults].sort((a,b)=>(a.elapsed_s||99)-(b.elapsed_s||99)).map((r,ri) => {
+                          const ts = r.elapsed_s>0 ? Math.round(r.tokens/r.elapsed_s) : 0;
                           return (
-                            <tr key={r.model} style={{ borderBottom: ri < modelResults.length-1 ? "1px solid var(--border)" : "none" }}>
+                            <tr key={r.model} style={{ borderBottom:ri<modelResults.length-1?"1px solid var(--border)":"none" }}>
                               <td style={{ padding:"7px 14px", fontSize:12 }}>
-                                {ri === 0 && !r.error && <span style={{ marginRight:5 }}>⚡</span>}
-                                <span style={{ fontWeight:600, color:"var(--text1)" }}>{r.name || r.model}</span>
-                                {r.error && <span style={{ color:"var(--red)", marginLeft:8, fontSize:11 }}>⚠</span>}
+                                {ri===0&&!r.error && <span style={{ marginRight:5 }}>⚡</span>}
+                                <span style={{ fontWeight:600, color:"var(--text1)" }}>{r.name||r.model}</span>
+                                {r.error && <span style={{ color:"var(--red)", marginLeft:8, fontSize:11 }}>⚠ {r.error.slice(0,50)}</span>}
                               </td>
-                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color: ri===0&&!r.error ? "var(--green)" : "var(--text2)" }}>
-                                {r.elapsed_s ? `${r.elapsed_s}s` : "—"}
-                              </td>
-                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
-                                {r.tokens || "—"}
-                              </td>
-                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
-                                {ts || "—"}
-                              </td>
+                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:ri===0&&!r.error?"var(--green)":"var(--text2)" }}>{r.elapsed_s?`${r.elapsed_s}s`:"—"}</td>
+                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{r.tokens||"—"}</td>
+                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{ts||"—"}</td>
                             </tr>
                           );
                         })}
@@ -4734,7 +5051,7 @@ function BenchmarkPage({ t, activeModels }) {
         </>
       )}
 
-      {/* No results yet */}
+      {/* Empty state */}
       {(!results || results.suite !== suite) && !running && (
         <div style={{ padding:32, textAlign:"center", color:"var(--text2)", fontFamily:"var(--mono)", fontSize:12 }}>
           {t("bench_no_results")}
@@ -4745,7 +5062,7 @@ function BenchmarkPage({ t, activeModels }) {
       {history.length > 0 && (
         <div style={{ marginTop:8, paddingTop:12, borderTop:"1px solid var(--border)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
           <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
-            {t("bench_history_title")}: {history.length} run{history.length !== 1 ? "s" : ""} · {new Date(history[0].timestamp).toLocaleDateString()}
+            {t("bench_history_title")}: {history.length} run{history.length!==1?"s":""} · {new Date(history[0].timestamp).toLocaleDateString()}
           </span>
           <button className="btn btn-ghost btn-sm" onClick={clearHistory}>{t("bench_clear")}</button>
         </div>
