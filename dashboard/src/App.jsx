@@ -308,7 +308,14 @@ const I18N = {
     auto_detected:"Auto-detected",
     auto_local_hint:"Local model — no API cost",
     auto_cloud_hint:"Cloud model — API usage billed by provider",
-    nav_compare:"Compare", nav_stats:"Stats",
+    nav_compare:"Compare", nav_stats:"Stats", nav_bench:"Benchmarks",
+    bench_title:"Benchmarks", bench_sub:"Standardized prompts to measure and compare your models",
+    bench_suite_speed:"Speed Test", bench_suite_coding:"Coding", bench_suite_reasoning:"Reasoning", bench_suite_creative:"Creativity",
+    bench_run:"Run Benchmark", bench_running:"Running",
+    bench_no_active:"Need at least 2 active models to run benchmarks.",
+    bench_no_results:"No benchmark run yet — select a suite and click Run Benchmark.",
+    bench_leaderboard:"Overall Leaderboard", bench_results:"Results per Prompt",
+    bench_clear:"Clear History", bench_history_title:"Run History",
     compare_title:"Response Comparison",
     compare_sub:"Last multi-model responses side by side — copy and pick the best",
     compare_empty:"No multi-model responses yet",
@@ -606,7 +613,14 @@ const I18N = {
     auto_detected:"Detectado automáticamente",
     auto_local_hint:"Modelo local — sin costo de API",
     auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
-    nav_compare:"Comparar", nav_stats:"Stats",
+    nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
+    bench_title:"Benchmarks", bench_sub:"Prompts estandarizados para medir y comparar tus modelos",
+    bench_suite_speed:"Test de Velocidad", bench_suite_coding:"Programación", bench_suite_reasoning:"Razonamiento", bench_suite_creative:"Creatividad",
+    bench_run:"Ejecutar Benchmark", bench_running:"Ejecutando",
+    bench_no_active:"Se necesitan al menos 2 modelos activos para ejecutar benchmarks.",
+    bench_no_results:"Aún no hay resultados — seleccioná un suite y hacé clic en Ejecutar Benchmark.",
+    bench_leaderboard:"Ranking General", bench_results:"Resultados por Prompt",
+    bench_clear:"Limpiar Historial", bench_history_title:"Historial de Ejecuciones",
     compare_title:"Comparación de Respuestas",
     compare_sub:"Últimas respuestas multi-modelo lado a lado — copiá y elegí la mejor",
     compare_empty:"Sin respuestas multi-modelo todavía",
@@ -901,7 +915,14 @@ const I18N = {
     auto_detected:"Détecté automatiquement",
     auto_local_hint:"Modèle local — sans coût d'API",
     auto_cloud_hint:"Modèle cloud — facturation par le fournisseur",
-    nav_compare:"Comparer", nav_stats:"Stats",
+    nav_compare:"Comparer", nav_stats:"Stats", nav_bench:"Benchmarks",
+    bench_title:"Benchmarks", bench_sub:"Prompts standardisés pour mesurer et comparer vos modèles",
+    bench_suite_speed:"Test de Vitesse", bench_suite_coding:"Programmation", bench_suite_reasoning:"Raisonnement", bench_suite_creative:"Créativité",
+    bench_run:"Lancer le Benchmark", bench_running:"En cours",
+    bench_no_active:"Au moins 2 modèles actifs sont nécessaires pour lancer des benchmarks.",
+    bench_no_results:"Aucun résultat pour l'instant — sélectionnez une suite et cliquez sur Lancer le Benchmark.",
+    bench_leaderboard:"Classement Général", bench_results:"Résultats par Prompt",
+    bench_clear:"Effacer l'Historique", bench_history_title:"Historique des Exécutions",
     compare_title:"Comparaison des Réponses",
     compare_sub:"Dernières réponses multi-modèles côte à côte — copiez et choisissez la meilleure",
     compare_empty:"Aucune réponse multi-modèle pour l'instant",
@@ -1196,7 +1217,14 @@ const I18N = {
     auto_detected:"Automatisch erkannt",
     auto_local_hint:"Lokales Modell — keine API-Kosten",
     auto_cloud_hint:"Cloud-Modell — Abrechnung durch den Anbieter",
-    nav_compare:"Vergleich", nav_stats:"Stats",
+    nav_compare:"Vergleich", nav_stats:"Stats", nav_bench:"Benchmarks",
+    bench_title:"Benchmarks", bench_sub:"Standardisierte Prompts zum Messen und Vergleichen Ihrer Modelle",
+    bench_suite_speed:"Geschwindigkeitstest", bench_suite_coding:"Programmierung", bench_suite_reasoning:"Schlussfolgerung", bench_suite_creative:"Kreativität",
+    bench_run:"Benchmark starten", bench_running:"Läuft",
+    bench_no_active:"Mindestens 2 aktive Modelle sind erforderlich um Benchmarks auszuführen.",
+    bench_no_results:"Noch keine Ergebnisse — Suite auswählen und Benchmark starten klicken.",
+    bench_leaderboard:"Gesamtrangliste", bench_results:"Ergebnisse pro Prompt",
+    bench_clear:"Verlauf löschen", bench_history_title:"Ausführungsverlauf",
     compare_title:"Antwort-Vergleich",
     compare_sub:"Letzte Multi-Modell-Antworten nebeneinander — kopieren und die beste wählen",
     compare_empty:"Noch keine Multi-Modell-Antworten",
@@ -1491,7 +1519,14 @@ const I18N = {
     auto_detected:"自动检测",
     auto_local_hint:"本地模型 — 无 API 费用",
     auto_cloud_hint:"云端模型 — 由提供商计费",
-    nav_compare:"对比", nav_stats:"统计",
+    nav_compare:"对比", nav_stats:"统计", nav_bench:"基准测试",
+    bench_title:"基准测试", bench_sub:"标准化提示词，用于测量和比较您的模型",
+    bench_suite_speed:"速度测试", bench_suite_coding:"编程", bench_suite_reasoning:"推理", bench_suite_creative:"创意",
+    bench_run:"运行基准测试", bench_running:"运行中",
+    bench_no_active:"需要至少 2 个活跃模型才能运行基准测试。",
+    bench_no_results:"尚无结果 — 选择测试套件并点击运行基准测试。",
+    bench_leaderboard:"总体排行榜", bench_results:"各提示词结果",
+    bench_clear:"清除历史", bench_history_title:"运行历史",
     compare_title:"响应对比",
     compare_sub:"最新多模型响应并排显示 — 复制并选择最佳答案",
     compare_empty:"暂无多模型响应",
@@ -1786,7 +1821,14 @@ const I18N = {
     auto_detected:"自動検出",
     auto_local_hint:"ローカルモデル — APIコストなし",
     auto_cloud_hint:"クラウドモデル — プロバイダーによる課金",
-    nav_compare:"比較", nav_stats:"統計",
+    nav_compare:"比較", nav_stats:"統計", nav_bench:"ベンチマーク",
+    bench_title:"ベンチマーク", bench_sub:"モデルを測定・比較するための標準化されたプロンプト",
+    bench_suite_speed:"スピードテスト", bench_suite_coding:"コーディング", bench_suite_reasoning:"推論", bench_suite_creative:"創造性",
+    bench_run:"ベンチマーク実行", bench_running:"実行中",
+    bench_no_active:"ベンチマークには少なくとも2つのアクティブモデルが必要です。",
+    bench_no_results:"まだ結果がありません — スイートを選択してベンチマーク実行をクリックしてください。",
+    bench_leaderboard:"総合リーダーボード", bench_results:"プロンプト別結果",
+    bench_clear:"履歴をクリア", bench_history_title:"実行履歴",
     compare_title:"レスポンス比較",
     compare_sub:"最新のマルチモデルレスポンスを並べて表示 — コピーして最良を選択",
     compare_empty:"マルチモデルレスポンスはまだありません",
@@ -2081,7 +2123,14 @@ const I18N = {
     auto_detected:"Detectado automaticamente",
     auto_local_hint:"Modelo local — sem custo de API",
     auto_cloud_hint:"Modelo cloud — faturamento pelo provedor",
-    nav_compare:"Comparar", nav_stats:"Stats",
+    nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
+    bench_title:"Benchmarks", bench_sub:"Prompts padronizados para medir e comparar seus modelos",
+    bench_suite_speed:"Teste de Velocidade", bench_suite_coding:"Programação", bench_suite_reasoning:"Raciocínio", bench_suite_creative:"Criatividade",
+    bench_run:"Executar Benchmark", bench_running:"Executando",
+    bench_no_active:"São necessários pelo menos 2 modelos ativos para executar benchmarks.",
+    bench_no_results:"Nenhum resultado ainda — selecione uma suite e clique em Executar Benchmark.",
+    bench_leaderboard:"Ranking Geral", bench_results:"Resultados por Prompt",
+    bench_clear:"Limpar Histórico", bench_history_title:"Histórico de Execuções",
     compare_title:"Comparação de Respostas",
     compare_sub:"Últimas respostas multi-modelo lado a lado — copie e escolha a melhor",
     compare_empty:"Sem respostas multi-modelo ainda",
@@ -3073,6 +3122,7 @@ export default function AirvoDashboard() {
               { id:"status",  icon:"◎", label:t("nav_status")  },
               { id:"compare", icon:"⊞", label:t("nav_compare") },
               { id:"stats",   icon:"📊", label:t("nav_stats")  },
+              { id:"bench",   icon:"🏆", label:t("nav_bench")  },
               { id:"config",  icon:"⊙", label:t("nav_config")  },
               { id:"add",     icon:"+", label:t("nav_add")     },
               { id:"help",    icon:"?", label:t("nav_help")    },
@@ -4339,6 +4389,14 @@ export default function AirvoDashboard() {
             />
           )}
 
+          {/* ── BENCH PAGE ── */}
+          {page === "bench" && (
+            <BenchmarkPage
+              t={t}
+              activeModels={active}
+            />
+          )}
+
           {/* ── HELP PAGE ── */}
           {page === "help" && <HelpPage t={t} setPage={setPage} />}
 
@@ -4444,6 +4502,254 @@ function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete }) {
       <div style={{ marginTop:12, display:"flex", justifyContent:"flex-end" }}>
         <button className="btn btn-danger btn-sm" onClick={onDelete}>{t("delete_btn")}</button>
       </div>
+    </div>
+  );
+}
+
+// ── Benchmark suite definitions ──────────────────────────────────────────
+const BENCH_SUITES = {
+  speed:     { icon:"⚡", key:"speed",     prompts:[
+    { id:"sp1", label:"Hello",  text:"Say hello in one sentence." },
+    { id:"sp2", label:"Count",  text:"Count from 1 to 10, one number per line." },
+    { id:"sp3", label:"Colors", text:"List exactly 5 colors, one per line." },
+  ]},
+  coding:    { icon:"💻", key:"coding",    prompts:[
+    { id:"co1", label:"FizzBuzz",   text:"Write a Python FizzBuzz for 1 to 20. Return only the code, no explanation." },
+    { id:"co2", label:"Palindrome", text:"Write a Python function is_palindrome(s) returning True or False. Code only." },
+    { id:"co3", label:"Fibonacci",  text:"Write a Python function fib(n) returning the nth Fibonacci number. Code only." },
+  ]},
+  reasoning: { icon:"🧠", key:"reasoning", prompts:[
+    { id:"re1", label:"Syllogism", text:"All bloops are razzles. All razzles are lazzles. Are all bloops lazzles? Answer Yes or No and explain in one sentence." },
+    { id:"re2", label:"Math",      text:"Calculate: (17 × 23) + (456 / 8). Show your working." },
+    { id:"re3", label:"Sequence",  text:"What comes next: 2, 4, 8, 16, 32, ___? Give the answer and explain in one sentence." },
+  ]},
+  creative:  { icon:"🎨", key:"creative",  prompts:[
+    { id:"cr1", label:"Haiku",    text:"Write a haiku about artificial intelligence." },
+    { id:"cr2", label:"Metaphor", text:"Explain neural networks using a cooking metaphor in exactly 2 sentences." },
+    { id:"cr3", label:"Story",    text:"Write a 2-sentence story about a robot discovering music." },
+  ]},
+};
+
+function BenchmarkPage({ t, activeModels }) {
+  const [suite,    setSuite]    = useState("speed");
+  const [running,  setRunning]  = useState(false);
+  const [progress, setProgress] = useState({ n:0, total:0, label:"" });
+  const [results,  setResults]  = useState(() => {
+    try { return JSON.parse(localStorage.getItem("airvo_bench_results") || "null"); } catch { return null; }
+  });
+  const [history,  setHistory]  = useState(() => {
+    try { return JSON.parse(localStorage.getItem("airvo_bench_history") || "[]"); } catch { return []; }
+  });
+
+  async function runBenchmark() {
+    if (activeModels.length < 2 || running) return;
+    setRunning(true);
+    const s = BENCH_SUITES[suite];
+    const runResults = [];
+    for (let i = 0; i < s.prompts.length; i++) {
+      const p = s.prompts[i];
+      setProgress({ n: i + 1, total: s.prompts.length, label: p.label });
+      try {
+        const resp = await fetch(`${API}/api/compare/run`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: p.text, max_tokens: 512, temperature: 0.3 }),
+        });
+        const data = await resp.json();
+        runResults.push({ prompt: p, modelResults: data.data?.results || [] });
+      } catch (e) {
+        runResults.push({ prompt: p, modelResults: [], error: String(e) });
+      }
+    }
+    const run = { id: Date.now(), suite, timestamp: Date.now(), results: runResults };
+    setResults(run);
+    const newHist = [run, ...history].slice(0, 5);
+    setHistory(newHist);
+    localStorage.setItem("airvo_bench_results", JSON.stringify(run));
+    localStorage.setItem("airvo_bench_history", JSON.stringify(newHist));
+    setRunning(false);
+    setProgress({ n:0, total:0, label:"" });
+  }
+
+  function clearHistory() {
+    setHistory([]); setResults(null);
+    localStorage.removeItem("airvo_bench_results");
+    localStorage.removeItem("airvo_bench_history");
+  }
+
+  function computeLeaderboard(run) {
+    if (!run) return [];
+    const scores = {};
+    for (const { modelResults } of run.results) {
+      if (!modelResults?.length) continue;
+      const valid  = modelResults.filter(r => !r.error && r.elapsed_s);
+      const sorted = [...valid].sort((a, b) => (a.elapsed_s||99) - (b.elapsed_s||99));
+      sorted.forEach((r, rank) => {
+        if (!scores[r.model]) scores[r.model] = { name:r.name||r.model, pts:0, totE:0, totT:0, totTS:0, n:0 };
+        scores[r.model].pts   += sorted.length - rank;
+        scores[r.model].totE  += r.elapsed_s || 0;
+        scores[r.model].totT  += r.tokens    || 0;
+        scores[r.model].totTS += r.elapsed_s > 0 ? (r.tokens / r.elapsed_s) : 0;
+        scores[r.model].n     += 1;
+      });
+    }
+    return Object.entries(scores)
+      .map(([id, s]) => ({
+        id, name:s.name, pts:s.pts,
+        avgE:  s.n ? (s.totE  / s.n).toFixed(2) : "—",
+        avgT:  s.n ? Math.round(s.totT  / s.n)  : 0,
+        avgTS: s.n ? Math.round(s.totTS / s.n)  : 0,
+      }))
+      .sort((a, b) => b.pts - a.pts);
+  }
+
+  const leaderboard = computeLeaderboard(results?.suite === suite ? results : null);
+  const medals      = ["🥇","🥈","🥉"];
+  const suiteDef    = BENCH_SUITES[suite];
+
+  return (
+    <div>
+      <h1 className="page-title">{t("bench_title")}</h1>
+      <p className="page-sub">{t("bench_sub")}</p>
+
+      {/* Suite selector */}
+      <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:20 }}>
+        {Object.values(BENCH_SUITES).map(s => (
+          <button key={s.key} disabled={running}
+            className={`btn ${suite === s.key ? "btn-primary" : "btn-ghost"}`}
+            onClick={() => setSuite(s.key)}>
+            {s.icon} {t(`bench_suite_${s.key}`)}
+          </button>
+        ))}
+      </div>
+
+      {/* Prompts preview */}
+      <div style={{ marginBottom:20, background:"var(--bg2)", borderRadius:12, border:"1px solid var(--border)", padding:"12px 16px" }}>
+        <div style={{ fontSize:11, fontWeight:700, color:"var(--text2)", marginBottom:10, textTransform:"uppercase", letterSpacing:1 }}>
+          {suiteDef.icon} {t(`bench_suite_${suite}`)} · {suiteDef.prompts.length} prompts
+        </div>
+        {suiteDef.prompts.map((p, i) => (
+          <div key={p.id} style={{ display:"flex", gap:10, alignItems:"baseline", padding:"5px 0", borderBottom: i < suiteDef.prompts.length-1 ? "1px solid var(--border)" : "none" }}>
+            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", minWidth:16 }}>{i+1}.</span>
+            <span style={{ fontWeight:700, fontSize:12, color:"var(--accent)", minWidth:82 }}>{p.label}</span>
+            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", lineHeight:1.5 }}>{p.text}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Run controls */}
+      {activeModels.length < 2 ? (
+        <div style={{ padding:12, background:"rgba(255,80,80,0.08)", border:"1px solid var(--red)", borderRadius:8, color:"var(--red)", fontFamily:"var(--mono)", fontSize:12, marginBottom:20 }}>
+          ⚠ {t("bench_no_active")}
+        </div>
+      ) : (
+        <div style={{ display:"flex", alignItems:"center", gap:16, marginBottom:20 }}>
+          <button className="btn btn-primary" onClick={runBenchmark} disabled={running} style={{ minWidth:180 }}>
+            {running
+              ? `⏳ ${t("bench_running")} ${progress.n}/${progress.total}: ${progress.label}`
+              : `▶ ${t("bench_run")}`}
+          </button>
+          {running && (
+            <div style={{ flex:1, maxWidth:300, height:6, background:"var(--bg3)", borderRadius:3, overflow:"hidden" }}>
+              <div style={{ height:"100%", width:`${(progress.n/progress.total)*100}%`, background:"var(--accent)", transition:"width 0.5s", borderRadius:3 }} />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Results for current suite */}
+      {results?.suite === suite && (
+        <>
+          {/* Leaderboard */}
+          <div style={{ marginBottom:24 }}>
+            <div style={{ fontSize:12, fontWeight:800, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+              🏆 {t("bench_leaderboard")}
+            </div>
+            <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
+              {leaderboard.map((m, i) => (
+                <div key={m.id} style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:12, padding:"14px 20px", minWidth:170, position:"relative" }}>
+                  <div style={{ fontSize:26, marginBottom:4 }}>{medals[i] || `#${i+1}`}</div>
+                  <div style={{ fontWeight:700, fontSize:13, color:"var(--text1)", marginBottom:6 }}>{m.name}</div>
+                  <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--green)" }}>⚡ {m.avgE}s</span>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)" }}>📝 {m.avgT} tok</span>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--yellow)" }}>🚀 {m.avgTS} t/s</span>
+                  </div>
+                  <span style={{ position:"absolute", top:10, right:12, fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{m.pts}pts</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Per-prompt table */}
+          <div style={{ marginBottom:24 }}>
+            <div style={{ fontSize:12, fontWeight:800, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+              📋 {t("bench_results")}
+            </div>
+            {results.results.map(({ prompt, modelResults, error }) => (
+              <div key={prompt.id} style={{ marginBottom:12, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, overflow:"hidden" }}>
+                <div style={{ padding:"8px 14px", background:"var(--bg3)", borderBottom:"1px solid var(--border)", display:"flex", gap:10, alignItems:"center" }}>
+                  <span style={{ fontWeight:700, color:"var(--accent)", fontSize:12 }}>{prompt.label}</span>
+                  <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>{prompt.text.length > 70 ? prompt.text.slice(0,70)+"…" : prompt.text}</span>
+                </div>
+                {error
+                  ? <div style={{ padding:10, color:"var(--red)", fontFamily:"var(--mono)", fontSize:12 }}>⚠ {error}</div>
+                  : <table style={{ width:"100%", borderCollapse:"collapse" }}>
+                      <thead>
+                        <tr style={{ borderBottom:"1px solid var(--border)" }}>
+                          <th style={{ textAlign:"left",  padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Model</th>
+                          <th style={{ textAlign:"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Elapsed</th>
+                          <th style={{ textAlign:"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Tokens</th>
+                          <th style={{ textAlign:"right", padding:"7px 14px", fontSize:11, color:"var(--text2)", fontFamily:"var(--mono)", fontWeight:600 }}>Tok/s</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[...modelResults].sort((a,b) => (a.elapsed_s||99)-(b.elapsed_s||99)).map((r, ri) => {
+                          const ts = r.elapsed_s > 0 ? Math.round(r.tokens / r.elapsed_s) : 0;
+                          return (
+                            <tr key={r.model} style={{ borderBottom: ri < modelResults.length-1 ? "1px solid var(--border)" : "none" }}>
+                              <td style={{ padding:"7px 14px", fontSize:12 }}>
+                                {ri === 0 && !r.error && <span style={{ marginRight:5 }}>⚡</span>}
+                                <span style={{ fontWeight:600, color:"var(--text1)" }}>{r.name || r.model}</span>
+                                {r.error && <span style={{ color:"var(--red)", marginLeft:8, fontSize:11 }}>⚠</span>}
+                              </td>
+                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color: ri===0&&!r.error ? "var(--green)" : "var(--text2)" }}>
+                                {r.elapsed_s ? `${r.elapsed_s}s` : "—"}
+                              </td>
+                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
+                                {r.tokens || "—"}
+                              </td>
+                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>
+                                {ts || "—"}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                }
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* No results yet */}
+      {(!results || results.suite !== suite) && !running && (
+        <div style={{ padding:32, textAlign:"center", color:"var(--text2)", fontFamily:"var(--mono)", fontSize:12 }}>
+          {t("bench_no_results")}
+        </div>
+      )}
+
+      {/* History footer */}
+      {history.length > 0 && (
+        <div style={{ marginTop:8, paddingTop:12, borderTop:"1px solid var(--border)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+            {t("bench_history_title")}: {history.length} run{history.length !== 1 ? "s" : ""} · {new Date(history[0].timestamp).toLocaleDateString()}
+          </span>
+          <button className="btn btn-ghost btn-sm" onClick={clearHistory}>{t("bench_clear")}</button>
+        </div>
+      )}
     </div>
   );
 }
