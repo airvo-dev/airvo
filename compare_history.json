@@ -1,5 +1,77 @@
 [
   {
+    "id": "1775616511.3640797",
+    "timestamp": 1775616511.3653147,
+    "mode": "parallel",
+    "prompt": "What comes next: 2, 4, 8, 16, 32, ___? Give the answer and explain in one sentence.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "The next number in the sequence is 64, as each number is twice the previous one, indicating a geometric progression.",
+        "error": null,
+        "tokens": 111,
+        "elapsed_s": 0.3
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "64, because the pattern is obtained by doubling the previous term, which is a classic example of a geometric progression.",
+        "error": null,
+        "tokens": 110,
+        "elapsed_s": 0.49
+      }
+    ]
+  },
+  {
+    "id": "1775616510.809039",
+    "timestamp": 1775616510.809039,
+    "mode": "parallel",
+    "prompt": "Calculate: (17 × 23) + (456 / 8). Show your working.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "To calculate (17 × 23) + (456 / 8), I will follow the order of operations (PEMDAS):\n\n1. Multiply 17 and 23:\n   17 × 23 = 391\n\n2. Divide 456 by 8:\n   456 ÷ 8 = 57\n\n3. Add the results of step 1 and step 2:\n   391 + 57 = 448\n\nTherefore, the result is 448.",
+        "error": null,
+        "tokens": 174,
+        "elapsed_s": 0.36
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "To calculate the expression, I'll follow the order of operations (PEMDAS):\n\n1. Multiply 17 and 23:\n17 × 23 = 391\n\n2. Divide 456 by 8:\n456 ÷ 8 = 57\n\n3. Add the results of steps 1 and 2:\n391 + 57 = 448\n\nSo, the final result is: 448",
+        "error": null,
+        "tokens": 158,
+        "elapsed_s": 0.46
+      }
+    ]
+  },
+  {
+    "id": "1775616510.3098736",
+    "timestamp": 1775616510.3098736,
+    "mode": "parallel",
+    "prompt": "All bloops are razzles. All razzles are lazzles. Are all bloops lazzles? Answer Yes or No and explain in one sentence.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "Yes, all bloops are lazzles because if all bloops are razzles and all razzles are lazzles, then by transitive property, all bloops are lazzles.",
+        "error": null,
+        "tokens": 134,
+        "elapsed_s": 0.44
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "Yes, because according to the given statements, bloops are a subset of razzles and razzles are a subset of lazzles, so by transitivity, all bloops are lazzles.",
+        "error": null,
+        "tokens": 135,
+        "elapsed_s": 0.46
+      }
+    ]
+  },
+  {
     "id": "1775615046.265717",
     "timestamp": 1775615046.265717,
     "mode": "parallel",
@@ -164,78 +236,6 @@
         "error": null,
         "tokens": 76,
         "elapsed_s": 0.46
-      }
-    ]
-  },
-  {
-    "id": "1775614862.270017",
-    "timestamp": 1775614862.270017,
-    "mode": "parallel",
-    "prompt": "Count from 1 to 10, one number per line.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
-        "error": null,
-        "tokens": 89,
-        "elapsed_s": 0.26
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
-        "error": null,
-        "tokens": 89,
-        "elapsed_s": 0.46
-      }
-    ]
-  },
-  {
-    "id": "1775614861.7819436",
-    "timestamp": 1775614861.7819436,
-    "mode": "parallel",
-    "prompt": "Say hello in one sentence.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "Hello.",
-        "error": null,
-        "tokens": 65,
-        "elapsed_s": 0.36
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "Hello, it's nice to meet you and I'm here to assist you with any software development questions or tasks you may have.",
-        "error": null,
-        "tokens": 89,
-        "elapsed_s": 0.57
-      }
-    ]
-  },
-  {
-    "id": "1775611185.197865",
-    "timestamp": 1775611185.197865,
-    "mode": "parallel",
-    "prompt": "List exactly 5 colors, one per line.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "Red\nBlue\nGreen\nYellow\nPurple",
-        "error": null,
-        "tokens": 76,
-        "elapsed_s": 0.27
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "Red\nBlue\nGreen\nYellow\nPurple",
-        "error": null,
-        "tokens": 76,
-        "elapsed_s": 0.87
       }
     ]
   }

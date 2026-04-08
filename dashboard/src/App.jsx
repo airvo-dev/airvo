@@ -326,6 +326,8 @@ const I18N = {
     bench_modal_title:"New model activated!", bench_modal_body:"Run a quick Speed Test to see how it compares?",
     bench_modal_go:"▶ Run Speed Test", bench_modal_skip:"Skip",
     bench_radar:"Radar Chart", bench_score_history:"Score History",
+    bench_radar_desc:"Each axis = relative score (0–100). Hover the dots for exact values. Bigger polygon = stronger model overall.",
+    bench_history_desc:"Composite score (0–100) per run. Hover dots to see model + date + score. Tracks improvements over time.",
     compare_title:"Response Comparison",
     compare_sub:"Last multi-model responses side by side — copy and pick the best",
     compare_empty:"No multi-model responses yet",
@@ -641,6 +643,8 @@ const I18N = {
     bench_modal_title:"¡Modelo activado!", bench_modal_body:"¿Querés correr un Speed Test rápido para ver cómo se compara?",
     bench_modal_go:"▶ Correr Speed Test", bench_modal_skip:"Omitir",
     bench_radar:"Gráfico Radar", bench_score_history:"Historial de Puntuación",
+    bench_radar_desc:"Cada eje = puntuación relativa (0–100). Hover en los puntos para detalles. Polígono más grande = mejor modelo.",
+    bench_history_desc:"Puntuación compuesta (0–100) por ejecución. Hover para ver modelo + fecha + valor exacto.",
     compare_title:"Comparación de Respuestas",
     compare_sub:"Últimas respuestas multi-modelo lado a lado — copiá y elegí la mejor",
     compare_empty:"Sin respuestas multi-modelo todavía",
@@ -953,6 +957,8 @@ const I18N = {
     bench_modal_title:"Nouveau modèle activé !", bench_modal_body:"Lancer un Speed Test rapide pour voir comment il se compare ?",
     bench_modal_go:"▶ Lancer Speed Test", bench_modal_skip:"Ignorer",
     bench_radar:"Graphique Radar", bench_score_history:"Historique des Scores",
+    bench_radar_desc:"Chaque axe = score relatif (0–100). Survolez les points pour les détails. Plus grand polygone = meilleur modèle.",
+    bench_history_desc:"Score composite (0–100) par exécution. Survolez pour voir modèle + date + valeur exacte.",
     compare_title:"Comparaison des Réponses",
     compare_sub:"Dernières réponses multi-modèles côte à côte — copiez et choisissez la meilleure",
     compare_empty:"Aucune réponse multi-modèle pour l'instant",
@@ -1265,6 +1271,8 @@ const I18N = {
     bench_modal_title:"Neues Modell aktiviert!", bench_modal_body:"Schnellen Speed Test ausführen um zu vergleichen?",
     bench_modal_go:"▶ Speed Test starten", bench_modal_skip:"Überspringen",
     bench_radar:"Radar-Diagramm", bench_score_history:"Score-Verlauf",
+    bench_radar_desc:"Jede Achse = relativer Score (0–100). Hover über Punkte für Details. Größeres Polygon = besseres Modell.",
+    bench_history_desc:"Zusammengesetzter Score (0–100) pro Ausführung. Hover für Modell + Datum + genauen Wert.",
     compare_title:"Antwort-Vergleich",
     compare_sub:"Letzte Multi-Modell-Antworten nebeneinander — kopieren und die beste wählen",
     compare_empty:"Noch keine Multi-Modell-Antworten",
@@ -1577,6 +1585,8 @@ const I18N = {
     bench_modal_title:"新模型已激活！", bench_modal_body:"运行快速 Speed Test 来比较效果？",
     bench_modal_go:"▶ 运行 Speed Test", bench_modal_skip:"跳过",
     bench_radar:"雷达图", bench_score_history:"得分历史",
+    bench_radar_desc:"每轴 = 相对分数（0–100）。悬停点查看详情。多边形越大 = 综合表现越强。",
+    bench_history_desc:"每次运行的综合分数（0–100）。悬停查看模型 + 日期 + 精确值。",
     compare_title:"响应对比",
     compare_sub:"最新多模型响应并排显示 — 复制并选择最佳答案",
     compare_empty:"暂无多模型响应",
@@ -1889,6 +1899,8 @@ const I18N = {
     bench_modal_title:"新しいモデルが有効化されました！", bench_modal_body:"スピードテストで比較しますか？",
     bench_modal_go:"▶ Speed Test実行", bench_modal_skip:"スキップ",
     bench_radar:"レーダーチャート", bench_score_history:"スコア履歴",
+    bench_radar_desc:"各軸 = 相対スコア（0–100）。点にホバーで詳細表示。大きな多角形 = 総合的に優秀なモデル。",
+    bench_history_desc:"実行ごとの総合スコア（0–100）。ホバーでモデル・日付・正確な値を確認。",
     compare_title:"レスポンス比較",
     compare_sub:"最新のマルチモデルレスポンスを並べて表示 — コピーして最良を選択",
     compare_empty:"マルチモデルレスポンスはまだありません",
@@ -2201,6 +2213,8 @@ const I18N = {
     bench_modal_title:"Novo modelo ativado!", bench_modal_body:"Executar um Speed Test rápido para comparar?",
     bench_modal_go:"▶ Executar Speed Test", bench_modal_skip:"Pular",
     bench_radar:"Gráfico Radar", bench_score_history:"Histórico de Pontuação",
+    bench_radar_desc:"Cada eixo = pontuação relativa (0–100). Passe o mouse nos pontos para detalhes. Polígono maior = modelo mais forte.",
+    bench_history_desc:"Pontuação composta (0–100) por execução. Passe o mouse para ver modelo + data + valor exato.",
     compare_title:"Comparação de Respostas",
     compare_sub:"Últimas respostas multi-modelo lado a lado — copie e escolha a melhor",
     compare_empty:"Sem respostas multi-modelo ainda",
@@ -5060,20 +5074,24 @@ function BenchmarkPage({ t, activeModels }) {
             const cx = 140, cy = 130, R = 90;
             const angles = [-Math.PI/2, 0, Math.PI/2, Math.PI];
             const axisLabels = [
-              { x:140, y:24,  text:"⚡ Speed"  },
-              { x:260, y:134, text:"🚀 Tok/s"  },
-              { x:140, y:250, text:"🎯 Acc."   },
-              { x:20,  y:134, text:"✅ Cons."  },
+              { x:140, y:22,  text:"⚡ Speed",  desc:"Faster avg response = higher score. Best model in this run = 100%." },
+              { x:264, y:134, text:"🚀 Tok/s",  desc:"More tokens per second = higher score. Best model in this run = 100%." },
+              { x:140, y:253, text:"🎯 Acc.",   desc:"Correct answers on checkable prompts (Coding/Reasoning). No validators = treated as 100%." },
+              { x:16,  y:134, text:"✅ Cons.",  desc:"Consistency = 1 − (errors / prompts). 100% means zero failed calls." },
             ];
+            const axisNames = ["Speed","Tok/s","Accuracy","Consistency"];
             const nP    = results?.results?.length || 1;
             const gridP = (r) => angles.map(a => `${cx+R*r*Math.cos(a)},${cy+R*r*Math.sin(a)}`).join(" ");
             return (
               <div style={{ marginBottom:24, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, padding:16 }}>
-                <div style={{ fontWeight:800, fontSize:12, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+                <div style={{ fontWeight:800, fontSize:12, color:"var(--text1)", marginBottom:4, textTransform:"uppercase", letterSpacing:1 }}>
                   🕸 {t("bench_radar")}
                 </div>
-                <div style={{ display:"flex", flexWrap:"wrap", gap:16, alignItems:"center", justifyContent:"center" }}>
-                  <svg width="280" height="260" viewBox="0 0 280 260" style={{ overflow:"visible" }}>
+                <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:12, lineHeight:1.6 }}>
+                  {t("bench_radar_desc")}
+                </div>
+                <div style={{ display:"flex", flexWrap:"wrap", gap:24, alignItems:"center", justifyContent:"center" }}>
+                  <svg width="280" height="268" viewBox="0 0 280 268" style={{ overflow:"visible" }}>
                     {[0.25,0.5,0.75,1].map(r => (
                       <polygon key={r} points={gridP(r)} fill="none" stroke="var(--border)" strokeWidth={r===1?"1.5":"1"} opacity={r===1?1:0.5} />
                     ))}
@@ -5081,35 +5099,54 @@ function BenchmarkPage({ t, activeModels }) {
                       <line key={i} x1={cx} y1={cy} x2={cx+R*Math.cos(a)} y2={cy+R*Math.sin(a)} stroke="var(--border)" strokeWidth="1" />
                     ))}
                     {[0.25,0.5,0.75].map(r => (
-                      <text key={r} x={cx+3} y={cy-R*r-2} fontSize="8" fill="var(--text2)" fontFamily="var(--mono)" opacity="0.7">{Math.round(r*100)}</text>
+                      <text key={r} x={cx+4} y={cy-R*r-2} fontSize="8" fill="var(--text2)" fontFamily="var(--mono)" opacity="0.7">{Math.round(r*100)}%</text>
                     ))}
                     {axisLabels.map((l,i) => (
-                      <text key={i} x={l.x} y={l.y} textAnchor="middle" fontSize="10" fill="var(--text2)" fontFamily="var(--mono)">{l.text}</text>
+                      <text key={i} x={l.x} y={l.y} textAnchor="middle" fontSize="10" fill="var(--text2)" fontFamily="var(--mono)" style={{ cursor:"help" }}>
+                        <title>{l.desc}</title>
+                        {l.text}
+                      </text>
                     ))}
                     {leaderboard.map((m, mi) => {
-                      const sv  = Math.max(0, 1 - (parseFloat(m.avgE)||0) / maxAvgE);
-                      const tv  = Math.max(0, Math.min(1, (m.avgTS||0) / maxAvgTS));
-                      const av  = m.accPct ?? 1;
-                      const cv  = Math.max(0, 1 - (m.errors||0) / nP);
-                      const col = BENCH_COLORS[mi % BENCH_COLORS.length];
-                      const pts = [sv,tv,av,cv].map((v,i) => `${cx+v*R*Math.cos(angles[i])},${cy+v*R*Math.sin(angles[i])}`).join(" ");
+                      const sv   = Math.max(0, 1 - (parseFloat(m.avgE)||0) / maxAvgE);
+                      const tv   = Math.max(0, Math.min(1, (m.avgTS||0) / maxAvgTS));
+                      const av   = m.accPct ?? 1;
+                      const cv   = Math.max(0, 1 - (m.errors||0) / nP);
+                      const col  = BENCH_COLORS[mi % BENCH_COLORS.length];
+                      const vals = [sv,tv,av,cv];
+                      const pts  = vals.map((v,i) => `${cx+v*R*Math.cos(angles[i])},${cy+v*R*Math.sin(angles[i])}`).join(" ");
                       return (
                         <g key={m.id}>
-                          <polygon points={pts} fill={col+"33"} stroke={col} strokeWidth="2" opacity="0.9" />
-                          {[sv,tv,av,cv].map((v,ai) => (
-                            <circle key={ai} cx={cx+v*R*Math.cos(angles[ai])} cy={cy+v*R*Math.sin(angles[ai])} r="3" fill={col} />
+                          <polygon points={pts} fill={col+"28"} stroke={col} strokeWidth="2" opacity="0.9">
+                            <title>{m.name} — Overall score: {m.score}pts</title>
+                          </polygon>
+                          {vals.map((v,ai) => (
+                            <circle key={ai} cx={cx+v*R*Math.cos(angles[ai])} cy={cy+v*R*Math.sin(angles[ai])} r="4" fill={col} style={{ cursor:"crosshair" }}>
+                              <title>{m.name} — {axisNames[ai]}: {Math.round(v*100)}%</title>
+                            </circle>
                           ))}
                         </g>
                       );
                     })}
                   </svg>
-                  <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                  <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                     {leaderboard.map((m, mi) => (
-                      <div key={m.id} style={{ display:"flex", alignItems:"center", gap:8 }}>
-                        <div style={{ width:12, height:12, borderRadius:3, background:BENCH_COLORS[mi % BENCH_COLORS.length], flexShrink:0 }} />
-                        <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text1)" }}>{m.name}</span>
+                      <div key={m.id} style={{ display:"flex", alignItems:"flex-start", gap:8 }}>
+                        <div style={{ width:14, height:14, borderRadius:4, background:BENCH_COLORS[mi % BENCH_COLORS.length], flexShrink:0, marginTop:1 }} />
+                        <div>
+                          <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text1)", fontWeight:700 }}>{m.name}</div>
+                          <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", marginTop:2 }}>
+                            {m.score}pts · ⚡{m.avgE}s · 🚀{m.avgTS}t/s{m.accuracy ? ` · 🎯${m.accuracy}` : ""}
+                          </div>
+                        </div>
                       </div>
                     ))}
+                    <div style={{ marginTop:6, paddingTop:6, borderTop:"1px solid var(--border)", fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", lineHeight:1.7 }}>
+                      <div>⚡ Speed — avg response time</div>
+                      <div>🚀 Tok/s — generation speed</div>
+                      <div>🎯 Acc. — prompt accuracy</div>
+                      <div>✅ Cons. — error-free rate</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -5132,8 +5169,11 @@ function BenchmarkPage({ t, activeModels }) {
             const yS = (v) => pT + iH - (v/100)*iH;
             return (
               <div style={{ marginBottom:24, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, padding:16 }}>
-                <div style={{ fontWeight:800, fontSize:12, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+                <div style={{ fontWeight:800, fontSize:12, color:"var(--text1)", marginBottom:4, textTransform:"uppercase", letterSpacing:1 }}>
                   📈 {t("bench_score_history")}
+                </div>
+                <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:12, lineHeight:1.6 }}>
+                  {t("bench_history_desc")}
                 </div>
                 <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ overflow:"visible" }}>
                   {[0,25,50,75,100].map(v => (
@@ -5148,6 +5188,7 @@ function BenchmarkPage({ t, activeModels }) {
                     </text>
                   ))}
                   {modelIds.map((mid,mi) => {
+                    const mName = leaderboard.find(x => x.id === mid)?.name || mid;
                     const pts = chartRuns.map((_,i) => {
                       const s = runScores[i][mid];
                       return s !== undefined ? `${pL+i*xStep},${yS(s)}` : null;
@@ -5156,15 +5197,34 @@ function BenchmarkPage({ t, activeModels }) {
                     const col = BENCH_COLORS[mi % BENCH_COLORS.length];
                     return (
                       <g key={mid}>
-                        <polyline points={pts.join(" ")} fill="none" stroke={col} strokeWidth="2" strokeLinejoin="round" />
-                        {chartRuns.map((_,i) => {
+                        <polyline points={pts.join(" ")} fill="none" stroke={col} strokeWidth="2" strokeLinejoin="round">
+                          <title>{mName}</title>
+                        </polyline>
+                        {chartRuns.map((run,i) => {
                           const s = runScores[i][mid];
-                          return s !== undefined ? <circle key={i} cx={pL+i*xStep} cy={yS(s)} r="3" fill={col} /> : null;
+                          return s !== undefined ? (
+                            <circle key={i} cx={pL+i*xStep} cy={yS(s)} r="4" fill={col} style={{ cursor:"crosshair" }}>
+                              <title>{mName} — {new Date(run.timestamp).toLocaleDateString()}: {s}pts</title>
+                            </circle>
+                          ) : null;
                         })}
                       </g>
                     );
                   })}
                 </svg>
+                {/* Legend */}
+                <div style={{ display:"flex", flexWrap:"wrap", gap:16, marginTop:10, paddingTop:10, borderTop:"1px solid var(--border)" }}>
+                  {leaderboard.map((m, mi) => (
+                    <div key={m.id} style={{ display:"flex", alignItems:"center", gap:8 }}>
+                      <svg width="22" height="10" viewBox="0 0 22 10">
+                        <line x1="0" y1="5" x2="22" y2="5" stroke={BENCH_COLORS[mi % BENCH_COLORS.length]} strokeWidth="2" strokeLinecap="round" />
+                        <circle cx="11" cy="5" r="3" fill={BENCH_COLORS[mi % BENCH_COLORS.length]} />
+                      </svg>
+                      <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text1)", fontWeight:600 }}>{m.name}</span>
+                      <span style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)" }}>{m.score}pts</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             );
           })()}
