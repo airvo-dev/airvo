@@ -557,6 +557,30 @@ async def set_api_key(model_id: str, api_key: str):
     settings.set_api_key(model_id, api_key)
     return {"ok": True}
 
+@router.post("/api/models/{model_id:path}/test", tags=["Models"], summary="Test model API key",
+    description="Make a minimal call to verify a model's API key and connectivity. Returns ok and latency_ms.")
+async def test_model_connection(model_id: str):
+    models_list = settings.get_models()
+    model = next((m for m in models_list if m["id"] == model_id), None)
+    if not model:
+        raise HTTPException(404, f"Model not found: {model_id}")
+    kwargs: dict = {
+        "model": model_id,
+        "messages": [{"role": "user", "content": "Reply with the single word: ok"}],
+        "max_tokens": 5,
+        "stream": False,
+    }
+    if model.get("api_key"):
+        kwargs["api_key"] = model["api_key"]
+    if model.get("base_url"):
+        kwargs["api_base"] = model["base_url"]
+    start = time.time()
+    try:
+        await litellm.acompletion(**kwargs)
+        return {"ok": True, "latency_ms": round((time.time() - start) * 1000)}
+    except Exception as exc:
+        return {"ok": False, "error": str(exc)[:200]}
+
 @router.patch("/api/models/{model_id:path}", tags=["Models"], summary="Update model fields",
     description="Partially update a model's configuration (name, base_url, notes, etc.). Only provided fields are updated.")
 async def update_model(model_id: str, updates: ModelUpdate):

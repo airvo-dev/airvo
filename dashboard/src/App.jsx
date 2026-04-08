@@ -51,6 +51,8 @@ const I18N = {
     active:"active", inactive:"inactive", free_badge:"FREE", paid_badge:"PAID",
     save_key:"Save", hide_key:"hide", show_key:"show", change_key:"change", delete_btn:"delete",
     key_placeholder:"API key...",
+    model_test_btn:"Test", model_test_testing:"Testing…",
+    model_note_edit:"Edit notes", model_note_save:"Save", model_note_ph:"Personal notes — context limit, pricing, quality…",
     status_title:"Status", status_sub:"Server status and active models", server_label:"Server",
     status_online:"● Online", status_offline_msg:"Cannot connect to server.",
     status_offline_hint:"Make sure Airvo is running with",
@@ -396,6 +398,8 @@ const I18N = {
     active:"activo", inactive:"inactivo", free_badge:"GRATIS", paid_badge:"PAGO",
     save_key:"Guardar", hide_key:"ocultar", show_key:"ver", change_key:"cambiar", delete_btn:"eliminar",
     key_placeholder:"API key...",
+    model_test_btn:"Test", model_test_testing:"Probando…",
+    model_note_edit:"Editar nota", model_note_save:"Guardar", model_note_ph:"Notas personales — contexto, precio, calidad…",
     status_title:"Estado", status_sub:"Estado del servidor y modelos activos", server_label:"Servidor",
     status_online:"● Online", status_offline_msg:"No se puede conectar al servidor.",
     status_offline_hint:"Asegurate de que Airvo esté corriendo con",
@@ -714,6 +718,8 @@ const I18N = {
     active:"actif", inactive:"inactif", free_badge:"GRATUIT", paid_badge:"PAYANT",
     save_key:"Enregistrer", hide_key:"masquer", show_key:"afficher", change_key:"modifier", delete_btn:"supprimer",
     key_placeholder:"Clé API...",
+    model_test_btn:"Tester", model_test_testing:"Test en cours…",
+    model_note_edit:"Modifier la note", model_note_save:"Enregistrer", model_note_ph:"Notes personnelles — contexte, prix, qualité…",
     status_title:"Statut", status_sub:"État du serveur et modèles actifs", server_label:"Serveur",
     status_online:"● En ligne", status_offline_msg:"Impossible de se connecter au serveur.",
     status_offline_hint:"Assurez-vous qu'Airvo est lancé avec",
@@ -1030,6 +1036,8 @@ const I18N = {
     active:"aktiv", inactive:"inaktiv", free_badge:"GRATIS", paid_badge:"KOSTENPFLICHTIG",
     save_key:"Speichern", hide_key:"ausblenden", show_key:"anzeigen", change_key:"ändern", delete_btn:"löschen",
     key_placeholder:"API-Schlüssel...",
+    model_test_btn:"Testen", model_test_testing:"Test läuft…",
+    model_note_edit:"Notiz bearbeiten", model_note_save:"Speichern", model_note_ph:"Persönliche Notizen — Kontext, Preis, Qualität…",
     status_title:"Status", status_sub:"Serverstatus und aktive Modelle", server_label:"Server",
     status_online:"● Online", status_offline_msg:"Verbindung zum Server nicht möglich.",
     status_offline_hint:"Stellen Sie sicher, dass Airvo läuft mit",
@@ -1346,6 +1354,8 @@ const I18N = {
     active:"已激活", inactive:"未激活", free_badge:"免费", paid_badge:"付费",
     save_key:"保存", hide_key:"隐藏", show_key:"显示", change_key:"修改", delete_btn:"删除",
     key_placeholder:"API 密钥...",
+    model_test_btn:"测试", model_test_testing:"测试中…",
+    model_note_edit:"编辑备注", model_note_save:"保存", model_note_ph:"个人备注 — 上下文限制、定价、质量…",
     status_title:"状态", status_sub:"服务器状态和活跃模型", server_label:"服务器",
     status_online:"● 在线", status_offline_msg:"无法连接到服务器。",
     status_offline_hint:"请确保 Airvo 正在运行，使用命令",
@@ -1662,6 +1672,8 @@ const I18N = {
     active:"アクティブ", inactive:"非アクティブ", free_badge:"無料", paid_badge:"有料",
     save_key:"保存", hide_key:"非表示", show_key:"表示", change_key:"変更", delete_btn:"削除",
     key_placeholder:"APIキー...",
+    model_test_btn:"テスト", model_test_testing:"テスト中…",
+    model_note_edit:"メモを編集", model_note_save:"保存", model_note_ph:"個人メモ — コンテキスト制限・価格・品質…",
     status_title:"ステータス", status_sub:"サーバー状態とアクティブモデル", server_label:"サーバー",
     status_online:"● オンライン", status_offline_msg:"サーバーに接続できません。",
     status_offline_hint:"Airvoが起動していることを確認してください",
@@ -1978,6 +1990,8 @@ const I18N = {
     active:"ativo", inactive:"inativo", free_badge:"GRÁTIS", paid_badge:"PAGO",
     save_key:"Salvar", hide_key:"ocultar", show_key:"exibir", change_key:"alterar", delete_btn:"excluir",
     key_placeholder:"Chave API...",
+    model_test_btn:"Testar", model_test_testing:"Testando…",
+    model_note_edit:"Editar nota", model_note_save:"Salvar", model_note_ph:"Notas pessoais — limite de contexto, preço, qualidade…",
     status_title:"Status", status_sub:"Estado do servidor e modelos ativos", server_label:"Servidor",
     status_online:"● Online", status_offline_msg:"Não foi possível conectar ao servidor.",
     status_offline_hint:"Certifique-se de que o Airvo está rodando com",
@@ -3113,6 +3127,17 @@ export default function AirvoDashboard() {
     } catch { toast(t("toast_error_key"), "error"); }
   }
 
+  async function saveNotes(id, notes) {
+    try {
+      await fetch(`${API}/api/models/${encodeURIComponent(id)}`, {
+        method:"PATCH", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ notes }),
+      });
+      setModels(prev => prev.map(m => m.id===id ? { ...m, notes } : m));
+      toast(t("model_note_save"), "success");
+    } catch { toast(t("toast_error_key"), "error"); }
+  }
+
   async function deleteModel(id) {
     if (!confirm(t("confirm_delete"))) return;
     try {
@@ -3291,6 +3316,7 @@ export default function AirvoDashboard() {
                         onToggle={() => toggleModel(m.id, m.active)}
                         onSaveKey={key => saveKey(m.id, key)}
                         onDelete={() => deleteModel(m.id)}
+                        onSaveNotes={notes => saveNotes(m.id, notes)}
                       />
                     ))}
                   </div>
@@ -3306,6 +3332,7 @@ export default function AirvoDashboard() {
                             onToggle={() => toggleModel(m.id, m.active)}
                             onSaveKey={key => saveKey(m.id, key)}
                             onDelete={() => deleteModel(m.id)}
+                            onSaveNotes={notes => saveNotes(m.id, notes)}
                           />
                         ))}
                       </div>
@@ -4555,11 +4582,22 @@ export default function AirvoDashboard() {
   );
 }
 
-function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete }) {
-  const [keyInput, setKeyInput] = useState("");
-  const [showKey, setShowKey]   = useState(false);
+function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete, onSaveNotes }) {
+  const [keyInput,  setKeyInput]  = useState("");
+  const [showKey,   setShowKey]   = useState(false);
+  const [testState, setTestState] = useState(null); // null | "testing" | {ok, latency_ms, error}
+  const [showNote,  setShowNote]  = useState(false);
+  const [noteInput, setNoteInput] = useState(model.notes || "");
   const isFree   = inferIsFree(model.provider, model.base_url);
   const needsKey = !isFree;
+
+  async function handleTest() {
+    setTestState("testing");
+    try {
+      const res = await fetch(`${API}/api/models/${encodeURIComponent(model.id)}/test`, { method:"POST" });
+      setTestState(await res.json());
+    } catch { setTestState({ ok:false, error:"Network error" }); }
+  }
 
   return (
     <div className={`model-card ${model.active?"active":""}`}>
@@ -4570,7 +4608,38 @@ function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete }) {
         </div>
         <span className={`provider-badge ${getProviderClass(model.provider)}`}>{model.provider}</span>
       </div>
-      {model.notes && <div className="model-notes">{model.notes}</div>}
+
+      {/* Notes: inline edit */}
+      {showNote
+        ? <div style={{ margin:"8px 0", display:"flex", flexDirection:"column", gap:6 }}>
+            <textarea className="key-input" rows={3}
+              placeholder={t("model_note_ph")}
+              value={noteInput}
+              onChange={e => setNoteInput(e.target.value)}
+              style={{ resize:"vertical", fontFamily:"var(--mono)", fontSize:11, minHeight:56, width:"100%", boxSizing:"border-box" }}
+            />
+            <div style={{ display:"flex", gap:6, justifyContent:"flex-end" }}>
+              <button className="btn btn-ghost btn-sm"
+                onClick={() => { setShowNote(false); setNoteInput(model.notes||""); }}>✕</button>
+              <button className="btn btn-primary btn-sm"
+                onClick={() => { onSaveNotes?.(noteInput.trim()); setShowNote(false); }}>
+                {t("model_note_save")}
+              </button>
+            </div>
+          </div>
+        : <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:6, margin:"6px 0 2px" }}>
+            {model.notes
+              ? <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", lineHeight:1.5, flex:1 }}>{model.notes}</div>
+              : <div style={{ flex:1 }} />
+            }
+            <button className="btn btn-ghost btn-sm"
+              onClick={() => setShowNote(true)}
+              style={{ opacity:0.6, fontSize:10, flexShrink:0 }}>
+              ✎ {t("model_note_edit")}
+            </button>
+          </div>
+      }
+
       <div className="model-footer">
         <span className={`free-badge ${isFree?"free":"paid"}`}>{isFree?t("free_badge"):t("paid_badge")}</span>
         <div style={{ display:"flex", alignItems:"center", gap:8 }}>
@@ -4623,6 +4692,25 @@ function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete }) {
               </button>
             </div>
         }
+        {/* Test connection button — only when key is set */}
+        {model.api_key && (
+          <div style={{ marginTop:8, display:"flex", alignItems:"center", gap:8 }}>
+            <button className="btn btn-ghost btn-sm"
+              onClick={handleTest}
+              disabled={testState === "testing"}
+              style={{ fontFamily:"var(--mono)", fontSize:11 }}>
+              {testState === "testing" ? t("model_test_testing") : `🔌 ${t("model_test_btn")}`}
+            </button>
+            {testState && testState !== "testing" && (
+              <span style={{ fontFamily:"var(--mono)", fontSize:11,
+                color: testState.ok ? "var(--green)" : "var(--red)" }}>
+                {testState.ok
+                  ? `✓ ${testState.latency_ms}ms`
+                  : `✗ ${(testState.error || "Failed").slice(0, 70)}`}
+              </span>
+            )}
+          </div>
+        )}
       </>}
       <div style={{ marginTop:12, display:"flex", justifyContent:"flex-end" }}>
         <button className="btn btn-danger btn-sm" onClick={onDelete}>{t("delete_btn")}</button>
