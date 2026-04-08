@@ -298,6 +298,29 @@ const I18N = {
     help_stats_latency_body:"Average response time per model across all recorded requests. Green = fastest relative to others, yellow = moderate, red = slowest. Useful for choosing the right model when speed matters.",
     help_stats_daily_title:"📅 Daily Activity",
     help_stats_daily_body:"Sparkline bars showing token usage per day over the last 7 days. Helps you spot patterns — e.g. which models you use more on heavy coding days.",
+    help_models_cards_title:"Model Card Features",
+    help_models_test_title:"🔌 API Key Test",
+    help_models_test_body:"Click 🔌 Test on any card with an API key configured. Airvo sends a minimal call to verify the key is valid and the provider responds. Shows ✓ with latency in ms on success, or ✗ with the error message on failure. The result resets each time you test.",
+    help_models_notes_title:"✎ Personal Notes",
+    help_models_notes_body:"Click ✎ Edit notes on any card to add a freeform reminder — context limit, pricing tier, performance observations, use cases. Notes are saved in ~/.airvo/models.json and displayed permanently on the card.",
+    help_bench_title:"Benchmarks — Feature Guide",
+    help_bench_intro:"The Benchmarks tab lets you measure and compare your models with standardized prompts — not opinions. Run a suite, see who wins on speed, accuracy, output length and consistency, all in one click.",
+    help_bench_suites_title:"📦 Built-in Suites",
+    help_bench_suites_body:"Speed Test — 3 short prompts measuring raw generation speed.\nCoding — FizzBuzz, palindrome, Fibonacci with automatic correctness check (✓/✗).\nReasoning — Syllogism, math problem, number sequence with answer validation.\nCreativity — Haiku, metaphor, 2-sentence story.",
+    help_bench_custom_title:"✏️ Custom Suites",
+    help_bench_custom_body:"Create named suites with your own prompts. Click 'New suite', name it, add prompts with a short label and full text. Delete individual prompts or the whole suite. Use for domain-specific benchmarks — your own coding challenges, QA tests, or style comparisons.",
+    help_bench_leaderboard_title:"🏆 Leaderboard & Scoring",
+    help_bench_leaderboard_body:"Score = weighted composite of Speed (tok/s), Tokens (output length), Accuracy (for suites with validators — heavily weighted), and Consistency (low variance = better). A correct-but-slow answer always beats a fast-but-wrong one. The Per-Prompt table shows individual results with ✓/✗ accuracy badges.",
+    help_bench_charts_title:"Radar Chart & Score History",
+    help_bench_charts_body:"Radar (2+ models in last run) — 4 axes: Speed, Tok/s, Accuracy, Consistency. Hover dots for exact values. Score History line chart (3+ runs) — tracks each model's composite score over time. Hover dots to see model, date, score, and run annotation.",
+    help_bench_annotation_title:"📝 Run Annotation",
+    help_bench_annotation_body:"Before clicking Run Benchmark, type an optional note — e.g. 'after Ollama update', 'with GPU offload', 'cold start'. The note is saved with the run and shown in score history tooltips, making it easy to correlate score changes with environment changes.",
+    help_bench_export_title:"📄 Export & Run Comparison",
+    help_bench_export_body:"Export the last run as .md (human-readable), .csv (for spreadsheets), or copy raw JSON. History stores the last 20 runs. Click 'Compare Runs' to compare any two runs side by side with delta scores.",
+    help_faq_9_q:"How does Benchmarks calculate the score?",
+    help_faq_9_a:"Score = weighted composite: Speed (tok/s), Output length, Accuracy (✓/✗ for suites with validators — carries the most weight), Consistency (low variance). Max 100 points. A correct-but-slow answer always beats a fast-but-wrong one.",
+    help_faq_10_q:"Can I benchmark with just one model?",
+    help_faq_10_a:"Yes — absolute scores work with one model. But benchmarks are most useful with 2+ models to compare relative performance on the exact same prompts.",
     config_context_memory_section:"Context & Memory",
     toast_activated:"Model activated", toast_deactivated:"Model deactivated",
     toast_key_saved:"API key saved ✓", toast_key_error:"Enter a valid API key",
@@ -619,6 +642,29 @@ const I18N = {
     help_stats_latency_body:"Tiempo de respuesta promedio por modelo en todas las solicitudes registradas. Verde = más rápido relativo a los demás, amarillo = moderado, rojo = más lento. Útil para elegir el modelo correcto cuando la velocidad importa.",
     help_stats_daily_title:"📅 Actividad Diaria",
     help_stats_daily_body:"Barras sparkline que muestran el uso de tokens por día en los últimos 7 días. Ayuda a detectar patrones — ej. qué modelos usás más en días de mucho código.",
+    help_models_cards_title:"Funciones de la Tarjeta de Modelos",
+    help_models_test_title:"🔌 Test de API Key",
+    help_models_test_body:"Hacé clic en 🔌 Test en cualquier tarjeta con API key configurada. Airvo hace una llamada mínima para verificar que la key es válida y el proveedor responde. Muestra ✓ con latencia en ms si funciona, o ✗ con el mensaje de error si falla.",
+    help_models_notes_title:"✎ Notas Personales",
+    help_models_notes_body:"Hacé clic en ✎ Editar nota en cualquier tarjeta para agregar un recordatorio — límite de contexto, precio, observaciones de calidad, casos de uso. Las notas se guardan en ~/.airvo/models.json y se muestran permanentemente en la tarjeta.",
+    help_bench_title:"Benchmarks — Guía de Features",
+    help_bench_intro:"El tab de Benchmarks te permite medir y comparar tus modelos con prompts estandarizados — sin opiniones. Ejecutá una suite y ves quién gana en velocidad, precisión, longitud y consistencia, con un solo clic.",
+    help_bench_suites_title:"📦 Suites Incluidas",
+    help_bench_suites_body:"Speed Test — 3 prompts cortos midiendo velocidad de generación.\nCodigo — FizzBuzz, palíndromo, Fibonacci con verificación automática (✓/✗).\nRazonamiento — Silogismo, problema matemático, secuencia numérica con validación.\nCreatividad — Haiku, metáfora, historia de 2 oraciones.",
+    help_bench_custom_title:"✏️ Suites Personalizadas",
+    help_bench_custom_body:"Creá suites con nombre y tus propios prompts. Hacé clic en 'Nueva suite', poné un nombre y agregá prompts con etiqueta corta y texto completo. Borrá prompts individuales o la suite entera. Usá para benchmarks de tu dominio.",
+    help_bench_leaderboard_title:"🏆 Leaderboard y Puntaje",
+    help_bench_leaderboard_body:"Puntaje = compuesto ponderado de Velocidad (tok/s), Tokens (longitud), Precisión (para suites con validadores — mayor peso), y Consistencia (baja varianza = mejor). Una respuesta correcta pero lenta siempre gana sobre una rápida pero incorrecta. La tabla Per-Prompt muestra resultados con badges ✓/✗.",
+    help_bench_charts_title:"Gráfico Radar e Historial de Puntajes",
+    help_bench_charts_body:"Radar (2+ modelos en última corrida) — 4 ejes: Velocidad, Tok/s, Precisión, Consistencia. Pasá el mouse sobre los puntos para valores exactos. Historial de puntajes (3+ corridas) — rastrea el puntaje de cada modelo en el tiempo. Hover para ver nombre, fecha, puntaje y anotación.",
+    help_bench_annotation_title:"📝 Anotación de Corrida",
+    help_bench_annotation_body:"Antes de hacer clic en Run Benchmark, escribí una nota opcional — ej. 'después de actualizar Ollama', 'con GPU offload', 'cold start'. La nota se guarda con la corrida y aparece en los tooltips del historial.",
+    help_bench_export_title:"📄 Exportar y Comparar Corridas",
+    help_bench_export_body:"Exportá la última corrida como .md, .csv o copiá JSON. El historial guarda las últimas 20 corridas. Hacé clic en 'Comparar Corridas' para comparar dos corridas con delta de puntajes.",
+    help_faq_9_q:"¿Cómo calcula el puntaje Benchmarks?",
+    help_faq_9_a:"Puntaje = compuesto ponderado: Velocidad (tok/s), Longitud de salida, Precisión (✓/✗ para suites con validadores — mayor peso), Consistencia (baja varianza). Máximo 100 puntos. Una respuesta correcta pero lenta siempre gana sobre una rápida pero incorrecta.",
+    help_faq_10_q:"¿Puedo hacer benchmark con un solo modelo?",
+    help_faq_10_a:"Sí — los puntajes absolutos funcionan con un modelo. Pero los benchmarks son más útiles con 2+ modelos para comparar performance relativa con los mismos prompts.",
     config_context_memory_section:"Contexto & Memoria",
     toast_activated:"Modelo activado", toast_deactivated:"Modelo desactivado",
     toast_key_saved:"API key guardada ✓", toast_key_error:"Ingresá una API key válida",
@@ -937,6 +983,29 @@ const I18N = {
     help_stats_latency_body:"Temps de réponse moyen par modèle sur toutes les requêtes enregistrées. Vert = le plus rapide, jaune = modéré, rouge = le plus lent. Utile pour choisir le bon modèle quand la vitesse compte.",
     help_stats_daily_title:"📅 Activité Quotidienne",
     help_stats_daily_body:"Barres sparkline montrant l'utilisation des tokens par jour sur les 7 derniers jours. Aide à identifier des tendances — ex. quels modèles vous utilisez le plus lors des journées intenses.",
+    help_models_cards_title:"Fonctionnalités des Cartes Modèles",
+    help_models_test_title:"🔌 Test de Clé API",
+    help_models_test_body:"Cliquez sur 🔌 Tester sur n'importe quelle carte avec une clé API configurée. Airvo envoie un appel minimal pour vérifier la validité de la clé et la disponibilité du fournisseur. Affiche ✓ avec la latence en ms en cas de succès, ou ✗ avec le message d'erreur en cas d'échec.",
+    help_models_notes_title:"✎ Notes Personnelles",
+    help_models_notes_body:"Cliquez sur ✎ Modifier la note pour ajouter un mémo libre — limite de contexte, tarification, observations de qualité, cas d'usage. Les notes sont enregistrées dans ~/.airvo/models.json et affichées en permanence sur la carte.",
+    help_bench_title:"Benchmarks — Guide des Fonctionnalités",
+    help_bench_intro:"L'onglet Benchmarks vous permet de mesurer et comparer vos modèles avec des prompts standardisés — sans opinions. Lancez une suite et voyez qui gagne en vitesse, précision, longueur et cohérence, en un seul clic.",
+    help_bench_suites_title:"📦 Suites Intégrées",
+    help_bench_suites_body:"Speed Test — 3 prompts courts mesurant la vitesse brute.\nCodage — FizzBuzz, palindrome, Fibonacci avec vérification automatique (✓/✗).\nRaisonnement — Syllogisme, problème mathématique, séquence numérique.\nCréativité — Haïku, métaphore, histoire en 2 phrases.",
+    help_bench_custom_title:"✏️ Suites Personnalisées",
+    help_bench_custom_body:"Créez des suites nommées avec vos propres prompts. Cliquez sur 'Nouvelle suite', nommez-la et ajoutez des prompts. Supprimez des prompts individuels ou la suite entière.",
+    help_bench_leaderboard_title:"🏆 Classement & Score",
+    help_bench_leaderboard_body:"Score = composite pondéré de Vitesse (tok/s), Tokens, Précision (pour les suites avec validateurs — poids maximal) et Cohérence (faible variance = mieux). Un modèle correct mais lent bat un rapide mais faux. Le tableau Par-Prompt montre les résultats individuels avec badges ✓/✗.",
+    help_bench_charts_title:"Radar & Historique des Scores",
+    help_bench_charts_body:"Radar (2+ modèles dans la dernière exécution) — 4 axes : Vitesse, Tok/s, Précision, Cohérence. Survolez les points pour les valeurs exactes. Historique des scores (3+ exécutions) — suit le score de chaque modèle dans le temps.",
+    help_bench_annotation_title:"📝 Annotation d'Exécution",
+    help_bench_annotation_body:"Avant de lancer, saisissez une note optionnelle — ex. 'après MAJ Ollama', 'avec GPU offload'. La note est sauvegardée avec l'exécution et visible dans les info-bulles de l'historique.",
+    help_bench_export_title:"📄 Export & Comparaison",
+    help_bench_export_body:"Exportez en .md, .csv ou copiez en JSON. L'historique conserve les 20 dernières exécutions. Cliquez sur 'Comparer' pour comparer deux exécutions côte à côte avec les deltas.",
+    help_faq_9_q:"Comment Benchmarks calcule-t-il le score ?",
+    help_faq_9_a:"Score = composite pondéré : Vitesse (tok/s), Longueur de sortie, Précision (✓/✗ — poids le plus élevé), Cohérence. Max 100 points. Une réponse correcte mais lente bat toujours une réponse rapide mais fausse.",
+    help_faq_10_q:"Puis-je faire un benchmark avec un seul modèle ?",
+    help_faq_10_a:"Oui — les scores absolus fonctionnent avec un seul modèle. Mais les benchmarks sont plus utiles avec 2+ modèles pour comparer les performances relatives sur les mêmes prompts.",
     config_context_memory_section:"Contexte & Mémoire",
     toast_activated:"Modèle activé", toast_deactivated:"Modèle désactivé",
     toast_key_saved:"Clé API enregistrée ✓", toast_key_error:"Entrez une clé API valide",
@@ -1255,6 +1324,29 @@ const I18N = {
     help_stats_latency_body:"Durchschnittliche Antwortzeit pro Modell über alle aufgezeichneten Anfragen. Grün = am schnellsten, gelb = moderat, rot = am langsamsten. Nützlich, wenn Geschwindigkeit entscheidend ist.",
     help_stats_daily_title:"📅 Tägliche Aktivität",
     help_stats_daily_body:"Sparkline-Balken, die die Token-Nutzung pro Tag über die letzten 7 Tage zeigen. Hilft Muster zu erkennen — z.B. welche Modelle Sie an intensiven Coding-Tagen mehr nutzen.",
+    help_models_cards_title:"Funktionen der Modellkarten",
+    help_models_test_title:"🔌 API-Schlüssel Test",
+    help_models_test_body:"Klicken Sie auf 🔌 Testen bei jeder Karte mit einem konfigurierten API-Schlüssel. Airvo sendet einen minimalen Aufruf zur Überprüfung der Schlüsselgültigkeit und Anbietererreichbarkeit. Zeigt ✓ mit Latenz in ms bei Erfolg, oder ✗ mit der Fehlermeldung bei Misserfolg.",
+    help_models_notes_title:"✎ Persönliche Notizen",
+    help_models_notes_body:"Klicken Sie auf ✎ Notiz bearbeiten, um eine freie Notiz hinzuzufügen — Kontextlimit, Preisstufe, Qualitätsbeobachtungen, Anwendungsfälle. Notizen werden in ~/.airvo/models.json gespeichert und dauerhaft auf der Karte angezeigt.",
+    help_bench_title:"Benchmarks — Feature-Guide",
+    help_bench_intro:"Der Benchmarks-Tab ermöglicht es, Modelle mit standardisierten Prompts zu messen und zu vergleichen — ohne Meinungen. Starten Sie eine Suite und sehen Sie auf einen Klick, wer bei Geschwindigkeit, Genauigkeit, Ausgabelänge und Konsistenz gewinnt.",
+    help_bench_suites_title:"📦 Integrierte Suites",
+    help_bench_suites_body:"Speed Test — 3 kurze Prompts zur Messung der Rohgeschwindigkeit.\nCoding — FizzBuzz, Palindrom, Fibonacci mit automatischer Korrektheitsprüfung (✓/✗).\nLogik — Syllogismus, Mathematikaufgabe, Zahlensequenz.\nKreativität — Haiku, Metapher, 2-Satz-Geschichte.",
+    help_bench_custom_title:"✏️ Benutzerdefinierte Suites",
+    help_bench_custom_body:"Erstellen Sie benannte Suites mit eigenen Prompts. Klicken Sie auf 'Neue Suite', benennen Sie sie und fügen Sie Prompts hinzu. Löschen Sie einzelne Prompts oder die gesamte Suite.",
+    help_bench_leaderboard_title:"🏆 Rangliste & Bewertung",
+    help_bench_leaderboard_body:"Punktzahl = gewichtetes Composite aus Geschwindigkeit (tok/s), Tokens, Genauigkeit (für Suites mit Validatoren — höchste Gewichtung) und Konsistenz. Ein korrektes aber langsames Modell schlägt ein schnelles aber falsches. Die Pro-Prompt-Tabelle zeigt Einzelergebnisse mit ✓/✗ Badges.",
+    help_bench_charts_title:"Radar & Punkteverlauf",
+    help_bench_charts_body:"Radar (2+ Modelle im letzten Lauf) — 4 Achsen: Geschwindigkeit, Tok/s, Genauigkeit, Konsistenz. Hover für genaue Werte. Punkteverlauf (3+ Läufe) — verfolgt den Score jedes Modells über die Zeit.",
+    help_bench_annotation_title:"📝 Laufannotation",
+    help_bench_annotation_body:"Geben Sie vor dem Start eine optionale Notiz ein — z.B. 'nach Ollama-Update', 'mit GPU-Offload'. Die Notiz wird mit dem Lauf gespeichert und in Verlaufs-Tooltips angezeigt.",
+    help_bench_export_title:"📄 Export & Vergleich",
+    help_bench_export_body:"Exportieren Sie den letzten Lauf als .md, .csv oder als JSON-Kopie. Verlauf speichert die letzten 20 Läufe. Klicken Sie auf 'Läufe vergleichen' für einen Vergleich mit Delta-Scores.",
+    help_faq_9_q:"Wie berechnet Benchmarks die Punktzahl?",
+    help_faq_9_a:"Punktzahl = gewichtetes Composite: Geschwindigkeit (tok/s), Ausgabelänge, Genauigkeit (✓/✗ für Suites mit Validatoren — höchste Gewichtung), Konsistenz. Max 100 Punkte. Eine korrekte aber langsame Antwort schlägt immer eine schnelle aber falsche.",
+    help_faq_10_q:"Kann ich einen Benchmark mit nur einem Modell durchführen?",
+    help_faq_10_a:"Ja — absolute Punktzahlen funktionieren mit einem Modell. Benchmarks sind jedoch am nützlichsten mit 2+ Modellen für relative Leistungsvergleiche auf denselben Prompts.",
     config_context_memory_section:"Kontext & Speicher",
     toast_activated:"Modell aktiviert", toast_deactivated:"Modell deaktiviert",
     toast_key_saved:"API-Schlüssel gespeichert ✓", toast_key_error:"Geben Sie einen gültigen API-Schlüssel ein",
@@ -1573,6 +1665,29 @@ const I18N = {
     help_stats_latency_body:"所有记录请求中每个模型的平均响应时间。绿色 = 相对最快，黄色 = 中等，红色 = 最慢。在速度重要时选择合适模型时很有用。",
     help_stats_daily_title:"📅 每日活动",
     help_stats_daily_body:"迷你条形图显示过去 7 天每天的 token 使用情况。帮助发现规律——例如在高强度编码日您更多使用哪些模型。",
+    help_models_cards_title:"模型卡片功能",
+    help_models_test_title:"🔌 API 密钥测试",
+    help_models_test_body:"点击配置了 API 密钥的任意卡片上的 🔌 测试按钮。Airvo 发送最小化请求验证密钥有效性和服务商可达性。成功显示 ✓ 和延迟毫秒数，失败显示 ✗ 和错误信息。",
+    help_models_notes_title:"✎ 个人备注",
+    help_models_notes_body:"点击任意卡片上的 ✎ 编辑备注，添加自由文本提醒——上下文限制、定价等级、质量观察、使用场景。备注保存在 ~/.airvo/models.json 中并永久显示在卡片上。",
+    help_bench_title:"基准测试——功能指南",
+    help_bench_intro:"基准测试标签页让您用标准化提示词衡量和比较模型——而非主观意见。运行一个套件，一键查看谁在速度、准确性、输出长度和一致性上胜出。",
+    help_bench_suites_title:"📦 内置套件",
+    help_bench_suites_body:"速度测试——3个短提示词测量原始生成速度。\n编码——FizzBuzz、回文、斐波那契，自动正确性检查（✓/✗）。\n推理——三段论、数学题、数字序列，自动答案验证。\n创意——俳句、比喻、两句话故事。",
+    help_bench_custom_title:"✏️ 自定义套件",
+    help_bench_custom_body:"创建带名称的套件和自定义提示词。点击「新建套件」，命名后添加带短标签和完整文本的提示词。可删除单个提示词或整个套件。",
+    help_bench_leaderboard_title:"🏆 排行榜与评分",
+    help_bench_leaderboard_body:"分数 = 速度（tok/s）、Token数（输出长度）、准确性（有验证器的套件——权重最高）和一致性（低方差更好）的加权综合。正确但慢的回答总是胜过快速但错误的回答。各提示词表格显示带✓/✗徽章的单独结果。",
+    help_bench_charts_title:"雷达图与分数历史",
+    help_bench_charts_body:"雷达图（最后一次运行需2+个模型）——4个轴：速度、Tok/s、准确性、一致性。悬停点查看精确值。分数历史折线图（需3+次运行）——追踪每个模型随时间的综合分数。",
+    help_bench_annotation_title:"📝 运行注释",
+    help_bench_annotation_body:"点击「运行基准测试」前，可输入可选备注——如「Ollama更新后」、「GPU卸载」。备注随运行保存，显示在历史工具提示中。",
+    help_bench_export_title:"📄 导出与运行对比",
+    help_bench_export_body:"将最后一次运行导出为 .md、.csv 或复制 JSON。历史记录保存最近20次运行。点击「比较运行」可并排比较两次运行的分数差异。",
+    help_faq_9_q:"基准测试如何计算分数？",
+    help_faq_9_a:"分数 = 加权综合：速度（tok/s）、输出长度、准确性（✓/✗ 有验证器的套件——权重最高）、一致性（低方差）。最高100分。正确但慢的回答总是胜过快速但错误的回答。",
+    help_faq_10_q:"只有一个模型能做基准测试吗？",
+    help_faq_10_a:"可以——绝对分数适用于单个模型。但基准测试在2+个模型时最有价值，可以在完全相同的提示词上比较相对性能。",
     config_context_memory_section:"上下文与内存",
     toast_activated:"模型已激活", toast_deactivated:"模型已停用",
     toast_key_saved:"API 密钥已保存 ✓", toast_key_error:"请输入有效的 API 密钥",
@@ -1891,6 +2006,29 @@ const I18N = {
     help_stats_latency_body:"記録された全リクエストのモデルごとの平均応答時間。緑 = 他より最速、黄 = 中程度、赤 = 最遅。速度が重要な場面で適切なモデルを選ぶのに役立ちます。",
     help_stats_daily_title:"📅 日別アクティビティ",
     help_stats_daily_body:"過去7日間の日ごとのトークン使用量を示すスパークライン棒グラフ。傾向を発見するのに役立ちます——例えばコーディング集中日にどのモデルをより多く使うかなど。",
+    help_models_cards_title:"モデルカードの機能",
+    help_models_test_title:"🔌 APIキーテスト",
+    help_models_test_body:"APIキーが設定されているカードの🔌テストボタンをクリックします。Airvoはキーの有効性とプロバイダーへの疎通を確認する最小限の呼び出しを送信します。成功時は✓とレイテンシ(ms)を表示、失敗時は✗とエラーメッセージを表示します。",
+    help_models_notes_title:"✎ 個人メモ",
+    help_models_notes_body:"任意のカードの✎メモを編集をクリックして自由なメモを追加できます——コンテキスト制限、価格帯、品質観察、ユースケース。メモは~/.airvo/models.jsonに保存され、カードに永続表示されます。",
+    help_bench_title:"ベンチマーク——機能ガイド",
+    help_bench_intro:"ベンチマークタブでは、標準化されたプロンプトを使ってモデルを測定・比較できます——主観なしで。スイートを実行し、速度・精度・出力長・一貫性で誰が勝つかをワンクリックで確認できます。",
+    help_bench_suites_title:"📦 組み込みスイート",
+    help_bench_suites_body:"スピードテスト——生成速度を測る3つの短いプロンプト。\nコーディング——FizzBuzz、回文、フィボナッチの自動正確性チェック（✓/✗）。\n推論——三段論法、数学問題、数列の答え検証。\n創造性——俳句、比喩、2文の物語。",
+    help_bench_custom_title:"✏️ カスタムスイート",
+    help_bench_custom_body:"名前付きスイートと独自プロンプトを作成できます。「新しいスイート」をクリックして名前を付け、短いラベルと全文テキストでプロンプトを追加します。個別プロンプトまたはスイート全体を削除できます。",
+    help_bench_leaderboard_title:"🏆 リーダーボード & スコア",
+    help_bench_leaderboard_body:"スコア = 速度（tok/s）、トークン数（出力長）、精度（バリデーター付きスイート——最も重み付けが高い）、一貫性（低分散が良い）の加重複合。正確だが遅い回答は速いが間違った回答に常に勝ります。",
+    help_bench_charts_title:"レーダーチャート & スコア履歴",
+    help_bench_charts_body:"レーダー（最終実行で2+モデル必要）——4軸：速度、Tok/s、精度、一貫性。点にホバーで正確な値を表示。スコア履歴（3+実行必要）——各モデルの複合スコアを時系列で追跡。",
+    help_bench_annotation_title:"📝 実行アノテーション",
+    help_bench_annotation_body:"「ベンチマーク実行」ボタンを押す前に任意のメモを入力できます——例：「Ollamaアップデート後」、「GPUオフロードあり」。メモは実行と一緒に保存され、履歴ツールチップに表示されます。",
+    help_bench_export_title:"📄 エクスポート & 実行比較",
+    help_bench_export_body:"最後の実行を.md、.csvとしてエクスポートするか、JSONをコピーできます。履歴は最新20回分を保持します。「実行を比較」をクリックして2つの実行をスコア差と並べて比較できます。",
+    help_faq_9_q:"ベンチマークはどのようにスコアを計算しますか？",
+    help_faq_9_a:"スコア = 速度（tok/s）、出力長、精度（✓/✗ バリデーター付きスイート——最も重み付けが高い）、一貫性（低分散）の加重複合。最高100点。正確だが遅い回答は常に速いが間違った回答に勝ります。",
+    help_faq_10_q:"モデルが1つだけでもベンチマークを実行できますか？",
+    help_faq_10_a:"はい——絶対スコアは1つのモデルでも機能します。ただし、全く同じプロンプトで相対パフォーマンスを比較するには、2+モデルで使用するのが最も効果的です。",
     config_context_memory_section:"コンテキスト & メモリ",
     toast_activated:"モデルを有効化しました", toast_deactivated:"モデルを無効化しました",
     toast_key_saved:"APIキーを保存しました ✓", toast_key_error:"有効なAPIキーを入力してください",
@@ -2209,6 +2347,29 @@ const I18N = {
     help_stats_latency_body:"Tempo médio de resposta por modelo em todas as requisições registradas. Verde = mais rápido em relação aos outros, amarelo = moderado, vermelho = mais lento. Útil para escolher o modelo certo quando a velocidade importa.",
     help_stats_daily_title:"📅 Atividade Diária",
     help_stats_daily_body:"Barras sparkline mostrando o uso de tokens por dia nos últimos 7 dias. Ajuda a identificar padrões — ex. quais modelos você usa mais em dias intensos de programação.",
+    help_models_cards_title:"Funcionalidades do Cartão de Modelos",
+    help_models_test_title:"🔌 Teste de Chave API",
+    help_models_test_body:"Clique em 🔌 Testar em qualquer cartão com uma chave API configurada. O Airvo faz uma chamada mínima para verificar se a chave é válida e o provedor responde. Mostra ✓ com latência em ms no sucesso, ou ✗ com a mensagem de erro na falha.",
+    help_models_notes_title:"✎ Notas Pessoais",
+    help_models_notes_body:"Clique em ✎ Editar nota em qualquer cartão para adicionar um lembrete livre — limite de contexto, preço, observações de qualidade, casos de uso. As notas são salvas em ~/.airvo/models.json e exibidas permanentemente no cartão.",
+    help_bench_title:"Benchmarks — Guia de Funcionalidades",
+    help_bench_intro:"A aba Benchmarks permite medir e comparar seus modelos com prompts padronizados — sem opiniões. Execute uma suite e veja quem vence em velocidade, precisão, comprimento de saída e consistência, com um clique.",
+    help_bench_suites_title:"📦 Suites Integradas",
+    help_bench_suites_body:"Speed Test — 3 prompts curtos medindo velocidade de geração.\nCodificação — FizzBuzz, palíndromo, Fibonacci com verificação automática (✓/✗).\nRaciocínio — Silogismo, problema matemático, sequência numérica.\nCriatividade — Haiku, metáfora, história de 2 frases.",
+    help_bench_custom_title:"✏️ Suites Personalizadas",
+    help_bench_custom_body:"Crie suites nomeadas com seus próprios prompts. Clique em 'Nova suite', nomeie-a e adicione prompts com rótulo curto e texto completo. Delete prompts individuais ou a suite inteira.",
+    help_bench_leaderboard_title:"🏆 Ranking & Pontuação",
+    help_bench_leaderboard_body:"Pontuação = composto ponderado de Velocidade (tok/s), Tokens (comprimento de saída), Precisão (para suites com validadores — maior peso) e Consistência (baixa variância = melhor). Um modelo correto mas lento sempre vence um rápido mas errado. A tabela Por-Prompt mostra resultados individuais com badges ✓/✗.",
+    help_bench_charts_title:"Gráfico Radar & Histórico de Pontuações",
+    help_bench_charts_body:"Radar (2+ modelos na última execução) — 4 eixos: Velocidade, Tok/s, Precisão, Consistência. Passe o mouse nos pontos para valores exatos. Histórico de pontuações (3+ execuções) — rastreia a pontuação composta de cada modelo ao longo do tempo.",
+    help_bench_annotation_title:"📝 Anotação de Execução",
+    help_bench_annotation_body:"Antes de clicar em Executar Benchmark, digite uma nota opcional — ex. 'após atualização do Ollama', 'com GPU offload'. A nota é salva com a execução e exibida nos tooltips do histórico.",
+    help_bench_export_title:"📄 Exportar & Comparar Execuções",
+    help_bench_export_body:"Exporte a última execução como .md, .csv ou copie como JSON. O histórico armazena as últimas 20 execuções. Clique em 'Comparar Execuções' para comparar duas execuções com delta de pontuações.",
+    help_faq_9_q:"Como o Benchmarks calcula a pontuação?",
+    help_faq_9_a:"Pontuação = composto ponderado: Velocidade (tok/s), Comprimento de saída, Precisão (✓/✗ para suites com validadores — maior peso), Consistência (baixa variância). Máximo 100 pontos. Uma resposta correta mas lenta sempre vence uma rápida mas errada.",
+    help_faq_10_q:"Posso fazer benchmark com apenas um modelo?",
+    help_faq_10_a:"Sim — pontuações absolutas funcionam com um modelo. Mas benchmarks são mais úteis com 2+ modelos para comparar performance relativa nos mesmos prompts.",
     config_context_memory_section:"Contexto & Memória",
     toast_activated:"Modelo ativado", toast_deactivated:"Modelo desativado",
     toast_key_saved:"Chave API salva ✓", toast_key_error:"Insira uma chave API válida",
@@ -5926,6 +6087,27 @@ function HelpPage({ t, setPage }) {
           <button className="btn btn-primary" onClick={() => setPage("add")}>+ {t("nav_add")}</button>
         </div>
       </div>
+
+      {/* Model Card Features */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">◈</span>
+          {t("help_models_cards_title")}
+        </div>
+        {[
+          { title:t("help_models_test_title"),  desc:t("help_models_test_body")  },
+          { title:t("help_models_notes_title"), desc:t("help_models_notes_body") },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc">{f.desc}</div>
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("models")}>◈ {t("nav_models")}</button>
+        </div>
+      </div>
+
       <div className="help-section">
         <div className="help-section-title">
           <span className="help-section-icon">⊙</span>
@@ -6091,7 +6273,37 @@ function HelpPage({ t, setPage }) {
         </div>
       </div>
 
-      {/* Troubleshooting */}
+      {/* Benchmarks tab */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🏆</span>
+          {t("help_bench_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-desc" style={{ lineHeight:1.8 }}>{t("help_bench_intro")}</div>
+        </div>
+        {[
+          { title:t("help_bench_suites_title"),      body:t("help_bench_suites_body"),      isCode:true },
+          { title:t("help_bench_custom_title"),      body:t("help_bench_custom_body"),      isCode:false },
+          { title:t("help_bench_leaderboard_title"), body:t("help_bench_leaderboard_body"), isCode:false },
+          { title:t("help_bench_charts_title"),      body:t("help_bench_charts_body"),      isCode:false },
+          { title:t("help_bench_annotation_title"),  body:t("help_bench_annotation_body"),  isCode:false },
+          { title:t("help_bench_export_title"),      body:t("help_bench_export_body"),      isCode:false },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            {f.isCode
+              ? <div className="help-code-block">{f.body.split("\n").map((l,i) => <div key={i}>▸ {l}</div>)}</div>
+              : <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+            }
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("bench")}>🏆 {t("nav_bench")}</button>
+        </div>
+      </div>
+
+      {/* Troubleshooting */}}
       <div className="help-section">
         <div className="help-section-title">
           <span className="help-section-icon">🔧</span>
@@ -6110,7 +6322,7 @@ function HelpPage({ t, setPage }) {
           <span className="help-section-icon">?</span>
           {t("help_faq_title")}
         </div>
-        {[1,2,3,4,5,6,7,8].map(n => (
+        {[1,2,3,4,5,6,7,8,9,10].map(n => (
           <div key={n} className="faq-item">
             <div className="faq-q">Q: {t(`help_faq_${n}_q`)}</div>
             <div className="faq-a">{t(`help_faq_${n}_a`)}</div>
