@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Fragment } from "react";
 import hljs from "highlight.js/lib/core";
 import _hljsPY   from "highlight.js/lib/languages/python";
 import _hljsJS   from "highlight.js/lib/languages/javascript";
@@ -325,6 +325,7 @@ const I18N = {
     bench_accuracy:"Accuracy", bench_accuracy_pass:"✓ correct", bench_accuracy_fail:"✗ incorrect",
     bench_modal_title:"New model activated!", bench_modal_body:"Run a quick Speed Test to see how it compares?",
     bench_modal_go:"▶ Run Speed Test", bench_modal_skip:"Skip",
+    bench_radar:"Radar Chart", bench_score_history:"Score History",
     compare_title:"Response Comparison",
     compare_sub:"Last multi-model responses side by side — copy and pick the best",
     compare_empty:"No multi-model responses yet",
@@ -639,6 +640,7 @@ const I18N = {
     bench_accuracy:"Precisión", bench_accuracy_pass:"✓ correcto", bench_accuracy_fail:"✗ incorrecto",
     bench_modal_title:"¡Modelo activado!", bench_modal_body:"¿Querés correr un Speed Test rápido para ver cómo se compara?",
     bench_modal_go:"▶ Correr Speed Test", bench_modal_skip:"Omitir",
+    bench_radar:"Gráfico Radar", bench_score_history:"Historial de Puntuación",
     compare_title:"Comparación de Respuestas",
     compare_sub:"Últimas respuestas multi-modelo lado a lado — copiá y elegí la mejor",
     compare_empty:"Sin respuestas multi-modelo todavía",
@@ -950,6 +952,7 @@ const I18N = {
     bench_accuracy:"Précision", bench_accuracy_pass:"✓ correct", bench_accuracy_fail:"✗ incorrect",
     bench_modal_title:"Nouveau modèle activé !", bench_modal_body:"Lancer un Speed Test rapide pour voir comment il se compare ?",
     bench_modal_go:"▶ Lancer Speed Test", bench_modal_skip:"Ignorer",
+    bench_radar:"Graphique Radar", bench_score_history:"Historique des Scores",
     compare_title:"Comparaison des Réponses",
     compare_sub:"Dernières réponses multi-modèles côte à côte — copiez et choisissez la meilleure",
     compare_empty:"Aucune réponse multi-modèle pour l'instant",
@@ -1261,6 +1264,7 @@ const I18N = {
     bench_accuracy:"Genauigkeit", bench_accuracy_pass:"✓ korrekt", bench_accuracy_fail:"✗ falsch",
     bench_modal_title:"Neues Modell aktiviert!", bench_modal_body:"Schnellen Speed Test ausführen um zu vergleichen?",
     bench_modal_go:"▶ Speed Test starten", bench_modal_skip:"Überspringen",
+    bench_radar:"Radar-Diagramm", bench_score_history:"Score-Verlauf",
     compare_title:"Antwort-Vergleich",
     compare_sub:"Letzte Multi-Modell-Antworten nebeneinander — kopieren und die beste wählen",
     compare_empty:"Noch keine Multi-Modell-Antworten",
@@ -1572,6 +1576,7 @@ const I18N = {
     bench_accuracy:"准确率", bench_accuracy_pass:"✓ 正确", bench_accuracy_fail:"✗ 错误",
     bench_modal_title:"新模型已激活！", bench_modal_body:"运行快速 Speed Test 来比较效果？",
     bench_modal_go:"▶ 运行 Speed Test", bench_modal_skip:"跳过",
+    bench_radar:"雷达图", bench_score_history:"得分历史",
     compare_title:"响应对比",
     compare_sub:"最新多模型响应并排显示 — 复制并选择最佳答案",
     compare_empty:"暂无多模型响应",
@@ -1883,6 +1888,7 @@ const I18N = {
     bench_accuracy:"正確性", bench_accuracy_pass:"✓ 正解", bench_accuracy_fail:"✗ 不正解",
     bench_modal_title:"新しいモデルが有効化されました！", bench_modal_body:"スピードテストで比較しますか？",
     bench_modal_go:"▶ Speed Test実行", bench_modal_skip:"スキップ",
+    bench_radar:"レーダーチャート", bench_score_history:"スコア履歴",
     compare_title:"レスポンス比較",
     compare_sub:"最新のマルチモデルレスポンスを並べて表示 — コピーして最良を選択",
     compare_empty:"マルチモデルレスポンスはまだありません",
@@ -2194,6 +2200,7 @@ const I18N = {
     bench_accuracy:"Precisão", bench_accuracy_pass:"✓ correto", bench_accuracy_fail:"✗ incorreto",
     bench_modal_title:"Novo modelo ativado!", bench_modal_body:"Executar um Speed Test rápido para comparar?",
     bench_modal_go:"▶ Executar Speed Test", bench_modal_skip:"Pular",
+    bench_radar:"Gráfico Radar", bench_score_history:"Histórico de Pontuação",
     compare_title:"Comparação de Respostas",
     compare_sub:"Últimas respostas multi-modelo lado a lado — copie e escolha a melhor",
     compare_empty:"Sem respostas multi-modelo ainda",
@@ -4629,6 +4636,8 @@ const BENCH_SUITES = {
 function tryLS(key, def) { try { return JSON.parse(localStorage.getItem(key) || "null") ?? def; } catch { return def; } }
 function saveLS(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
 
+const BENCH_COLORS = ["#7c3aed","#2563eb","#16a34a","#d97706","#dc2626","#db2777","#0891b2","#64748b"];
+
 function BenchmarkPage({ t, activeModels }) {
   const [suite,         setSuite]        = useState("speed");
   const [running,       setRunning]      = useState(false);
@@ -4644,6 +4653,7 @@ function BenchmarkPage({ t, activeModels }) {
   const [addText,       setAddText]      = useState("");
   const [showAddForm,   setShowAddForm]  = useState(false);
   const [copied,        setCopied]       = useState(false);
+  const [previewKey,    setPreviewKey]   = useState(null);
 
   const suiteDef = suite === "custom"
     ? { icon:"✏️", key:"custom", prompts: customPrompts }
@@ -5045,6 +5055,120 @@ function BenchmarkPage({ t, activeModels }) {
             </table>
           )}
 
+          {/* Radar Chart */}
+          {leaderboard.length >= 2 && (() => {
+            const cx = 140, cy = 130, R = 90;
+            const angles = [-Math.PI/2, 0, Math.PI/2, Math.PI];
+            const axisLabels = [
+              { x:140, y:24,  text:"⚡ Speed"  },
+              { x:260, y:134, text:"🚀 Tok/s"  },
+              { x:140, y:250, text:"🎯 Acc."   },
+              { x:20,  y:134, text:"✅ Cons."  },
+            ];
+            const nP    = results?.results?.length || 1;
+            const gridP = (r) => angles.map(a => `${cx+R*r*Math.cos(a)},${cy+R*r*Math.sin(a)}`).join(" ");
+            return (
+              <div style={{ marginBottom:24, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, padding:16 }}>
+                <div style={{ fontWeight:800, fontSize:12, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+                  🕸 {t("bench_radar")}
+                </div>
+                <div style={{ display:"flex", flexWrap:"wrap", gap:16, alignItems:"center", justifyContent:"center" }}>
+                  <svg width="280" height="260" viewBox="0 0 280 260" style={{ overflow:"visible" }}>
+                    {[0.25,0.5,0.75,1].map(r => (
+                      <polygon key={r} points={gridP(r)} fill="none" stroke="var(--border)" strokeWidth={r===1?"1.5":"1"} opacity={r===1?1:0.5} />
+                    ))}
+                    {angles.map((a,i) => (
+                      <line key={i} x1={cx} y1={cy} x2={cx+R*Math.cos(a)} y2={cy+R*Math.sin(a)} stroke="var(--border)" strokeWidth="1" />
+                    ))}
+                    {[0.25,0.5,0.75].map(r => (
+                      <text key={r} x={cx+3} y={cy-R*r-2} fontSize="8" fill="var(--text2)" fontFamily="var(--mono)" opacity="0.7">{Math.round(r*100)}</text>
+                    ))}
+                    {axisLabels.map((l,i) => (
+                      <text key={i} x={l.x} y={l.y} textAnchor="middle" fontSize="10" fill="var(--text2)" fontFamily="var(--mono)">{l.text}</text>
+                    ))}
+                    {leaderboard.map((m, mi) => {
+                      const sv  = Math.max(0, 1 - (parseFloat(m.avgE)||0) / maxAvgE);
+                      const tv  = Math.max(0, Math.min(1, (m.avgTS||0) / maxAvgTS));
+                      const av  = m.accPct ?? 1;
+                      const cv  = Math.max(0, 1 - (m.errors||0) / nP);
+                      const col = BENCH_COLORS[mi % BENCH_COLORS.length];
+                      const pts = [sv,tv,av,cv].map((v,i) => `${cx+v*R*Math.cos(angles[i])},${cy+v*R*Math.sin(angles[i])}`).join(" ");
+                      return (
+                        <g key={m.id}>
+                          <polygon points={pts} fill={col+"33"} stroke={col} strokeWidth="2" opacity="0.9" />
+                          {[sv,tv,av,cv].map((v,ai) => (
+                            <circle key={ai} cx={cx+v*R*Math.cos(angles[ai])} cy={cy+v*R*Math.sin(angles[ai])} r="3" fill={col} />
+                          ))}
+                        </g>
+                      );
+                    })}
+                  </svg>
+                  <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                    {leaderboard.map((m, mi) => (
+                      <div key={m.id} style={{ display:"flex", alignItems:"center", gap:8 }}>
+                        <div style={{ width:12, height:12, borderRadius:3, background:BENCH_COLORS[mi % BENCH_COLORS.length], flexShrink:0 }} />
+                        <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text1)" }}>{m.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Score History Line Chart */}
+          {sameSuiteHistory.length >= 3 && (() => {
+            const chartRuns = [...sameSuiteHistory].reverse().slice(-8);
+            const modelIds  = leaderboard.map(m => m.id);
+            const runScores = chartRuns.map(run => {
+              const lb = computeLeaderboard(run);
+              const s  = {};
+              lb.forEach(m => { s[m.id] = m.score; });
+              return s;
+            });
+            const W=360, H=130, pL=30, pR=10, pT=10, pB=28;
+            const iW = W-pL-pR, iH = H-pT-pB;
+            const xStep = chartRuns.length > 1 ? iW/(chartRuns.length-1) : iW;
+            const yS = (v) => pT + iH - (v/100)*iH;
+            return (
+              <div style={{ marginBottom:24, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, padding:16 }}>
+                <div style={{ fontWeight:800, fontSize:12, color:"var(--text1)", marginBottom:12, textTransform:"uppercase", letterSpacing:1 }}>
+                  📈 {t("bench_score_history")}
+                </div>
+                <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ overflow:"visible" }}>
+                  {[0,25,50,75,100].map(v => (
+                    <g key={v}>
+                      <line x1={pL} y1={yS(v)} x2={pL+iW} y2={yS(v)} stroke="var(--border)" strokeWidth="1" />
+                      <text x={pL-4} y={yS(v)+3} textAnchor="end" fontSize="8" fill="var(--text2)" fontFamily="var(--mono)">{v}</text>
+                    </g>
+                  ))}
+                  {chartRuns.map((run,i) => (
+                    <text key={run.id} x={pL+i*xStep} y={H-4} textAnchor="middle" fontSize="8" fill="var(--text2)" fontFamily="var(--mono)">
+                      {new Date(run.timestamp).toLocaleDateString(undefined,{month:"numeric",day:"numeric"})}
+                    </text>
+                  ))}
+                  {modelIds.map((mid,mi) => {
+                    const pts = chartRuns.map((_,i) => {
+                      const s = runScores[i][mid];
+                      return s !== undefined ? `${pL+i*xStep},${yS(s)}` : null;
+                    }).filter(Boolean);
+                    if (pts.length < 2) return null;
+                    const col = BENCH_COLORS[mi % BENCH_COLORS.length];
+                    return (
+                      <g key={mid}>
+                        <polyline points={pts.join(" ")} fill="none" stroke={col} strokeWidth="2" strokeLinejoin="round" />
+                        {chartRuns.map((_,i) => {
+                          const s = runScores[i][mid];
+                          return s !== undefined ? <circle key={i} cx={pL+i*xStep} cy={yS(s)} r="3" fill={col} /> : null;
+                        })}
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            );
+          })()}
+
           {/* Run A vs B comparison */}
           {compareMode && sameSuiteHistory.length >= 2 && (
             <div style={{ marginBottom:24, background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:10, padding:16 }}>
@@ -5121,7 +5245,9 @@ function BenchmarkPage({ t, activeModels }) {
                       </thead>
                       <tbody>
                         {[...modelResults].sort((a,b)=>(a.elapsed_s||99)-(b.elapsed_s||99)).map((r,ri) => {
-                          const ts = r.elapsed_s>0 ? Math.round(r.tokens/r.elapsed_s) : 0;
+                          const ts   = r.elapsed_s>0 ? Math.round(r.tokens/r.elapsed_s) : 0;
+                          const pKey = `${prompt.id}::${r.model}`;
+                          const open = previewKey === pKey;
                           let accBadge = null;
                           if (prompt.check && !r.error) {
                             let pass = false;
@@ -5131,17 +5257,34 @@ function BenchmarkPage({ t, activeModels }) {
                               : <span style={{ color:"var(--red)",   fontWeight:700 }}>✗</span>;
                           }
                           return (
-                            <tr key={r.model} style={{ borderBottom:ri<modelResults.length-1?"1px solid var(--border)":"none" }}>
-                              <td style={{ padding:"7px 14px", fontSize:12 }}>
-                                {ri===0&&!r.error && <span style={{ marginRight:5 }}>⚡</span>}
-                                <span style={{ fontWeight:600, color:"var(--text1)" }}>{r.name||r.model}</span>
-                                {r.error && <span style={{ color:"var(--red)", marginLeft:8, fontSize:11 }}>⚠ {r.error.slice(0,50)}</span>}
-                              </td>
-                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:ri===0&&!r.error?"var(--green)":"var(--text2)" }}>{r.elapsed_s?`${r.elapsed_s}s`:"—"}</td>
-                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{r.tokens||"—"}</td>
-                              <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{ts||"—"}</td>
-                              {prompt.check && <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:13 }}>{r.error ? <span style={{ color:"var(--text2)" }}>—</span> : accBadge}</td>}
-                            </tr>
+                            <Fragment key={r.model}>
+                              <tr
+                                onClick={() => !r.error && setPreviewKey(prev => prev === pKey ? null : pKey)}
+                                style={{ borderBottom: (!open && ri<modelResults.length-1) ? "1px solid var(--border)" : "none",
+                                  cursor: r.error ? "default" : "pointer",
+                                  background: open ? "rgba(255,255,255,0.03)" : undefined }}
+                              >
+                                <td style={{ padding:"7px 14px", fontSize:12 }}>
+                                  {ri===0&&!r.error && <span style={{ marginRight:5 }}>⚡</span>}
+                                  <span style={{ fontWeight:600, color:"var(--text1)" }}>{r.name||r.model}</span>
+                                  {r.error && <span style={{ color:"var(--red)", marginLeft:8, fontSize:11 }}>⚠ {r.error.slice(0,50)}</span>}
+                                  {!r.error && <span style={{ marginLeft:8, fontSize:10, color:"var(--text2)", opacity:0.5 }}>{open?"▲":"▼"}</span>}
+                                </td>
+                                <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:ri===0&&!r.error?"var(--green)":"var(--text2)" }}>{r.elapsed_s?`${r.elapsed_s}s`:"—"}</td>
+                                <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{r.tokens||"—"}</td>
+                                <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{ts||"—"}</td>
+                                {prompt.check && <td style={{ textAlign:"right", padding:"7px 14px", fontFamily:"var(--mono)", fontSize:13 }}>{r.error ? <span style={{ color:"var(--text2)" }}>—</span> : accBadge}</td>}
+                              </tr>
+                              {open && !r.error && (
+                                <tr style={{ borderBottom: ri<modelResults.length-1 ? "1px solid var(--border)" : "none" }}>
+                                  <td colSpan={prompt.check ? 5 : 4} style={{ padding:"0 14px 12px 14px" }}>
+                                    <pre style={{ margin:0, padding:"10px 14px", background:"var(--bg3)", borderRadius:8, fontFamily:"var(--mono)", fontSize:11, color:"var(--text1)", whiteSpace:"pre-wrap", wordBreak:"break-word", maxHeight:220, overflow:"auto", lineHeight:1.65 }}>
+                                      {r.content || "(empty response)"}
+                                    </pre>
+                                  </td>
+                                </tr>
+                              )}
+                            </Fragment>
                           );
                         })}
                       </tbody>

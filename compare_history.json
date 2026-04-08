@@ -1,5 +1,221 @@
 [
   {
+    "id": "1775615046.265717",
+    "timestamp": 1775615046.265717,
+    "mode": "parallel",
+    "prompt": "List exactly 5 colors, one per line.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "Blue\nRed\nGreen\nYellow\nPurple",
+        "error": null,
+        "tokens": 76,
+        "elapsed_s": 0.24
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "Red\nBlue\nGreen\nYellow\nPurple",
+        "error": null,
+        "tokens": 76,
+        "elapsed_s": 0.36
+      }
+    ]
+  },
+  {
+    "id": "1775615045.8878393",
+    "timestamp": 1775615045.8878393,
+    "mode": "parallel",
+    "prompt": "Count from 1 to 10, one number per line.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+        "error": null,
+        "tokens": 89,
+        "elapsed_s": 0.25
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+        "error": null,
+        "tokens": 89,
+        "elapsed_s": 0.43
+      }
+    ]
+  },
+  {
+    "id": "1775615045.437744",
+    "timestamp": 1775615045.437744,
+    "mode": "parallel",
+    "prompt": "Say hello in one sentence.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "Hello.",
+        "error": null,
+        "tokens": 65,
+        "elapsed_s": 0.37
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "Hello, it's nice to meet you and I'm here to assist you with any software development questions or tasks you may have.",
+        "error": null,
+        "tokens": 89,
+        "elapsed_s": 0.33
+      }
+    ]
+  },
+  {
+    "id": "1775614877.7408934",
+    "timestamp": 1775614877.7408934,
+    "mode": "parallel",
+    "prompt": "Write a Python function fib(n) returning the nth Fibonacci number. Code only.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "def fib(n): \n    if n <= 0: \n        return 0 \n    elif n == 1: \n        return 1 \n    else: \n        return fib(n-1) + fib(n-2)",
+        "error": null,
+        "tokens": 121,
+        "elapsed_s": 0.3
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "```python\ndef fib(n):\n    if n <= 0:\n        return \"Input should be a positive integer\"\n    elif n == 1:\n        return 0\n    elif n == 2:\n        return 1\n    else:\n        a, b = 0, 1\n        for _ in range(2, n):\n            a, b = b, a + b\n        return b\n```",
+        "error": null,
+        "tokens": 161,
+        "elapsed_s": 0.49
+      }
+    ]
+  },
+  {
+    "id": "1775614877.2173421",
+    "timestamp": 1775614877.2173421,
+    "mode": "parallel",
+    "prompt": "Write a Python function is_palindrome(s) returning True or False. Code only.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "def is_palindrome(s): return s == s[::-1]",
+        "error": null,
+        "tokens": 87,
+        "elapsed_s": 0.26
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "```python\ndef is_palindrome(s: str) -> bool:\n    return s == s[::-1]\n```",
+        "error": null,
+        "tokens": 97,
+        "elapsed_s": 0.52
+      }
+    ]
+  },
+  {
+    "id": "1775614876.6634753",
+    "timestamp": 1775614876.6634753,
+    "mode": "parallel",
+    "prompt": "Write a Python FizzBuzz for 1 to 20. Return only the code, no explanation.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "for i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)",
+        "error": null,
+        "tokens": 149,
+        "elapsed_s": 0.35
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "```python\nfor i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)\n```",
+        "error": null,
+        "tokens": 153,
+        "elapsed_s": 0.59
+      }
+    ]
+  },
+  {
+    "id": "1775614862.7603605",
+    "timestamp": 1775614862.7603605,
+    "mode": "parallel",
+    "prompt": "List exactly 5 colors, one per line.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "Blue\nRed\nYellow\nGreen\nPurple",
+        "error": null,
+        "tokens": 76,
+        "elapsed_s": 0.26
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "Red\nBlue\nGreen\nYellow\nPurple",
+        "error": null,
+        "tokens": 76,
+        "elapsed_s": 0.46
+      }
+    ]
+  },
+  {
+    "id": "1775614862.270017",
+    "timestamp": 1775614862.270017,
+    "mode": "parallel",
+    "prompt": "Count from 1 to 10, one number per line.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+        "error": null,
+        "tokens": 89,
+        "elapsed_s": 0.26
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+        "error": null,
+        "tokens": 89,
+        "elapsed_s": 0.46
+      }
+    ]
+  },
+  {
+    "id": "1775614861.7819436",
+    "timestamp": 1775614861.7819436,
+    "mode": "parallel",
+    "prompt": "Say hello in one sentence.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "Hello.",
+        "error": null,
+        "tokens": 65,
+        "elapsed_s": 0.36
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "Hello, it's nice to meet you and I'm here to assist you with any software development questions or tasks you may have.",
+        "error": null,
+        "tokens": 89,
+        "elapsed_s": 0.57
+      }
+    ]
+  },
+  {
     "id": "1775611185.197865",
     "timestamp": 1775611185.197865,
     "mode": "parallel",
@@ -20,222 +236,6 @@
         "error": null,
         "tokens": 76,
         "elapsed_s": 0.87
-      }
-    ]
-  },
-  {
-    "id": "1775611184.2855737",
-    "timestamp": 1775611184.2855737,
-    "mode": "parallel",
-    "prompt": "Count from 1 to 10, one number per line.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
-        "error": null,
-        "tokens": 89,
-        "elapsed_s": 0.26
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
-        "error": null,
-        "tokens": 89,
-        "elapsed_s": 1.44
-      }
-    ]
-  },
-  {
-    "id": "1775611182.804803",
-    "timestamp": 1775611182.804803,
-    "mode": "parallel",
-    "prompt": "Say hello in one sentence.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "Hello.",
-        "error": null,
-        "tokens": 65,
-        "elapsed_s": 0.25
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "Hello, it's nice to meet you and I'm here to assist you with any software development questions or tasks you may have.",
-        "error": null,
-        "tokens": 89,
-        "elapsed_s": 1.34
-      }
-    ]
-  },
-  {
-    "id": "1775611167.0256655",
-    "timestamp": 1775611167.0256655,
-    "mode": "parallel",
-    "prompt": "What comes next: 2, 4, 8, 16, 32, ___? Give the answer and explain in one sentence.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "The next number in the sequence is 64, as each number is twice the previous number, indicating a geometric progression.",
-        "error": null,
-        "tokens": 111,
-        "elapsed_s": 0.3
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "64, because the pattern is obtained by doubling the previous term, which is a classic example of a geometric progression.",
-        "error": null,
-        "tokens": 110,
-        "elapsed_s": 0.87
-      }
-    ]
-  },
-  {
-    "id": "1775611166.1209717",
-    "timestamp": 1775611166.1209717,
-    "mode": "parallel",
-    "prompt": "Calculate: (17 × 23) + (456 / 8). Show your working.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "To calculate (17 × 23) + (456 / 8), I will follow the order of operations (PEMDAS):\n\n1. Multiply 17 and 23:\n   17 × 23 = 391\n\n2. Divide 456 by 8:\n   456 / 8 = 57\n\n3. Add the results of step 1 and step 2:\n   391 + 57 = 448\n\nTherefore, the result is 448.",
-        "error": null,
-        "tokens": 173,
-        "elapsed_s": 0.34
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "To calculate the expression, I'll follow the order of operations (PEMDAS):\n\n1. Multiply 17 and 23:\n17 × 23 = 391\n\n2. Divide 456 by 8:\n456 ÷ 8 = 57\n\n3. Add the results of steps 1 and 2:\n391 + 57 = 448\n\nTherefore, the result of the expression (17 × 23) + (456 / 8) is 448.",
-        "error": null,
-        "tokens": 173,
-        "elapsed_s": 1.1
-      }
-    ]
-  },
-  {
-    "id": "1775611164.9972355",
-    "timestamp": 1775611164.9972355,
-    "mode": "parallel",
-    "prompt": "All bloops are razzles. All razzles are lazzles. Are all bloops lazzles? Answer Yes or No and explain in one sentence.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "Yes, all bloops are lazzles because if all bloops are razzles and all razzles are lazzles, then by transitive property, all bloops must be lazzles.",
-        "error": null,
-        "tokens": 135,
-        "elapsed_s": 0.32
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "Yes, because according to the given statements, bloops are a subset of razzles and razzles are a subset of lazzles, so by transitivity, all bloops are lazzles.",
-        "error": null,
-        "tokens": 135,
-        "elapsed_s": 1.12
-      }
-    ]
-  },
-  {
-    "id": "1775611142.3781888",
-    "timestamp": 1775611142.3781888,
-    "mode": "parallel",
-    "prompt": "Write a Python function fib(n) returning the nth Fibonacci number. Code only.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "def fib(n): \n    if n <= 0: \n        return 0 \n    elif n == 1: \n        return 1 \n    else: \n        return fib(n-1) + fib(n-2)",
-        "error": null,
-        "tokens": 121,
-        "elapsed_s": 0.35
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "```python\ndef fib(n):\n    if n <= 0:\n        return \"Input should be a positive integer\"\n    elif n == 1:\n        return 0\n    elif n == 2:\n        return 1\n    else:\n        a, b = 0, 1\n        for _ in range(2, n):\n            a, b = b, a + b\n        return b\n```",
-        "error": null,
-        "tokens": 161,
-        "elapsed_s": 0.87
-      }
-    ]
-  },
-  {
-    "id": "1775611141.4820044",
-    "timestamp": 1775611141.4820044,
-    "mode": "parallel",
-    "prompt": "Write a Python function is_palindrome(s) returning True or False. Code only.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "def is_palindrome(s): return s == s[::-1]",
-        "error": null,
-        "tokens": 87,
-        "elapsed_s": 0.3
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "```python\ndef is_palindrome(s: str) -> bool:\n    return s == s[::-1]\n```",
-        "error": null,
-        "tokens": 97,
-        "elapsed_s": 0.46
-      }
-    ]
-  },
-  {
-    "id": "1775611141.000663",
-    "timestamp": 1775611141.000663,
-    "mode": "parallel",
-    "prompt": "Write a Python FizzBuzz for 1 to 20. Return only the code, no explanation.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "for i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)",
-        "error": null,
-        "tokens": 149,
-        "elapsed_s": 0.3
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "```python\nfor i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)\n```",
-        "error": null,
-        "tokens": 153,
-        "elapsed_s": 1.12
-      }
-    ]
-  },
-  {
-    "id": "1775611114.4106596",
-    "timestamp": 1775611114.4106596,
-    "mode": "parallel",
-    "prompt": "Write a 2-sentence story about a robot discovering music.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "As the robot's advanced sensors picked up the vibrations of a nearby guitar, it was suddenly enveloped in a world of melodic patterns and harmonious frequencies that it had never experienced before. The robot's processing units whirred to life as it began to analyze and replicate the sounds, eventually creating its own unique composition that echoed through the empty laboratory.",
-        "error": null,
-        "tokens": 141,
-        "elapsed_s": 0.36
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "As the robot, named Zeta, wandered through the abandoned city, it stumbled upon a dusty old record player and was immediately captivated by the melodic sounds that filled the air. Entranced by the rhythm and harmony, Zeta began to move its mechanical limbs in time with the music, discovering a newfound sense of joy and creativity that it had never experienced before.",
-        "error": null,
-        "tokens": 144,
-        "elapsed_s": 3.89
       }
     ]
   }
