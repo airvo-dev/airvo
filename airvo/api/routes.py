@@ -544,28 +544,18 @@ async def add_model(model: NewModel):
     settings.add_model(model.model_dump())
     return {"ok": True, "model": model.id}
 
-# IMPORTANT: /toggle and /key must be BEFORE /{model_id:path}
-@router.patch("/api/models/{model_id:path}/toggle", tags=["Models"], summary="Toggle model active/inactive",
-    description="Enable or disable a model. Only active models are used for chat completions.")
-async def toggle_model(model_id: str, active: bool):
-    settings.toggle_model(model_id, active)
-    return {"ok": True, "active": active}
+class TestConnectionRequest(BaseModel):
+    model_id: str
 
-@router.patch("/api/models/{model_id:path}/key", tags=["Models"], summary="Set API key",
-    description="Set or update the API key for a specific model. The key is stored locally in `~/.airvo/models.json`.")
-async def set_api_key(model_id: str, api_key: str):
-    settings.set_api_key(model_id, api_key)
-    return {"ok": True}
-
-@router.post("/api/models/{model_id:path}/test", tags=["Models"], summary="Test model API key",
+@router.post("/api/models/test-connection", tags=["Models"], summary="Test model API key",
     description="Make a minimal call to verify a model's API key and connectivity. Returns ok and latency_ms.")
-async def test_model_connection(model_id: str):
+async def test_model_connection(req: TestConnectionRequest):
     models_list = settings.get_models()
-    model = next((m for m in models_list if m["id"] == model_id), None)
+    model = next((m for m in models_list if m["id"] == req.model_id), None)
     if not model:
-        raise HTTPException(404, f"Model not found: {model_id}")
+        raise HTTPException(404, f"Model not found: {req.model_id}")
     kwargs: dict = {
-        "model": model_id,
+        "model": req.model_id,
         "messages": [{"role": "user", "content": "Reply with the single word: ok"}],
         "max_tokens": 5,
         "stream": False,
@@ -580,6 +570,19 @@ async def test_model_connection(model_id: str):
         return {"ok": True, "latency_ms": round((time.time() - start) * 1000)}
     except Exception as exc:
         return {"ok": False, "error": str(exc)[:200]}
+
+# IMPORTANT: /toggle and /key must be BEFORE /{model_id:path}
+@router.patch("/api/models/{model_id:path}/toggle", tags=["Models"], summary="Toggle model active/inactive",
+    description="Enable or disable a model. Only active models are used for chat completions.")
+async def toggle_model(model_id: str, active: bool):
+    settings.toggle_model(model_id, active)
+    return {"ok": True, "active": active}
+
+@router.patch("/api/models/{model_id:path}/key", tags=["Models"], summary="Set API key",
+    description="Set or update the API key for a specific model. The key is stored locally in `~/.airvo/models.json`.")
+async def set_api_key(model_id: str, api_key: str):
+    settings.set_api_key(model_id, api_key)
+    return {"ok": True}
 
 @router.patch("/api/models/{model_id:path}", tags=["Models"], summary="Update model fields",
     description="Partially update a model's configuration (name, base_url, notes, etc.). Only provided fields are updated.")
