@@ -544,33 +544,6 @@ async def add_model(model: NewModel):
     settings.add_model(model.model_dump())
     return {"ok": True, "model": model.id}
 
-class TestConnectionRequest(BaseModel):
-    model_id: str
-
-@router.post("/api/models/test-connection", tags=["Models"], summary="Test model API key",
-    description="Make a minimal call to verify a model's API key and connectivity. Returns ok and latency_ms.")
-async def test_model_connection(req: TestConnectionRequest):
-    models_list = settings.get_models()
-    model = next((m for m in models_list if m["id"] == req.model_id), None)
-    if not model:
-        raise HTTPException(404, f"Model not found: {req.model_id}")
-    kwargs: dict = {
-        "model": req.model_id,
-        "messages": [{"role": "user", "content": "Reply with the single word: ok"}],
-        "max_tokens": 5,
-        "stream": False,
-    }
-    if model.get("api_key"):
-        kwargs["api_key"] = model["api_key"]
-    if model.get("base_url"):
-        kwargs["api_base"] = model["base_url"]
-    start = time.time()
-    try:
-        await litellm.acompletion(**kwargs)
-        return {"ok": True, "latency_ms": round((time.time() - start) * 1000)}
-    except Exception as exc:
-        return {"ok": False, "error": str(exc)[:200]}
-
 # IMPORTANT: /toggle and /key must be BEFORE /{model_id:path}
 @router.patch("/api/models/{model_id:path}/toggle", tags=["Models"], summary="Toggle model active/inactive",
     description="Enable or disable a model. Only active models are used for chat completions.")
@@ -596,6 +569,34 @@ async def update_model(model_id: str, updates: ModelUpdate):
 async def delete_model(model_id: str):
     settings.delete_model(model_id)
     return {"ok": True}
+
+# ── Test model connectivity (separate namespace to avoid path-wildcard conflicts) ─
+class TestConnectionRequest(BaseModel):
+    model_id: str
+
+@router.post("/api/model-test", tags=["Models"], summary="Test model API key",
+    description="Make a minimal call to verify a model's API key and connectivity. Returns ok and latency_ms.")
+async def test_model_connection(req: TestConnectionRequest):
+    models_list = settings.get_models()
+    model = next((m for m in models_list if m["id"] == req.model_id), None)
+    if not model:
+        raise HTTPException(404, f"Model not found: {req.model_id}")
+    kwargs: dict = {
+        "model": req.model_id,
+        "messages": [{"role": "user", "content": "Reply with the single word: ok"}],
+        "max_tokens": 5,
+        "stream": False,
+    }
+    if model.get("api_key"):
+        kwargs["api_key"] = model["api_key"]
+    if model.get("base_url"):
+        kwargs["api_base"] = model["base_url"]
+    start = time.time()
+    try:
+        await litellm.acompletion(**kwargs)
+        return {"ok": True, "latency_ms": round((time.time() - start) * 1000)}
+    except Exception as exc:
+        return {"ok": False, "error": str(exc)[:200]}
 
 # ── Preferences endpoints ─────────────────────────────────────────────────
 

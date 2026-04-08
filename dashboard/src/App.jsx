@@ -4594,7 +4594,7 @@ function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete, onSaveNotes
   async function handleTest() {
     setTestState("testing");
     try {
-      const res = await fetch(`${API}/api/models/test-connection`, {
+      const res = await fetch(`${API}/api/model-test`, {
         method:"POST",
         headers:{ "Content-Type":"application/json" },
         body: JSON.stringify({ model_id: model.id }),
