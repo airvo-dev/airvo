@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.3.7-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.5.6-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -60,9 +60,12 @@ Your Editor (VS Code)
 - ✅ Any model, any provider — no lock-in
 - ✅ Up to 3 models simultaneously — parallel, race, vote or review
 - ✅ 4 multi-model modes — Parallel, Race, Vote, Review
+- ✅ **Compare tab** — compare any prompt across all models in real-time with word-level diff
+- ✅ **Benchmarks tab** — standardized suites, radar chart, score history, custom suites
 - ✅ Smart Memory (RAG) — semantic search of your codebase, 100% local
 - ✅ Memory Manager — real-time RAM/GPU usage, Ollama model rotation
 - ✅ Model Discovery — browse and add Ollama + OpenRouter models in one click
+- ✅ API key test — verify any key with one click directly from the dashboard
 - ✅ Your API keys stored locally — never shared
 - ✅ 100% local option — zero internet, zero cost
 - ✅ Works with free tiers — Groq, Ollama, LM Studio
@@ -138,6 +141,18 @@ Browse a curated catalog of Ollama-compatible models filtered by what fits in yo
 **🌡️ Tunable Behavior**
 Adjust temperature (0.0 → 1.0) and max tokens per request directly from the dashboard. Precise and deterministic for code, creative for brainstorming.
 
+**🆚 Compare Tab**
+Send any prompt to all active models at once and see responses stream in real-time side by side. Word-level diff highlights exactly where answers differ. Sort by response time or token count, filter by model, annotate runs, and export comparisons as Markdown.
+
+**🏆 Benchmarks Tab**
+Run standardized suites (Speed, Coding, Reasoning, Creativity) or your own custom named suites against all active models. Automatic accuracy scoring for code and logic tasks. Results shown in a leaderboard, radar chart (4 axes: Speed, Tok/s, Accuracy, Consistency), and score history over time. Annotate runs to track what changed between sessions.
+
+**🔌 API Key Test**
+Verify any model's API key with one click from the Models page. Airvo sends a minimal 5-token request and shows latency in ms or the exact error — without leaving the dashboard.
+
+**✎ Model Notes**
+Add personal notes to any model card — context limit, pricing tier, performance observations, best use cases. Saved locally to `~/.airvo/models.json`.
+
 **📊 Usage Stats**
 See requests and tokens used per model — all stored locally. Know exactly what you're using and reset anytime.
 
@@ -174,17 +189,23 @@ Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works w
 
 The Airvo dashboard runs at `http://localhost:5000` and lets you manage everything visually.
 
-**Models page** — activate/deactivate models, save API keys, see requests and tokens per model.
+**Models page** — activate/deactivate models, save API keys, test keys with one click, add personal notes, see requests and tokens per model.
 
 ![Airvo Dashboard - Models](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-models.png)
 
-**Configuration page** — set multi-model mode, adjust temperature and max tokens, enable project context, configure Smart Memory (RAG), view usage stats.
+**Compare tab** — send a prompt to all active models simultaneously, stream responses in real-time, inspect word-level diffs, sort by speed or token count, export as Markdown.
+
+**Benchmarks tab** — run Speed, Coding, Reasoning, Creativity, or custom suites against all models. Leaderboard + radar chart + score history over time. Annotate each run.
+
+**Stats page** — per-model usage, daily sparklines, total token breakdown.
+
+**Configuration page** — set multi-model mode, adjust temperature and max tokens, enable project context, configure Smart Memory (RAG).
 
 **Add Model page** — add any model with contextual tooltips on every field.
 
 ![Airvo Dashboard - Add Model](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-add-model.png)
 
-**Help page** — full reference guide, field-by-field documentation, FAQ.
+**Help page** — full reference guide, field-by-field documentation, FAQ (7 languages).
 
 ![Airvo Dashboard - Help](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-help.png)
 
@@ -378,10 +399,46 @@ Make sure continue.dev is installed in VS Code and that `airvo start` has run at
 
 ## Changelog
 
+**v0.5.6** — API key test, model notes, help docs update
+- **API key test** — click 🔌 Test on any model card with a configured key; Airvo makes a minimal call and shows ✓ latency ms or ✗ error message.
+- **Model notes** — click ✎ Edit notes on any card to save freeform reminders (context limit, pricing, use case). Persisted to `~/.airvo/models.json`.
+- **Help section** — full documentation for Models tab features and Benchmarks tab (7 languages), FAQ extended to 10 entries.
+- Version metadata fix: `importlib.metadata` now correctly reports `0.5.6` after `pip install -e .`.
+
+**v0.5.5** — Benchmarks: score history, radar chart, run annotation
+- **Score History** — line chart tracking each model's composite score across runs (requires 3+ runs on the same suite). Hover dots for model, date, score, and annotation.
+- **Radar chart** — 4-axis chart (Speed, Tok/s, Accuracy, Consistency) shown after any run with 2+ models.
+- **Run annotation** — add a note before each run (e.g. "after Ollama update"); note saved with run and shown in history tooltips.
+- **Export** — export last run as `.md`, `.csv`, or copy raw JSON. History stores last 20 runs.
+
+**v0.5.4** — Benchmarks: custom suites, leaderboard accuracy
+- **Named custom suites** — create multiple named suites with your own prompts; switch via dropdown; each suite stores prompts independently in the browser.
+- **Leaderboard scoring** — composite score weighted by Speed (tok/s), Output length, Accuracy (✓/✗ validators — highest weight), Consistency (low variance). Max 100 pts.
+- **Per-prompt table** — individual results with ✓/✗ accuracy badges per model per prompt.
+- **Built-in suite improvements** — Coding (FizzBuzz, palindrome, Fibonacci) and Reasoning (syllogism, math, sequence) now have automatic answer validators.
+
+**v0.5.0** — Benchmarks tab (initial)
+- New **Benchmarks** tab: run Speed, Coding, Reasoning, and Creativity suites against all active models.
+- Ranked leaderboard with composite scoring. Results persist across sessions.
+
+**v0.4.2** — Compare tab: ask-from-tab, sort controls, tok/s badge
+- **Ask from Compare tab** — prompt box directly in the Compare tab, no need to go through Chat.
+- **Sort controls** — sort responses by arrival time or token count.
+- **Tok/s badge** — tokens-per-second displayed on each response card.
+- **Word-level diff** — highlighted diff between any two model responses.
+
+**v0.4.1** — Compare tab: SSE streaming + diff + persistence
+- **Real-time SSE streaming** — model responses stream as they are generated.
+- **Word-level diff** — compare any two responses with highlighted differences.
+- **JSON persistence** — compare history saved to `~/.airvo/compare_history.json` (not site-packages).
+
+**v0.4.0** — Compare tab (initial)
+- New **Compare** tab: send a prompt to all active models simultaneously and see responses side by side.
+
 **v0.3.7** — README changelog fix
 - Updated changelog on PyPI to include all releases from v0.3.3 onwards. No functional changes.
 
-**v0.3.6** — API docs, architecture rewrite
+**v0.3.6** \u2014 API docs, architecture rewrite
 - **OpenAPI docs** — all 22 REST endpoints now have tags, summaries, and descriptions. Visit `http://127.0.0.1:8765/docs` for full interactive documentation.
 - **ARCHITECTURE.md** — complete rewrite covering system design, data flow, RAG pipeline, Memory Manager, Model Discovery, multi-model modes, and design decisions with code examples.
 - **FastAPI app description** — rich server description with feature list, quickstart, and links shown in `/docs`.
