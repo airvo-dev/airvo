@@ -319,6 +319,8 @@ const I18N = {
     bench_suite_custom:"Custom", bench_score:"Score", bench_view_bars:"Bar view", bench_view_table:"Table view",
     bench_custom_add:"Add Prompt", bench_custom_label:"Label (short name)", bench_custom_text:"Prompt text",
     bench_custom_empty:"No custom prompts yet. Add your own.",
+    bench_suite_new:"New suite", bench_suite_delete:"Delete suite", bench_suite_name_ph:"Suite name...",
+    bench_run_note:"Note (optional)", bench_run_note_ph:"e.g. after Ollama update, with GPU offload...",
     bench_export_md:"Export .md", bench_export_csv:"Export .csv", bench_copy_json:"Copy JSON",
     bench_compare_runs:"Compare Runs", bench_run_a:"Run A", bench_run_b:"Run B",
     bench_no_history:"Need 2+ runs to compare",
@@ -636,6 +638,8 @@ const I18N = {
     bench_suite_custom:"Personalizado", bench_score:"Puntos", bench_view_bars:"Vista de barras", bench_view_table:"Vista de tabla",
     bench_custom_add:"Agregar Prompt", bench_custom_label:"Etiqueta (nombre corto)", bench_custom_text:"Texto del prompt",
     bench_custom_empty:"Sin prompts personalizados. Agregá los tuyos.",
+    bench_suite_new:"Nueva suite", bench_suite_delete:"Eliminar suite", bench_suite_name_ph:"Nombre de suite...",
+    bench_run_note:"Nota (opcional)", bench_run_note_ph:"ej. tras update de Ollama, con GPU offload...",
     bench_export_md:"Exportar .md", bench_export_csv:"Exportar .csv", bench_copy_json:"Copiar JSON",
     bench_compare_runs:"Comparar Ejecuciones", bench_run_a:"Ejecución A", bench_run_b:"Ejecución B",
     bench_no_history:"Necesitás 2+ ejecuciones para comparar",
@@ -950,6 +954,8 @@ const I18N = {
     bench_suite_custom:"Personnalisé", bench_score:"Score", bench_view_bars:"Vue barres", bench_view_table:"Vue tableau",
     bench_custom_add:"Ajouter Prompt", bench_custom_label:"Étiquette (nom court)", bench_custom_text:"Texte du prompt",
     bench_custom_empty:"Aucun prompt personnalisé. Ajoutez les vôtres.",
+    bench_suite_new:"Nouvelle suite", bench_suite_delete:"Supprimer la suite", bench_suite_name_ph:"Nom de la suite...",
+    bench_run_note:"Note (optionnel)", bench_run_note_ph:"ex. après mise à jour Ollama, avec GPU offload...",
     bench_export_md:"Exporter .md", bench_export_csv:"Exporter .csv", bench_copy_json:"Copier JSON",
     bench_compare_runs:"Comparer les Exécutions", bench_run_a:"Exécution A", bench_run_b:"Exécution B",
     bench_no_history:"2+ exécutions nécessaires pour comparer",
@@ -1264,6 +1270,8 @@ const I18N = {
     bench_suite_custom:"Benutzerdefiniert", bench_score:"Punkte", bench_view_bars:"Balkenansicht", bench_view_table:"Tabellenansicht",
     bench_custom_add:"Prompt hinzufügen", bench_custom_label:"Bezeichnung (Kurzname)", bench_custom_text:"Prompt-Text",
     bench_custom_empty:"Keine benutzerdefinierten Prompts. Fügen Sie Ihre eigenen hinzu.",
+    bench_suite_new:"Neue Suite", bench_suite_delete:"Suite löschen", bench_suite_name_ph:"Suite-Name...",
+    bench_run_note:"Notiz (optional)", bench_run_note_ph:"z.B. nach Ollama-Update, mit GPU offload...",
     bench_export_md:".md exportieren", bench_export_csv:".csv exportieren", bench_copy_json:"JSON kopieren",
     bench_compare_runs:"Ausführungen vergleichen", bench_run_a:"Ausführung A", bench_run_b:"Ausführung B",
     bench_no_history:"2+ Ausführungen zum Vergleichen erforderlich",
@@ -1578,6 +1586,8 @@ const I18N = {
     bench_suite_custom:"自定义", bench_score:"得分", bench_view_bars:"条形图视图", bench_view_table:"表格视图",
     bench_custom_add:"添加提示词", bench_custom_label:"标签（简短名称）", bench_custom_text:"提示词文本",
     bench_custom_empty:"还没有自定义提示词。添加您自己的。",
+    bench_suite_new:"新建套件", bench_suite_delete:"删除套件", bench_suite_name_ph:"套件名称...",
+    bench_run_note:"备注（可选）", bench_run_note_ph:"例：Ollama更新后，使用GPU卸载...",
     bench_export_md:"导出 .md", bench_export_csv:"导出 .csv", bench_copy_json:"复制 JSON",
     bench_compare_runs:"比较运行", bench_run_a:"运行 A", bench_run_b:"运行 B",
     bench_no_history:"需要 2+ 次运行才能比较",
@@ -1892,6 +1902,8 @@ const I18N = {
     bench_suite_custom:"カスタム", bench_score:"スコア", bench_view_bars:"バー表示", bench_view_table:"テーブル表示",
     bench_custom_add:"プロンプト追加", bench_custom_label:"ラベル（短い名前）", bench_custom_text:"プロンプトテキスト",
     bench_custom_empty:"カスタムプロンプトがありません。追加してください。",
+    bench_suite_new:"新しいスイート", bench_suite_delete:"スイートを削除", bench_suite_name_ph:"スイート名...",
+    bench_run_note:"メモ（任意）", bench_run_note_ph:"例：Ollamaアップデート後、GPUオフロード使用...",
     bench_export_md:".md をエクスポート", bench_export_csv:".csv をエクスポート", bench_copy_json:"JSONをコピー",
     bench_compare_runs:"実行を比較", bench_run_a:"実行 A", bench_run_b:"実行 B",
     bench_no_history:"比較には2回以上の実行が必要です",
@@ -2206,6 +2218,8 @@ const I18N = {
     bench_suite_custom:"Personalizado", bench_score:"Pontos", bench_view_bars:"Visualização em barras", bench_view_table:"Visualização em tabela",
     bench_custom_add:"Adicionar Prompt", bench_custom_label:"Rótulo (nome curto)", bench_custom_text:"Texto do prompt",
     bench_custom_empty:"Sem prompts personalizados. Adicione os seus.",
+    bench_suite_new:"Nova suite", bench_suite_delete:"Excluir suite", bench_suite_name_ph:"Nome da suite...",
+    bench_run_note:"Nota (opcional)", bench_run_note_ph:"ex. após atualização do Ollama, com GPU offload...",
     bench_export_md:"Exportar .md", bench_export_csv:"Exportar .csv", bench_copy_json:"Copiar JSON",
     bench_compare_runs:"Comparar Execuções", bench_run_a:"Execução A", bench_run_b:"Execução B",
     bench_no_history:"Necessário 2+ execuções para comparar",
@@ -4662,15 +4676,33 @@ function BenchmarkPage({ t, activeModels }) {
   const [compareMode,   setCompareMode]  = useState(false);
   const [cmpIdxA,       setCmpIdxA]      = useState(0);
   const [cmpIdxB,       setCmpIdxB]      = useState(1);
-  const [customPrompts, setCustomPrompts] = useState(() => tryLS("airvo_bench_custom", []));
+  const [customPrompts, setCustomPrompts] = useState(() => {
+    // migrate old flat array to named suites format
+    const legacy = tryLS("airvo_bench_custom", null);
+    const suites = tryLS("airvo_bench_custom_suites", null);
+    if (suites) return suites;
+    if (Array.isArray(legacy) && legacy.length) return { "My Suite": legacy };
+    return {};
+  });
+  const [activeSuiteName, setActiveSuiteName] = useState(() => {
+    const suites = tryLS("airvo_bench_custom_suites", null);
+    const legacy = tryLS("airvo_bench_custom", null);
+    if (suites) return Object.keys(suites)[0] || "";
+    if (Array.isArray(legacy) && legacy.length) return "My Suite";
+    return "";
+  });
+  const [newSuiteName,  setNewSuiteName]  = useState("");
+  const [showNewSuite,  setShowNewSuite]  = useState(false);
+  const [runNote,       setRunNote]       = useState("");
   const [addLabel,      setAddLabel]     = useState("");
   const [addText,       setAddText]      = useState("");
   const [showAddForm,   setShowAddForm]  = useState(false);
   const [copied,        setCopied]       = useState(false);
   const [previewKey,    setPreviewKey]   = useState(null);
 
+  const activeCustomPrompts = (activeSuiteName && customPrompts[activeSuiteName]) || [];
   const suiteDef = suite === "custom"
-    ? { icon:"✏️", key:"custom", prompts: customPrompts }
+    ? { icon:"✏️", key:"custom", prompts: activeCustomPrompts }
     : BENCH_SUITES[suite];
 
   async function runBenchmark() {
@@ -4693,9 +4725,9 @@ function BenchmarkPage({ t, activeModels }) {
         runResults.push({ prompt: p, modelResults: [], error: String(e) });
       }
     }
-    const run = { id: Date.now(), suite, timestamp: Date.now(), results: runResults };
+    const run = { id: Date.now(), suite, suiteName: suite === "custom" ? activeSuiteName : suite, timestamp: Date.now(), note: runNote.trim() || null, results: runResults };
     setResults(run);
-    const newHist = [run, ...history].slice(0, 10);
+    const newHist = [run, ...history].slice(0, 20);
     setHistory(newHist);
     saveLS("airvo_bench_results", run);
     saveLS("airvo_bench_history", newHist);
@@ -4709,17 +4741,37 @@ function BenchmarkPage({ t, activeModels }) {
     localStorage.removeItem("airvo_bench_history");
   }
 
+  function saveCustomSuites(next) { setCustomPrompts(next); saveLS("airvo_bench_custom_suites", next); }
+
+  function addCustomSuite() {
+    const name = newSuiteName.trim();
+    if (!name) return;
+    const next = { ...customPrompts, [name]: customPrompts[name] || [] };
+    saveCustomSuites(next);
+    setActiveSuiteName(name);
+    setNewSuiteName(""); setShowNewSuite(false);
+  }
+
+  function deleteCustomSuite() {
+    if (!activeSuiteName) return;
+    const next = { ...customPrompts };
+    delete next[activeSuiteName];
+    saveCustomSuites(next);
+    setActiveSuiteName(Object.keys(next)[0] || "");
+  }
+
   function addCustomPrompt() {
-    if (!addLabel.trim() || !addText.trim()) return;
+    if (!addLabel.trim() || !addText.trim() || !activeSuiteName) return;
     const p = { id:`cu${Date.now()}`, label:addLabel.trim(), text:addText.trim() };
-    const next = [...customPrompts, p];
-    setCustomPrompts(next); saveLS("airvo_bench_custom", next);
+    const next = { ...customPrompts, [activeSuiteName]: [...(customPrompts[activeSuiteName]||[]), p] };
+    saveCustomSuites(next);
     setAddLabel(""); setAddText(""); setShowAddForm(false);
   }
 
   function deleteCustomPrompt(id) {
-    const next = customPrompts.filter(p => p.id !== id);
-    setCustomPrompts(next); saveLS("airvo_bench_custom", next);
+    if (!activeSuiteName) return;
+    const next = { ...customPrompts, [activeSuiteName]: (customPrompts[activeSuiteName]||[]).filter(p => p.id !== id) };
+    saveCustomSuites(next);
   }
 
   // ── Weighted leaderboard: speed 40% + tokens 30% + consistency 30% ──
@@ -4888,9 +4940,30 @@ function BenchmarkPage({ t, activeModels }) {
             {suiteDef.icon} {t(`bench_suite_${suite}`)} · {suiteDef.prompts.length} prompts
           </div>
           {suite === "custom" && (
-            <button className="btn btn-ghost btn-sm" onClick={() => setShowAddForm(!showAddForm)}>
-              + {t("bench_custom_add")}
-            </button>
+            <div style={{ display:"flex", gap:8, alignItems:"center", flexWrap:"wrap" }}>
+              {Object.keys(customPrompts).length > 0 && (
+                <select value={activeSuiteName} onChange={e => setActiveSuiteName(e.target.value)}
+                  style={{ background:"var(--bg)", border:"1px solid var(--border)", color:"var(--text1)", borderRadius:6, padding:"3px 8px", fontSize:12, fontFamily:"var(--mono)", cursor:"pointer" }}>
+                  {Object.keys(customPrompts).map(n => <option key={n} value={n}>{n}</option>)}
+                </select>
+              )}
+              {!showNewSuite
+                ? <button className="btn btn-ghost btn-sm" onClick={() => setShowNewSuite(true)}>＋ {t("bench_suite_new")}</button>
+                : <span style={{ display:"flex", gap:6 }}>
+                    <input className="key-input" placeholder={t("bench_suite_name_ph")} value={newSuiteName} onChange={e => setNewSuiteName(e.target.value)}
+                      onKeyDown={e => e.key==="Enter" && addCustomSuite()}
+                      style={{ fontFamily:"var(--mono)", fontSize:12, width:140 }} />
+                    <button className="btn btn-primary btn-sm" onClick={addCustomSuite}>✓</button>
+                    <button className="btn btn-ghost btn-sm" onClick={() => { setShowNewSuite(false); setNewSuiteName(""); }}>✕</button>
+                  </span>
+              }
+              {activeSuiteName && Object.keys(customPrompts).length > 0 && (
+                <button className="btn btn-danger btn-sm" onClick={deleteCustomSuite} title={t("bench_suite_delete")}>🗑</button>
+              )}
+              {activeSuiteName && (
+                <button className="btn btn-ghost btn-sm" onClick={() => setShowAddForm(!showAddForm)}>+ {t("bench_custom_add")}</button>
+              )}
+            </div>
           )}
         </div>
 
@@ -4909,9 +4982,13 @@ function BenchmarkPage({ t, activeModels }) {
           </div>
         )}
 
-        {suiteDef.prompts.length === 0
-          ? <div style={{ color:"var(--text2)", fontFamily:"var(--mono)", fontSize:12, padding:"8px 0" }}>{t("bench_custom_empty")}</div>
-          : suiteDef.prompts.map((p, i) => (
+        {suite === "custom" && !activeSuiteName
+          ? <div style={{ color:"var(--text2)", fontFamily:"var(--mono)", fontSize:12, padding:"8px 0" }}>
+              {t("bench_suite_new")} → create your first suite
+            </div>
+          : suiteDef.prompts.length === 0
+            ? <div style={{ color:"var(--text2)", fontFamily:"var(--mono)", fontSize:12, padding:"8px 0" }}>{t("bench_custom_empty")}</div>
+            : suiteDef.prompts.map((p, i) => (
             <div key={p.id} style={{ display:"flex", gap:10, alignItems:"baseline", padding:"5px 0", borderBottom: i < suiteDef.prompts.length-1 ? "1px solid var(--border)" : "none" }}>
               <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", minWidth:16 }}>{i+1}.</span>
               <span style={{ fontWeight:700, fontSize:12, color:"var(--accent)", minWidth:82 }}>{p.label}</span>
@@ -4931,32 +5008,40 @@ function BenchmarkPage({ t, activeModels }) {
           ⚠ {t("bench_no_active")}
         </div>
       ) : (
-        <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", marginBottom:20 }}>
-          <button className="btn btn-primary" onClick={runBenchmark}
-            disabled={running || (suite === "custom" && customPrompts.length === 0)}
-            style={{ minWidth:185 }}>
-            {running
-              ? `⏳ ${t("bench_running")} ${progress.n}/${progress.total}: ${progress.label}`
-              : `▶ ${t("bench_run")}`}
-          </button>
-          {running && (
-            <div style={{ flex:1, maxWidth:260, height:6, background:"var(--bg3)", borderRadius:3, overflow:"hidden" }}>
-              <div style={{ height:"100%", width:`${(progress.n/progress.total)*100}%`, background:"var(--accent)", transition:"width 0.5s", borderRadius:3 }} />
-            </div>
-          )}
-          {results?.suite === suite && !running && (
-            <div style={{ display:"flex", gap:6, marginLeft:"auto", flexWrap:"wrap" }}>
-              <button className="btn btn-ghost btn-sm" title={t("bench_view_bars")}
-                style={{ background: viewMode==="bars"?"var(--bg3)":undefined }}
-                onClick={() => setViewMode("bars")}>📊</button>
-              <button className="btn btn-ghost btn-sm" title={t("bench_view_table")}
-                style={{ background: viewMode==="table"?"var(--bg3)":undefined }}
-                onClick={() => setViewMode("table")}>☰</button>
-              <button className="btn btn-ghost btn-sm" onClick={exportMD} title={t("bench_export_md")}>📄 .md</button>
-              <button className="btn btn-ghost btn-sm" onClick={exportCSV} title={t("bench_export_csv")}>📊 .csv</button>
-              <button className="btn btn-ghost btn-sm" onClick={copyJSON}>{copied ? "✓" : "{}"} JSON</button>
-            </div>
-          )}
+        <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:20 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", whiteSpace:"nowrap" }}>📝 {t("bench_run_note")}:</span>
+            <input className="key-input" placeholder={t("bench_run_note_ph")} value={runNote}
+              onChange={e => setRunNote(e.target.value)} disabled={running}
+              style={{ fontFamily:"var(--mono)", fontSize:11, flex:1, maxWidth:420, opacity: running ? 0.5 : 1 }} />
+          </div>
+          <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
+            <button className="btn btn-primary" onClick={runBenchmark}
+              disabled={running || (suite === "custom" && activeCustomPrompts.length === 0)}
+              style={{ minWidth:185 }}>
+              {running
+                ? `⏳ ${t("bench_running")} ${progress.n}/${progress.total}: ${progress.label}`
+                : `▶ ${t("bench_run")}`}
+            </button>
+            {running && (
+              <div style={{ flex:1, maxWidth:260, height:6, background:"var(--bg3)", borderRadius:3, overflow:"hidden" }}>
+                <div style={{ height:"100%", width:`${(progress.n/progress.total)*100}%`, background:"var(--accent)", transition:"width 0.5s", borderRadius:3 }} />
+              </div>
+            )}
+            {results?.suite === suite && !running && (
+              <div style={{ display:"flex", gap:6, marginLeft:"auto", flexWrap:"wrap" }}>
+                <button className="btn btn-ghost btn-sm" title={t("bench_view_bars")}
+                  style={{ background: viewMode==="bars"?"var(--bg3)":undefined }}
+                  onClick={() => setViewMode("bars")}>📊</button>
+                <button className="btn btn-ghost btn-sm" title={t("bench_view_table")}
+                  style={{ background: viewMode==="table"?"var(--bg3)":undefined }}
+                  onClick={() => setViewMode("table")}>☰</button>
+                <button className="btn btn-ghost btn-sm" onClick={exportMD} title={t("bench_export_md")}>📄 .md</button>
+                <button className="btn btn-ghost btn-sm" onClick={exportCSV} title={t("bench_export_csv")}>📊 .csv</button>
+                <button className="btn btn-ghost btn-sm" onClick={copyJSON}>{copied ? "✓" : "{}"} JSON</button>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -4965,8 +5050,13 @@ function BenchmarkPage({ t, activeModels }) {
         <>
           {/* Leaderboard header + compare toggle */}
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-            <div style={{ fontSize:12, fontWeight:800, color:"var(--text1)", textTransform:"uppercase", letterSpacing:1 }}>
-              🏆 {t("bench_leaderboard")}
+            <div>
+              <div style={{ fontSize:12, fontWeight:800, color:"var(--text1)", textTransform:"uppercase", letterSpacing:1 }}>
+                🏆 {t("bench_leaderboard")}
+              </div>
+              {results.note && (
+                <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", marginTop:3 }}>📝 {results.note}</div>
+              )}
             </div>
             {sameSuiteHistory.length >= 2 && (
               <button className="btn btn-ghost btn-sm"
@@ -5183,7 +5273,8 @@ function BenchmarkPage({ t, activeModels }) {
                     </g>
                   ))}
                   {chartRuns.map((run,i) => (
-                    <text key={run.id} x={pL+i*xStep} y={H-4} textAnchor="middle" fontSize="8" fill="var(--text2)" fontFamily="var(--mono)">
+                    <text key={run.id} x={pL+i*xStep} y={H-4} textAnchor="middle" fontSize="8" fill="var(--text2)" fontFamily="var(--mono)" style={{ cursor: run.note ? "help" : "default" }}>
+                      <title>{new Date(run.timestamp).toLocaleDateString()}{run.note ? ` — ${run.note}` : ""}</title>
                       {new Date(run.timestamp).toLocaleDateString(undefined,{month:"numeric",day:"numeric"})}
                     </text>
                   ))}
@@ -5204,7 +5295,7 @@ function BenchmarkPage({ t, activeModels }) {
                           const s = runScores[i][mid];
                           return s !== undefined ? (
                             <circle key={i} cx={pL+i*xStep} cy={yS(s)} r="4" fill={col} style={{ cursor:"crosshair" }}>
-                              <title>{mName} — {new Date(run.timestamp).toLocaleDateString()}: {s}pts</title>
+                              <title>{mName} — {new Date(run.timestamp).toLocaleDateString()}: {s}pts{run.note ? ` · 📝 ${run.note}` : ""}</title>
                             </circle>
                           ) : null;
                         })}
@@ -5366,9 +5457,14 @@ function BenchmarkPage({ t, activeModels }) {
       {/* History footer */}
       {history.length > 0 && (
         <div style={{ marginTop:8, paddingTop:12, borderTop:"1px solid var(--border)", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-          <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
-            {t("bench_history_title")}: {history.length} run{history.length!==1?"s":""} · {new Date(history[0].timestamp).toLocaleDateString()}
-          </span>
+          <div>
+            <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
+              {t("bench_history_title")}: {history.length} run{history.length!==1?"s":""} · {new Date(history[0].timestamp).toLocaleDateString()}
+            </span>
+            {history[0].note && (
+              <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", marginLeft:10 }}>📝 {history[0].note}</span>
+            )}
+          </div>
           <button className="btn btn-ghost btn-sm" onClick={clearHistory}>{t("bench_clear")}</button>
         </div>
       )}

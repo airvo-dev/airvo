@@ -1,5 +1,77 @@
 [
   {
+    "id": "1775617036.036496",
+    "timestamp": 1775617036.036496,
+    "mode": "parallel",
+    "prompt": "Write a Python function fib(n) returning the nth Fibonacci number. Code only.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "def fib(n): \n    if n <= 0: \n        return 0 \n    elif n == 1: \n        return 1 \n    else: \n        return fib(n-1) + fib(n-2)",
+        "error": null,
+        "tokens": 121,
+        "elapsed_s": 0.27
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "```python\ndef fib(n):\n    if n <= 0:\n        return \"Input should be a positive integer\"\n    elif n == 1:\n        return 0\n    elif n == 2:\n        return 1\n    else:\n        a, b = 0, 1\n        for _ in range(2, n):\n            a, b = b, a + b\n        return b\n```",
+        "error": null,
+        "tokens": 161,
+        "elapsed_s": 0.37
+      }
+    ]
+  },
+  {
+    "id": "1775617035.6446366",
+    "timestamp": 1775617035.6446366,
+    "mode": "parallel",
+    "prompt": "Write a Python function is_palindrome(s) returning True or False. Code only.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "def is_palindrome(s): return s == s[::-1]",
+        "error": null,
+        "tokens": 87,
+        "elapsed_s": 0.36
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "```python\ndef is_palindrome(s: str) -> bool:\n    return s == s[::-1]\n```",
+        "error": null,
+        "tokens": 97,
+        "elapsed_s": 0.27
+      }
+    ]
+  },
+  {
+    "id": "1775617035.260817",
+    "timestamp": 1775617035.260817,
+    "mode": "parallel",
+    "prompt": "Write a Python FizzBuzz for 1 to 20. Return only the code, no explanation.",
+    "results": [
+      {
+        "model": "groq/llama-3.1-8b-instant",
+        "name": "Llama 3.1 8B (Groq)",
+        "content": "for i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)",
+        "error": null,
+        "tokens": 149,
+        "elapsed_s": 0.4
+      },
+      {
+        "model": "groq/llama-3.3-70b-versatile",
+        "name": "Llama 3.3 70B (Groq)",
+        "content": "```python\nfor i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)\n```",
+        "error": null,
+        "tokens": 153,
+        "elapsed_s": 0.46
+      }
+    ]
+  },
+  {
     "id": "1775616511.3640797",
     "timestamp": 1775616511.3653147,
     "mode": "parallel",
@@ -164,78 +236,6 @@
         "error": null,
         "tokens": 161,
         "elapsed_s": 0.49
-      }
-    ]
-  },
-  {
-    "id": "1775614877.2173421",
-    "timestamp": 1775614877.2173421,
-    "mode": "parallel",
-    "prompt": "Write a Python function is_palindrome(s) returning True or False. Code only.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "def is_palindrome(s): return s == s[::-1]",
-        "error": null,
-        "tokens": 87,
-        "elapsed_s": 0.26
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "```python\ndef is_palindrome(s: str) -> bool:\n    return s == s[::-1]\n```",
-        "error": null,
-        "tokens": 97,
-        "elapsed_s": 0.52
-      }
-    ]
-  },
-  {
-    "id": "1775614876.6634753",
-    "timestamp": 1775614876.6634753,
-    "mode": "parallel",
-    "prompt": "Write a Python FizzBuzz for 1 to 20. Return only the code, no explanation.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "for i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)",
-        "error": null,
-        "tokens": 149,
-        "elapsed_s": 0.35
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "```python\nfor i in range(1, 21):\n    if i % 3 == 0 and i % 5 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)\n```",
-        "error": null,
-        "tokens": 153,
-        "elapsed_s": 0.59
-      }
-    ]
-  },
-  {
-    "id": "1775614862.7603605",
-    "timestamp": 1775614862.7603605,
-    "mode": "parallel",
-    "prompt": "List exactly 5 colors, one per line.",
-    "results": [
-      {
-        "model": "groq/llama-3.1-8b-instant",
-        "name": "Llama 3.1 8B (Groq)",
-        "content": "Blue\nRed\nYellow\nGreen\nPurple",
-        "error": null,
-        "tokens": 76,
-        "elapsed_s": 0.26
-      },
-      {
-        "model": "groq/llama-3.3-70b-versatile",
-        "name": "Llama 3.3 70B (Groq)",
-        "content": "Red\nBlue\nGreen\nYellow\nPurple",
-        "error": null,
-        "tokens": 76,
-        "elapsed_s": 0.46
       }
     ]
   }
