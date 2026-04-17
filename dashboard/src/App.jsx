@@ -333,7 +333,7 @@ const I18N = {
     auto_detected:"Auto-detected",
     auto_local_hint:"Local model — no API cost",
     auto_cloud_hint:"Cloud model — API usage billed by provider",
-    nav_compare:"Compare", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Chat", nav_compare:"Compare", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Standardized prompts to measure and compare your models",
     bench_suite_speed:"Speed Test", bench_suite_coding:"Coding", bench_suite_reasoning:"Reasoning", bench_suite_creative:"Creativity",
     bench_run:"Run Benchmark", bench_running:"Running",
@@ -677,7 +677,7 @@ const I18N = {
     auto_detected:"Detectado automáticamente",
     auto_local_hint:"Modelo local — sin costo de API",
     auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
-    nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Chat", nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Prompts estandarizados para medir y comparar tus modelos",
     bench_suite_speed:"Test de Velocidad", bench_suite_coding:"Programación", bench_suite_reasoning:"Razonamiento", bench_suite_creative:"Creatividad",
     bench_run:"Ejecutar Benchmark", bench_running:"Ejecutando",
@@ -1018,7 +1018,7 @@ const I18N = {
     auto_detected:"Détecté automatiquement",
     auto_local_hint:"Modèle local — sans coût d'API",
     auto_cloud_hint:"Modèle cloud — facturation par le fournisseur",
-    nav_compare:"Comparer", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Chat", nav_compare:"Comparer", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Prompts standardisés pour mesurer et comparer vos modèles",
     bench_suite_speed:"Test de Vitesse", bench_suite_coding:"Programmation", bench_suite_reasoning:"Raisonnement", bench_suite_creative:"Créativité",
     bench_run:"Lancer le Benchmark", bench_running:"En cours",
@@ -1359,7 +1359,7 @@ const I18N = {
     auto_detected:"Automatisch erkannt",
     auto_local_hint:"Lokales Modell — keine API-Kosten",
     auto_cloud_hint:"Cloud-Modell — Abrechnung durch den Anbieter",
-    nav_compare:"Vergleich", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Chat", nav_compare:"Vergleich", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Standardisierte Prompts zum Messen und Vergleichen Ihrer Modelle",
     bench_suite_speed:"Geschwindigkeitstest", bench_suite_coding:"Programmierung", bench_suite_reasoning:"Schlussfolgerung", bench_suite_creative:"Kreativität",
     bench_run:"Benchmark starten", bench_running:"Läuft",
@@ -1700,7 +1700,7 @@ const I18N = {
     auto_detected:"自动检测",
     auto_local_hint:"本地模型 — 无 API 费用",
     auto_cloud_hint:"云端模型 — 由提供商计费",
-    nav_compare:"对比", nav_stats:"统计", nav_bench:"基准测试",
+    nav_chat:"聊天", nav_compare:"对比", nav_stats:"统计", nav_bench:"基准测试",
     bench_title:"基准测试", bench_sub:"标准化提示词，用于测量和比较您的模型",
     bench_suite_speed:"速度测试", bench_suite_coding:"编程", bench_suite_reasoning:"推理", bench_suite_creative:"创意",
     bench_run:"运行基准测试", bench_running:"运行中",
@@ -2041,7 +2041,7 @@ const I18N = {
     auto_detected:"自動検出",
     auto_local_hint:"ローカルモデル — APIコストなし",
     auto_cloud_hint:"クラウドモデル — プロバイダーによる課金",
-    nav_compare:"比較", nav_stats:"統計", nav_bench:"ベンチマーク",
+    nav_chat:"チャット", nav_compare:"比較", nav_stats:"統計", nav_bench:"ベンチマーク",
     bench_title:"ベンチマーク", bench_sub:"モデルを測定・比較するための標準化されたプロンプト",
     bench_suite_speed:"スピードテスト", bench_suite_coding:"コーディング", bench_suite_reasoning:"推論", bench_suite_creative:"創造性",
     bench_run:"ベンチマーク実行", bench_running:"実行中",
@@ -2382,7 +2382,7 @@ const I18N = {
     auto_detected:"Detectado automaticamente",
     auto_local_hint:"Modelo local — sem custo de API",
     auto_cloud_hint:"Modelo cloud — faturamento pelo provedor",
-    nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Chat", nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Prompts padronizados para medir e comparar seus modelos",
     bench_suite_speed:"Teste de Velocidade", bench_suite_coding:"Programação", bench_suite_reasoning:"Raciocínio", bench_suite_creative:"Criatividade",
     bench_run:"Executar Benchmark", bench_running:"Executando",
@@ -2631,6 +2631,49 @@ const css = `
   .hljs-deletion { background:#2a0a0a; color:#f87171; }
   .hljs-emphasis { font-style:italic; }
   .hljs-strong { font-weight:700; }
+
+  /* ── Chat Page ── */
+  .chat-layout { display:flex; height:calc(100vh - 60px); overflow:hidden; margin:-32px; }
+  .chat-sidebar { width:260px; min-width:220px; max-width:300px; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; transition:width .2s,min-width .2s; overflow:hidden; }
+  .chat-sidebar-hidden { width:0; min-width:0; }
+  .chat-sidebar-header { display:flex; gap:6px; padding:12px; border-bottom:1px solid var(--border); }
+  .chat-conv-list { flex:1; overflow-y:auto; padding:8px 0; }
+  .chat-conv-item { padding:10px 14px; cursor:pointer; border-bottom:1px solid transparent; position:relative; transition:background .12s; }
+  .chat-conv-item:hover { background:var(--bg3); }
+  .chat-conv-item.active { background:var(--bg3); border-left:3px solid var(--accent); }
+  .chat-conv-title { font-size:13px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px; }
+  .chat-conv-meta { font-family:var(--mono); font-size:10px; color:var(--text2); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:190px; }
+  .chat-conv-actions { position:absolute; right:8px; top:50%; transform:translateY(-50%); display:none; gap:4px; }
+  .chat-conv-item:hover .chat-conv-actions { display:flex; }
+  .chat-conv-btn { background:transparent; border:1px solid var(--border); border-radius:4px; color:var(--text2); font-size:11px; padding:2px 6px; cursor:pointer; transition:all .1s; }
+  .chat-conv-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .chat-conv-btn-del:hover { border-color:var(--red); color:var(--red); }
+  .chat-rename-input { width:100%; font-size:12px; background:var(--bg); border:1px solid var(--accent); border-radius:4px; color:var(--text); padding:3px 6px; font-family:var(--mono); outline:none; }
+
+  .chat-main { flex:1; display:flex; flex-direction:column; min-width:0; background:var(--bg); }
+  .chat-toolbar { display:flex; align-items:center; gap:8px; padding:10px 16px; border-bottom:1px solid var(--border); background:var(--bg2); min-height:48px; flex-shrink:0; }
+  .chat-messages { flex:1; overflow-y:auto; padding:24px 20px; display:flex; flex-direction:column; gap:16px; }
+  .chat-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; height:100%; min-height:300px; color:var(--text2); }
+
+  .chat-bubble { max-width:780px; width:100%; display:flex; flex-direction:column; gap:6px; position:relative; }
+  .chat-bubble-user { align-self:flex-end; align-items:flex-end; }
+  .chat-bubble-ai { align-self:flex-start; align-items:flex-start; }
+  .chat-bubble-role { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text2); }
+  .chat-bubble-user .chat-bubble-role { color:var(--accent); }
+  .chat-bubble-content { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-size:14px; line-height:1.7; max-width:100%; }
+  .chat-bubble-user .chat-bubble-content { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .chat-cursor { display:inline-block; animation:blink 1s step-start infinite; color:var(--accent); }
+  .chat-copy-btn { background:transparent; border:1px solid var(--border); border-radius:6px; color:var(--text2); font-size:12px; padding:2px 8px; cursor:pointer; transition:all .1s; align-self:flex-end; }
+  .chat-copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  .chat-input-area { padding:12px 16px 16px; border-top:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
+  .chat-input-row { display:flex; gap:8px; align-items:flex-end; }
+  .chat-textarea { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-family:var(--sans); font-size:14px; resize:none; outline:none; min-height:42px; max-height:200px; transition:border .15s; overflow-y:auto; }
+  .chat-textarea:focus { border-color:var(--accent); }
+  .chat-textarea:disabled { opacity:0.5; }
+  .chat-send-btn { border-radius:10px; padding:10px 16px; font-size:18px; line-height:1; height:42px; flex-shrink:0; }
+  .chat-mic-btn { border-radius:10px; padding:8px 12px; font-size:16px; height:42px; flex-shrink:0; transition:all .15s; }
+  .chat-mic-active { border-color:var(--red) !important; color:var(--red) !important; animation:pulse 1s infinite; }
 `;
 
 function getProviderClass(p) {
@@ -3410,6 +3453,7 @@ export default function AirvoDashboard() {
             {[
               { id:"models",  icon:"◈", label:t("nav_models"), badge:models.length||null },
               { id:"status",  icon:"◎", label:t("nav_status")  },
+              { id:"chat",    icon:"💬", label:t("nav_chat")    },
               { id:"compare", icon:"⊞", label:t("nav_compare") },
               { id:"stats",   icon:"📊", label:t("nav_stats")  },
               { id:"bench",   icon:"🏆", label:t("nav_bench")  },
@@ -4686,6 +4730,15 @@ export default function AirvoDashboard() {
             <BenchmarkPage
               t={t}
               activeModels={active}
+            />
+          )}
+
+          {/* ── CHAT PAGE ── */}
+          {page === "chat" && (
+            <ChatPage
+              t={t}
+              activeModels={active}
+              prefs={prefs}
             />
           )}
 
@@ -6357,5 +6410,367 @@ function HelpPage({ t, setPage }) {
         ))}
       </div>
     </>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CHAT PAGE — v0.6
+// Native dashboard chat with conversation history, SSE streaming, mic input
+// ══════════════════════════════════════════════════════════════════════════════
+function ChatPage({ t, activeModels, prefs }) {
+  const [conversations, setConversations] = React.useState([]);
+  const [activeConvId,  setActiveConvId]  = React.useState(null);
+  const [messages,      setMessages]      = React.useState([]);
+  const [input,         setInput]         = React.useState("");
+  const [streaming,     setStreaming]      = React.useState(false);
+  const [streamContent, setStreamContent] = React.useState("");
+  const [selectedModel, setSelectedModel] = React.useState("");
+  const [listening,     setListening]     = React.useState(false);
+  const [showHistory,   setShowHistory]   = React.useState(true);
+  const [renaming,      setRenaming]      = React.useState(null); // conv_id being renamed
+  const [renameVal,     setRenameVal]     = React.useState("");
+  const bottomRef   = React.useRef(null);
+  const textareaRef = React.useRef(null);
+  const recognRef   = React.useRef(null);
+
+  // ── Load conversation list ───────────────────────────────────────────────
+  const loadHistory = React.useCallback(async () => {
+    try {
+      const res  = await fetch("/api/chat/history");
+      const data = await res.json();
+      setConversations(data.conversations || []);
+    } catch { /* server offline */ }
+  }, []);
+
+  React.useEffect(() => { loadHistory(); }, [loadHistory]);
+
+  // ── Auto-scroll to bottom on new messages ───────────────────────────────
+  React.useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, streamContent]);
+
+  // ── Load a conversation's messages ──────────────────────────────────────
+  function openConversation(conv) {
+    setActiveConvId(conv.id);
+    setMessages(conv.messages || []);
+    setStreamContent("");
+  }
+
+  // ── Start a new conversation ─────────────────────────────────────────────
+  function newConversation() {
+    setActiveConvId(null);
+    setMessages([]);
+    setStreamContent("");
+    setInput("");
+  }
+
+  // ── Send message ─────────────────────────────────────────────────────────
+  async function sendMessage(e) {
+    e?.preventDefault();
+    const text = input.trim();
+    if (!text || streaming) return;
+
+    // Optimistic update
+    const userMsg = { role: "user", content: text };
+    setMessages(prev => [...prev, userMsg]);
+    setInput("");
+    setStreaming(true);
+    setStreamContent("");
+
+    try {
+      const body = {
+        message:         text,
+        conversation_id: activeConvId || undefined,
+        model_id:        selectedModel || undefined,
+      };
+      const res = await fetch("/api/chat/stream", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(body),
+      });
+
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder();
+      let   full    = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const lines = decoder.decode(value).split("\n");
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const evt = JSON.parse(line.slice(6));
+
+          if (evt.type === "delta") {
+            full += evt.content;
+            setStreamContent(full);
+          } else if (evt.type === "done") {
+            // Finalize
+            setMessages(prev => [...prev, { role: "assistant", content: full }]);
+            setStreamContent("");
+            setActiveConvId(evt.conv_id);
+            // Refresh conversation list and update this conv's messages in place
+            const res2  = await fetch("/api/chat/history");
+            const data2 = await res2.json();
+            setConversations(data2.conversations || []);
+          } else if (evt.type === "error") {
+            setMessages(prev => [...prev, { role: "assistant", content: `⚠ ${evt.error}` }]);
+            setStreamContent("");
+          }
+        }
+      }
+    } catch (err) {
+      setMessages(prev => [...prev, { role: "assistant", content: `⚠ Connection error: ${err.message}` }]);
+      setStreamContent("");
+    } finally {
+      setStreaming(false);
+    }
+  }
+
+  // ── Handle Enter key (Shift+Enter = newline) ─────────────────────────────
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
+  // ── Delete conversation ───────────────────────────────────────────────────
+  async function deleteConv(e, conv_id) {
+    e.stopPropagation();
+    await fetch(`/api/chat/history/${encodeURIComponent(conv_id)}`, { method: "DELETE" });
+    if (activeConvId === conv_id) newConversation();
+    setConversations(prev => prev.filter(c => c.id !== conv_id));
+  }
+
+  // ── Rename conversation ───────────────────────────────────────────────────
+  async function saveRename(conv_id) {
+    if (!renameVal.trim()) { setRenaming(null); return; }
+    await fetch(`/api/chat/history/${encodeURIComponent(conv_id)}/title`, {
+      method:  "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ title: renameVal.trim() }),
+    });
+    setConversations(prev => prev.map(c => c.id === conv_id ? { ...c, title: renameVal.trim() } : c));
+    setRenaming(null);
+  }
+
+  // ── Microphone (Web Speech API) ──────────────────────────────────────────
+  function toggleMic() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { alert("Speech recognition not supported in this browser."); return; }
+
+    if (listening) {
+      recognRef.current?.stop();
+      setListening(false);
+      return;
+    }
+    const recog = new SR();
+    recog.continuous     = false;
+    recog.interimResults = true;
+    recog.lang           = "en-US";
+    recognRef.current    = recog;
+
+    recog.onresult = (ev) => {
+      const transcript = Array.from(ev.results)
+        .map(r => r[0].transcript).join("");
+      setInput(transcript);
+    };
+    recog.onend   = () => setListening(false);
+    recog.onerror = () => setListening(false);
+    recog.start();
+    setListening(true);
+  }
+
+  // ── Copy message content ──────────────────────────────────────────────────
+  function copyMsg(content) {
+    navigator.clipboard.writeText(content).catch(() => {});
+  }
+
+  // ── Render a single message bubble ───────────────────────────────────────
+  function MessageBubble({ msg, isStreaming }) {
+    const isUser = msg.role === "user";
+    const blocks = parseBlocks(msg.content || "");
+    return (
+      <div className={`chat-bubble ${isUser ? "chat-bubble-user" : "chat-bubble-ai"}`}>
+        <div className="chat-bubble-role">{isUser ? "You" : "AI"}</div>
+        <div className="chat-bubble-content">
+          {blocks.map((b, i) =>
+            b.type === "code"
+              ? <CodeBlock key={i} code={b.code} lang={b.lang} />
+              : <p key={i} style={{ margin:"4px 0", lineHeight:1.7 }}>{b.text}</p>
+          )}
+          {isStreaming && <span className="chat-cursor">▌</span>}
+        </div>
+        {!isUser && !isStreaming && (
+          <button
+            className="chat-copy-btn"
+            onClick={() => copyMsg(msg.content)}
+            title="Copy"
+          >⎘</button>
+        )}
+      </div>
+    );
+  }
+
+  const hasMic = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+  return (
+    <div className="chat-layout">
+
+      {/* ── Sidebar: conversation history ─────────────────────────────── */}
+      <div className={`chat-sidebar ${showHistory ? "" : "chat-sidebar-hidden"}`}>
+        <div className="chat-sidebar-header">
+          <button className="btn btn-primary btn-sm" style={{ flex:1 }} onClick={newConversation}>
+            + New Chat
+          </button>
+          <button
+            className="btn btn-ghost btn-sm"
+            style={{ padding:"6px 10px" }}
+            onClick={() => setShowHistory(h => !h)}
+            title="Toggle history"
+          >☰</button>
+        </div>
+
+        <div className="chat-conv-list">
+          {conversations.length === 0 && (
+            <div style={{ padding:"16px 12px", fontSize:12, color:"var(--text2)", fontFamily:"var(--mono)" }}>
+              No conversations yet
+            </div>
+          )}
+          {conversations.map(conv => (
+            <div
+              key={conv.id}
+              className={`chat-conv-item ${activeConvId === conv.id ? "active" : ""}`}
+              onClick={() => openConversation(conv)}
+            >
+              {renaming === conv.id ? (
+                <input
+                  className="chat-rename-input"
+                  value={renameVal}
+                  autoFocus
+                  onChange={e => setRenameVal(e.target.value)}
+                  onBlur={() => saveRename(conv.id)}
+                  onKeyDown={e => {
+                    if (e.key === "Enter") saveRename(conv.id);
+                    if (e.key === "Escape") setRenaming(null);
+                  }}
+                  onClick={e => e.stopPropagation()}
+                />
+              ) : (
+                <>
+                  <div className="chat-conv-title">{conv.title}</div>
+                  <div className="chat-conv-meta">
+                    {conv.model_name || conv.model} · {new Date((conv.updated_at || conv.created_at) * 1000).toLocaleDateString()}
+                  </div>
+                  <div className="chat-conv-actions">
+                    <button
+                      className="chat-conv-btn"
+                      title="Rename"
+                      onClick={e => { e.stopPropagation(); setRenaming(conv.id); setRenameVal(conv.title); }}
+                    >✎</button>
+                    <button
+                      className="chat-conv-btn chat-conv-btn-del"
+                      title="Delete"
+                      onClick={e => deleteConv(e, conv.id)}
+                    >✕</button>
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Main chat area ────────────────────────────────────────────── */}
+      <div className="chat-main">
+
+        {/* Toolbar */}
+        <div className="chat-toolbar">
+          {!showHistory && (
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={() => setShowHistory(true)}
+              title="Show history"
+            >☰</button>
+          )}
+          <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", flex:1, paddingLeft:8 }}>
+            {activeConvId
+              ? conversations.find(c => c.id === activeConvId)?.title || "Chat"
+              : "New conversation"}
+          </div>
+          {/* Model selector */}
+          <select
+            value={selectedModel}
+            onChange={e => setSelectedModel(e.target.value)}
+            style={{ fontFamily:"var(--mono)", fontSize:11, background:"var(--bg3)", color:"var(--text1)", border:"1px solid var(--border)", borderRadius:6, padding:"4px 8px" }}
+          >
+            <option value="">Auto (best active)</option>
+            {activeModels.map(m => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Messages */}
+        <div className="chat-messages">
+          {messages.length === 0 && !streaming && (
+            <div className="chat-empty">
+              <div style={{ fontSize:40, marginBottom:12 }}>💬</div>
+              <div style={{ fontSize:16, fontWeight:700, marginBottom:8 }}>Start a conversation</div>
+              <div style={{ fontSize:12, color:"var(--text2)", fontFamily:"var(--mono)", maxWidth:360, textAlign:"center", lineHeight:1.8 }}>
+                Ask anything — your project context and RAG settings apply automatically.
+              </div>
+            </div>
+          )}
+
+          {messages.map((msg, i) => (
+            <MessageBubble key={i} msg={msg} isStreaming={false} />
+          ))}
+
+          {streaming && streamContent && (
+            <MessageBubble
+              msg={{ role: "assistant", content: streamContent }}
+              isStreaming={true}
+            />
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Input area */}
+        <form className="chat-input-area" onSubmit={sendMessage}>
+          <div className="chat-input-row">
+            {hasMic && (
+              <button
+                type="button"
+                className={`btn btn-ghost chat-mic-btn ${listening ? "chat-mic-active" : ""}`}
+                onClick={toggleMic}
+                title={listening ? "Stop recording" : "Voice input"}
+              >
+                {listening ? "⏹" : "🎤"}
+              </button>
+            )}
+            <textarea
+              ref={textareaRef}
+              className="chat-textarea"
+              placeholder="Message… (Enter to send, Shift+Enter for newline)"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={1}
+              disabled={streaming}
+            />
+            <button
+              type="submit"
+              className="btn btn-primary chat-send-btn"
+              disabled={!input.trim() || streaming}
+            >
+              {streaming ? "…" : "↑"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

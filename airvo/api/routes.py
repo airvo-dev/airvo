@@ -10,7 +10,7 @@ import os
 import time
 from collections import deque
 
-from airvo.config.settings import settings, save_models
+from airvo.config.settings import settings, save_models, MEMORY_MAX_CHARS
 
 logger = logging.getLogger(__name__)
 
@@ -1215,3 +1215,211 @@ async def discovery_add(req: QuickAddRequest):
         return {"ok": True, "model": litellm_id, "already_existed": False}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# CHAT HISTORY  — v0.6
+# Persists native dashboard chat conversations to ~/.airvo/chat_history.json
+# Each conversation = { id, title, created_at, model, messages: [...] }
+# ══════════════════════════════════════════════════════════════════════════════
+
+_CHAT_HISTORY_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "chat_history.json")
+_MAX_CONVERSATIONS = 50   # keep last 50 conversations
+
+
+def _load_chat_history() -> list:
+    try:
+        if os.path.exists(_CHAT_HISTORY_FILE):
+            with open(_CHAT_HISTORY_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return []
+
+
+def _save_chat_history(data: list) -> None:
+    try:
+        os.makedirs(os.path.dirname(_CHAT_HISTORY_FILE), exist_ok=True)
+        with open(_CHAT_HISTORY_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        logger.warning("[Chat] Failed to save chat history: %s", e)
+
+
+class ChatMessageIn(BaseModel):
+    role:    str
+    content: str
+
+class ChatSendRequest(BaseModel):
+    conversation_id: Optional[str] = None   # None = start new conversation
+    message:         str
+    model_id:        Optional[str] = None   # override active model
+
+
+@router.get("/api/chat/history", tags=["Chat History"])
+async def get_chat_history():
+    """Return all saved conversations, newest first."""
+    convs = _load_chat_history()
+    return {"conversations": convs}
+
+
+@router.delete("/api/chat/history/{conv_id}", tags=["Chat History"])
+async def delete_conversation(conv_id: str):
+    """Delete a single conversation by id."""
+    convs = _load_chat_history()
+    convs = [c for c in convs if c.get("id") != conv_id]
+    _save_chat_history(convs)
+    return {"ok": True}
+
+
+@router.delete("/api/chat/history", tags=["Chat History"])
+async def clear_chat_history():
+    """Delete all chat history."""
+    _save_chat_history([])
+    return {"ok": True}
+
+
+@router.patch("/api/chat/history/{conv_id}/title", tags=["Chat History"])
+async def rename_conversation(conv_id: str, body: dict):
+    """Rename a conversation."""
+    convs = _load_chat_history()
+    for c in convs:
+        if c.get("id") == conv_id:
+            c["title"] = body.get("title", c["title"])
+            break
+    _save_chat_history(convs)
+    return {"ok": True}
+
+
+@router.post("/api/chat/stream", tags=["Chat History"])
+async def chat_stream(req: ChatSendRequest):
+    """
+    Stream a chat response and persist the full conversation.
+
+    SSE events:
+      data: {"type":"delta",   "content":"..."}      — token chunk
+      data: {"type":"done",    "tokens":N, "elapsed_s":X, "conv_id":"...", "title":"..."}
+      data: {"type":"error",   "error":"..."}
+    """
+    prefs       = settings.prefs
+    active_mods = [m for m in settings.models if m.get("active")]
+
+    # Choose model: explicit override → agent_model pref → first active
+    chosen = None
+    if req.model_id:
+        chosen = next((m for m in active_mods if m["id"] == req.model_id), None)
+    if not chosen and prefs.get("agent_model"):
+        chosen = next((m for m in active_mods if m["id"] == prefs["agent_model"]), None)
+    if not chosen and active_mods:
+        chosen = active_mods[0]
+    if not chosen:
+        async def _no_model():
+            yield 'data: {"type":"error","error":"No active model configured"}\n\n'
+        return StreamingResponse(_no_model(), media_type="text/event-stream")
+
+    # Load or create conversation
+    convs   = _load_chat_history()
+    conv_id = req.conversation_id
+
+    if conv_id:
+        conv = next((c for c in convs if c.get("id") == conv_id), None)
+        if not conv:
+            conv_id = None  # conversation was deleted, start fresh
+
+    if not conv_id:
+        import uuid
+        conv_id = str(uuid.uuid4())
+        # Title = first 60 chars of first message
+        title = req.message[:60] + ("…" if len(req.message) > 60 else "")
+        conv  = {
+            "id":         conv_id,
+            "title":      title,
+            "created_at": time.time(),
+            "model":      chosen["id"],
+            "model_name": chosen.get("name", chosen["id"]),
+            "messages":   [],
+        }
+        convs.insert(0, conv)
+        # Trim to max conversations
+        if len(convs) > _MAX_CONVERSATIONS:
+            convs = convs[:_MAX_CONVERSATIONS]
+
+    # Append the user message
+    conv["messages"].append({"role": "user", "content": req.message})
+
+    # Build LiteLLM messages — inject project memory if enabled
+    llm_messages = []
+    system_parts = []
+    if prefs.get("memory_enabled") and prefs.get("memory_text", "").strip():
+        system_parts.append(prefs["memory_text"].strip()[:MEMORY_MAX_CHARS])
+    if system_parts:
+        llm_messages.append({"role": "system", "content": "\n\n".join(system_parts)})
+
+    # Add conversation history (last N messages for context)
+    max_hist = int(prefs.get("max_history_messages", 10))
+    llm_messages.extend([
+        {"role": m["role"], "content": m["content"]}
+        for m in conv["messages"][-max_hist:]
+    ])
+
+    # TPM guard
+    model_id   = chosen["id"]
+    max_tokens = _safe_max_tokens(model_id, int(prefs.get("max_tokens", 1024)))
+    temperature = float(prefs.get("temperature", 0.7))
+
+    async def _stream():
+        full_response = ""
+        start         = time.time()
+        token_count   = 0
+        try:
+            kwargs = dict(
+                model       = model_id,
+                messages    = llm_messages,
+                stream      = True,
+                max_tokens  = max_tokens,
+                temperature = temperature,
+            )
+            if chosen.get("api_key"):
+                kwargs["api_key"] = chosen["api_key"]
+            if chosen.get("base_url"):
+                kwargs["base_url"] = chosen["base_url"]
+
+            resp = await litellm.acompletion(**kwargs)
+            async for chunk in resp:
+                delta = chunk.choices[0].delta.content or ""
+                if delta:
+                    full_response += delta
+                    token_count   += 1
+                    payload = json.dumps({"type": "delta", "content": delta}, ensure_ascii=False)
+                    yield f"data: {payload}\n\n"
+
+        except Exception as e:
+            err = json.dumps({"type": "error", "error": str(e)})
+            yield f"data: {err}\n\n"
+            return
+
+        elapsed = round(time.time() - start, 2)
+
+        # Persist assistant message
+        conv["messages"].append({"role": "assistant", "content": full_response})
+        conv["updated_at"] = time.time()
+        _save_chat_history(convs)
+
+        # Record usage stats
+        try:
+            settings.record_usage(model_id, token_count)
+        except Exception:
+            pass
+
+        done = json.dumps({
+            "type":      "done",
+            "tokens":    token_count,
+            "elapsed_s": elapsed,
+            "conv_id":   conv_id,
+            "title":     conv["title"],
+            "model_id":  model_id,
+            "model_name": chosen.get("name", model_id),
+        })
+        yield f"data: {done}\n\n"
+
+    return StreamingResponse(_stream(), media_type="text/event-stream")
