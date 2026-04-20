@@ -215,7 +215,11 @@ The Airvo dashboard runs at `http://localhost:5000` and lets you manage everythi
 
 **Compare tab** — send a prompt to all active models simultaneously, stream responses in real-time, inspect word-level diffs, sort by speed or token count, export as Markdown.
 
+![Airvo Dashboard - Compare](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-compare.png)
+
 **Benchmarks tab** — run Speed, Coding, Reasoning, Creativity, or custom suites against all models. Leaderboard + radar chart + score history over time. Annotate each run.
+
+![Airvo Dashboard - Benchmarks](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-benchmarks.png)
 
 **Stats page** — per-model usage, daily sparklines, total token breakdown.
 
@@ -228,6 +232,8 @@ The Airvo dashboard runs at `http://localhost:5000` and lets you manage everythi
 **Help page** — full reference guide, field-by-field documentation, FAQ (7 languages).
 
 **Assistant tab** — built-in 🤖 chat for Airvo-specific questions. Streams responses, saves history locally, renders Markdown, shows token count and response time per message.
+
+![Airvo Dashboard - Chat](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-chat.png)
 
 ![Airvo Dashboard - Help](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-help.png)
 
