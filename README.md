@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.5.7-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.7.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -62,6 +62,11 @@ Your Editor (VS Code)
 - ✅ 4 multi-model modes — Parallel, Race, Vote, Review
 - ✅ **Compare tab** — compare any prompt across all models in real-time with word-level diff
 - ✅ **Benchmarks tab** — standardized suites, radar chart, score history, custom suites
+- ✅ **Airvo Assistant** — built-in chat to ask anything about Airvo: setup, features, troubleshooting
+- ✅ **Fallback Chains** — if a model fails, automatically retries with the next active model; toast shows `⚡ Fallback: A → B`
+- ✅ **Model Health Monitor** — ping all active models concurrently; live `✅ Xms` / `❌` chips on every model card
+- ✅ **Smart Router** — classifies every prompt (code/debug/math/creative/explain/general) and picks the optimal model; 0ms latency, fully local
+- ✅ **Regenerate** — ↺ button to resend the last prompt and get a fresh response from any model
 - ✅ Smart Memory (RAG) — semantic search of your codebase, 100% local
 - ✅ Memory Manager — real-time RAM/GPU usage, Ollama model rotation
 - ✅ Model Discovery — browse and add Ollama + OpenRouter models in one click
@@ -117,6 +122,9 @@ Open VS Code → press `Ctrl+L` → ask anything.
 **🤖 Any Model, Any Provider**
 Add any model supported by LiteLLM — over 100 providers. Groq, OpenAI, Anthropic, Ollama, LM Studio, DeepSeek, Mistral, Gemini, and more.
 
+**🤖 Airvo Assistant**
+A built-in chat interface in the dashboard that knows everything about Airvo. Ask how to add models, configure RAG, troubleshoot errors, or understand any feature. Responses stream in real-time, history is saved locally, and the assistant sees your live configuration state — so answers are specific to your setup, not generic.
+
 **⚡ Multi-Model Modes**
 Run up to 3 models simultaneously in 4 modes: **Parallel** (see all answers), **Race** (fastest wins), **Vote** (consensus), **Review** (one generates, others refine).
 
@@ -144,7 +152,19 @@ Adjust temperature (0.0 → 1.0) and max tokens per request directly from the da
 **🆚 Compare Tab**
 Send any prompt to all active models at once and see responses stream in real-time side by side. Word-level diff highlights exactly where answers differ. Sort by response time or token count, filter by model, annotate runs, and export comparisons as Markdown.
 
-**🏆 Benchmarks Tab**
+**� Model Health Monitor**
+Ping all your active models at once with the `🏓 Ping All` button. Each model card instantly shows `✅ Xms` (green, responsive) or `❌ error` (red, unreachable). Know which models are alive before you send a prompt.
+
+**🧠 Smart Router**
+Every prompt you send is silently classified into one of 6 categories — `code`, `debug`, `math`, `creative`, `explain`, `general` — using 50+ local regex patterns (0ms, no API call). Airvo then picks the model you’ve configured for that category. Assign your fastest model to `code`, your most powerful to `debug`, etc. A category badge in the chat toolbar shows what was detected.
+
+**⚡ Fallback Chains**
+If the selected model fails (timeout, rate limit, server error), Airvo automatically tries the next active model — transparently and without interrupting the UX. A toast `⚡ Fallback: ModelA → ModelB` appears so you always know what happened.
+
+**↺ Regenerate**
+Not happy with the last response? Click ↺ on any AI message to delete it and resend the exact same prompt, getting a fresh response. Works with Fallback Chains and Smart Router.
+
+**�🏆 Benchmarks Tab**
 Run standardized suites (Speed, Coding, Reasoning, Creativity) or your own custom named suites against all active models. Automatic accuracy scoring for code and logic tasks. Results shown in a leaderboard, radar chart (4 axes: Speed, Tok/s, Accuracy, Consistency), and score history over time. Annotate runs to track what changed between sessions.
 
 **🔌 API Key Test**
@@ -206,6 +226,8 @@ The Airvo dashboard runs at `http://localhost:5000` and lets you manage everythi
 ![Airvo Dashboard - Add Model](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-add-model.png)
 
 **Help page** — full reference guide, field-by-field documentation, FAQ (7 languages).
+
+**Assistant tab** — built-in 🤖 chat for Airvo-specific questions. Streams responses, saves history locally, renders Markdown, shows token count and response time per message.
 
 ![Airvo Dashboard - Help](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-help.png)
 
@@ -398,6 +420,25 @@ Make sure continue.dev is installed in VS Code and that `airvo start` has run at
 ---
 
 ## Changelog
+
+**v0.7.0** — Smart Router + Fallback Chains + Health Monitor + Regenerate
+- **Smart Router** — every prompt is silently classified into one of 6 categories (`code`, `debug`, `math`, `creative`, `explain`, `general`) using 50+ local regex patterns (0ms latency, no API call). Airvo picks the user-configured preferred model for that category. Category badge shown in chat toolbar.
+- **Fallback Chains** — if the chosen model fails (timeout, rate limit, error), Airvo automatically retries with the next active model. SSE event `{"type":"fallback","from":"...","to":"..."}` triggers a `⚡ Fallback: A → B` toast in the UI. All models exhausted → clear error shown.
+- **Model Health Monitor** — `🏓 Ping All` button pings all active models concurrently (`GET /api/health/providers`). Each model card shows a chip: `✅ Xms` or `❌ error`. Useful before a long session to verify availability.
+- **Regenerate button** — ↺ button on the last AI message (only visible when not streaming). Removes the AI reply and resends the user’s last prompt fresh, including fallback chain and smart routing.
+- **New endpoints** — `GET /api/health/providers`, `GET /api/router/categories`, `POST /api/router/classify`.
+- **New module** — `airvo/router/classifier.py` — 6-category prompt classifier, pure Python, zero dependencies beyond stdlib.
+
+**v0.6.0** — Airvo Assistant
+- **Airvo Assistant tab** (🤖) — built-in chat interface dedicated to answering questions about Airvo. Knows the full documentation (HELP.md + ARCHITECTURE.md) and your live configuration state (active models, RAG status, preferences).
+- **Streaming SSE** — responses stream token by token with thinking animation while the model prepares the first token.
+- **Persistent history** — conversations saved to `~/.airvo/chat_history.json` (max 50). Rename, delete individual conversations, or clear all.
+- **Markdown rendering** — bold, italic, inline code, headings, bullet lists, numbered lists, links, horizontal rules, syntax-highlighted code blocks.
+- **Token count** — each response shows token count + response time (e.g. `247 tokens · 1.3s`).
+- **Voice input** — 🎤 microphone button using Web Speech API (Chrome/Edge).
+- **Auto-resize input** — text box grows with multi-line messages.
+- **7 languages** — all UI strings and suggested questions translated.
+- **No active model warning** — clear error state with link to Config if no models are active.
 
 **v0.5.7** — Benchmark suites backend persistence
 - Custom benchmark suites now saved to `~/.airvo/bench_suites.json` via `GET/PUT /api/bench/suites`. Suites survive browser clears, browser changes, and reinstalls.

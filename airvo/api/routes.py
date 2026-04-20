@@ -11,6 +11,7 @@ import time
 from collections import deque
 
 from airvo.config.settings import settings, save_models, MEMORY_MAX_CHARS
+from airvo.router.classifier import classify as _classify_prompt, CATEGORY_META
 
 logger = logging.getLogger(__name__)
 
@@ -618,6 +619,47 @@ async def test_model_connection(req: TestConnectionRequest):
     except Exception as exc:
         return {"ok": False, "error": str(exc)[:200]}
 
+
+@router.get("/api/health/providers", tags=["Models"], summary="Health check all active models",
+    description="Pings every active model concurrently with a 1-token request. Returns status and latency_ms per model.")
+async def health_providers():
+    """Concurrent health ping for every active model."""
+    active = settings.get_active_models()
+
+    async def _ping(model: dict) -> dict:
+        kwargs: dict = {
+            "model":    model["id"],
+            "messages": [{"role": "user", "content": "ok"}],
+            "max_tokens": 1,
+            "stream":   False,
+        }
+        if model.get("api_key"):
+            kwargs["api_key"] = model["api_key"]
+        if model.get("base_url"):
+            kwargs["api_base"] = model["base_url"]
+        start = time.time()
+        try:
+            await litellm.acompletion(**kwargs)
+            return {
+                "model_id":   model["id"],
+                "name":       model.get("name", model["id"]),
+                "provider":   model.get("provider", ""),
+                "ok":         True,
+                "latency_ms": round((time.time() - start) * 1000),
+            }
+        except Exception as exc:
+            return {
+                "model_id":   model["id"],
+                "name":       model.get("name", model["id"]),
+                "provider":   model.get("provider", ""),
+                "ok":         False,
+                "latency_ms": None,
+                "error":      str(exc)[:120],
+            }
+
+    results = await asyncio.gather(*[_ping(m) for m in active])
+    return {"results": list(results)}
+
 # ── Preferences endpoints ─────────────────────────────────────────────────
 
 @router.get("/api/prefs", tags=["Preferences"], summary="Get preferences",
@@ -631,6 +673,36 @@ async def update_prefs(updates: PrefsUpdate):
     data = {k: v for k, v in updates.model_dump().items() if v is not None}
     settings.update_prefs(data)
     return {"ok": True}
+
+# ── Smart Router endpoints ────────────────────────────────────────────────
+
+@router.get("/api/router/categories", tags=["Smart Router"],
+    summary="List all route categories with icon, label, and configured model.")
+async def get_router_categories():
+    """Return all categories + which model (if any) is configured for each."""
+    prefs = settings.get_prefs()
+    cats  = []
+    for key, meta in CATEGORY_META.items():
+        cats.append({
+            "category":  key,
+            "icon":      meta["icon"],
+            "label":     meta["label"],
+            "color":     meta["color"],
+            "model_id":  prefs.get(f"router_{key}"),
+        })
+    return {"categories": cats}
+
+
+class ClassifyRequest(BaseModel):
+    prompt: str
+
+@router.post("/api/router/classify", tags=["Smart Router"],
+    summary="Classify a prompt and return its category.")
+async def classify_prompt(req: ClassifyRequest):
+    cat  = _classify_prompt(req.prompt)
+    meta = CATEGORY_META[cat]
+    return {"category": cat, "icon": meta["icon"], "label": meta["label"]}
+
 
 # ── Stats endpoints ───────────────────────────────────────────────────────
 
@@ -1226,6 +1298,44 @@ async def discovery_add(req: QuickAddRequest):
 _CHAT_HISTORY_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "chat_history.json")
 _MAX_CONVERSATIONS = 50   # keep last 50 conversations
 
+# Airvo docs injected as assistant system prompt
+_DOCS_DIR = os.path.join(os.path.dirname(__file__), "..", "docs")
+
+def _load_airvo_system_prompt() -> str:
+    """Load HELP.md + ARCHITECTURE.md as the assistant's system context."""
+    parts = [
+        "You are the Airvo Assistant — an embedded expert guide for the Airvo tool.",
+        "IMPORTANT RULES:",
+        "1. ONLY answer questions about Airvo, its features, configuration, and usage.",
+        "2. If asked about general Python, AI, or unrelated topics, redirect: 'I'm the Airvo Assistant — I can only help with Airvo-specific questions.'",
+        "3. Always give PRACTICAL, SPECIFIC answers about Airvo — not generic AI/ML theory.",
+        "4. When explaining RAG, always explain it in the context of how Airvo uses it (indexing the project, injecting context into requests to continue.dev).",
+        "5. When explaining models, refer to the Airvo dashboard and configuration flow.",
+        "6. Be concise. Prefer step-by-step instructions over long explanations.",
+        "7. ALWAYS respond in the same language the user writes in. If they write in Spanish, answer in Spanish. If English, answer in English.",
+        "",
+        "AIRVO CONTEXT SUMMARY:",
+        "- Airvo is a local server (default port 5000) that acts as an OpenAI-compatible proxy.",
+        "- Users connect continue.dev (or any OpenAI-compatible client) to Airvo instead of directly to the model provider.",
+        "- Airvo routes requests to the configured models (Groq, OpenAI, Ollama, LMStudio, etc.).",
+        "- RAG: Airvo indexes the user's project files locally (ChromaDB, ~/.airvo/rag/) and injects relevant code fragments into every request automatically.",
+        "- Compare tab: sends the same prompt to multiple models simultaneously and shows results side by side.",
+        "- Smart Memory: project-level context (description, tech stack) always injected into requests.",
+        "- The Airvo dashboard is accessible at http://localhost:5000 (or the port configured with --port).",
+        "- continue.dev config: set apiBase to http://localhost:5000/v1 and model to 'airvo'.",
+        "",
+    ]
+    for fname in ("HELP.md", "ARCHITECTURE.md"):
+        fpath = os.path.normpath(os.path.join(_DOCS_DIR, fname))
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                content = f.read()
+            # Use up to 8000 chars per doc
+            parts.append(f"--- {fname} ---\n{content[:8000]}")
+        except Exception:
+            pass
+    return "\n".join(parts)
+
 
 def _load_chat_history() -> list:
     try:
@@ -1301,13 +1411,20 @@ async def chat_stream(req: ChatSendRequest):
       data: {"type":"done",    "tokens":N, "elapsed_s":X, "conv_id":"...", "title":"..."}
       data: {"type":"error",   "error":"..."}
     """
-    prefs       = settings.prefs
-    active_mods = [m for m in settings.models if m.get("active")]
+    prefs       = settings.get_prefs()
+    active_mods = settings.get_active_models()
 
-    # Choose model: explicit override → agent_model pref → first active
+    # Choose model: explicit override → Smart Router → agent_model pref → first active
+    route_category = _classify_prompt(req.message)
     chosen = None
     if req.model_id:
         chosen = next((m for m in active_mods if m["id"] == req.model_id), None)
+    # Smart Router: check per-category preferred model
+    if not chosen:
+        router_pref_key = f"router_{route_category}"
+        router_model_id = prefs.get(router_pref_key)
+        if router_model_id:
+            chosen = next((m for m in active_mods if m["id"] == router_model_id), None)
     if not chosen and prefs.get("agent_model"):
         chosen = next((m for m in active_mods if m["id"] == prefs["agent_model"]), None)
     if not chosen and active_mods:
@@ -1347,13 +1464,22 @@ async def chat_stream(req: ChatSendRequest):
     # Append the user message
     conv["messages"].append({"role": "user", "content": req.message})
 
-    # Build LiteLLM messages — inject project memory if enabled
+    # Build LiteLLM messages — Airvo assistant system prompt always first
     llm_messages = []
-    system_parts = []
+    # Build live status snapshot for context
+    live_status_lines = ["\nCURRENT USER STATE (live snapshot):"]
+    live_status_lines.append(f"  Active models ({len(active_mods)}):")
+    for m in active_mods:
+        live_status_lines.append(f"    - {m.get('name', m['id'])} [{m['id']}] provider={m.get('provider','?')}")
+    if not active_mods:
+        live_status_lines.append("    (none — user has no active models)")
+    live_status_lines.append(f"  RAG enabled: {prefs.get('rag_enabled', False)}")
+    live_status_lines.append(f"  Memory enabled: {prefs.get('memory_enabled', False)}")
+    live_status_lines.append(f"  max_history_messages: {prefs.get('max_history_messages', 10)}")
+    system_parts = [_load_airvo_system_prompt() + "\n".join(live_status_lines)]
     if prefs.get("memory_enabled") and prefs.get("memory_text", "").strip():
         system_parts.append(prefs["memory_text"].strip()[:MEMORY_MAX_CHARS])
-    if system_parts:
-        llm_messages.append({"role": "system", "content": "\n\n".join(system_parts)})
+    llm_messages.append({"role": "system", "content": "\n\n".join(system_parts)})
 
     # Add conversation history (last N messages for context)
     max_hist = int(prefs.get("max_history_messages", 10))
@@ -1362,43 +1488,68 @@ async def chat_stream(req: ChatSendRequest):
         for m in conv["messages"][-max_hist:]
     ])
 
-    # TPM guard
-    model_id   = chosen["id"]
-    max_tokens = _safe_max_tokens(model_id, int(prefs.get("max_tokens", 1024)))
     temperature = float(prefs.get("temperature", 0.7))
+
+    # ── Fallback chain: chosen model first, then the rest of active models ──
+    fallback_chain = [chosen] + [m for m in active_mods if m["id"] != chosen["id"]]
 
     async def _stream():
         full_response = ""
         start         = time.time()
         token_count   = 0
-        try:
-            kwargs = dict(
-                model       = model_id,
-                messages    = llm_messages,
-                stream      = True,
-                max_tokens  = max_tokens,
-                temperature = temperature,
-            )
-            if chosen.get("api_key"):
-                kwargs["api_key"] = chosen["api_key"]
-            if chosen.get("base_url"):
-                kwargs["base_url"] = chosen["base_url"]
+        used_model    = chosen  # track which model actually responded
 
-            resp = await litellm.acompletion(**kwargs)
-            async for chunk in resp:
-                delta = chunk.choices[0].delta.content or ""
-                if delta:
-                    full_response += delta
-                    token_count   += 1
-                    payload = json.dumps({"type": "delta", "content": delta}, ensure_ascii=False)
-                    yield f"data: {payload}\n\n"
+        for attempt, candidate in enumerate(fallback_chain):
+            cand_id     = candidate["id"]
+            cand_tokens = _safe_max_tokens(cand_id, int(prefs.get("max_tokens", 1024)))
+            full_response = ""
+            token_count   = 0
 
-        except Exception as e:
-            err = json.dumps({"type": "error", "error": str(e)})
-            yield f"data: {err}\n\n"
-            return
+            if attempt > 0:
+                fallback_evt = json.dumps({
+                    "type": "fallback",
+                    "from": fallback_chain[attempt - 1].get("name", fallback_chain[attempt - 1]["id"]),
+                    "to":   candidate.get("name", cand_id),
+                })
+                yield f"data: {fallback_evt}\n\n"
+
+            try:
+                kwargs = dict(
+                    model       = cand_id,
+                    messages    = llm_messages,
+                    stream      = True,
+                    max_tokens  = cand_tokens,
+                    temperature = temperature,
+                )
+                if candidate.get("api_key"):
+                    kwargs["api_key"] = candidate["api_key"]
+                if candidate.get("base_url"):
+                    kwargs["base_url"] = candidate["base_url"]
+
+                resp = await litellm.acompletion(**kwargs)
+                async for chunk in resp:
+                    delta = chunk.choices[0].delta.content or ""
+                    if delta:
+                        full_response += delta
+                        token_count   += 1
+                        payload = json.dumps({"type": "delta", "content": delta}, ensure_ascii=False)
+                        yield f"data: {payload}\n\n"
+
+                used_model = candidate  # success — record which model was used
+                break  # done, don't try next
+
+            except Exception as e:
+                logger.warning("[Fallback] Model %s failed (attempt %d/%d): %s",
+                               cand_id, attempt + 1, len(fallback_chain), e)
+                if attempt == len(fallback_chain) - 1:
+                    # All models exhausted
+                    err = json.dumps({"type": "error", "error": f"All models failed. Last error: {e}"})
+                    yield f"data: {err}\n\n"
+                    return
+                # else: loop continues to next candidate
 
         elapsed = round(time.time() - start, 2)
+        model_id = used_model["id"]  # update to whichever model actually responded
 
         # Persist assistant message
         conv["messages"].append({"role": "assistant", "content": full_response})
@@ -1412,13 +1563,14 @@ async def chat_stream(req: ChatSendRequest):
             pass
 
         done = json.dumps({
-            "type":      "done",
-            "tokens":    token_count,
-            "elapsed_s": elapsed,
-            "conv_id":   conv_id,
-            "title":     conv["title"],
-            "model_id":  model_id,
-            "model_name": chosen.get("name", model_id),
+            "type":           "done",
+            "tokens":         token_count,
+            "elapsed_s":      elapsed,
+            "conv_id":        conv_id,
+            "title":          conv["title"],
+            "model_id":       model_id,
+            "model_name":     used_model.get("name", model_id),
+            "route_category": route_category,
         })
         yield f"data: {done}\n\n"
 

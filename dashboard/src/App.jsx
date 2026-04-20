@@ -106,7 +106,17 @@ const I18N = {
     maxtokens_label:"Max Tokens",
     maxtokens_saved:"Max tokens saved",
     maxhistory_label:"Chat History Limit",
-    maxhistory_sub:"Max messages kept per request. Lower = fewer tokens sent to the model.",
+    maxhistory_sub:"How many previous messages the Assistant carries into each request. Lower = fewer tokens, faster responses. Higher = more context remembered.",
+    assistant_q1:"How do I add an Ollama model?",
+    assistant_q2:"What does the Compare tab do?",
+    assistant_q3:"How does project memory work?",
+    assistant_q4:"Why is my model showing an error?",
+    assistant_no_model:"No active models. Go to",
+    assistant_no_model_link:"Config → Models",
+    assistant_no_model2:"to add and activate a model first.",
+    chat_clear_all:"Clear all",
+    chat_clear_confirm:"Delete all conversations?",
+    chat_regenerate:"Regenerate response",
     maxhistory_saved:"History limit saved",
     memory_label:"Project Context",
     memory_sub:"Write once, injected into every request. Helps Airvo understand your stack without repeating yourself.",
@@ -333,7 +343,7 @@ const I18N = {
     auto_detected:"Auto-detected",
     auto_local_hint:"Local model — no API cost",
     auto_cloud_hint:"Cloud model — API usage billed by provider",
-    nav_chat:"Chat", nav_compare:"Compare", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Assistant", nav_compare:"Compare", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Standardized prompts to measure and compare your models",
     bench_suite_speed:"Speed Test", bench_suite_coding:"Coding", bench_suite_reasoning:"Reasoning", bench_suite_creative:"Creativity",
     bench_run:"Run Benchmark", bench_running:"Running",
@@ -476,7 +486,17 @@ const I18N = {
     maxtokens_label:"Máximo de Tokens",
     maxtokens_saved:"Máximo de tokens guardado",
     maxhistory_label:"Límite de Historial",
-    maxhistory_sub:"Máx. mensajes por request. Más bajo = menos tokens enviados al modelo.",
+    maxhistory_sub:"Cuántos mensajes anteriores lleva el Asistente en cada request. Menor = menos tokens, más rápido. Mayor = más contexto recordado.",
+    assistant_q1:"¿Cómo agrego un modelo de Ollama?",
+    assistant_q2:"¿Para qué sirve la pestaña Compare?",
+    assistant_q3:"¿Cómo funciona la memoria del proyecto?",
+    assistant_q4:"¿Por qué mi modelo muestra un error?",
+    assistant_no_model:"Sin modelos activos. Ve a",
+    assistant_no_model_link:"Config → Modelos",
+    assistant_no_model2:"para agregar y activar un modelo primero.",
+    chat_clear_all:"Borrar todo",
+    chat_clear_confirm:"¿Eliminar todas las conversaciones?",
+    chat_regenerate:"Regenerar respuesta",
     maxhistory_saved:"Límite guardado",
     memory_label:"Contexto del Proyecto",
     memory_sub:"Escribilo una vez, se inyecta en cada request. Ayuda a Airvo a entender tu stack sin repetirlo.",
@@ -677,7 +697,7 @@ const I18N = {
     auto_detected:"Detectado automáticamente",
     auto_local_hint:"Modelo local — sin costo de API",
     auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
-    nav_chat:"Chat", nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Asistente", nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Prompts estandarizados para medir y comparar tus modelos",
     bench_suite_speed:"Test de Velocidad", bench_suite_coding:"Programación", bench_suite_reasoning:"Razonamiento", bench_suite_creative:"Creatividad",
     bench_run:"Ejecutar Benchmark", bench_running:"Ejecutando",
@@ -819,7 +839,16 @@ const I18N = {
     maxtokens_label:"Tokens Maximum",
     maxtokens_saved:"Tokens maximum enregistrés",
     maxhistory_label:"Limite d'Historique",
-    maxhistory_sub:"Nb max de messages par requête. Plus bas = moins de tokens envoyés.",
+    maxhistory_sub:"Nombre de messages précédents envoyés par l'Assistant à chaque requête. Moins = moins de tokens. Plus = plus de contexte mémorisé.",
+    assistant_q1:"Comment ajouter un modèle Ollama ?",
+    assistant_q2:"À quoi sert l'onglet Compare ?",
+    assistant_q3:"Comment fonctionne la mémoire de projet ?",
+    assistant_q4:"Pourquoi mon modèle affiche une erreur ?",
+    assistant_no_model:"Aucun modèle actif. Allez dans",
+    assistant_no_model_link:"Config → Modèles",
+    assistant_no_model2:"pour ajouter et activer un modèle.",
+    chat_clear_all:"Tout effacer",
+    chat_clear_confirm:"Supprimer toutes les conversations ?",
     maxhistory_saved:"Limite enregistrée",
     memory_label:"Contexte du Projet",
     memory_sub:"Écrivez une fois, injecté dans chaque requête. Aide Airvo à comprendre votre stack.",
@@ -1018,7 +1047,7 @@ const I18N = {
     auto_detected:"Détecté automatiquement",
     auto_local_hint:"Modèle local — sans coût d'API",
     auto_cloud_hint:"Modèle cloud — facturation par le fournisseur",
-    nav_chat:"Chat", nav_compare:"Comparer", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Assistant", nav_compare:"Comparer", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Prompts standardisés pour mesurer et comparer vos modèles",
     bench_suite_speed:"Test de Vitesse", bench_suite_coding:"Programmation", bench_suite_reasoning:"Raisonnement", bench_suite_creative:"Créativité",
     bench_run:"Lancer le Benchmark", bench_running:"En cours",
@@ -1160,7 +1189,17 @@ const I18N = {
     maxtokens_label:"Maximale Token",
     maxtokens_saved:"Maximale Token gespeichert",
     maxhistory_label:"Verlaufslimit",
-    maxhistory_sub:"Max. Nachrichten pro Anfrage. Niedriger = weniger gesendete Token.",
+    maxhistory_sub:"Wie viele vorherige Nachrichten der Assistent pro Anfrage mitsendet. Niedriger = weniger Token, schneller. Höher = mehr Kontext.",
+    assistant_q1:"Wie füge ich ein Ollama-Modell hinzu?",
+    assistant_q2:"Wofür ist der Compare-Tab?",
+    assistant_q3:"Wie funktioniert das Projektgedächtnis?",
+    assistant_q4:"Warum zeigt mein Modell einen Fehler?",
+    assistant_no_model:"Keine aktiven Modelle. Gehe zu",
+    assistant_no_model_link:"Config → Modelle",
+    assistant_no_model2:"um ein Modell hinzuzufügen und zu aktivieren.",
+    chat_clear_all:"Alles löschen",
+    chat_clear_confirm:"Alle Gespräche löschen?",
+    chat_regenerate:"Antwort neu generieren",
     maxhistory_saved:"Limit gespeichert",
     memory_label:"Projektkontext",
     memory_sub:"Einmal schreiben, in jede Anfrage eingefügt. Hilft Airvo, Ihren Stack zu verstehen.",
@@ -1359,7 +1398,7 @@ const I18N = {
     auto_detected:"Automatisch erkannt",
     auto_local_hint:"Lokales Modell — keine API-Kosten",
     auto_cloud_hint:"Cloud-Modell — Abrechnung durch den Anbieter",
-    nav_chat:"Chat", nav_compare:"Vergleich", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Assistent", nav_compare:"Vergleich", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Standardisierte Prompts zum Messen und Vergleichen Ihrer Modelle",
     bench_suite_speed:"Geschwindigkeitstest", bench_suite_coding:"Programmierung", bench_suite_reasoning:"Schlussfolgerung", bench_suite_creative:"Kreativität",
     bench_run:"Benchmark starten", bench_running:"Läuft",
@@ -1501,7 +1540,17 @@ const I18N = {
     maxtokens_label:"最大 Token 数",
     maxtokens_saved:"最大 Token 数已保存",
     maxhistory_label:"历史记录限制",
-    maxhistory_sub:"每次请求保留的最大消息数。越小发送的 token 越少。",
+    maxhistory_sub:"助手每次请求携带的历史消息数。越小越快，越大上下文记忆越多。",
+    assistant_q1:"如何添加 Ollama 模型？",
+    assistant_q2:"Compare 页签有什么用？",
+    assistant_q3:"项目记忆是如何工作的？",
+    assistant_q4:"为什么我的模型显示错误？",
+    assistant_no_model:"无活跃模型，请前往",
+    assistant_no_model_link:"设置 → 模型",
+    assistant_no_model2:"添加并激活一个模型。",
+    chat_clear_all:"清除全部",
+    chat_clear_confirm:"删除所有对话？",
+    chat_regenerate:"重新生成回答",
     maxhistory_saved:"限制已保存",
     memory_label:"项目上下文",
     memory_sub:"写一次，注入每个请求。帮助 Airvo 了解您的技术栈。",
@@ -1700,7 +1749,7 @@ const I18N = {
     auto_detected:"自动检测",
     auto_local_hint:"本地模型 — 无 API 费用",
     auto_cloud_hint:"云端模型 — 由提供商计费",
-    nav_chat:"聊天", nav_compare:"对比", nav_stats:"统计", nav_bench:"基准测试",
+    nav_chat:"助手", nav_compare:"对比", nav_stats:"统计", nav_bench:"基准测试",
     bench_title:"基准测试", bench_sub:"标准化提示词，用于测量和比较您的模型",
     bench_suite_speed:"速度测试", bench_suite_coding:"编程", bench_suite_reasoning:"推理", bench_suite_creative:"创意",
     bench_run:"运行基准测试", bench_running:"运行中",
@@ -1842,7 +1891,17 @@ const I18N = {
     maxtokens_label:"最大トークン数",
     maxtokens_saved:"最大トークン数を保存しました",
     maxhistory_label:"履歴制限",
-    maxhistory_sub:"リクエストごとの最大メッセージ数。小さいほど送信トークンが少なくなります。",
+    maxhistory_sub:"アシスタントが各リクエストで送る過去のメッセージ数。少ない=高速、多い=より多くのコンテキストを記憶。",
+    assistant_q1:"Ollamaモデルの追加方法は？",
+    assistant_q2:"Compareタブは何のため？",
+    assistant_q3:"プロジェクトメモリの仕組みは？",
+    assistant_q4:"モデルにエラーが出るのはなぜ？",
+    assistant_no_model:"アクティブなモデルがありません。",
+    assistant_no_model_link:"設定 → モデル",
+    assistant_no_model2:"でモデルを追加・有効化してください。",
+    chat_clear_all:"全て溈す",
+    chat_clear_confirm:"全ての会話を削除しますか？",
+    chat_regenerate:"回答を再生成",
     maxhistory_saved:"制限を保存しました",
     memory_label:"プロジェクトコンテキスト",
     memory_sub:"一度書くと、すべてのリクエストに注入されます。Airvoがあなたのスタックを理解するのに役立ちます。",
@@ -2041,7 +2100,7 @@ const I18N = {
     auto_detected:"自動検出",
     auto_local_hint:"ローカルモデル — APIコストなし",
     auto_cloud_hint:"クラウドモデル — プロバイダーによる課金",
-    nav_chat:"チャット", nav_compare:"比較", nav_stats:"統計", nav_bench:"ベンチマーク",
+    nav_chat:"アシスタント", nav_compare:"比較", nav_stats:"統計", nav_bench:"ベンチマーク",
     bench_title:"ベンチマーク", bench_sub:"モデルを測定・比較するための標準化されたプロンプト",
     bench_suite_speed:"スピードテスト", bench_suite_coding:"コーディング", bench_suite_reasoning:"推論", bench_suite_creative:"創造性",
     bench_run:"ベンチマーク実行", bench_running:"実行中",
@@ -2183,7 +2242,17 @@ const I18N = {
     maxtokens_label:"Máximo de Tokens",
     maxtokens_saved:"Máximo de tokens salvo",
     maxhistory_label:"Limite do Histórico",
-    maxhistory_sub:"Máx. mensagens por requisição. Menor = menos tokens enviados ao modelo.",
+    maxhistory_sub:"Quantas mensagens anteriores o Assistente carrega em cada request. Menor = menos tokens, mais rápido. Maior = mais contexto lembrado.",
+    assistant_q1:"Como adiciono um modelo Ollama?",
+    assistant_q2:"Para que serve a aba Compare?",
+    assistant_q3:"Como funciona a memória do projeto?",
+    assistant_q4:"Por que meu modelo está com erro?",
+    assistant_no_model:"Nenhum modelo ativo. Vá em",
+    assistant_no_model_link:"Config → Modelos",
+    assistant_no_model2:"para adicionar e ativar um modelo primeiro.",
+    chat_clear_all:"Limpar tudo",
+    chat_clear_confirm:"Excluir todas as conversas?",
+    chat_regenerate:"Regenerar resposta",
     maxhistory_saved:"Limite salvo",
     memory_label:"Contexto do Projeto",
     memory_sub:"Escreva uma vez, injetado em cada requisição. Ajuda o Airvo a entender seu stack.",
@@ -2382,7 +2451,7 @@ const I18N = {
     auto_detected:"Detectado automaticamente",
     auto_local_hint:"Modelo local — sem custo de API",
     auto_cloud_hint:"Modelo cloud — faturamento pelo provedor",
-    nav_chat:"Chat", nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
+    nav_chat:"Assistente", nav_compare:"Comparar", nav_stats:"Stats", nav_bench:"Benchmarks",
     bench_title:"Benchmarks", bench_sub:"Prompts padronizados para medir e comparar seus modelos",
     bench_suite_speed:"Teste de Velocidade", bench_suite_coding:"Programação", bench_suite_reasoning:"Raciocínio", bench_suite_creative:"Criatividade",
     bench_run:"Executar Benchmark", bench_running:"Executando",
@@ -2665,6 +2734,7 @@ const css = `
   .chat-cursor { display:inline-block; animation:blink 1s step-start infinite; color:var(--accent); }
   .chat-copy-btn { background:transparent; border:1px solid var(--border); border-radius:6px; color:var(--text2); font-size:12px; padding:2px 8px; cursor:pointer; transition:all .1s; align-self:flex-end; }
   .chat-copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .chat-token-meta { font-family:var(--mono); font-size:10px; color:var(--text2); opacity:0.7; }
 
   .chat-input-area { padding:12px 16px 16px; border-top:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
   .chat-input-row { display:flex; gap:8px; align-items:flex-end; }
@@ -2674,6 +2744,12 @@ const css = `
   .chat-send-btn { border-radius:10px; padding:10px 16px; font-size:18px; line-height:1; height:42px; flex-shrink:0; }
   .chat-mic-btn { border-radius:10px; padding:8px 12px; font-size:16px; height:42px; flex-shrink:0; transition:all .15s; }
   .chat-mic-active { border-color:var(--red) !important; color:var(--red) !important; animation:pulse 1s infinite; }
+  .chat-thinking { display:flex; align-items:center; gap:5px; padding:14px 16px !important; }
+  .chat-thinking-dot { width:7px; height:7px; border-radius:50%; background:var(--text2); display:inline-block; animation:chatBounce 1.2s ease-in-out infinite; }
+  .chat-thinking-dot:nth-child(1) { animation-delay:0s; }
+  .chat-thinking-dot:nth-child(2) { animation-delay:.2s; }
+  .chat-thinking-dot:nth-child(3) { animation-delay:.4s; }
+  @keyframes chatBounce { 0%,80%,100%{transform:scale(.6);opacity:.4} 40%{transform:scale(1);opacity:1} }
 `;
 
 function getProviderClass(p) {
@@ -2747,6 +2823,74 @@ function LangDropdown({ lang, setLang }) {
       )}
     </div>
   );
+}
+
+/** Render inline markdown: **bold**, *italic*, `code`, links */
+function renderInline(text) {
+  const parts = [];
+  // Split on bold, italic, inline-code, links
+  const re = /(\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`|\[([^\]]+)\]\(([^)]+)\))/g;
+  let last = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    if (m[2] !== undefined)      parts.push(<strong key={m.index}>{m[2]}</strong>);
+    else if (m[3] !== undefined) parts.push(<em key={m.index}>{m[3]}</em>);
+    else if (m[4] !== undefined) parts.push(<code key={m.index} style={{ background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:4, padding:"1px 5px", fontFamily:"var(--mono)", fontSize:"0.88em" }}>{m[4]}</code>);
+    else if (m[5] !== undefined) parts.push(<a key={m.index} href={m[6]} target="_blank" rel="noreferrer" style={{ color:"var(--accent)" }}>{m[5]}</a>);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts.length ? parts : [text];
+}
+
+/** Render a plain text block as structured markdown (headings, lists, paragraphs) */
+function renderMarkdownText(text, keyPrefix) {
+  const lines = text.split("\n");
+  const out = [];
+  let listBuf = [];
+  let i = 0;
+
+  function flushList() {
+    if (!listBuf.length) return;
+    out.push(
+      <ul key={`${keyPrefix}-ul-${i}`} style={{ margin:"6px 0 6px 0", paddingLeft:20, listStyle:"disc" }}>
+        {listBuf.map((item, j) => <li key={j} style={{ lineHeight:1.7 }}>{renderInline(item)}</li>)}
+      </ul>
+    );
+    listBuf = [];
+  }
+
+  for (const line of lines) {
+    // Headings
+    const h3 = line.match(/^###\s+(.+)/);
+    const h2 = line.match(/^##\s+(.+)/);
+    const h1 = line.match(/^#\s+(.+)/);
+    // List item
+    const li = line.match(/^[-*+]\s+(.+)/) || line.match(/^\d+\.\s+(.+)/);
+    // Horizontal rule
+    const hr = line.match(/^---+$/);
+
+    if (h1 || h2 || h3) {
+      flushList();
+      const txt = (h1 || h2 || h3)[1];
+      const sz  = h1 ? 17 : h2 ? 15 : 13;
+      out.push(<div key={`${keyPrefix}-h-${i}`} style={{ fontWeight:700, fontSize:sz, marginTop:10, marginBottom:3, color:"var(--text)" }}>{renderInline(txt)}</div>);
+    } else if (li) {
+      listBuf.push(li[1]);
+    } else if (hr) {
+      flushList();
+      out.push(<hr key={`${keyPrefix}-hr-${i}`} style={{ border:"none", borderTop:"1px solid var(--border)", margin:"10px 0" }} />);
+    } else if (line.trim() === "") {
+      flushList();
+      out.push(<div key={`${keyPrefix}-br-${i}`} style={{ height:6 }} />);
+    } else {
+      flushList();
+      out.push(<p key={`${keyPrefix}-p-${i}`} style={{ margin:"3px 0", lineHeight:1.75 }}>{renderInline(line)}</p>);
+    }
+    i++;
+  }
+  flushList();
+  return out;
 }
 
 function parseBlocks(text) {
@@ -3016,6 +3160,8 @@ export default function AirvoDashboard() {
   const [loading, setLoading]  = useState(true);
   const [prefs, setPrefs]      = useState(null);
   const [stats, setStats]      = useState({});
+  const [providerHealth, setProviderHealth] = useState({}); // model_id -> {ok, latency_ms, error}
+  const [pinging, setPinging]  = useState(false);
   const [ragStatus, setRagStatus]       = useState(null);
   const [ragIndexing, setRagIndexing]   = useState(false);
   const [ragAdvanced, setRagAdvanced]   = useState(false);
@@ -3453,7 +3599,7 @@ export default function AirvoDashboard() {
             {[
               { id:"models",  icon:"◈", label:t("nav_models"), badge:models.length||null },
               { id:"status",  icon:"◎", label:t("nav_status")  },
-              { id:"chat",    icon:"💬", label:t("nav_chat")    },
+              { id:"chat",    icon:"🤖", label:t("nav_chat")    },
               { id:"compare", icon:"⊞", label:t("nav_compare") },
               { id:"stats",   icon:"📊", label:t("nav_stats")  },
               { id:"bench",   icon:"🏆", label:t("nav_bench")  },
@@ -3515,9 +3661,28 @@ export default function AirvoDashboard() {
             {loading
               ? <div className="empty">{t("loading_models")}</div>
               : <>
+                  <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:10, gap:8, alignItems:"center" }}>
+                    {pinging && <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>Pinging…</span>}
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      style={{ fontFamily:"var(--mono)", fontSize:11 }}
+                      disabled={pinging}
+                      onClick={async () => {
+                        setPinging(true);
+                        try {
+                          const r = await fetch(`${API}/api/health/providers`);
+                          const d = await r.json();
+                          const map = {};
+                          for (const item of (d.results || [])) map[item.model_id] = item;
+                          setProviderHealth(map);
+                        } catch { /* offline */ }
+                        setPinging(false);
+                      }}
+                    >🏓 Ping All</button>
+                  </div>
                   <div className="models-grid">
                     {configured.map(m => (
-                      <ModelCard key={m.id} model={m} t={t} stats={stats[m.id]}
+                      <ModelCard key={m.id} model={m} t={t} stats={stats[m.id]} health={providerHealth[m.id]}
                         onToggle={() => toggleModel(m.id, m.active)}
                         onSaveKey={key => saveKey(m.id, key)}
                         onDelete={() => deleteModel(m.id)}
@@ -4424,6 +4589,27 @@ export default function AirvoDashboard() {
                 </select>
               </div>
 
+              {/* Smart Router */}
+              <div className="card">
+                <div className="card-title">🧠 Smart Router</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", margin:"0 0 14px 0", lineHeight:1.6 }}>
+                  Assign a preferred model per prompt category. When no model is assigned, the default active model is used.
+                </p>
+                {[{key:"code",icon:"💻",label:"Code"},{key:"debug",icon:"🐛",label:"Debug"},{key:"math",icon:"🔢",label:"Math"},{key:"creative",icon:"🎨",label:"Creative"},{key:"explain",icon:"📖",label:"Explain"},{key:"general",icon:"💬",label:"General"}].map(cat => (
+                  <div key={cat.key} style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                    <span style={{ fontFamily:"var(--mono)", fontSize:12, width:90, flexShrink:0 }}>{cat.icon} {cat.label}</span>
+                    <select className="form-input" style={{ flex:1, fontSize:11 }}
+                      value={prefs[`router_${cat.key}`] ?? ""}
+                      onChange={e => { updatePrefs({ [`router_${cat.key}`]: e.target.value || null }); toast("Smart Router saved ✓", "success"); }}>
+                      <option value="">Auto</option>
+                      {(health?.active_models ?? []).map(id => (
+                        <option key={id} value={id}>{id}</option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+              </div>
+
               {/* Temperature */}
               <div className="card">
                 <div className="card-title">{t("temp_label")}</div>
@@ -4472,6 +4658,11 @@ export default function AirvoDashboard() {
                   <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)" }}>
                     messages &nbsp;<span style={{ color: (prefs.max_history_messages ?? 10) <= 6 ? "var(--green)" : (prefs.max_history_messages ?? 10) <= 14 ? "var(--yellow)" : "var(--red)" }}>●</span>
                   </span>
+                </div>
+                <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", marginTop:10, lineHeight:1.8 }}>
+                  <span style={{ color:"var(--green)" }}>2–6</span> · fast, low cost &nbsp;|&nbsp;
+                  <span style={{ color:"var(--yellow)" }}>8–14</span> · balanced &nbsp;|&nbsp;
+                  <span style={{ color:"var(--red)" }}>16+</span> · deep context, more tokens
                 </div>
               </div>
 
@@ -4796,7 +4987,7 @@ export default function AirvoDashboard() {
   );
 }
 
-function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete, onSaveNotes }) {
+function ModelCard({ model, t, stats, health, onToggle, onSaveKey, onDelete, onSaveNotes }) {
   const [keyInput,  setKeyInput]  = useState("");
   const [showKey,   setShowKey]   = useState(false);
   const [testState, setTestState] = useState(null); // null | "testing" | {ok, latency_ms, error}
@@ -4824,7 +5015,20 @@ function ModelCard({ model, t, stats, onToggle, onSaveKey, onDelete, onSaveNotes
           <div className="model-name">{model.name}</div>
           <div className="model-id">{model.id}</div>
         </div>
-        <span className={`provider-badge ${getProviderClass(model.provider)}`}>{model.provider}</span>
+        <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:6 }}>
+          <span className={`provider-badge ${getProviderClass(model.provider)}`}>{model.provider}</span>
+          {health && (
+            <span style={{
+              fontFamily:"var(--mono)", fontSize:10, fontWeight:600,
+              color: health.ok ? "var(--green)" : "var(--red)",
+              background: health.ok ? "rgba(80,200,120,.12)" : "rgba(220,80,80,.12)",
+              border: `1px solid ${health.ok ? "var(--green)" : "var(--red)"}`,
+              borderRadius:4, padding:"2px 6px", lineHeight:1.4,
+            }}>
+              {health.ok ? `✅ ${health.latency_ms}ms` : "❌ timeout"}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Notes: inline edit */}
@@ -6418,23 +6622,26 @@ function HelpPage({ t, setPage }) {
 // Native dashboard chat with conversation history, SSE streaming, mic input
 // ══════════════════════════════════════════════════════════════════════════════
 function ChatPage({ t, activeModels, prefs }) {
-  const [conversations, setConversations] = React.useState([]);
-  const [activeConvId,  setActiveConvId]  = React.useState(null);
-  const [messages,      setMessages]      = React.useState([]);
-  const [input,         setInput]         = React.useState("");
-  const [streaming,     setStreaming]      = React.useState(false);
-  const [streamContent, setStreamContent] = React.useState("");
-  const [selectedModel, setSelectedModel] = React.useState("");
-  const [listening,     setListening]     = React.useState(false);
-  const [showHistory,   setShowHistory]   = React.useState(true);
-  const [renaming,      setRenaming]      = React.useState(null); // conv_id being renamed
-  const [renameVal,     setRenameVal]     = React.useState("");
-  const bottomRef   = React.useRef(null);
-  const textareaRef = React.useRef(null);
-  const recognRef   = React.useRef(null);
+  const [conversations, setConversations] = useState([]);
+  const [activeConvId,  setActiveConvId]  = useState(null);
+  const [messages,      setMessages]      = useState([]);
+  const [input,         setInput]         = useState("");
+  const [streaming,     setStreaming]      = useState(false);
+  const [streamContent, setStreamContent] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
+  const [listening,     setListening]     = useState(false);
+  const [showHistory,   setShowHistory]   = useState(true);
+  const [renaming,      setRenaming]      = useState(null);
+  const [renameVal,     setRenameVal]     = useState("");
+  const [activeModelName, setActiveModelName] = useState("");
+  const [routeCategory,   setRouteCategory]   = useState(null); // {icon, label, color}
+  const [fallbackNote,  setFallbackNote]  = useState(null); // {from, to}
+  const bottomRef   = useRef(null);
+  const textareaRef = useRef(null);
+  const recognRef   = useRef(null);
 
   // ── Load conversation list ───────────────────────────────────────────────
-  const loadHistory = React.useCallback(async () => {
+  const loadHistory = useCallback(async () => {
     try {
       const res  = await fetch("/api/chat/history");
       const data = await res.json();
@@ -6442,10 +6649,10 @@ function ChatPage({ t, activeModels, prefs }) {
     } catch { /* server offline */ }
   }, []);
 
-  React.useEffect(() => { loadHistory(); }, [loadHistory]);
+  useEffect(() => { loadHistory(); }, [loadHistory]);
 
   // ── Auto-scroll to bottom on new messages ───────────────────────────────
-  React.useEffect(() => {
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streamContent]);
 
@@ -6474,6 +6681,8 @@ function ChatPage({ t, activeModels, prefs }) {
     const userMsg = { role: "user", content: text };
     setMessages(prev => [...prev, userMsg]);
     setInput("");
+    // Reset textarea height
+    if (textareaRef.current) { textareaRef.current.style.height = "auto"; }
     setStreaming(true);
     setStreamContent("");
 
@@ -6492,24 +6701,175 @@ function ChatPage({ t, activeModels, prefs }) {
       const reader  = res.body.getReader();
       const decoder = new TextDecoder();
       let   full    = "";
+      let   buf     = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        const lines = decoder.decode(value).split("\n");
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop(); // keep incomplete last line
         for (const line of lines) {
           if (!line.startsWith("data: ")) continue;
-          const evt = JSON.parse(line.slice(6));
+          const raw = line.slice(6).trim();
+          if (!raw) continue;
+          let evt;
+          try { evt = JSON.parse(raw); } catch { continue; }
 
           if (evt.type === "delta") {
             full += evt.content;
             setStreamContent(full);
+          } else if (evt.type === "fallback") {
+            setFallbackNote({ from: evt.from, to: evt.to });
+            setTimeout(() => setFallbackNote(null), 5000);
           } else if (evt.type === "done") {
-            // Finalize
-            setMessages(prev => [...prev, { role: "assistant", content: full }]);
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0 }]);
             setStreamContent("");
             setActiveConvId(evt.conv_id);
-            // Refresh conversation list and update this conv's messages in place
+            if (evt.model_name) setActiveModelName(evt.model_name);
+            if (evt.route_category) {
+              const CATS = { code:{icon:"💻",color:"#4a9eff"}, debug:{icon:"🐛",color:"#ff6b6b"}, math:{icon:"🔢",color:"#ffd93d"}, creative:{icon:"🎨",color:"#c084fc"}, explain:{icon:"📖",color:"#6bcb77"}, general:{icon:"💬",color:"#94a3b8"} };
+              setRouteCategory({ label: evt.route_category, ...(CATS[evt.route_category] || CATS.general) });
+            }
+            const res2  = await fetch("/api/chat/history");
+            const data2 = await res2.json();
+            setConversations(data2.conversations || []);
+          } else if (evt.type === "error") {
+            setMessages(prev => [...prev, { role: "assistant", content: `⚠ ${evt.error}` }]);
+            setStreamContent("");
+          }
+        }
+      }
+    } catch (err) {
+      setMessages(prev => [...prev, { role: "assistant", content: `⚠ Connection error: ${err.message}` }]);
+      setStreamContent("");
+    } finally {
+      setStreaming(false);
+    }
+  }
+
+  // ── Regenerate last AI response ────────────────────────────────────────
+  async function regenerate() {
+    if (streaming) return;
+    // Find last user message
+    const lastUser = [...messages].reverse().find(m => m.role === "user");
+    if (!lastUser) return;
+    // Remove last AI message
+    setMessages(prev => {
+      const copy = [...prev];
+      for (let i = copy.length - 1; i >= 0; i--) {
+        if (copy[i].role === "assistant") { copy.splice(i, 1); break; }
+      }
+      return copy;
+    });
+    setStreaming(true);
+    setStreamContent("");
+    try {
+      const body = {
+        message:         lastUser.content,
+        conversation_id: activeConvId || undefined,
+        model_id:        selectedModel || undefined,
+        regenerate:      true,
+      };
+      const res = await fetch("/api/chat/stream", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(body),
+      });
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder();
+      let   full    = "";
+      let   buf     = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const raw = line.slice(6).trim();
+          if (!raw) continue;
+          let evt;
+          try { evt = JSON.parse(raw); } catch { continue; }
+          if (evt.type === "delta") {
+            full += evt.content;
+            setStreamContent(full);
+          } else if (evt.type === "done") {
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0 }]);
+            setStreamContent("");
+            setActiveConvId(evt.conv_id);
+            if (evt.model_name) setActiveModelName(evt.model_name);
+            const res2  = await fetch("/api/chat/history");
+            const data2 = await res2.json();
+            setConversations(data2.conversations || []);
+          } else if (evt.type === "error") {
+            setMessages(prev => [...prev, { role: "assistant", content: `⚠ ${evt.error}` }]);
+            setStreamContent("");
+          }
+        }
+      }
+    } catch (err) {
+      setMessages(prev => [...prev, { role: "assistant", content: `⚠ Connection error: ${err.message}` }]);
+      setStreamContent("");
+    } finally {
+      setStreaming(false);
+    }
+  }
+
+  // ── Regenerate last AI response ───────────────────────────────────────────
+  async function regenerate() {
+    if (streaming) return;
+    const lastUser = [...messages].reverse().find(m => m.role === "user");
+    if (!lastUser) return;
+    // Remove last AI message
+    setMessages(prev => {
+      const copy = [...prev];
+      for (let i = copy.length - 1; i >= 0; i--) {
+        if (copy[i].role === "assistant") { copy.splice(i, 1); break; }
+      }
+      return copy;
+    });
+    setStreaming(true);
+    setStreamContent("");
+    try {
+      const body = {
+        message:         lastUser.content,
+        conversation_id: activeConvId || undefined,
+        model_id:        selectedModel || undefined,
+      };
+      const res = await fetch("/api/chat/stream", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(body),
+      });
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder();
+      let   full    = "";
+      let   buf     = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const raw = line.slice(6).trim();
+          if (!raw) continue;
+          let evt;
+          try { evt = JSON.parse(raw); } catch { continue; }
+          if (evt.type === "delta") {
+            full += evt.content;
+            setStreamContent(full);
+          } else if (evt.type === "fallback") {
+            setFallbackNote({ from: evt.from, to: evt.to });
+            setTimeout(() => setFallbackNote(null), 5000);
+          } else if (evt.type === "done") {
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0 }]);
+            setStreamContent("");
+            setActiveConvId(evt.conv_id);
+            if (evt.model_name) setActiveModelName(evt.model_name);
             const res2  = await fetch("/api/chat/history");
             const data2 = await res2.json();
             setConversations(data2.conversations || []);
@@ -6566,15 +6926,15 @@ function ChatPage({ t, activeModels, prefs }) {
       return;
     }
     const recog = new SR();
-    recog.continuous     = false;
+    recog.continuous     = true;
     recog.interimResults = true;
-    recog.lang           = "en-US";
+    recog.lang           = navigator.language || "en-US";
     recognRef.current    = recog;
 
     recog.onresult = (ev) => {
       const transcript = Array.from(ev.results)
         .map(r => r[0].transcript).join("");
-      setInput(transcript);
+      setInput(prev => transcript);
     };
     recog.onend   = () => setListening(false);
     recog.onerror = () => setListening(false);
@@ -6588,26 +6948,39 @@ function ChatPage({ t, activeModels, prefs }) {
   }
 
   // ── Render a single message bubble ───────────────────────────────────────
-  function MessageBubble({ msg, isStreaming }) {
+  function renderBubble(msg, isStreaming, key) {
     const isUser = msg.role === "user";
     const blocks = parseBlocks(msg.content || "");
     return (
-      <div className={`chat-bubble ${isUser ? "chat-bubble-user" : "chat-bubble-ai"}`}>
+      <div key={key} className={`chat-bubble ${isUser ? "chat-bubble-user" : "chat-bubble-ai"}`}>
         <div className="chat-bubble-role">{isUser ? "You" : "AI"}</div>
         <div className="chat-bubble-content">
           {blocks.map((b, i) =>
             b.type === "code"
-              ? <CodeBlock key={i} code={b.code} lang={b.lang} />
-              : <p key={i} style={{ margin:"4px 0", lineHeight:1.7 }}>{b.text}</p>
+              ? <CodeBlock key={i} block={b} t={t} />
+              : <div key={i}>{renderMarkdownText(b.content, `${key}-${i}`)}</div>
           )}
           {isStreaming && <span className="chat-cursor">▌</span>}
         </div>
         {!isUser && !isStreaming && (
-          <button
-            className="chat-copy-btn"
-            onClick={() => copyMsg(msg.content)}
-            title="Copy"
-          >⎘</button>
+          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+            <button
+              className="chat-copy-btn"
+              onClick={() => copyMsg(msg.content)}
+              title="Copy"
+            >⎘</button>
+            {key === messages.length - 1 && !streaming && (
+              <button
+                className="chat-copy-btn"
+                onClick={regenerate}
+                title={t("chat_regenerate")}
+                style={{ fontSize:14 }}
+              >↺</button>
+            )}
+            {msg.tokens > 0 && (
+              <span className="chat-token-meta">{msg.tokens} tokens · {msg.elapsed_s ? msg.elapsed_s.toFixed(1)+"s" : ""}</span>
+            )}
+          </div>
         )}
       </div>
     );
@@ -6617,6 +6990,18 @@ function ChatPage({ t, activeModels, prefs }) {
 
   return (
     <div className="chat-layout">
+
+      {/* ── Fallback toast ────────────────────────────────────────────── */}
+      {fallbackNote && (
+        <div style={{
+          position:"fixed", bottom:80, left:"50%", transform:"translateX(-50%)",
+          background:"var(--accent)", color:"#fff", padding:"8px 18px",
+          borderRadius:8, fontSize:13, zIndex:9999, boxShadow:"0 4px 16px rgba(0,0,0,.3)",
+          display:"flex", alignItems:"center", gap:8,
+        }}>
+          ⚡ Fallback: <b>{fallbackNote.from}</b> → <b>{fallbackNote.to}</b>
+        </div>
+      )}
 
       {/* ── Sidebar: conversation history ─────────────────────────────── */}
       <div className={`chat-sidebar ${showHistory ? "" : "chat-sidebar-hidden"}`}>
@@ -6679,6 +7064,21 @@ function ChatPage({ t, activeModels, prefs }) {
               )}
             </div>
           ))}
+          {conversations.length > 0 && (
+            <div style={{ padding:"10px 12px", borderTop:"1px solid var(--border)" }}>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ width:"100%", color:"var(--danger,#e05c5c)", fontSize:11, fontFamily:"var(--mono)" }}
+                onClick={async () => {
+                  if (!window.confirm(t("chat_clear_confirm"))) return;
+                  await fetch("/api/chat/history", { method: "DELETE" });
+                  setConversations([]);
+                  setActiveModelName("");
+                  newConversation();
+                }}
+              >🗑 {t("chat_clear_all")}</button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -6699,40 +7099,63 @@ function ChatPage({ t, activeModels, prefs }) {
               ? conversations.find(c => c.id === activeConvId)?.title || "Chat"
               : "New conversation"}
           </div>
-          {/* Model selector */}
-          <select
-            value={selectedModel}
-            onChange={e => setSelectedModel(e.target.value)}
-            style={{ fontFamily:"var(--mono)", fontSize:11, background:"var(--bg3)", color:"var(--text1)", border:"1px solid var(--border)", borderRadius:6, padding:"4px 8px" }}
-          >
-            <option value="">Auto (best active)</option>
-            {activeModels.map(m => (
-              <option key={m.id} value={m.id}>{m.name}</option>
-            ))}
-          </select>
+          <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:6, padding:"4px 10px" }}>
+            🤖 {activeModelName || (activeModels && activeModels[0]?.name) || "Airvo Assistant"}
+          </div>
+          {routeCategory && (
+            <div title={`Smart Router: ${routeCategory.label}`} style={{ fontFamily:"var(--mono)", fontSize:10, color:"#fff", background:routeCategory.color+"33", border:`1px solid ${routeCategory.color}`, borderRadius:6, padding:"4px 8px", cursor:"default" }}>
+              {routeCategory.icon} {routeCategory.label}
+            </div>
+          )}
         </div>
 
         {/* Messages */}
         <div className="chat-messages">
           {messages.length === 0 && !streaming && (
             <div className="chat-empty">
-              <div style={{ fontSize:40, marginBottom:12 }}>💬</div>
-              <div style={{ fontSize:16, fontWeight:700, marginBottom:8 }}>Start a conversation</div>
-              <div style={{ fontSize:12, color:"var(--text2)", fontFamily:"var(--mono)", maxWidth:360, textAlign:"center", lineHeight:1.8 }}>
-                Ask anything — your project context and RAG settings apply automatically.
-              </div>
+              <div style={{ fontSize:40, marginBottom:12 }}>🤖</div>
+              <div style={{ fontSize:16, fontWeight:700, marginBottom:8 }}>Airvo Assistant</div>
+              {activeModels && activeModels.length === 0 ? (
+                <div style={{ fontSize:12, color:"var(--danger,#e05c5c)", fontFamily:"var(--mono)", maxWidth:380, textAlign:"center", lineHeight:1.9, background:"var(--bg2)", border:"1px solid var(--danger,#e05c5c)", borderRadius:8, padding:"12px 16px" }}>
+                  ⚠️ {t("assistant_no_model")} <strong>{t("assistant_no_model_link")}</strong> {t("assistant_no_model2")}
+                </div>
+              ) : (
+                <>
+                  <div style={{ fontSize:12, color:"var(--text2)", fontFamily:"var(--mono)", maxWidth:380, textAlign:"center", lineHeight:1.9 }}>
+                    Ask me anything about Airvo — how to add models, configure RAG,
+                    use Compare, troubleshoot errors, or understand any feature.
+                  </div>
+                  <div style={{ marginTop:20, display:"flex", flexDirection:"column", gap:8, width:"100%", maxWidth:380 }}>
+                    {[t("assistant_q1"), t("assistant_q2"), t("assistant_q3"), t("assistant_q4")].map(q => (
+                      <button key={q} onClick={() => setInput(q)}
+                        style={{ background:"var(--bg2)", border:"1px solid var(--border)", borderRadius:8, padding:"8px 14px",
+                          color:"var(--text2)", fontFamily:"var(--mono)", fontSize:11, cursor:"pointer", textAlign:"left",
+                          transition:"all .15s" }}
+                        onMouseOver={e=>e.currentTarget.style.borderColor="var(--accent)"}
+                        onMouseOut={e=>e.currentTarget.style.borderColor="var(--border)"}
+                      >{q}</button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
 
-          {messages.map((msg, i) => (
-            <MessageBubble key={i} msg={msg} isStreaming={false} />
-          ))}
+          {messages.map((msg, i) => renderBubble(msg, false, i))}
 
-          {streaming && streamContent && (
-            <MessageBubble
-              msg={{ role: "assistant", content: streamContent }}
-              isStreaming={true}
-            />
+          {streaming && streamContent && renderBubble(
+            { role: "assistant", content: streamContent }, true, "stream"
+          )}
+
+          {streaming && !streamContent && (
+            <div className="chat-bubble chat-bubble-ai">
+              <div className="chat-bubble-role">AI</div>
+              <div className="chat-bubble-content chat-thinking">
+                <span className="chat-thinking-dot" />
+                <span className="chat-thinking-dot" />
+                <span className="chat-thinking-dot" />
+              </div>
+            </div>
           )}
 
           <div ref={bottomRef} />
@@ -6754,9 +7177,14 @@ function ChatPage({ t, activeModels, prefs }) {
             <textarea
               ref={textareaRef}
               className="chat-textarea"
-              placeholder="Message… (Enter to send, Shift+Enter for newline)"
+              placeholder="Ask about Airvo… (Enter to send, Shift+Enter for newline)"
               value={input}
-              onChange={e => setInput(e.target.value)}
+              onChange={e => {
+                setInput(e.target.value);
+                // auto-resize
+                e.target.style.height = "auto";
+                e.target.style.height = Math.min(e.target.scrollHeight, 200) + "px";
+              }}
               onKeyDown={handleKeyDown}
               rows={1}
               disabled={streaming}

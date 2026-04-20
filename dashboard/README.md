@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.2.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.7.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -132,6 +132,9 @@ See requests and tokens used per model — all stored locally. Know exactly what
 **🌍 7 Languages**
 Dashboard available in English, Español, Français, Deutsch, 中文, 日本語, Português.
 
+**🤖 Airvo Assistant**
+Built-in chat interface in the dashboard for asking anything about Airvo — setup, features, troubleshooting. Streams responses, saves history locally (`~/.airvo/chat_history.json`), renders Markdown, shows token count per response.
+
 **🔌 VS Code Native**
 Works through continue.dev — chat, edit, and apply code changes without leaving your editor.
 
@@ -173,6 +176,8 @@ The Airvo dashboard runs at `http://localhost:5000` and lets you manage everythi
 ![Airvo Dashboard - Add Model](airvo/docs/assets/screenshot-add-model.png)
 
 **Help page** — full reference guide, field-by-field documentation, FAQ.
+
+**Assistant tab** — built-in 🤖 chat for Airvo-specific questions. Streams responses, saves conversation history, renders Markdown.
 
 ![Airvo Dashboard - Help](airvo/docs/assets/screenshot-help.png)
 

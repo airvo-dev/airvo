@@ -1,6 +1,6 @@
 # Airvo — Architecture Guide
 
-> **Version 0.3.7** · Last updated: April 2026
+> **Version 0.7.0** · Last updated: April 2026
 >
 > This document explains _how_ the system works and _why_ each design decision was made.
 > It is intended for any developer who wants to understand, extend, or contribute to Airvo.
@@ -22,6 +22,9 @@
    - 5.6 [discovery/ — Model Discovery](#56-discovery--model-discovery)
    - 5.7 [cli.py — Command-Line Interface](#57-clipy--command-line-interface)
    - 5.8 [Dashboard (React)](#58-dashboard-react)
+   - 5.9 [router/ — Smart Router & Prompt Classifier](#59-router--smart-router--prompt-classifier)
+   - 5.10 [Compare Tab — Architecture & Data Flow](#510-compare-tab--architecture--data-flow)
+   - 5.11 [Benchmarks Tab — Architecture & Persistence](#511-benchmarks-tab--architecture--persistence)
 6. [Multi-Model Modes](#6-multi-model-modes)
 7. [TPM Guard — Rate Limit Protection](#7-tpm-guard--rate-limit-protection)
 8. [Security](#8-security)
@@ -107,7 +110,7 @@ airvo/
 ├── cli.py                   # Typer CLI — `airvo start`, `airvo config`, `airvo version`
 ├── server.py                # FastAPI app, CORS, middleware, static files
 ├── api/
-│   └── routes.py            # ALL endpoints + multi-model orchestration (807 lines)
+│   └── routes.py            # ALL endpoints + multi-model orchestration + fallback chains
 ├── config/
 │   └── settings.py          # Settings singleton, file I/O, defaults (312 lines)
 ├── rag/
@@ -118,6 +121,9 @@ airvo/
 │   └── memory_manager.py     # Memory pressure analysis + suggestions (145 lines)
 ├── discovery/
 │   └── discoverer.py         # Ollama catalog + OpenRouter API (160 lines)
+├── router/
+│   ├── __init__.py           # Package marker
+│   └── classifier.py         # Prompt classifier — 6 categories, 0ms latency (~80 lines)
 ├── dashboard/                # Pre-built React SPA (served as static files)
 │   └── dist/
 └── docs/
@@ -125,7 +131,7 @@ airvo/
 
 dashboard/                    # React 19 + Vite source (development)
 ├── src/
-│   ├── App.jsx               # Single-file dashboard (2943 lines, 7 languages)
+│   ├── App.jsx               # Single-file dashboard (~7100 lines, 7 languages)
 │   └── main.jsx
 ├── vite.config.js
 └── package.json
@@ -852,7 +858,7 @@ def detect_continue_dev() -> bool:
 
 **Purpose:** A web UI for managing models, preferences, and monitoring system health.
 
-**Tech:** React 19, Vite, no external UI libraries. Single `App.jsx` file (2943 lines).
+**Tech:** React 19, Vite, no external UI libraries. Single `App.jsx` file (~7100 lines).
 
 **Key features:**
 
@@ -866,6 +872,13 @@ def detect_continue_dev() -> bool:
 | **Hardware Monitor** | RAM bar, GPU info, Ollama loaded models, unload button |
 | **Model Discovery** | Browse Ollama catalog + OpenRouter models, quick-add |
 | **Agent Model Selector** | Choose which model handles tool calls (Agent/Plan mode) |
+| **Compare Tab** | Side-by-side prompt comparison across all models, word-level diff, export |
+| **Benchmarks Tab** | Standardized suites, radar chart, score history, custom suites |
+| **Airvo Assistant** | Built-in chat interface for Airvo documentation and configuration help. Streams responses, persists history to `~/.airvo/chat_history.json`, renders Markdown, shows token count. Context includes full docs + live user state. |
+| **Fallback Chains** | If the selected model fails (timeout, rate limit, error), Airvo automatically retries with the next active model. A toast `⚡ Fallback: A → B` is shown in the chat UI. |
+| **Model Health Monitor** | `🏓 Ping All` button pings every active model concurrently. Each model card shows a live chip: `✅ 45ms` (green) or `❌ error` (red). |
+| **Smart Router** | Classifies the prompt into one of 6 categories (`code`, `debug`, `math`, `creative`, `explain`, `general`) using 0ms local regex patterns. Selects the user-configured preferred model for that category. Badge shown in chat toolbar. Config per category in the Configuration tab. |
+| **Regenerate** | ↺ button on the last AI message — removes it and resends the same user prompt with a fresh SSE stream. |
 | **Usage Stats** | Per-model request count and token usage |
 | **Configuration** | Temperature, max tokens, history limit, system prompt |
 | **Help Page** | Setup guide, keyboard shortcuts, FAQ |
@@ -894,6 +907,180 @@ The dashboard divides models into two sections:
 - **💡 Suggestions:** Inactive models with no API key. These are templates showing what's available. Users can configure them or remove them.
 
 This separation keeps the active surface clean: a user with many model templates can see at a glance which models are actually doing work, without being distracted by unconfigured suggestions.
+
+---
+
+### 5.9 router/ — Smart Router & Prompt Classifier
+
+**File:** `airvo/router/classifier.py`
+
+Classifies incoming prompts into one of 6 categories using pure regex — zero API calls, 0ms latency.
+
+| Category | Keywords / patterns |
+|---|---|
+| `code` | write, implement, function, class, loop, script, algorithm … |
+| `debug` | fix, error, bug, exception, traceback, doesn’t work, broken … |
+| `math` | calculate, solve, equation, probability, derivative, integral … |
+| `creative` | story, poem, essay, creative, brainstorm, imagine … |
+| `explain` | explain, what is, how does, describe, summarize, difference … |
+| `general` | (default fallback) |
+
+**API:**
+
+```python
+from airvo.router.classifier import classify, CATEGORY_META
+
+category = classify("write a Python function")
+# → "code"
+
+meta = CATEGORY_META[category]
+# → {"icon": "💻", "label": "Code", "color": "#7c6dfa"}
+```
+
+**Integration in `routes.py`:**
+
+```python
+route_category = _classify_prompt(req.message)
+# Look up router_<category> pref → preferred model
+# If not configured, fall back to agent_model / first active
+```
+
+**Fallback chain execution:**
+
+```python
+fallback_chain = [chosen] + [m for m in active_mods if m["id"] != chosen["id"]]
+for attempt, candidate in enumerate(fallback_chain):
+    try:
+        # stream response ...
+        break
+    except Exception:
+        if attempt < len(fallback_chain) - 1:
+            yield sse_json({"type": "fallback", "from": candidate["id"], "to": fallback_chain[attempt+1]["id"]})
+        else:
+            yield sse_json({"type": "error", "error": "All models failed"})
+```
+
+---
+
+### 5.10 Compare Tab — Architecture & Data Flow
+
+The Compare tab sends a single prompt to every active model simultaneously and streams all responses in parallel to the browser. It is completely independent from the continue.dev chat path.
+
+#### Endpoints
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/api/compare/run` | Run a comparison from the dashboard UI. Body: `{"prompt": "..."}`. Calls all active models via `call_model()` and stores the result. |
+| `POST` | `/api/compare/stream` | Same as `/run` but responses are streamed as SSE. Each model's tokens arrive as `{"type":"delta","model":"...","content":"..."}`. |
+| `GET` | `/api/compare/latest` | Returns the last stored comparison result. |
+| `GET` | `/api/compare/history` | Returns the last 10 comparison runs. |
+| `DELETE` | `/api/compare/history` | Clears all compare history. |
+
+#### SSE event stream for `/api/compare/stream`
+
+Each model sends a stream of events independently:
+
+```
+data: {"type": "delta",  "model": "groq/llama-3.3-70b-versatile", "content": "The answer"}
+data: {"type": "done",   "model": "groq/llama-3.3-70b-versatile", "tokens": 87, "elapsed_s": 0.9, "tps": 96.7}
+data: {"type": "error",  "model": "ollama/llama3", "error": "Connection refused"}
+```
+
+The frontend opens **one SSE connection per model** concurrently, accumulates the `delta` events into each model's card, and shows the `done` metadata (tokens, tok/s) when the stream closes.
+
+#### Persistence
+
+Comparison results are stored in memory as a `collections.deque` (max 10 entries) and serialized to `~/.airvo/compare_history.json` after every run:
+
+```python
+_HISTORY_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "compare_history.json")
+_compare_store: deque = _load_history()  # loaded on server start
+```
+
+History survives server restarts. The file grows linearly — each entry includes the full prompt and all model responses.
+
+#### Word-level diff (frontend, `App.jsx`)
+
+The diff is computed entirely in the browser when the user pins a response card:
+
+```javascript
+function computeWordDiff(results, pinnedIdx) {
+  const ref = tokenize(results[pinnedIdx].content);
+  return results.map((r, i) => {
+    if (i === pinnedIdx) return r;  // pinned card: no diff
+    const tokens = tokenize(r.content);
+    // LCS-based word diff against ref
+    return { ...r, diffTokens: lcs(ref, tokens) };
+  });
+}
+```
+
+Each word gets a label: `same`, `added`, `removed`. The card renders with inline CSS highlights.
+
+#### Why store history on the server, not in the browser?
+
+Compare results can be large (several models × full responses). LocalStorage has a 5–10 MB limit and is easily cleared. Storing in `~/.airvo/compare_history.json` means history survives browser changes, clears, and updates to the dashboard code.
+
+---
+
+### 5.11 Benchmarks Tab — Architecture & Persistence
+
+The Benchmarks tab runs standardized prompt suites against all active models and produces objective scores. No external benchmark harness is used — everything runs through the same `call_model()` path as regular chat.
+
+#### Built-in suites
+
+The four built-in suites (`speed`, `coding`, `reasoning`, `creativity`) are defined as constants in `App.jsx`:
+
+```javascript
+const BENCH_SUITES = {
+  speed:     { prompts: ["Say hello", "Count to 10", "What is 2+2?"] },
+  coding:    { prompts: [{q:"FizzBuzz in Python",    expected:"FizzBuzz"},
+                         {q:"Check palindrome",       expected:"racecar"},
+                         {q:"Fibonacci sequence",     expected:"55"}] },
+  reasoning: { prompts: [{q:"All cats have tails...", expected:"Whiskers"},
+                         {q:"What comes next: 2,4,8", expected:"16"}] },
+  creativity:{ prompts: ["Write a 2-sentence story about a robot"] },
+};
+```
+
+For prompts with an `expected` field, the model's response is checked for containment (`response.includes(expected)`) to produce `✓` / `❌`.
+
+#### Scoring formula
+
+Composite score per model, 0–100:
+
+```
+score = (
+  accuracy_pct   × 0.40   // fraction of ✓ answers out of all validated prompts
+  + tps_score    × 0.25   // tok/s normalized to the fastest model in the run
+  + length_score × 0.20   // output length normalized
+  + consistency  × 0.15   // 1 − (std_dev / mean) for response times
+) × 100
+```
+
+Models that error on a prompt receive 0 for accuracy and 0 for that prompt's length and tps.
+
+#### Custom suites — backend persistence
+
+User-created suites are stored server-side:
+
+```python
+_BENCH_SUITES_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "bench_suites.json")
+```
+
+Endpoints:
+- `GET /api/bench/suites` — returns the full dict of all user suites
+- `PUT /api/bench/suites` — replaces the entire dict (body: `{"My Suite": {"prompts": [...]}}`)
+
+**Migration from localStorage:** on first dashboard load after v0.5.7, if the browser has suites in `localStorage["bench_suites"]`, they are automatically sent to the server via `PUT /api/bench/suites` and then cleared from `localStorage`. This ensures suites survive browser changes.
+
+#### Score history
+
+Each run result is appended to `localStorage["bench_history"]` in the browser (max 20 entries per suite). The history chart reads from this key. The server only stores the suite *definitions*, not the run *results*. This is an intentional split: suite definitions must survive browser clears; run history is ephemeral and device-local.
+
+#### Radar chart
+
+After any run with 2+ models, the frontend renders a radar chart with 4 axes: Speed, Tok/s, Accuracy, Consistency. It is drawn using a pure-SVG implementation inside `App.jsx` (no chart library dependency). Each axis is normalized 0–100.
 
 ---
 
@@ -1043,7 +1230,7 @@ if _char_cap:
 
 ## 9. API Reference
 
-Base URL: `http://127.0.0.1:8765` (default dev port) or `http://localhost:5000` (default `airvo start`).
+Base URL: `http://localhost:5000` (default `airvo start`).
 
 ### OpenAI-Compatible Endpoints
 
@@ -1061,8 +1248,9 @@ Base URL: `http://127.0.0.1:8765` (default dev port) or `http://localhost:5000` 
 | `POST` | `/api/models` | Add a new model. Body: `NewModel`. |
 | `PATCH` | `/api/models/{id}/toggle` | Toggle active/inactive. Query param: `active=true\|false`. |
 | `PATCH` | `/api/models/{id}/key` | Set API key. Query param: `api_key=sk-...`. |
-| `PATCH` | `/api/models/{id}` | Update model fields. Body: `ModelUpdate`. |
+| `PATCH` | `/api/models/{id}` | Update model fields (name, base_url, notes, etc.). Body: `ModelUpdate` (partial). |
 | `DELETE` | `/api/models/{id}` | Delete a model permanently. |
+| `POST` | `/api/model-test` | Test a model's API key. Body: `{"model_id": "groq/..."}`. Returns `{"ok": true, "latency_ms": 312}` or `{"ok": false, "error": "invalid_api_key"}`. Sends a real 5-token request to the provider. |
 
 ### Preferences
 
@@ -1101,6 +1289,49 @@ Base URL: `http://127.0.0.1:8765` (default dev port) or `http://localhost:5000` 
 | `GET` | `/api/discovery/ollama` | Curated Ollama catalog with `installed` and `fits_ram` flags. |
 | `GET` | `/api/discovery/openrouter` | OpenRouter models (cached 5 min). Query: `limit=60`. |
 | `POST` | `/api/discovery/add` | Quick-add a discovered model to Airvo settings. Body: `QuickAddRequest`. |
+
+### Compare
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/api/compare/run` | Run a comparison (non-streaming). Sends prompt to all active models, stores result. Body: `{"prompt": "..."}`. |
+| `POST` | `/api/compare/stream` | Run a comparison with SSE streaming. One stream per model. Events: `delta` (token), `done` (tokens, elapsed_s, tps), `error`. |
+| `GET` | `/api/compare/latest` | Get the most recent comparison result. |
+| `GET` | `/api/compare/history` | Get the last 10 comparison runs. |
+| `DELETE` | `/api/compare/history` | Clear all compare history (memory + `compare_history.json`). |
+
+### Benchmarks
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/bench/suites` | Get all user-defined benchmark suites from `~/.airvo/bench_suites.json`. |
+| `PUT` | `/api/bench/suites` | Replace all user-defined suites. Body: dict of suite name → suite definition. |
+
+### Airvo Assistant (Chat)
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/chat/history` | List all saved conversations (id, title, model, message count, timestamps). |
+| `DELETE` | `/api/chat/history` | Delete all conversations. |
+| `GET` | `/api/chat/history/{id}` | Get full message list for a conversation. |
+| `DELETE` | `/api/chat/history/{id}` | Delete a single conversation. |
+| `PATCH` | `/api/chat/history/{id}/title` | Rename a conversation. Body: `{"title": "New name"}`. |
+| `POST` | `/api/chat/stream` | Send a message and stream the assistant response as SSE. Body: `{"message": "...", "conversation_id": "..."}`. SSE events: `delta` (streaming token), `done` (conv_id, title, model_id, model_name, tokens, elapsed_s), `error`. |
+
+**Persistence:** conversations are stored in `~/.airvo/chat_history.json` (max 50). Each conversation holds full message history.
+
+**System prompt:** the assistant receives the full HELP.md + ARCHITECTURE.md (up to 8 000 chars each) plus a live snapshot of the user's active models, RAG state, and preferences before every request.
+
+**SSE event types** (in addition to `delta`, `done`, `error`):
+- `fallback` — `{"type": "fallback", "from": "model-a", "to": "model-b"}` — emitted when a model fails and the next candidate takes over.
+
+### Health & Smart Router (v0.7)
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/api/health/providers` | Pings all active models concurrently. Returns `{model_id: {ok, latency_ms, error}}`. |
+| `GET` | `/api/router/categories` | Lists the 6 prompt categories and the model configured for each (`router_{category}` pref). |
+| `POST` | `/api/router/classify` | Classifies a prompt. Body: `{"message": "..."}`. Returns `{category, icon, label, color}`. |
 
 ### Interactive API Documentation
 
@@ -1176,7 +1407,63 @@ FastAPI auto-generates interactive docs at:
 }
 ```
 
-### `~/.continue/config.yaml` (auto-generated by `airvo start`)
+### `~/.airvo/chat_history.json`
+
+```json
+[
+  {
+    "id": "conv_a1b2c3",
+    "title": "How to add an Ollama model",
+    "model": "groq/llama-3.3-70b-versatile",
+    "model_name": "Llama 3.3 70B (Groq)",
+    "created_at": 1713456789,
+    "updated_at": 1713456820,
+    "messages": [
+      {"role": "user",      "content": "How do I add an Ollama model?"},
+      {"role": "assistant", "content": "To add an Ollama model..."}
+    ]
+  }
+]
+```
+
+Maximum 50 conversations. Oldest are removed when the limit is reached.
+
+### `~/.airvo/bench_suites.json`
+
+```json
+{
+  "My SQL suite": {
+    "prompts": [
+      {"q": "Write a SQL query to find duplicate emails", "expected": "GROUP BY"},
+      {"q": "Explain what a CTE is", "expected": null}
+    ]
+  },
+  "TypeScript basics": {
+    "prompts": [
+      {"q": "What is a union type?", "expected": null}
+    ]
+  }
+}
+```
+
+All user-created benchmark suites. Created/updated via `PUT /api/bench/suites`. Survives browser clears and reinstalls.
+
+### `~/.airvo/compare_history.json`
+
+```json
+[
+  {
+    "prompt": "Implement a binary search in Python",
+    "timestamp": 1713456789,
+    "results": [
+      {"model": "groq/llama-3.3-70b-versatile", "content": "...", "tokens": 124, "elapsed_s": 0.9},
+      {"model": "ollama/codellama",              "content": "...", "tokens": 98,  "elapsed_s": 3.1}
+    ]
+  }
+]
+```
+
+Last 10 comparison runs. Updated after every `POST /api/compare/run` or `/api/compare/stream`.
 
 ```yaml
 name: Local Config

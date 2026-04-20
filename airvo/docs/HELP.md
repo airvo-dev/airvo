@@ -1,6 +1,6 @@
 # Airvo — Complete User Guide
 
-> **Version:** 0.3.7 · **Language:** English (reference version)
+> **Version:** 0.7.0 · **Language:** English (reference version)
 > This document is the master reference for the Airvo dashboard Help page. It covers everything you need to get the most out of Airvo.
 
 ---
@@ -18,9 +18,13 @@
 9. [Agent / Plan Mode](#9-agent--plan-mode)
 10. [Project Context](#10-project-context)
 11. [Chat History Limit](#11-chat-history-limit)
-12. [Troubleshooting — When things go wrong](#12-troubleshooting--when-things-go-wrong)
-13. [FAQ — Frequently Asked Questions](#13-faq--frequently-asked-questions)
-14. [Pro Tips & Best Practices](#14-pro-tips--best-practices)
+12. [Airvo Assistant](#12-airvo-assistant)
+13. [Compare Tab — Side-by-side model comparison](#13-compare-tab--side-by-side-model-comparison)
+14. [Benchmarks Tab — Measure and rank your models](#14-benchmarks-tab--measure-and-rank-your-models)
+15. [v0.7 Features — Smart Router, Fallback Chains, Health Monitor](#15-v07-features--smart-router-fallback-chains-health-monitor)
+16. [Troubleshooting — When things go wrong](#16-troubleshooting--when-things-go-wrong)
+17. [FAQ — Frequently Asked Questions](#17-faq--frequently-asked-questions)
+18. [Pro Tips & Best Practices](#18-pro-tips--best-practices)
 
 ---
 
@@ -40,7 +44,7 @@ Your editor (VS Code)
         │  HTTP  (continue.dev protocol)
         ▼
 ┌──────────────────┐
-│   Airvo Server   │  ← port 8765, running on your machine
+│   Airvo Server   │  ← port 5000 (default), running on your machine
 │   (FastAPI)      │
 └────────┬─────────┘
          │
@@ -85,13 +89,13 @@ airvo start
 
 You'll see:
 ```
-✓ Airvo server running at http://127.0.0.1:8765
-  Dashboard: http://127.0.0.1:8765
+✓ Airvo server running at http://127.0.0.1:5000
+  Dashboard: http://127.0.0.1:5000
 ```
 
 ### Step 3 — Open the dashboard
 
-In your browser: **http://127.0.0.1:8765**
+In your browser: **http://localhost:5000**
 
 ### Step 4 — Add your first model
 
@@ -114,7 +118,7 @@ In your continue.dev `config.json`:
       "title": "Airvo",
       "provider": "openai",
       "model": "airvo",
-      "apiBase": "http://127.0.0.1:8765",
+      "apiBase": "http://localhost:5000",
       "apiKey": "airvo"
     }
   ]
@@ -200,6 +204,48 @@ http://localhost:1234    → LM Studio (default port)
 ```
 
 For all cloud providers (Groq, OpenAI, Anthropic, etc.) leave this field **empty** — LiteLLM already knows the correct URL for each one.
+
+### 🔌 API Key Test
+
+**What it is:** A button on every model card that sends a minimal 5-token request to the provider and shows the result.
+
+**How to use it:**
+1. Go to **Models**
+2. On any model card, click the **🔌 Test** button (only visible for models that have an API key configured)
+3. You'll see one of two results:
+   - `✓ 312ms` — the key is valid and the model is reachable
+   - `✗ invalid_api_key` (or similar error) — something is wrong
+
+**When to use it:**
+- After entering a new API key to verify it before starting a session
+- When a model is showing errors to diagnose whether the key is the problem
+- After generating a new key in the provider's console
+
+**Why it makes a real request (not just validation):** The only reliable test is an actual API call. A key that passes format validation can still fail because it's revoked, from the wrong project, or past its quota.
+
+---
+
+### ✎ Model Notes
+
+**What it is:** A freeform text field per model card where you can write personal reminders.
+
+**How to use it:**
+1. On any model card, click the **✎ Edit notes** icon
+2. Type your reminder: context limit, pricing tier, best use case, renewal date
+3. Click Save — notes are persisted in `~/.airvo/models.json`
+
+**Useful examples:**
+```
+Free tier: 6k TPM. Resets every minute. Best for fast code snippets.
+```
+```
+Paid — $0.003/1k tokens. Only use for reasoning-heavy tasks.
+```
+```
+Local 7B. Slow on CPU but 100% private. Use for confidential code.
+```
+
+Notes appear directly on the model card so you can read them at a glance without having to look anything up.
 
 ---
 
@@ -543,7 +589,387 @@ Airvo keeps the full history in your editor. It only sends the **last N messages
 
 ---
 
-## 12. Troubleshooting — When things go wrong
+## 12. Airvo Assistant
+
+The **Airvo Assistant** is a built-in AI chat interface in the dashboard, designed exclusively to answer questions about Airvo itself — how it works, how to configure it, how to troubleshoot it.
+
+> It is **not** a generic ChatGPT replacement. It only answers Airvo-related questions. For coding tasks, use continue.dev in VS Code as usual.
+
+---
+
+### How to access it
+
+Click the **🤖 Assistant** tab in the top navigation bar of the dashboard.
+
+---
+
+### What it can help with
+
+| Topic | Example questions |
+|---|---|
+| **Adding models** | "How do I add an Ollama model?" · "Where do I get a Groq API key?" |
+| **Feature explanations** | "What does the Compare tab do?" · "How does project memory work?" |
+| **Troubleshooting** | "Why is my model showing an error?" · "Why does RAG not find my code?" |
+| **Configuration** | "What is the Chat History Limit?" · "How do I enable Smart Memory?" |
+| **Architecture** | "How does Vote mode work?" · "How does Airvo route requests?" |
+
+The assistant has access to the full Airvo documentation (HELP.md + ARCHITECTURE.md) and to your **live configuration state** (which models are active, whether RAG is enabled, current preferences). This means it can give you answers specific to *your* setup, not just generic documentation.
+
+---
+
+### Features
+
+**Conversation history**
+- All conversations are saved locally at `~/.airvo/chat_history.json`
+- Maximum 50 conversations stored
+- You can rename, delete individual conversations, or clear all history
+- History survives server restarts and browser refreshes
+
+**Streaming responses**
+- Responses stream in real-time, word by word, just like a regular chat
+- A pulsing "thinking" animation appears while the model is preparing the first token
+
+**Markdown rendering**
+- Responses render full Markdown: **bold**, *italic*, `inline code`, headings, bullet lists, numbered lists, links, and horizontal rules
+- Code blocks are syntax-highlighted with a copy button
+
+**Token count**
+- Each response shows the token count and response time (e.g. `247 tokens · 1.3s`)
+- Useful for understanding how much context a question consumes
+
+**Model display**
+- The toolbar badge shows which model is currently responding
+- Uses the first active model by default (the same model used for continue.dev requests)
+
+**Voice input**
+- Click the 🎤 microphone button to dictate your question (requires a browser that supports the Web Speech API — Chrome/Edge on desktop)
+
+**Auto-resizing input**
+- The text box grows automatically as you type multi-line questions
+
+**7 languages**
+- The Assistant tab is available in all 7 dashboard languages: English, Español, Français, Deutsch, 中文, 日本語, Português
+- The assistant itself responds in whatever language you write in
+
+---
+
+### Context the assistant sees
+
+Before every message, the assistant receives:
+
+```
+[Full HELP.md — up to 8000 chars]
+[Full ARCHITECTURE.md — up to 8000 chars]
+
+CURRENT USER STATE (live snapshot):
+  Active models (2):
+    - Llama 3.3 70B [groq/llama-3.3-70b-versatile] provider=groq
+    - Llama 3.2 3B [ollama/llama3.2:3b] provider=ollama
+  RAG enabled: True
+  Memory enabled: False
+  max_history_messages: 10
+```
+
+This means the assistant knows your exact configuration and can give precise, contextual answers — not generic advice.
+
+---
+
+### Assistant History Limit
+
+The **Assistant History Limit** (configured in Configuration → Assistant History Limit) controls how many previous messages from the assistant conversation are sent to the model on each request.
+
+| Range | Effect |
+|---|---|
+| 🟢 2–6 | Fast, minimal token usage |
+| 🟡 8–14 | Balanced — follows multi-turn conversations well |
+| 🔴 16+ | Deep context — more tokens per request |
+
+**Default: 10.** Lower this if you are using a model with a small context window or a tight rate limit.
+
+---
+
+### What the assistant will NOT do
+
+- Answer general programming questions unrelated to Airvo
+- Help with tasks in your codebase (use continue.dev in VS Code for that)
+- Access the internet or external resources
+- Execute commands or modify your configuration
+
+If you ask an off-topic question, the assistant will redirect you: *"I'm the Airvo Assistant — I can only help with Airvo-specific questions."*
+
+---
+
+## 13. Compare Tab — Side-by-side model comparison
+
+### What it is
+
+The **Compare** tab lets you send a single prompt to all your active models at once and see their responses stream in side by side. It's the fastest way to evaluate model quality, cost, and speed for a specific task.
+
+> This is separate from continue.dev. It lives entirely in the Airvo dashboard and doesn't affect your editor workflow.
+
+---
+
+### How to use it
+
+1. Click the **⇆ Compare** tab in the dashboard navigation
+2. Type your prompt in the prompt box
+3. Click **Run** (or press Enter)
+4. All active models stream their responses in parallel, card by card
+5. Use the controls to explore the results
+
+---
+
+### What you see
+
+**Response cards**
+Each active model gets its own card, showing:
+- **Model name** and provider badge
+- **Streaming response** — tokens appear as the model generates them
+- **Response time** (total seconds to complete)
+- **Token count** and **tok/s** — tokens per second, a measure of raw speed
+- **Copy** button — copies the full response text
+
+**Sorting**
+- By default, cards reorder as responses arrive (fastest model first)
+- Use the **Sort by** control to lock to **Arrival time** or **Token count**
+
+---
+
+### Word-level Diff
+
+The most powerful feature of the Compare tab. Once two or more responses have arrived:
+
+1. **Pin** one response (click the 📌 icon on a card)
+2. All other cards immediately show a word-level diff against the pinned response:
+   - 🟩 **Green highlight** — word present in the pinned response but different from this one
+   - 🟥 **Red highlight** — word in this response but not in the pinned one
+   - **No highlight** — identical to the pinned response
+
+**Why it's useful:**
+- You instantly see where models disagree — not just that they disagree, but exactly which words differ
+- Great for factual questions: pinned = the model you trust most, red = deviations to investigate
+- Great for code: spot where one model used a different function name, library, or pattern
+
+**To remove the diff:** click the 📌 icon again to unpin.
+
+---
+
+### Exporting results
+
+Click **Export** on any comparison run to save results as Markdown.
+
+The exported file includes:
+- The prompt
+- All model responses in full
+- Metadata: model name, tokens, time, tok/s per response
+- Timestamp of the run
+
+Useful for sharing with teammates, keeping notes on model evaluation, or feeding results into a report.
+
+---
+
+### History
+
+The Compare tab keeps the **last 10 runs** in memory and persists them to `~/.airvo/compare_history.json`. 
+
+- Use the **History** dropdown (if available) to re-load a past comparison
+- History survives server restarts
+- Click **Clear history** to wipe all stored comparisons
+
+---
+
+### Tips
+
+- **For evaluating code quality:** use a tricky algorithm problem. Diff immediately shows which models deviate from the consensus approach.
+- **For evaluating instruction-following:** ask a model to respond in a specific format (JSON, bullet points). Diff shows who follows and who improvises.
+- **For debugging rate limits:** if one model's card shows an error instead of a response, that model hit its rate limit. The others still complete normally.
+- **Tok/s badge:** lower tok/s means the model is thinking more (larger models) or the provider is slower. Use Race mode in continue.dev if you find one model is always fastest here.
+
+---
+
+## 14. Benchmarks Tab — Measure and rank your models
+
+### What it is
+
+The **Benchmarks** tab runs standardized test suites against all your active models and gives them objective scores: speed, accuracy, reasoning quality, and creativity. Think of it as a personal leaderboard for the exact models you're using.
+
+> Results are specific to *your hardware and your API keys* — not generic internet benchmarks. A model's score here reflects actual performance in your setup.
+
+---
+
+### Built-in suites
+
+| Suite | What it tests | Auto-validated? |
+|---|---|---|
+| **Speed** | Time to first token, tok/s, total latency | — (objective) |
+| **Coding** | FizzBuzz, palindrome check, Fibonacci | ✅ Yes — output is checked for correctness |
+| **Reasoning** | Syllogism, sequence completion, math word problem | ✅ Yes — answer compared to expected |
+| **Creativity** | Open-ended creative prompts | 📊 Length + consistency score |
+
+---
+
+### How to run a benchmark
+
+1. Click the **🏅 Benchmarks** tab
+2. Select a suite from the **Suite** dropdown (Speed, Coding, Reasoning, Creativity, or a custom suite)
+3. Optionally: add a **run annotation** — a short note about this run (e.g. `"after upgrading Ollama"`, `"with RAG disabled"`)
+4. Click **Run Suite**
+5. Watch each model run each prompt in the suite sequentially
+6. See the **Leaderboard**, **Radar chart**, and **Per-prompt results** when the run completes
+
+---
+
+### Reading the results
+
+**Leaderboard**
+
+After a run, models are ranked by composite score (0–100):
+
+| Component | Weight | What it measures |
+|---|---|---|
+| **Accuracy** | Highest | Whether the model got the right answer (validated prompts only) |
+| **Speed (tok/s)** | High | How fast the model generates text |
+| **Output quality** | Medium | Length, coherence |
+| **Consistency** | Medium | Low variance across runs |
+
+Models that fail on a prompt get 0 for that prompt's accuracy component.
+
+**Per-prompt results table**
+
+Below the leaderboard you'll find a table with each model × each prompt:
+- ✅ = correct answer
+- ❌ = wrong answer or error
+- Time in seconds + token count per cell
+
+**Radar chart**
+
+When 2 or more models are compared, a radar chart shows the 4 axes (Speed, Tok/s, Accuracy, Consistency) for each model on the same plot. Great for seeing at a glance which model is balanced vs. which specializes.
+
+**Score history**
+
+Every time you run a suite, the composite score is added to the history chart. After 3+ runs on the same suite you can see a trend line per model:
+- Did updating Ollama improve or hurt speed?
+- Did switching from llama3 to llama3.1 improve accuracy?
+- Is one model consistently better on Monday than Friday? (hint: Groq free tier congestion)
+
+Hover over any dot to see the run date, score, and your annotation.
+
+---
+
+### Custom suites
+
+You can create your own benchmark suites with your own prompts.
+
+**Creating a custom suite:**
+1. Go to **Benchmarks** → click **+ New Suite**
+2. Give it a name (e.g. `"My SQL queries"`, `"TypeScript edge cases"`)
+3. Add prompts — you can optionally add an **expected answer** for automatic validation
+4. Click **Save Suite**
+
+**Suites are saved server-side** at `~/.airvo/bench_suites.json`, so they survive browser cache clears, browser changes, and Airvo reinstalls.
+
+**Multiple suites:** create as many as you want. Switch between them via the dropdown. Each suite stores its prompts independently.
+
+**With expected answers:** if you provide an expected answer (or keyword), Airvo checks whether the model's response contains it. Models that match get ✅; others get ❌. This gives you a real accuracy score even for custom prompts.
+
+---
+
+### Exporting results
+
+After a run, click **Export** to save:
+- **Markdown (`.md`)** — human-readable leaderboard + per-prompt table
+- **CSV (`.csv`)** — spreadsheet-friendly format
+- **Raw JSON** — full result data for programmatic processing
+
+---
+
+### Tips
+
+- **Run Speed suite first** when onboarding a new model — you'll immediately know if it's fast enough for your workflow
+- **Run Coding suite after model updates** — new versions sometimes regress on specific patterns
+- **Use annotations** even when you think you'll remember what changed — you won't
+- **Don't mix Groq free-tier and paid models in the same run** — Groq's rate limits can artificially slow times mid-suite
+- **Custom suite tip:** create a suite with 3–5 prompts from your actual daily work. The score will be more relevant than any generic benchmark.
+
+---
+
+## 15. v0.7 Features — Smart Router, Fallback Chains, Health Monitor
+
+### 🧠 Smart Router
+
+Every message you send is automatically classified into one of 6 categories before being sent to a model:
+
+| Category | Icon | Detected when the prompt … |
+|---|---|---|
+| `code` | 💻 | mentions writing, implementing, a function, a class, a script … |
+| `debug` | 🐞 | mentions fixing, an error, a bug, an exception, a traceback … |
+| `math` | 📊 | mentions calculating, solving, equations, probability, derivatives … |
+| `creative` | ✍️ | mentions stories, poems, essays, brainstorming, imagination … |
+| `explain` | 📖 | mentions explaining, what is, how does, describing, summarizing … |
+| `general` | 💬 | everything else |
+
+Classification is done **entirely on your machine with 0ms latency** — no API call, no model, just regex patterns.
+
+**How to use it:**
+1. Go to **Configuration** tab
+2. Scroll to **🧠 Smart Router**
+3. For each category, select the model you want Airvo to prefer
+4. Leave a category at “none” to use the default model
+
+A **category badge** (e.g. `💻 Code`) appears in the chat toolbar after each response so you know what was detected.
+
+**Example setup:**
+- `code` → `groq/llama-3.1-8b-instant` (fast, great at code)
+- `debug` → `groq/llama-3.3-70b-versatile` (more capable, better reasoning)
+- `math` → `openai/gpt-4o` (strongest at math)
+- `creative` → `anthropic/claude-3-haiku` (creative writing)
+
+---
+
+### ⚡ Fallback Chains
+
+If the selected model fails — timeout, rate limit hit, server error — Airvo **automatically tries the next active model** without interrupting you.
+
+**What you see:**
+- A **orange toast** at the bottom of the chat: `⚡ Fallback: ModelA → ModelB`
+- The response continues streaming from the fallback model
+- The `done` event tells you which model actually responded
+
+**Chain order:** the primary model is tried first (as selected by Smart Router or your default). Then all remaining active models are tried in order. If every model fails, you see a clear error message.
+
+**Why is this useful?**
+- Groq has free-tier rate limits — if you hit them, your Ollama local model takes over automatically
+- No more "model unavailable" dead ends
+- Works in both the chat and the regenerate flow
+
+---
+
+### 🏓 Model Health Monitor
+
+Before starting a session, you can verify that all your configured models are actually reachable.
+
+**How to use it:**
+1. Go to the **Models** tab
+2. Click **🏓 Ping All** (top right of the models grid)
+3. Wait 2–5 seconds while Airvo pings all active models in parallel
+4. Each model card shows:
+   - `✅ 45ms` — model is reachable, latency in milliseconds
+   - `❌ timeout` or `❌ error message` — model is unreachable
+
+**Tips:**
+- Click **Ping All** at the start of a work session
+- If a model shows `❌`, check the API key or whether Ollama is running
+- Latency gives you a hint of which model will respond fastest in Race mode
+
+---
+
+### ↺ Regenerate
+
+Not happy with the last AI response? Click the **↺** button on any AI message bubble (visible when the assistant is not currently streaming). It removes the last response and resends your original prompt fresh — including Smart Router classification and Fallback Chain protection.
+
+---
+
+## 16. Troubleshooting — When things go wrong
 
 ### ❌ "Rate limit error" / "tokens too large" from Groq
 
@@ -569,16 +995,16 @@ Airvo keeps the full history in your editor. It only sends the **last N messages
 airvo start
 
 # What port?
-netstat -ano | findstr :8765   # Windows
-lsof -i :8765                  # Mac/Linux
+netstat -ano | findstr :5000   # Windows
+lsof -i :5000                  # Mac/Linux
 
 # Does it respond?
-curl http://127.0.0.1:8765/api/health
+curl http://127.0.0.1:5000/api/health
 ```
 
 **Fixes:**
 1. Run `airvo start` in a terminal
-2. Check that the port in `.env` (`PORT=8765`) matches the port in your continue.dev config
+2. Check that the port in `.env` (`PORT=5000`) matches the port in your continue.dev config
 3. If there's a port conflict: change to 8766 in `.env` and in your continue.dev config
 4. Restart: `Ctrl+C` → `airvo start`
 
@@ -637,8 +1063,8 @@ The model catalog always loads (it comes from a local JSON). Only the "Installed
 **Why it happens:** Usually an IPv4/IPv6 issue. The server is on `127.0.0.1` (IPv4) but the browser tries `localhost` which may resolve to `::1` (IPv6).
 
 **Fix:**
-- Use **`http://127.0.0.1:8765`** in the browser, not `http://localhost:8765`
-- Or in continue.dev config: use `http://127.0.0.1:8765` as `apiBase`
+- Use **`http://localhost:5000`** in the browser
+- Or in continue.dev config: use `http://localhost:5000/v1` as `apiBase`
 
 ---
 
@@ -652,7 +1078,7 @@ The model catalog always loads (it comes from a local JSON). Only the "Installed
 
 ---
 
-## 13. FAQ — Frequently Asked Questions
+## 17. FAQ — Frequently Asked Questions
 
 **Do I need to fill in all fields to add a model?**
 No. Only Model ID, Name, and Provider are required. API Key is needed for cloud models. Base URL only for local models.
@@ -705,7 +1131,7 @@ Your editor (continue.dev) will show a connection error. Your conversation is sa
 
 ---
 
-## 14. Pro Tips & Best Practices
+## 18. Pro Tips & Best Practices
 
 ### 🎯 The ideal starting combination
 
@@ -726,6 +1152,26 @@ With these two you get cloud speed and local privacy, at zero cost.
 4. **Project Context:** the model knows your stack and conventions
 
 Result: you say "refactor the authentication service to use JWT" and the model knows where the files are, what stack you use, and how you write code.
+
+---
+
+### ↔️ Tips for Compare Tab
+
+- **Pin the model you trust most** — red highlights on other cards immediately flag deviations worth investigating
+- **Use Compare before starting a large Agent task** — send the problem description, see which model's approach you like best, then delegate to it
+- **Tok/s badge shows actual speed on your connection** — more reliable than published benchmarks
+- **Export comparisons** when evaluating models so you have notes across sessions
+- **For factual questions:** pin the "ground truth" model; red words on other cards = discrepancies to investigate
+
+---
+
+### 🏆 Tips for Benchmarks
+
+- **Run the Speed suite first** when onboarding any new model — you'll immediately know if it's fast enough for your workflow
+- **Annotate every run** — even `"before Ollama update"` saves you from guessing later what changed
+- **Create a custom suite** with 3–5 of your real daily prompts — the score will be more relevant than any generic benchmark
+- **Don't run during heavy Groq free-tier usage** — rate limits artificially inflate times and make results misleading
+- **Score history trend** is more useful than a single run — run the same suite weekly for 4 weeks to see real drift
 
 ---
 
@@ -753,6 +1199,7 @@ Result: you say "refactor the authentication service to use JWT" and the model k
 - **Race mode** if you have Groq + something slower: Groq always wins
 - **History = 4 messages** on Groq free — enough for most tasks
 - **Disable models** you're not using — reduces noise and speeds up parallel mode
+- **Smart Router + Health Monitor combo:** ping models at session start, then let Smart Router auto-route to the fastest alive model per task type
 
 ---
 
@@ -767,7 +1214,7 @@ Result: you say "refactor the authentication service to use JWT" and the model k
 ### 🛠️ Useful terminal commands
 
 ```bash
-airvo start               # start server (port 8765)
+airvo start               # start server (port 5000)
 airvo start --port 8766   # alternative port
 airvo version             # show installed version
 airvo --help              # show all commands
@@ -780,4 +1227,4 @@ ollama rm llama3          # remove a model
 
 ---
 
-*Airvo v0.3.7 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*
+*Airvo v0.7.0 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*
