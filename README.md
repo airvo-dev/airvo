@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.7.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.8.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -22,6 +22,7 @@ Airvo runs on your machine, connects to any AI model simultaneously, and integra
 
 - [What is Airvo?](#what-is-airvo)
 - [Quick Start](#quick-start)
+- [What's New in v0.8](#whats-new-in-v08)
 - [Features](#features)
 - [Supported Models](#supported-models)
 - [Dashboard](#dashboard)
@@ -67,6 +68,12 @@ Your Editor (VS Code)
 - ✅ **Model Health Monitor** — ping all active models concurrently; live `✅ Xms` / `❌` chips on every model card
 - ✅ **Smart Router** — classifies every prompt (code/debug/math/creative/explain/general) and picks the optimal model; 0ms latency, fully local
 - ✅ **Regenerate** — ↺ button to resend the last prompt and get a fresh response from any model
+- ✅ **Privacy Mode** — scans outgoing prompts for 18 categories of secrets (API keys, JWTs, AWS credentials…), blocks cloud routing if high-severity data detected
+- ✅ **Cost Tracking** — real-time cost per response using LiteLLM pricing (2,708 models); monthly budget with alert threshold; savings vs GPT-4o
+- ✅ **Prompt Cache** — SHA-256 cache of identical prompts; instant reply, zero tokens, zero cost on repeated questions
+- ✅ **Request History & Replay** — every request persisted to `~/.airvo/request_history.json`; search, audit, and counterfactual replay with one click
+- ✅ **Confidence Score** — 0–100 heuristic score after each response; detects uncertainty phrases, hedging, refusals, stale-knowledge markers
+- ✅ **Context Window Optimizer** — dynamically trims history to 70% of the model's actual context window (LiteLLM DB + fallback table); no more fixed-10-message cap
 - ✅ Smart Memory (RAG) — semantic search of your codebase, 100% local
 - ✅ Memory Manager — real-time RAM/GPU usage, Ollama model rotation
 - ✅ Model Discovery — browse and add Ollama + OpenRouter models in one click
@@ -114,6 +121,20 @@ Install the [Continue extension](https://marketplace.visualstudio.com/items?item
 **5. Start coding**
 
 Open VS Code → press `Ctrl+L` → ask anything.
+
+---
+
+## What's New in v0.8
+
+| Feature | What it does |
+|---|---|
+| 🔒 **Privacy Mode** | Scans every outgoing prompt for 18 secret categories (API keys, JWTs, AWS creds, DB URLs…). Blocks routing to cloud models when high-severity data is detected. Toggle in Config. |
+| 💰 **Cost Tracking** | Per-response cost shown inline in chat. LiteLLM pricing database (2,708 models). Monthly budget with configurable alert threshold. Savings vs GPT-4o. |
+| ⚡ **Prompt Cache** | SHA-256 cache of `(model + messages)`. Instant reply on repeated prompts — no API call, no cost. Skipped for temperature > 0.1 or tool calls. TTL + max entries configurable. |
+| 🕓 **Request History** | Every request persisted to `~/.airvo/request_history.json`. Searchable by prompt or model. Survives restarts. Configurable limit (default 200). |
+| ↺ **Counterfactual Replay** | In the History page, replay any past request through the current active model. Instantly compare how a model improvement changed the answer. |
+| 🎯 **Confidence Score** | Heuristic 0–100 score based on 30+ uncertainty/hedging/refusal signal patterns. Shown as a colored ◈ badge under each chat message and in the History table. |
+| 🧠 **Context Window Optimizer** | History trimmed dynamically to 70% of the model's actual context window (from LiteLLM DB or built-in table). Replaces the old fixed 10-message cap. |
 
 ---
 
@@ -176,6 +197,24 @@ Add personal notes to any model card — context limit, pricing tier, performanc
 **📊 Usage Stats**
 See requests and tokens used per model — all stored locally. Know exactly what you're using and reset anytime.
 
+**🔒 Privacy Mode**
+Scans every outgoing prompt for 18 categories of sensitive data — API keys, Bearer tokens, AWS credentials, JWTs, DSNs, SSH private keys, private IP ranges, and more. When enabled and a high-severity secret is detected, the request is blocked with HTTP 400 before it reaches any cloud provider. Local models (Ollama, LM Studio) are unaffected.
+
+**💰 Cost Tracking & Budget**
+After every response, Airvo calculates the exact cost using LiteLLM's pricing database (2,708 models). The cost appears inline in chat (💰 $0.00012 for cloud, ✦ free for local). Set a monthly USD budget in Config — Airvo alerts you when approaching the threshold and filters to free models if exceeded. The Stats page shows savings vs running the same tokens through GPT-4o.
+
+**⚡ Prompt Cache**
+Identical prompts sent to the same model return instantly from an in-memory + persistent cache. The cache key is a SHA-256 hash of the model ID and normalized message list. Bypassed when temperature > 0.1 (non-deterministic) or tool calls are present. Configure TTL (default 1 h) and max entries (default 500) in Config. Hit/miss stats shown in the cache card.
+
+**🕓 Request History & Counterfactual Replay**
+Every AI request is persisted to `~/.airvo/request_history.json`: timestamp, model, conversation, response, token count, cost, confidence label, and cache flag. Browse and search from the History tab. Click ↺ Replay on any entry to re-run the exact same messages through the current active model — instantly test whether a model update changed the answer.
+
+**🎯 Confidence Score**
+After each response, Airvo scores the text on a 0–100 scale using 30+ heuristic patterns across four categories: uncertainty phrases (-4 to -20), hedging language (-4 to -8), stale knowledge markers (-6 to -12), and refusal patterns (-15). Confident, direct answers score higher. Shown as a colored ◈ badge in chat and in the History table.
+
+**🧠 Context Window Optimizer**
+History is trimmed dynamically based on the model's actual context window size — from LiteLLM's database first, then a built-in fallback table. Targets 70% of the window, leaving headroom for the new prompt and response. The Chat History Limit slider still acts as a hard cap. Models with 200k+ context windows (Claude) now carry far more history than before.
+
 **🌍 7 Languages**
 Dashboard available in English, Español, Français, Deutsch, 中文, 日本語, Português.
 
@@ -223,13 +262,15 @@ The Airvo dashboard runs at `http://localhost:5000` and lets you manage everythi
 
 **Stats page** — per-model usage, daily sparklines, total token breakdown.
 
-**Configuration page** — set multi-model mode, adjust temperature and max tokens, enable project context, configure Smart Memory (RAG).
+**Configuration page** — set multi-model mode, temperature, max tokens, project context, Smart Memory (RAG). v0.8 section: Privacy Mode, Cost Budget, Prompt Cache settings, Request History settings.
+
+**History page** — searchable log of every AI request with cost, confidence, cached status, and one-click Counterfactual Replay.
 
 **Add Model page** — add any model with contextual tooltips on every field.
 
 ![Airvo Dashboard - Add Model](https://raw.githubusercontent.com/airvo-dev/airvo/main/airvo/docs/assets/screenshot-add-model.png)
 
-**Help page** — full reference guide, field-by-field documentation, FAQ (7 languages).
+**Help page** — full reference guide including all v0.8 features, field-by-field documentation, FAQ extended to 14 entries (7 languages).
 
 **Assistant tab** — built-in 🤖 chat for Airvo-specific questions. Streams responses, saves history locally, renders Markdown, shows token count and response time per message.
 
@@ -375,6 +416,7 @@ enable Smart Memory → index your project folder
 Airvo is designed with privacy and security in mind:
 
 - **API keys stay local** — stored in `~/.airvo/models.json` on your machine, never sent to Airvo servers
+- **Privacy Mode** — scans every prompt for 18 categories of secrets (API keys, JWTs, AWS credentials, DSNs…) and blocks routing to cloud models if high-severity data is detected. Enable in Config.
 - **Localhost only** — the server listens on `localhost:5000` by default, not accessible from the internet
 - **Restricted CORS** — only the dashboard and VS Code extensions can make requests to the server
 - **No telemetry** — Airvo collects no usage data, no analytics, no crash reports
@@ -423,9 +465,34 @@ Yes — run `airvo start --host 0.0.0.0` and it will be accessible from any devi
 **Airvo is not connecting to VS Code — what do I do?**
 Make sure continue.dev is installed in VS Code and that `airvo start` has run at least once to create the config. You can verify the config exists at `~/.continue/config.yaml`.
 
+**Does Privacy Mode work with local models (Ollama)?**
+Privacy Mode only blocks routing to cloud providers. Local models run entirely on your machine, so no data leaves — they always work regardless of the Privacy Mode setting.
+
+**How accurate is the cost estimate?**
+Very accurate for models in LiteLLM's database (2,708 models in v0.8). For unknown models, Airvo falls back to a prefix-match table. Check Config → Cost Budget for running monthly totals and Config → Stats for per-model breakdowns.
+
+**Does the prompt cache affect response quality?**
+No. The cache only activates for temperature ≤ 0.1 (deterministic mode). If you need a fresh response, change the wording slightly, set temperature > 0.1, or clear the cache from Config → Prompt Cache.
+
+**What does the Confidence Score actually mean?**
+It measures how certain the model *sounds*, not how correct it is. A high score (80+) means the model answered directly without hedging. Always verify factual claims independently. The score is useful for triaging responses at a glance.
+
 ---
 
 ## Changelog
+
+**v0.8.0** — Privacy Mode · Cost Tracking · Prompt Cache · Request History · Confidence Score · Context Window Optimizer
+- **Privacy Mode** — `airvo/privacy/detector.py` scans every outgoing prompt for 18 secret categories (API keys, Bearer tokens, AWS creds, JWTs, DSNs, SSH keys…). Blocks cloud routing with HTTP 400 if high-severity data detected. Toggle in Config.
+- **Cost Tracking** — `airvo/cost/pricing.py` uses LiteLLM `model_cost` (2,708 models) as primary pricing source with a fallback prefix table. `airvo_cost` SSE event emitted after every stream with `cost_usd`, `cost_fmt`, `savings_usd`. Monthly totals and savings vs GPT-4o shown in Config and Stats.
+- **Cost Budget** — set a monthly USD limit and alert threshold (%) in Config. When the budget alert fires, routing is filtered to free/local models only.
+- **Prompt Cache** — `airvo/cache/prompt_cache.py`. SHA-256 key of `(model_id + normalized messages)`. Persisted to `~/.airvo/prompt_cache.json`. Skipped for temperature > 0.1 or tool calls. TTL + max entries configurable.
+- **Request History** — `airvo/history/store.py`. Every request saved to `~/.airvo/request_history.json` with timestamp, model, messages, response, tokens, cost, confidence label, cache flag. Max 200 entries (configurable). Searchable via `GET /api/history?search=...`.
+- **Counterfactual Replay** — `POST /api/history/{id}/replay` re-runs any past request through the current active model. History tab in dashboard with search + replay button.
+- **Confidence Score** — `airvo/confidence/scorer.py`. 30+ regex patterns across 4 signal types (uncertainty, hedging, stale-knowledge, refusal). Base 85, clamped 0–100. Labels: `high` (≥80), `medium` (≥60), `low` (≥35), `very_low`. `airvo_confidence` SSE event emitted after every stream. Colored ◈ badge in chat and History table.
+- **Context Window Optimizer** — `airvo/context/optimizer.py`. Trims history to 70% of the model's context window (LiteLLM DB → built-in table → 8192 default). Replaces the old fixed `max_history_messages=10` truncation.
+- **Dashboard v0.8** — new History tab (search, replay, cost/confidence columns), Config v0.8 section (Privacy, Budget, Cache, History settings), inline cost and confidence badges per chat message, Help page extended with 7 new sections + 4 new FAQ entries.
+- **New endpoints** — `GET/DELETE /api/history`, `GET /api/history/{id}`, `POST /api/history/{id}/replay`, `GET/DELETE /api/cache/stats`, `GET/PUT /api/budget`, `GET /api/privacy/scan`, `GET/POST /api/privacy/status`, `GET /api/cost/monthly`, `GET /api/cost/estimate`.
+- **New modules** — `airvo/privacy/`, `airvo/cost/`, `airvo/history/`, `airvo/confidence/`, `airvo/cache/`, `airvo/context/`.
 
 **v0.7.0** — Smart Router + Fallback Chains + Health Monitor + Regenerate
 - **Smart Router** — every prompt is silently classified into one of 6 categories (`code`, `debug`, `math`, `creative`, `explain`, `general`) using 50+ local regex patterns (0ms latency, no API call). Airvo picks the user-configured preferred model for that category. Category badge shown in chat toolbar.

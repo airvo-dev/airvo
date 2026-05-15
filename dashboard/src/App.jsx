@@ -331,7 +331,118 @@ const I18N = {
     help_faq_9_a:"Score = weighted composite: Speed (tok/s), Output length, Accuracy (✓/✗ for suites with validators — carries the most weight), Consistency (low variance). Max 100 points. A correct-but-slow answer always beats a fast-but-wrong one.",
     help_faq_10_q:"Can I benchmark with just one model?",
     help_faq_10_a:"Yes — absolute scores work with one model. But benchmarks are most useful with 2+ models to compare relative performance on the exact same prompts.",
+
+    // ── v0.8 Help ─────────────────────────────────────────────────────────
+    help_v8_title:"What's New in v0.8",
+    help_v8_intro:"Airvo v0.8 adds seven new features focused on privacy, cost awareness, and observability. All are configured in Config → Privacy, Cost & History.",
+
+    help_privacy_title:"🔒 Privacy Mode",
+    help_privacy_what_title:"What it does",
+    help_privacy_what_body:"Scans every outgoing prompt for 18 categories of sensitive data — API keys, tokens, AWS credentials, JWTs, database connection strings, SSH keys, and more — using regex patterns. When Privacy Mode is enabled and a high-severity secret is detected, Airvo blocks the request and returns an HTTP 400 with a clear explanation.",
+    help_privacy_how_title:"How to enable",
+    help_privacy_how_body:"Config → Privacy, Cost & History → Privacy Mode → toggle ON. The 🔒 banner appears in the config card while active.",
+    help_privacy_tip_title:"💡 Tip",
+    help_privacy_tip_body:"Privacy Mode does not affect local models (Ollama, LM Studio). It specifically protects you from accidentally pasting credentials into a prompt that would be sent to a cloud provider (OpenAI, Groq, Anthropic, etc.).",
+
+    help_cost_title:"💰 Cost Consciousness",
+    help_cost_what_title:"Live cost estimation",
+    help_cost_what_body:"After every response, Airvo calculates the exact cost using LiteLLM's pricing database (2,708 models). The cost is shown inline in the chat under each assistant message — 💰 $0.00012 for cloud models, ✦ free for local models.",
+    help_cost_savings_title:"Savings vs GPT-4o",
+    help_cost_savings_body:"The Stats page and budget card show how much you've saved compared to running the same token count through GPT-4o. This makes the value of free/cheap models immediately visible.",
+    help_cost_budget_title:"Monthly budget",
+    help_cost_budget_body:"Set a USD monthly spending limit in Config → Cost Budget. Set the alert threshold (default 80%) — when you exceed it, Airvo filters routing to only use free/local models. Set limit to 0 for unlimited.",
+
+    help_cache_title:"⚡ Prompt Cache",
+    help_cache_what_title:"What it does",
+    help_cache_what_body:"Identical prompts sent to the same model return instantly from cache — no API call, no cost, no latency. The cache key is a SHA-256 hash of the model ID + normalized messages. Cached responses are marked with the ⚡ cached badge in the History page.",
+    help_cache_rules_title:"When cache is skipped",
+    help_cache_rules_body:"Cache is bypassed if temperature > 0.1 (creative/variable responses shouldn't be cached) or if the request contains tool calls (agentic mode). This ensures cached responses are always deterministic.",
+    help_cache_config_title:"Configuration",
+    help_cache_config_body:"Config → Prompt Cache: toggle on/off, set TTL (time-to-live in seconds, default 3600 = 1 h), max entries (default 500). The stats card shows hit count, miss count, and current size. Use 'Clear Cache' to force fresh responses.",
+
+    help_history_req_title:"🕓 Request History & Replay",
+    help_history_req_what_title:"What is recorded",
+    help_history_req_what_body:"Every AI request is persisted to ~/.airvo/request_history.json: timestamp, model, full conversation, response, token count, cost, confidence label, and whether the response came from cache. Default limit is 200 entries (configurable up to 2000).",
+    help_history_req_replay_title:"Counterfactual Replay",
+    help_history_req_replay_body:"In the History page, click ↺ Replay on any past entry. Airvo re-sends the exact same messages to the currently active model — useful for testing whether a model improvement changed the answer, or for A/B testing two models on the same prompt.",
+    help_history_req_search_title:"Search",
+    help_history_req_search_body:"Type any text in the search box and press Enter. Airvo searches both the prompt content and the model ID, returning matching entries sorted by newest first.",
+
+    help_confidence_title:"🎯 Confidence Score",
+    help_confidence_what_title:"What it measures",
+    help_confidence_what_body:"After each response, Airvo runs a heuristic scoring pass on the generated text. It detects 30+ uncertainty signals across four categories: uncertainty phrases (\"I'm not sure\", \"I think\", \"might be\"), hedging language (\"it depends\", \"typically\"), stale knowledge markers (\"as of my training\"), and refusal patterns. Confident, direct answers score higher.",
+    help_confidence_scale_title:"Score scale",
+    help_confidence_scale_body:"0–100 score, base 85. Each detected signal applies a penalty or bonus.\n◈ 80–100: high (green) — direct, confident answer\n◈ 60–79: medium (yellow) — some hedging\n◈ 35–59: low (orange) — heavy uncertainty\n◈ 0–34: very low (red) — strong refusal or major caveats",
+    help_confidence_badge_title:"Where it appears",
+    help_confidence_badge_body:"Inline in the chat under each assistant message as a colored ◈ score badge. Also visible in the History page's Confidence column.",
+
+    help_context_title:"🧠 Context Window Optimizer",
+    help_context_what_title:"What it does",
+    help_context_what_body:"Instead of a fixed message count, Airvo now trims conversation history dynamically based on the model's actual context window. It estimates token count (4 chars ≈ 1 token), then trims to 70% of the model's context window — leaving headroom for the new prompt and response.",
+    help_context_how_title:"Model context window detection",
+    help_context_how_body:"Window sizes come from LiteLLM's model database first. If not found, Airvo uses a built-in table (e.g. llama3 = 8192, mistral = 32768, claude = 200000). The Chat History Limit slider in Config still acts as a hard cap.",
+    help_context_tip_title:"💡 Why this matters",
+    help_context_tip_body:"Models with large context windows (Claude 200k, GPT-4o 128k) can carry much more history than the old fixed limit of 10 messages. Models with small windows (8k–16k) are protected from context overflow errors automatically.",
+
+    help_faq_11_q:"Does Privacy Mode work with local models (Ollama)?",
+    help_faq_11_a:"Privacy Mode only blocks routing to cloud providers. Local models run entirely on your machine, so no data leaves — Privacy Mode has no effect on them and they always work regardless of the setting.",
+    help_faq_12_q:"How accurate is the cost estimate?",
+    help_faq_12_a:"Very accurate for models in LiteLLM's database (2,708 models as of v0.8). For unknown models, Airvo uses a fallback prefix-match table. Check Config → Cost Budget for running monthly totals.",
+    help_faq_13_q:"Does the prompt cache affect the quality of responses?",
+    help_faq_13_a:"No. The cache only activates for temperature ≤ 0.1 (deterministic mode). If you need a fresh response, change the wording slightly, set temperature > 0.1, or clear the cache from Config.",
+    help_faq_14_q:"What does the Confidence Score actually tell me?",
+    help_faq_14_a:"It's a proxy for how certain the model sounds, not how correct it is. A high score means the model answered directly without hedging — useful for triaging responses. Always verify factual claims independently.",
+
     config_context_memory_section:"Context & Memory",
+    config_v8_section:"Privacy, Cost & History · v0.8",
+    nav_history:"History",
+    history_title:"Request History",
+    history_sub:"Recent AI requests with cost, confidence, and replay",
+    history_search_ph:"Search by prompt or model…",
+    history_empty:"No requests recorded yet. Enable history in Config → Privacy, Cost & History.",
+    history_replay:"↺ Replay",
+    history_replaying:"Replaying…",
+    history_replay_done:"Replayed ✓",
+    history_clear:"Clear History",
+    history_clear_confirm:"Delete all request history? This cannot be undone.",
+    history_date:"Date",
+    history_model_col:"Model",
+    history_tokens_col:"Tokens",
+    history_cost_col:"Cost",
+    history_conf_col:"Confidence",
+    history_cached_col:"Cached",
+    history_prompt_col:"Prompt",
+    privacy_mode_label:"Privacy Mode",
+    privacy_mode_sub:"Block prompts containing API keys, tokens, secrets, or credentials from being sent to cloud models. Forces local-only routing when enabled.",
+    privacy_mode_enable:"Enable Privacy Mode",
+    privacy_mode_on:"🔒 Privacy Mode active — cloud models blocked",
+    budget_label:"Cost Budget",
+    budget_sub:"Set a monthly USD spending limit. Airvo alerts you when approaching the threshold.",
+    budget_limit_label:"Monthly limit (USD, 0 = unlimited)",
+    budget_alert_label:"Alert threshold (%)",
+    budget_save:"Save Budget",
+    budget_cur_month:"Spent this month",
+    budget_savings:"Saved vs GPT-4o",
+    budget_unlimited:"No limit set",
+    budget_of:"of",
+    cache_label:"Prompt Cache",
+    cache_sub:"Cache identical prompts to save tokens and get instant replies on repeated questions.",
+    cache_enable:"Enable prompt cache",
+    cache_ttl:"TTL (seconds)",
+    cache_max_label:"Max cached entries",
+    cache_clear_btn:"Clear Cache",
+    cache_cleared:"Cache cleared ✓",
+    cache_hits:"Hits",
+    cache_misses:"Misses",
+    cache_entries:"Entries",
+    req_hist_label:"Request History Log",
+    req_hist_sub:"Record every request for audit, search, and counterfactual replay.",
+    req_hist_enable:"Enable request history",
+    req_hist_max:"Max entries",
+    conf_high:"High confidence",
+    conf_medium:"Medium confidence",
+    conf_low:"Low confidence",
+    conf_very_low:"Very low confidence",
     toast_activated:"Model activated", toast_deactivated:"Model deactivated",
     toast_key_saved:"API key saved ✓", toast_key_error:"Enter a valid API key",
     toast_deleted:"Model deleted", toast_added:"Model added ✓",
@@ -3202,6 +3313,15 @@ export default function AirvoDashboard() {
   const [discOllama,    setDiscOllama]    = useState(null);
   const [discOpenRouter,setDiscOpenRouter]= useState(null);
   const [discLoading,   setDiscLoading]   = useState(false);
+  // ── v0.8 state ────────────────────────────────────────────────────────────
+  const [budgetInfo,     setBudgetInfo]     = useState(null);
+  const [cacheStats,     setCacheStats]     = useState(null);
+  const [reqHistory,     setReqHistory]     = useState([]);
+  const [historySearch,  setHistorySearch]  = useState("");
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [lastCost,       setLastCost]       = useState(null);   // last airvo_cost event
+  const [lastConfidence, setLastConfidence] = useState(null);   // last airvo_confidence event
+  const [replayLoading,  setReplayLoading]  = useState(null);   // entry id being replayed
   const { toasts, add: toast } = useToast();
   const { lang, setLang, t }   = useLanguage();
 
@@ -3401,11 +3521,40 @@ export default function AirvoDashboard() {
     finally { setDiscLoading(false); }
   }, []);
 
+  // ── v0.8 fetch helpers ────────────────────────────────────────────────────
+  const fetchBudget = useCallback(async () => {
+    try {
+      const res = await fetch(`${API}/api/budget`);
+      if (res.ok) setBudgetInfo(await res.json());
+    } catch {}
+  }, []);
+
+  const fetchCacheStats = useCallback(async () => {
+    try {
+      const res = await fetch(`${API}/api/cache/stats`);
+      if (res.ok) setCacheStats(await res.json());
+    } catch {}
+  }, []);
+
+  const fetchReqHistory = useCallback(async (search = "") => {
+    setHistoryLoading(true);
+    try {
+      const url = search
+        ? `${API}/api/history?search=${encodeURIComponent(search)}`
+        : `${API}/api/history`;
+      const res = await fetch(url);
+      if (res.ok) setReqHistory((await res.json()).entries || []);
+    } catch {}
+    finally { setHistoryLoading(false); }
+  }, []);
+
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
   useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
   useEffect(() => { if (page === "compare") fetchCompare(); }, [page, fetchCompare]);
   useEffect(() => { if (page === "stats") fetchStats(); }, [page, fetchStats]);
+  useEffect(() => { if (page === "config") { fetchBudget(); fetchCacheStats(); } }, [page, fetchBudget, fetchCacheStats]);
+  useEffect(() => { if (page === "history") fetchReqHistory(historySearch); }, [page]); // eslint-disable-line
   useEffect(() => {
     try { localStorage.setItem("airvo_compare_prompt", comparePrompt); } catch {}
   }, [comparePrompt]);
@@ -3603,6 +3752,7 @@ export default function AirvoDashboard() {
               { id:"compare", icon:"⊞", label:t("nav_compare") },
               { id:"stats",   icon:"📊", label:t("nav_stats")  },
               { id:"bench",   icon:"🏆", label:t("nav_bench")  },
+              { id:"history", icon:"🕓", label:t("nav_history") },
               { id:"config",  icon:"⊙", label:t("nav_config")  },
               { id:"add",     icon:"+", label:t("nav_add")     },
               { id:"help",    icon:"?", label:t("nav_help")    },
@@ -4893,6 +5043,258 @@ export default function AirvoDashboard() {
                 }
               </div>
 
+              {/* ── v0.8 section ── */}
+              <div style={{ display:"flex", alignItems:"center", gap:12, marginTop:8 }}>
+                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", fontWeight:700, letterSpacing:2, textTransform:"uppercase" }}>
+                  🔒 {t("config_v8_section")}
+                </span>
+                <div style={{ flex:1, height:1, background:"var(--border)" }} />
+              </div>
+
+              {/* Privacy Mode */}
+              <div className="card">
+                <div className="card-title">🔒 {t("privacy_mode_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>{t("privacy_mode_sub")}</p>
+                <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:13, fontWeight:600 }}>
+                  <input type="checkbox"
+                    checked={prefs?.privacy_mode_enabled ?? false}
+                    onChange={e => {
+                      updatePrefs({ privacy_mode_enabled: e.target.checked });
+                      toast(e.target.checked ? "🔒 Privacy Mode enabled" : "Privacy Mode disabled", e.target.checked ? "info" : "success");
+                    }}
+                  />
+                  {t("privacy_mode_enable")}
+                </label>
+                {(prefs?.privacy_mode_enabled) && (
+                  <div style={{ marginTop:12, padding:"10px 14px", background:"#0a0f1a", border:"1px solid var(--accent)", borderRadius:8, fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)" }}>
+                    {t("privacy_mode_on")}
+                  </div>
+                )}
+              </div>
+
+              {/* Cost Budget */}
+              <div className="card">
+                <div className="card-title">💰 {t("budget_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>{t("budget_sub")}</p>
+                {budgetInfo && (
+                  <div style={{ display:"flex", gap:20, marginBottom:14, padding:"10px 14px", background:"var(--bg3)", borderRadius:8, border:"1px solid var(--border)", fontFamily:"var(--mono)", fontSize:11 }}>
+                    <div>
+                      <span style={{ color:"var(--text2)" }}>{t("budget_cur_month")}: </span>
+                      <span style={{ color:"var(--accent)", fontWeight:700 }}>${(budgetInfo.monthly_usd ?? 0).toFixed(4)}</span>
+                      {(budgetInfo.budget_usd ?? 0) > 0 && (
+                        <span style={{ color:"var(--text2)" }}> {t("budget_of")} ${budgetInfo.budget_usd}</span>
+                      )}
+                    </div>
+                    {(budgetInfo.savings_usd ?? 0) > 0 && (
+                      <div>
+                        <span style={{ color:"var(--text2)" }}>{t("budget_savings")}: </span>
+                        <span style={{ color:"var(--green)", fontWeight:700 }}>${(budgetInfo.savings_usd ?? 0).toFixed(4)}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:14 }}>
+                  <div>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("budget_limit_label")}</div>
+                    <input type="number" className="form-input" style={{ width:"100%" }} min={0} step={1}
+                      value={prefs?.cost_budget_usd ?? 0}
+                      onChange={e => setPrefs(p => ({ ...p, cost_budget_usd: parseFloat(e.target.value) || 0 }))}
+                      onBlur={e => { updatePrefs({ cost_budget_usd: parseFloat(e.target.value) || 0 }); toast(t("budget_save") + " ✓", "success"); }}
+                    />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("budget_alert_label")}</div>
+                    <input type="number" className="form-input" style={{ width:"100%" }} min={10} max={100} step={5}
+                      value={prefs?.cost_budget_alert_pct ?? 80}
+                      onChange={e => setPrefs(p => ({ ...p, cost_budget_alert_pct: parseInt(e.target.value) || 80 }))}
+                      onBlur={e => { updatePrefs({ cost_budget_alert_pct: parseInt(e.target.value) || 80 }); toast(t("budget_save") + " ✓", "success"); }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Prompt Cache */}
+              <div className="card">
+                <div className="card-title">⚡ {t("cache_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>{t("cache_sub")}</p>
+                {cacheStats && (
+                  <div style={{ display:"flex", gap:20, marginBottom:14, padding:"10px 14px", background:"var(--bg3)", borderRadius:8, border:"1px solid var(--border)", fontFamily:"var(--mono)", fontSize:11 }}>
+                    <div><span style={{ color:"var(--green)", fontWeight:700 }}>{cacheStats.hits ?? 0}</span> <span style={{ color:"var(--text2)" }}>{t("cache_hits")}</span></div>
+                    <div><span style={{ color:"var(--text2)", fontWeight:700 }}>{cacheStats.misses ?? 0}</span> <span style={{ color:"var(--text2)" }}>{t("cache_misses")}</span></div>
+                    <div><span style={{ color:"var(--accent)", fontWeight:700 }}>{cacheStats.entries ?? 0}</span> <span style={{ color:"var(--text2)" }}>{t("cache_entries")}</span></div>
+                    <div style={{ marginLeft:"auto" }}>
+                      <button className="btn btn-danger btn-sm" onClick={async () => {
+                        await fetch(`${API}/api/cache`, { method:"DELETE" });
+                        fetchCacheStats();
+                        toast(t("cache_cleared"), "success");
+                      }}>{t("cache_clear_btn")}</button>
+                    </div>
+                  </div>
+                )}
+                <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:13, fontWeight:600, marginBottom:14 }}>
+                  <input type="checkbox"
+                    checked={prefs?.cache_enabled ?? true}
+                    onChange={e => { updatePrefs({ cache_enabled: e.target.checked }); toast(e.target.checked ? "Cache enabled ✓" : "Cache disabled", "success"); }}
+                  />
+                  {t("cache_enable")}
+                </label>
+                {(prefs?.cache_enabled ?? true) && (
+                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+                    <div>
+                      <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("cache_ttl")}</div>
+                      <input type="number" className="form-input" style={{ width:"100%" }} min={60} max={86400} step={60}
+                        value={prefs?.cache_ttl_seconds ?? 3600}
+                        onChange={e => setPrefs(p => ({ ...p, cache_ttl_seconds: parseInt(e.target.value) || 3600 }))}
+                        onBlur={e => { updatePrefs({ cache_ttl_seconds: parseInt(e.target.value) || 3600 }); toast("Cache TTL saved ✓", "success"); }}
+                      />
+                    </div>
+                    <div>
+                      <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, marginBottom:6 }}>{t("cache_max_label")}</div>
+                      <input type="number" className="form-input" style={{ width:"100%" }} min={10} max={5000} step={50}
+                        value={prefs?.cache_max_entries ?? 500}
+                        onChange={e => setPrefs(p => ({ ...p, cache_max_entries: parseInt(e.target.value) || 500 }))}
+                        onBlur={e => { updatePrefs({ cache_max_entries: parseInt(e.target.value) || 500 }); toast("Cache limit saved ✓", "success"); }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Request History Log */}
+              <div className="card">
+                <div className="card-title">🕓 {t("req_hist_label")}</div>
+                <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>{t("req_hist_sub")}</p>
+                <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:13, fontWeight:600, marginBottom:14 }}>
+                  <input type="checkbox"
+                    checked={prefs?.history_enabled ?? true}
+                    onChange={e => { updatePrefs({ history_enabled: e.target.checked }); toast(e.target.checked ? "History enabled ✓" : "History disabled", "success"); }}
+                  />
+                  {t("req_hist_enable")}
+                </label>
+                {(prefs?.history_enabled ?? true) && (
+                  <div style={{ display:"flex", gap:12, alignItems:"center" }}>
+                    <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)", textTransform:"uppercase", letterSpacing:1, flexShrink:0 }}>{t("req_hist_max")}</div>
+                    <input type="number" className="form-input" style={{ width:120 }} min={10} max={2000} step={50}
+                      value={prefs?.history_max_entries ?? 200}
+                      onChange={e => setPrefs(p => ({ ...p, history_max_entries: parseInt(e.target.value) || 200 }))}
+                      onBlur={e => { updatePrefs({ history_max_entries: parseInt(e.target.value) || 200 }); toast("History limit saved ✓", "success"); }}
+                    />
+                    <button className="btn btn-ghost btn-sm" style={{ marginLeft:"auto" }} onClick={() => setPage("history")}>
+                      🕓 View History →
+                    </button>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </>}
+
+          {/* ── HISTORY PAGE ── */}
+          {page === "history" && <>
+            <h1 className="page-title">{t("history_title")}</h1>
+            <p className="page-sub">{t("history_sub")}</p>
+            <div style={{ display:"grid", gap:20 }}>
+
+              {/* Search + controls */}
+              <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+                <input type="text" className="form-input" style={{ flex:1 }}
+                  placeholder={t("history_search_ph")}
+                  value={historySearch}
+                  onChange={e => setHistorySearch(e.target.value)}
+                  onKeyDown={e => { if (e.key === "Enter") fetchReqHistory(historySearch); }}
+                />
+                <button className="btn btn-primary" onClick={() => fetchReqHistory(historySearch)}>
+                  🔍 Search
+                </button>
+                <button className="btn btn-ghost" onClick={() => { setHistorySearch(""); fetchReqHistory(""); }}>
+                  Reset
+                </button>
+                <button className="btn btn-danger btn-sm" style={{ marginLeft:"auto" }}
+                  onClick={async () => {
+                    if (!confirm(t("history_clear_confirm"))) return;
+                    await fetch(`${API}/api/history`, { method:"DELETE" });
+                    setReqHistory([]);
+                    toast(t("history_clear") + " ✓", "success");
+                  }}
+                >{t("history_clear")}</button>
+              </div>
+
+              {/* Table */}
+              {historyLoading
+                ? <div className="empty" style={{ padding:32 }}>Loading…</div>
+                : reqHistory.length === 0
+                  ? <div className="empty" style={{ padding:32 }}>{t("history_empty")}</div>
+                  : <div className="card" style={{ padding:0, overflow:"hidden" }}>
+                      <table className="stats-table" style={{ width:"100%", tableLayout:"fixed" }}>
+                        <thead>
+                          <tr>
+                            <th style={{ width:"16%" }}>{t("history_date")}</th>
+                            <th style={{ width:"14%" }}>{t("history_model_col")}</th>
+                            <th style={{ width:"36%" }}>{t("history_prompt_col")}</th>
+                            <th style={{ width:"9%", textAlign:"right" }}>{t("history_tokens_col")}</th>
+                            <th style={{ width:"9%", textAlign:"right" }}>{t("history_cost_col")}</th>
+                            <th style={{ width:"10%", textAlign:"center" }}>{t("history_conf_col")}</th>
+                            <th style={{ width:"6%", textAlign:"center" }}></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {reqHistory.map(entry => {
+                            const lastUser = [...(entry.messages || [])].reverse().find(m => m.role === "user");
+                            const prompt   = lastUser?.content || "";
+                            const confLabel = entry.confidence_label || "";
+                            const confColor = confLabel === "high" ? "var(--green)" : confLabel === "medium" ? "var(--yellow)" : confLabel === "low" ? "#f97316" : confLabel === "very_low" ? "var(--red)" : "var(--text2)";
+                            return (
+                              <tr key={entry.id}>
+                                <td style={{ fontFamily:"var(--mono)", fontSize:10, color:"var(--text2)" }}>
+                                  {new Date(entry.timestamp * 1000).toLocaleString()}
+                                </td>
+                                <td style={{ fontFamily:"var(--mono)", fontSize:10, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                                  {entry.model_id}
+                                  {entry.cached && <span style={{ marginLeft:4, fontSize:9, color:"var(--accent)", background:"#0a1a2a", border:"1px solid #1a3a5a", borderRadius:4, padding:"1px 5px" }}>⚡ cached</span>}
+                                </td>
+                                <td style={{ fontFamily:"var(--mono)", fontSize:10, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", color:"var(--text2)" }}
+                                  title={prompt}>
+                                  {prompt.slice(0, 120)}
+                                </td>
+                                <td className="num" style={{ fontSize:10 }}>{entry.tokens ?? 0}</td>
+                                <td className="num" style={{ fontSize:10 }}>{entry.cost_usd > 0 ? `$${entry.cost_usd.toFixed(5)}` : "free"}</td>
+                                <td style={{ textAlign:"center" }}>
+                                  {confLabel && (
+                                    <span style={{ fontFamily:"var(--mono)", fontSize:9, color:confColor, background:"#0a0a0a", border:`1px solid ${confColor}`, borderRadius:4, padding:"1px 5px" }}>
+                                      {confLabel}
+                                    </span>
+                                  )}
+                                </td>
+                                <td style={{ textAlign:"center" }}>
+                                  <button className="btn btn-ghost btn-sm"
+                                    style={{ fontSize:10, padding:"2px 8px" }}
+                                    disabled={replayLoading === entry.id}
+                                    onClick={async () => {
+                                      setReplayLoading(entry.id);
+                                      try {
+                                        const res = await fetch(`${API}/api/history/${entry.id}/replay`, { method:"POST" });
+                                        if (res.ok) {
+                                          const data = await res.json();
+                                          toast(t("history_replay_done"), "success");
+                                          // Navigate to history to refresh
+                                          fetchReqHistory(historySearch);
+                                        } else {
+                                          toast("Replay failed", "error");
+                                        }
+                                      } catch { toast("Replay failed", "error"); }
+                                      finally { setReplayLoading(null); }
+                                    }}
+                                  >
+                                    {replayLoading === entry.id ? t("history_replaying") : t("history_replay")}
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+              }
             </div>
           </>}
 
@@ -6587,6 +6989,143 @@ function HelpPage({ t, setPage }) {
         </div>
       </div>
 
+      {/* ── v0.8 Features ── */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">✦</span>
+          {t("help_v8_title")}
+        </div>
+        <div className="help-field-block">
+          <div className="help-field-desc" style={{ lineHeight:1.8 }}>{t("help_v8_intro")}</div>
+        </div>
+      </div>
+
+      {/* Privacy Mode */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🔒</span>
+          {t("help_privacy_title")}
+        </div>
+        {[
+          { title:t("help_privacy_what_title"),  body:t("help_privacy_what_body")  },
+          { title:t("help_privacy_how_title"),   body:t("help_privacy_how_body")   },
+          { title:t("help_privacy_tip_title"),   body:t("help_privacy_tip_body")   },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("config")}>⊙ {t("nav_config")}</button>
+        </div>
+      </div>
+
+      {/* Cost Consciousness */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">💰</span>
+          {t("help_cost_title")}
+        </div>
+        {[
+          { title:t("help_cost_what_title"),    body:t("help_cost_what_body")    },
+          { title:t("help_cost_savings_title"), body:t("help_cost_savings_body") },
+          { title:t("help_cost_budget_title"),  body:t("help_cost_budget_body")  },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("stats")}>📊 {t("nav_stats")}</button>
+        </div>
+      </div>
+
+      {/* Prompt Cache */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">⚡</span>
+          {t("help_cache_title")}
+        </div>
+        {[
+          { title:t("help_cache_what_title"),   body:t("help_cache_what_body"),   isCode:false },
+          { title:t("help_cache_rules_title"),  body:t("help_cache_rules_body"),  isCode:false },
+          { title:t("help_cache_config_title"), body:t("help_cache_config_body"), isCode:false },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("config")}>⊙ {t("nav_config")}</button>
+        </div>
+      </div>
+
+      {/* Request History & Replay */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🕓</span>
+          {t("help_history_req_title")}
+        </div>
+        {[
+          { title:t("help_history_req_what_title"),   body:t("help_history_req_what_body")   },
+          { title:t("help_history_req_replay_title"), body:t("help_history_req_replay_body") },
+          { title:t("help_history_req_search_title"), body:t("help_history_req_search_body") },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("history")}>🕓 {t("nav_history")}</button>
+        </div>
+      </div>
+
+      {/* Confidence Score */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🎯</span>
+          {t("help_confidence_title")}
+        </div>
+        {[
+          { title:t("help_confidence_what_title"),  body:t("help_confidence_what_body"),  isCode:false },
+          { title:t("help_confidence_scale_title"), body:t("help_confidence_scale_body"), isCode:true  },
+          { title:t("help_confidence_badge_title"), body:t("help_confidence_badge_body"), isCode:false },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            {f.isCode
+              ? <div className="help-code-block">{f.body.split("\n").map((l,i) => <div key={i}>{l}</div>)}</div>
+              : <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+            }
+          </div>
+        ))}
+        <div style={{ marginTop:16 }}>
+          <button className="btn btn-primary" onClick={() => setPage("chat")}>🤖 {t("nav_chat")}</button>
+        </div>
+      </div>
+
+      {/* Context Window Optimizer */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🧠</span>
+          {t("help_context_title")}
+        </div>
+        {[
+          { title:t("help_context_what_title"), body:t("help_context_what_body") },
+          { title:t("help_context_how_title"),  body:t("help_context_how_body")  },
+          { title:t("help_context_tip_title"),  body:t("help_context_tip_body")  },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+          </div>
+        ))}
+      </div>
+
       {/* Troubleshooting */}
       <div className="help-section">
         <div className="help-section-title">
@@ -6606,7 +7145,7 @@ function HelpPage({ t, setPage }) {
           <span className="help-section-icon">?</span>
           {t("help_faq_title")}
         </div>
-        {[1,2,3,4,5,6,7,8,9,10].map(n => (
+        {[1,2,3,4,5,6,7,8,9,10,11,12,13,14].map(n => (
           <div key={n} className="faq-item">
             <div className="faq-q">Q: {t(`help_faq_${n}_q`)}</div>
             <div className="faq-a">{t(`help_faq_${n}_a`)}</div>
@@ -6719,11 +7258,17 @@ function ChatPage({ t, activeModels, prefs }) {
           if (evt.type === "delta") {
             full += evt.content;
             setStreamContent(full);
+          } else if (evt.type === "airvo_cost") {
+            setLastCost(evt);
+          } else if (evt.type === "airvo_confidence") {
+            setLastConfidence(evt);
           } else if (evt.type === "fallback") {
             setFallbackNote({ from: evt.from, to: evt.to });
             setTimeout(() => setFallbackNote(null), 5000);
           } else if (evt.type === "done") {
-            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0 }]);
+            const pendingCost = lastCost;
+            const pendingConf = lastConfidence;
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0, cost: pendingCost, confidence: pendingConf }]);
             setStreamContent("");
             setActiveConvId(evt.conv_id);
             if (evt.model_name) setActiveModelName(evt.model_name);
@@ -6795,8 +7340,12 @@ function ChatPage({ t, activeModels, prefs }) {
           if (evt.type === "delta") {
             full += evt.content;
             setStreamContent(full);
+          } else if (evt.type === "airvo_cost") {
+            setLastCost(evt);
+          } else if (evt.type === "airvo_confidence") {
+            setLastConfidence(evt);
           } else if (evt.type === "done") {
-            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0 }]);
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0, cost: lastCost, confidence: lastConfidence }]);
             setStreamContent("");
             setActiveConvId(evt.conv_id);
             if (evt.model_name) setActiveModelName(evt.model_name);
@@ -6862,11 +7411,15 @@ function ChatPage({ t, activeModels, prefs }) {
           if (evt.type === "delta") {
             full += evt.content;
             setStreamContent(full);
+          } else if (evt.type === "airvo_cost") {
+            setLastCost(evt);
+          } else if (evt.type === "airvo_confidence") {
+            setLastConfidence(evt);
           } else if (evt.type === "fallback") {
             setFallbackNote({ from: evt.from, to: evt.to });
             setTimeout(() => setFallbackNote(null), 5000);
           } else if (evt.type === "done") {
-            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0 }]);
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0, cost: lastCost, confidence: lastConfidence }]);
             setStreamContent("");
             setActiveConvId(evt.conv_id);
             if (evt.model_name) setActiveModelName(evt.model_name);
@@ -6978,7 +7531,28 @@ function ChatPage({ t, activeModels, prefs }) {
               >↺</button>
             )}
             {msg.tokens > 0 && (
-              <span className="chat-token-meta">{msg.tokens} tokens · {msg.elapsed_s ? msg.elapsed_s.toFixed(1)+"s" : ""}</span>
+              <span className="chat-token-meta">{msg.tokens} tokens · {msg.elapsed_s ? msg.elapsed_s.toFixed(1)+"s" : ""}
+                {msg.cost && msg.cost.cost_usd > 0 && (
+                  <span style={{ marginLeft:8, color:"var(--yellow)", fontSize:10, fontFamily:"var(--mono)" }} title="Estimated cost for this response">
+                    💰 {msg.cost.cost_fmt}
+                  </span>
+                )}
+                {msg.cost && msg.cost.cost_usd === 0 && (
+                  <span style={{ marginLeft:8, color:"var(--green)", fontSize:10, fontFamily:"var(--mono)" }} title="Free response">
+                    ✦ free
+                  </span>
+                )}
+                {msg.confidence && (() => {
+                  const lbl = msg.confidence.label || "";
+                  const score = msg.confidence.score ?? 0;
+                  const col = lbl === "high" ? "var(--green)" : lbl === "medium" ? "var(--yellow)" : lbl === "low" ? "#f97316" : "var(--red)";
+                  return (
+                    <span style={{ marginLeft:8, color:col, fontSize:10, fontFamily:"var(--mono)" }} title={`Confidence score: ${score}/100`}>
+                      ◈ {score}
+                    </span>
+                  );
+                })()}
+              </span>
             )}
           </div>
         )}

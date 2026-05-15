@@ -102,6 +102,18 @@ DEFAULT_PREFS = {
         "node_modules", ".git", "dist", "__pycache__",
         "venv", ".venv", "build", ".next", "coverage",
     ],
+    # ── Privacy Mode ──────────────────────────────────────────────────────
+    "privacy_mode_enabled": False,
+    # ── Cost Budget ───────────────────────────────────────────────────────
+    "cost_budget_usd":      0.0,   # 0 = unlimited
+    "cost_budget_alert_pct": 80,   # warn when this % of budget is consumed
+    # ── Request History ─────────────────────────────────────────────────
+    "history_max_entries":  200,   # max entries to keep in request_history.json
+    "history_enabled":      True,  # set False to stop recording history entirely
+    # ── Prompt Cache ─────────────────────────────────────────────────
+    "cache_enabled":        True,
+    "cache_ttl_seconds":    3600,  # 1 hour default
+    "cache_max_entries":    500,
 }
 
 

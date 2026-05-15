@@ -12,6 +12,15 @@ from collections import deque
 
 from airvo.config.settings import settings, save_models, MEMORY_MAX_CHARS
 from airvo.router.classifier import classify as _classify_prompt, CATEGORY_META
+from airvo.privacy.detector import scan_messages, has_high_severity, severity, redact_text, scan
+from airvo.cost.pricing import (
+    estimate_cost_from_total, estimate_cost, estimate_cost_from_response,
+    format_cost, record_cost, get_monthly_cost, get_total_cost, get_savings_vs_gpt4o
+)
+from airvo.history import store as _history
+from airvo.confidence.scorer import score_dict as _confidence_score
+from airvo.cache import prompt_cache as _cache
+from airvo.context.optimizer import optimize as _optimize_context
 
 logger = logging.getLogger(__name__)
 
@@ -138,6 +147,18 @@ class PrefsUpdate(BaseModel):
     rag_max_inject_chars: Optional[int]     = None
     rag_extensions:   Optional[List[str]]  = None
     rag_exclude_dirs: Optional[List[str]]  = None
+    # ── Privacy Mode ──────────────────────────────────────────
+    privacy_mode_enabled: Optional[bool]   = None
+    # ── Cost Budget ───────────────────────────────────────────
+    cost_budget_usd:       Optional[float] = None
+    cost_budget_alert_pct: Optional[int]   = None
+    # ── Request History ──────────────────────────────────────
+    history_max_entries:   Optional[int]  = None
+    history_enabled:       Optional[bool] = None
+    # ── Prompt Cache ─────────────────────────────────────
+    cache_enabled:         Optional[bool] = None
+    cache_ttl_seconds:     Optional[int]  = None
+    cache_max_entries:     Optional[int]  = None
 
 # ── Dynamic model call ────────────────────────────────────────────────────
 async def call_model(model_config: dict, messages: list, request):
@@ -177,6 +198,9 @@ async def call_model(model_config: dict, messages: list, request):
             "error":     None,
             "tokens":    tokens,
             "elapsed_s": _elapsed,
+            "cost_usd":  estimate_cost_from_response(model_config["id"], response),
+            "cost_fmt":  format_cost(estimate_cost_from_response(model_config["id"], response)),
+            "savings_usd": get_savings_vs_gpt4o(model_config["id"], tokens),
         }
     except Exception as e:
         return {
@@ -186,6 +210,9 @@ async def call_model(model_config: dict, messages: list, request):
             "error":     str(e),
             "tokens":    0,
             "elapsed_s": None,
+            "cost_usd":  0.0,
+            "cost_fmt":  "free",
+            "savings_usd": 0.0,
         }
 
 # ── Multi-model modes ────────────────────────────────────────────────────
@@ -305,25 +332,68 @@ async def review_mode(models: list, messages: list, request) -> list:
 
 
 # ── Streaming helpers ─────────────────────────────────────────────────────
-async def single_model_stream(response, model_id: str):
+async def single_model_stream(response, model_id: str, messages: list = None):
     total_tokens = 0
+    full_text    = []
     t0 = time.time()
     async for chunk in response:
         if hasattr(chunk, "usage") and chunk.usage:
             total_tokens = chunk.usage.total_tokens or 0
+        try:
+            delta = chunk.choices[0].delta.content or ""
+            if delta:
+                full_text.append(delta)
+        except Exception:
+            pass
         yield f"data: {json.dumps(chunk.model_dump())}\n\n"
     elapsed = round(time.time() - t0, 2)
     if total_tokens > 0:
         settings.record_usage(model_id, total_tokens, elapsed_s=elapsed)
+    # ── Cost event ──────────────────────────────────────────────
+    cost_usd = estimate_cost_from_total(model_id, total_tokens)
+    savings  = get_savings_vs_gpt4o(model_id, total_tokens)
+    record_cost(model_id, cost_usd)
+    cost_event = {
+        "type":          "airvo_cost",
+        "model":         model_id,
+        "tokens":        total_tokens,
+        "cost_usd":      cost_usd,
+        "cost_fmt":      format_cost(cost_usd),
+        "savings_usd":   savings,
+        "elapsed_s":     elapsed,
+    }
+    yield f"data: {json.dumps(cost_event)}\n\n"
+    # ── Confidence Score event ───────────────────────────────────
+    _resp_text = "".join(full_text)
+    _conf = _confidence_score(_resp_text)
+    yield f"data: {json.dumps({'type': 'airvo_confidence', 'model': model_id, **_conf})}\n\n"
+    # ── Persist to request history ─────────────────────────────────
+    if messages:
+        _history.record(
+            messages=messages,
+            model_id=model_id,
+            mode="single",
+            response=_resp_text,
+            tokens=total_tokens,
+            cost_usd=cost_usd,
+            elapsed_s=elapsed,
+        )
+        # ── Store in prompt cache (only if temperature was low) ────────────────
+        _cache.put(model_id, messages, _resp_text, tokens=total_tokens, cost_usd=cost_usd)
     yield "data: [DONE]\n\n"
 
-async def multi_model_stream(results):
+async def multi_model_stream(results, messages: list = None):
     combined = ""
+    total_cost = 0.0
+    total_tokens = 0
     for r in results:
         if r["error"]:
             combined += f"**{r['name']}:**\n\u274c {r['error']}\n\n---\n\n"
         else:
             combined += f"**{r['name']}:**\n{r['content']}\n\n---\n\n"
+        total_cost   += r.get("cost_usd", 0.0)
+        total_tokens += r.get("tokens", 0)
+        record_cost(r["model"], r.get("cost_usd", 0.0))
 
     chunk_size = 10
     for i in range(0, len(combined), chunk_size):
@@ -337,9 +407,39 @@ async def multi_model_stream(results):
         yield f"data: {json.dumps(chunk)}\n\n"
 
     yield f"data: {json.dumps({'id':'airvo-multi','object':'chat.completion.chunk','model':'airvo-auto','choices':[{'index':0,'delta':{},'finish_reason':'stop'}]})}\n\n"
+    cost_event = {
+        "type":      "airvo_cost",
+        "model":     "airvo-multi",
+        "tokens":    total_tokens,
+        "cost_usd":  round(total_cost, 8),
+        "cost_fmt":  format_cost(total_cost),
+        "per_model": [
+            {"model": r["model"], "name": r["name"],
+             "cost_usd": r.get("cost_usd", 0.0),
+             "cost_fmt": r.get("cost_fmt", "free"),
+             "tokens": r.get("tokens", 0)}
+            for r in results
+        ],
+    }
+    yield f"data: {json.dumps(cost_event)}\n\n"
+    # ── Confidence Score events (one per model) ───────────────────────
+    for _r in results:
+        if _r.get("content"):
+            _conf = _confidence_score(_r["content"])
+            yield f"data: {json.dumps({'type': 'airvo_confidence', 'model': _r['model'], **_conf})}\n\n"
+    # ── Persist to request history ─────────────────────────────────
+        primary = next((r for r in results if not r.get("error")), results[0])
+        _history.record(
+            messages=messages,
+            model_id=primary["model"],
+            mode="multi",
+            response=combined,
+            tokens=total_tokens,
+            cost_usd=round(total_cost, 8),
+            elapsed_s=primary.get("elapsed_s") or 0.0,
+        )
     yield "data: [DONE]\n\n"
 
-# ── Chat endpoint ─────────────────────────────────────────────────────────
 @router.post("/v1/chat/completions", tags=["Chat"], summary="Chat completion (streaming)",
     description="OpenAI-compatible chat completion endpoint with SSE streaming.\n\n"
     "**Single model:** Real token-by-token streaming.\n"
@@ -416,14 +516,23 @@ async def chat_completions(request: ChatRequest):
         if not any(m["role"] == "system" for m in messages):
             messages.insert(0, {"role": "system", "content": system_content})
 
-        # ── History truncation — keep system + last N messages ───────────────
-        # Prevents hitting TPM limits on free tiers (Groq: 6k-12k TPM)
-        # Each message pair (user+assistant) is ~500-2000 tokens on average.
+        # ── Context Window Optimizer ──────────────────────────────────────────
+        # Dynamically trims history to fit 70% of the active model's context
+        # window using token estimation. max_history_messages acts as hard cap.
+        _active_now = settings.get_active_models()
+        _primary_id = _active_now[0]["id"] if _active_now else ""
         max_history = int(prefs.get("max_history_messages", 10))
-        system_msgs = [m for m in messages if m["role"] == "system"]
-        other_msgs  = [m for m in messages if m["role"] != "system"]
-        if len(other_msgs) > max_history:
-            other_msgs = other_msgs[-max_history:]
+        if _primary_id:
+            messages, _cwo_info = _optimize_context(
+                messages, _primary_id, max_history_cap=max_history
+            )
+            system_msgs = [m for m in messages if m["role"] == "system"]
+            other_msgs  = [m for m in messages if m["role"] != "system"]
+        else:
+            system_msgs = [m for m in messages if m["role"] == "system"]
+            other_msgs  = [m for m in messages if m["role"] != "system"]
+            if len(other_msgs) > max_history:
+                other_msgs = other_msgs[-max_history:]
 
         # ── Per-message char cap — only for providers with strict TPM limits ─
         # Uses _PROVIDER_LIMITS to determine the tightest cap across all active
@@ -448,6 +557,64 @@ async def chat_completions(request: ChatRequest):
                 detail="No active models. Configure at least one in the dashboard.")
 
         # prefs already loaded above for RAG check
+
+        # ── Privacy Mode — scan prompt for secrets before sending ────────────
+        if prefs.get("privacy_mode_enabled", False):
+            _user_messages = [m for m in messages if m.get("role") == "user"]
+            _privacy_hits = scan_messages(_user_messages)
+            if _privacy_hits:
+                _has_high = has_high_severity(_privacy_hits)
+                if _has_high:
+                    # Force local model if available, otherwise block
+                    _local_models = [m for m in active
+                                     if m.get("provider") in ("ollama", "lmstudio")
+                                     or "localhost" in (m.get("base_url") or "")]
+                    if _local_models:
+                        logger.warning(
+                            "[Privacy] HIGH severity secrets detected — forcing local model '%s'",
+                            _local_models[0]['id']
+                        )
+                        active = _local_models[:1]
+                    else:
+                        logger.warning(
+                            "[Privacy] HIGH severity secrets detected — no local model available, blocking"
+                        )
+                        raise HTTPException(
+                            status_code=400,
+                            detail={
+                                "privacy_blocked": True,
+                                "message": "Privacy Mode: sensitive data detected and no local model is available. Add an Ollama model or disable Privacy Mode.",
+                                "findings": [{"kind": h.kind, "severity": severity(h), "redacted": h.redacted} for h in _privacy_hits],
+                            }
+                        )
+
+        # ── Cost Budget — block paid models if monthly limit exceeded ────────
+        _budget_usd = float(prefs.get("cost_budget_usd", 0.0))
+        if _budget_usd > 0:
+            from datetime import date as _date
+            _month_key   = _date.today().strftime("%Y-%m")
+            _monthly     = get_monthly_cost(_month_key)
+            _spent       = sum(_monthly.values())
+            _alert_pct   = int(prefs.get("cost_budget_alert_pct", 80))
+            if _spent >= _budget_usd:
+                # Budget exceeded — keep only free/local models
+                _free_models = [m for m in active if m.get("free") or m.get("provider") in ("ollama", "lmstudio", "groq", "cerebras")]
+                if _free_models:
+                    logger.warning(
+                        "[Budget] Monthly limit $%.4f exceeded (spent $%.4f) — restricting to free models",
+                        _budget_usd, _spent
+                    )
+                    active = _free_models
+                else:
+                    raise HTTPException(
+                        status_code=402,
+                        detail={
+                            "budget_exceeded": True,
+                            "message": f"Monthly cost budget of ${_budget_usd:.2f} exceeded (spent ${_spent:.4f}). Add a free/local model or raise your budget.",
+                            "spent_usd": round(_spent, 4),
+                            "budget_usd": _budget_usd,
+                        }
+                    )
 
         # ── Tool calling — always single-model with streaming ──
         # When tools are present (Agent/Plan mode in continue.dev),
@@ -495,7 +662,7 @@ async def chat_completions(request: ChatRequest):
             response = await litellm.acompletion(**kwargs)
             settings.record_last_request("single", model=m.get("name", m["id"]))
             return StreamingResponse(
-                single_model_stream(response, m["id"]),
+                single_model_stream(response, m["id"], messages),
                 media_type="text/event-stream"
             )
 
@@ -538,7 +705,7 @@ async def chat_completions(request: ChatRequest):
 
         settings.record_last_request("multi", mode=mode)
         return StreamingResponse(
-            multi_model_stream(results),
+            multi_model_stream(results, messages),
             media_type="text/event-stream"
         )
 
@@ -735,6 +902,237 @@ async def list_models():
         "object": "list",
         "data": [{"id": "airvo-auto", "object": "model", "owned_by": "airvo"}]
     }
+
+# ── Privacy Mode endpoints ────────────────────────────────────────────────
+
+class PrivacyScanRequest(BaseModel):
+    text: str
+
+@router.post("/api/privacy/scan", tags=["Privacy"],
+    summary="Scan text for sensitive secrets",
+    description="Scans the provided text for API keys, passwords, tokens, emails, "
+                "and other sensitive patterns. Returns matches with severity and redacted values.")
+def privacy_scan(req: PrivacyScanRequest):
+    matches = scan(req.text)
+    return {
+        "clean": len(matches) == 0,
+        "force_local": has_high_severity(matches),
+        "findings": [
+            {
+                "kind":     m.kind,
+                "severity": severity(m),
+                "redacted": m.redacted,
+                "start":    m.start,
+                "end":      m.end,
+            }
+            for m in matches
+        ]
+    }
+
+@router.get("/api/privacy/status", tags=["Privacy"],
+    summary="Get Privacy Mode status")
+def privacy_status():
+    prefs = settings.get_prefs()
+    return {
+        "enabled": prefs.get("privacy_mode_enabled", False),
+    }
+
+@router.post("/api/privacy/status", tags=["Privacy"],
+    summary="Enable or disable Privacy Mode")
+def privacy_set_status(body: dict):
+    enabled = bool(body.get("enabled", False))
+    settings.update_prefs({"privacy_mode_enabled": enabled})
+    return {"enabled": enabled}
+
+# ── Cost Consciousness endpoints ──────────────────────────────────────────
+
+@router.get("/api/cost/monthly", tags=["Cost"],
+    summary="Get cost breakdown for the current month",
+    description="Returns per-model cost totals for the current calendar month in USD.")
+def cost_monthly():
+    from datetime import date
+    month_key = date.today().strftime("%Y-%m")
+    monthly = get_monthly_cost(month_key)
+    total = sum(monthly.values())
+    # Compute total savings vs GPT-4o using stats tokens
+    stats = settings.get_stats()
+    total_savings = 0.0
+    for model_id, model_stats in stats.items():
+        t = model_stats.get("tokens", 0)
+        total_savings += get_savings_vs_gpt4o(model_id, t)
+    return {
+        "month":         month_key,
+        "by_model":      monthly,
+        "total_usd":     round(total, 6),
+        "total_fmt":     format_cost(total),
+        "savings_vs_gpt4o_usd": round(total_savings, 4),
+        "savings_fmt":   format_cost(total_savings),
+    }
+
+@router.get("/api/cost/estimate", tags=["Cost"],
+    summary="Estimate cost for a given model and token count")
+def cost_estimate(model_id: str = "openai/gpt-4o", tokens: int = 1000):
+    cost = estimate_cost_from_total(model_id, tokens)
+    savings = get_savings_vs_gpt4o(model_id, tokens)
+    return {
+        "model":       model_id,
+        "tokens":      tokens,
+        "cost_usd":    cost,
+        "cost_fmt":    format_cost(cost),
+        "savings_usd": savings,
+        "savings_fmt": format_cost(savings),
+        "is_free":     cost == 0.0,
+    }
+
+# ── Request History + Counterfactual Replay endpoints ────────────────────
+
+@router.get("/api/history", tags=["History"],
+    summary="List request history",
+    description="Returns paginated request history. Supports search by prompt text or model id.")
+def history_list(limit: int = 50, offset: int = 0, search: str = ""):
+    return _history.list_entries(limit=limit, offset=offset, search=search)
+
+
+@router.get("/api/history/{entry_id}", tags=["History"],
+    summary="Get full detail of a history entry (including messages for replay)")
+def history_get(entry_id: str):
+    entry = _history.get_entry(entry_id)
+    if not entry:
+        raise HTTPException(status_code=404, detail="History entry not found")
+    return entry
+
+
+@router.delete("/api/history", tags=["History"],
+    summary="Clear all request history")
+def history_clear():
+    count = _history.clear_history()
+    return {"deleted": count}
+
+
+class ReplayRequest(BaseModel):
+    model_id: str
+
+
+@router.post("/api/history/{entry_id}/replay", tags=["History"],
+    summary="Counterfactual Replay — re-run a past prompt on a different model",
+    description="Takes the original conversation messages from a history entry and sends them "
+                "to the specified model. The result is stored as a replay inside the entry.")
+async def history_replay(entry_id: str, body: ReplayRequest):
+    entry = _history.get_entry(entry_id)
+    if not entry:
+        raise HTTPException(status_code=404, detail="History entry not found")
+
+    # Find the target model config
+    all_models = settings.get_models()
+    model_cfg  = next((m for m in all_models if m["id"] == body.model_id), None)
+    if not model_cfg:
+        raise HTTPException(status_code=400, detail=f"Model '{body.model_id}' not found")
+
+    messages = entry.get("messages", [])
+    if not messages:
+        raise HTTPException(status_code=400, detail="History entry has no messages to replay")
+
+    prefs    = settings.get_prefs()
+    _raw_max = prefs.get("max_tokens", settings.max_tokens)
+    kwargs   = dict(
+        model       = model_cfg["id"],
+        messages    = messages,
+        max_tokens  = _safe_max_tokens(model_cfg["id"], _raw_max),
+        temperature = prefs.get("temperature", settings.temperature),
+        stream      = False,
+        api_key     = model_cfg.get("api_key"),
+    )
+    if model_cfg.get("base_url"):
+        kwargs["api_base"] = model_cfg["base_url"]
+
+    t0 = time.time()
+    try:
+        response  = await litellm.acompletion(**kwargs)
+        elapsed   = round(time.time() - t0, 2)
+        resp_text = response.choices[0].message.content or ""
+        usage     = response.usage
+        tokens    = usage.total_tokens if usage and usage.total_tokens else 0
+        cost_usd  = estimate_cost_from_response(model_cfg["id"], response)
+        record_cost(model_cfg["id"], cost_usd)
+        _history.record_replay(
+            entry_id=entry_id,
+            model_id=model_cfg["id"],
+            response=resp_text,
+            tokens=tokens,
+            cost_usd=cost_usd,
+            elapsed_s=elapsed,
+        )
+        return {
+            "entry_id":  entry_id,
+            "model_id":  model_cfg["id"],
+            "response":  resp_text,
+            "tokens":    tokens,
+            "cost_usd":  cost_usd,
+            "cost_fmt":  format_cost(cost_usd),
+            "elapsed_s": elapsed,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Replay failed: {e}")
+
+
+# ── Prompt Cache endpoints ─────────────────────────────────────────────────
+
+@router.get("/api/cache/stats", tags=["Cache"],
+    summary="Get prompt cache statistics")
+def cache_stats_endpoint():
+    return _cache.stats()
+
+
+@router.delete("/api/cache", tags=["Cache"],
+    summary="Clear prompt cache (all models or specific model)")
+def cache_clear(model_id: str = ""):
+    count = _cache.clear(model_id or None)
+    return {"deleted": count, "model_id": model_id or "all"}
+
+
+# ── Cost Budget endpoints ─────────────────────────────────────────────────
+
+@router.get("/api/budget", tags=["Cost"],
+    summary="Get current monthly budget settings and usage")
+def get_budget():
+    from datetime import date
+    prefs     = settings.get_prefs()
+    month_key = date.today().strftime("%Y-%m")
+    monthly   = get_monthly_cost(month_key)
+    spent     = round(sum(monthly.values()), 6)
+    budget    = float(prefs.get("cost_budget_usd", 0.0))
+    alert_pct = int(prefs.get("cost_budget_alert_pct", 80))
+    pct_used  = round((spent / budget * 100), 1) if budget > 0 else None
+    return {
+        "budget_usd":      budget,
+        "unlimited":       budget == 0.0,
+        "spent_usd":       spent,
+        "spent_fmt":       format_cost(spent),
+        "remaining_usd":   round(max(0.0, budget - spent), 6) if budget > 0 else None,
+        "pct_used":        pct_used,
+        "alert_pct":       alert_pct,
+        "alert_triggered": (pct_used is not None and pct_used >= alert_pct),
+        "budget_exceeded": (budget > 0 and spent >= budget),
+        "month":           month_key,
+    }
+
+
+class BudgetUpdate(BaseModel):
+    cost_budget_usd:       Optional[float] = None
+    cost_budget_alert_pct: Optional[int]   = None
+
+
+@router.put("/api/budget", tags=["Cost"],
+    summary="Update monthly budget settings")
+def update_budget(body: BudgetUpdate):
+    updates = {}
+    if body.cost_budget_usd is not None:
+        updates["cost_budget_usd"] = max(0.0, body.cost_budget_usd)
+    if body.cost_budget_alert_pct is not None:
+        updates["cost_budget_alert_pct"] = max(1, min(100, body.cost_budget_alert_pct))
+    if updates:
+        settings.update_prefs(updates)
+    return get_budget()
 
 # ── Bench suites endpoints ────────────────────────────────────────────────
 
@@ -1559,6 +1957,33 @@ async def chat_stream(req: ChatSendRequest):
         # Record usage stats
         try:
             settings.record_usage(model_id, token_count)
+        except Exception:
+            pass
+
+        # ── Cost event ──────────────────────────────────────────────────
+        try:
+            from airvo.cost.pricing import estimate_cost_from_total, format_cost, get_savings_vs_gpt4o, record_cost
+            cost_usd = estimate_cost_from_total(model_id, token_count)
+            savings  = get_savings_vs_gpt4o(model_id, token_count)
+            record_cost(model_id, cost_usd)
+            cost_event = json.dumps({
+                "type":        "airvo_cost",
+                "model":       model_id,
+                "tokens":      token_count,
+                "cost_usd":    cost_usd,
+                "cost_fmt":    format_cost(cost_usd),
+                "savings_usd": savings,
+                "elapsed_s":   elapsed,
+            })
+            yield f"data: {cost_event}\n\n"
+        except Exception:
+            pass
+
+        # ── Confidence Score event ───────────────────────────────────────
+        try:
+            from airvo.confidence.scorer import score_dict as _confidence_score
+            _conf = _confidence_score(full_response)
+            yield f"data: {json.dumps({'type': 'airvo_confidence', 'model': model_id, **_conf})}\n\n"
         except Exception:
             pass
 
