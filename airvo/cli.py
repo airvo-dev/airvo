@@ -272,6 +272,41 @@ def config(
     typer.echo("  Use --show to see current config or --telegram-token to set a token.")
 
 
+# ── MCP command: airvo mcp ────────────────────────────────────────────────
+@app.command()
+def mcp(
+    port: int = typer.Option(int(os.getenv("PORT", 8765)), "--port", "-p", help="Airvo server port to connect to"),
+):
+    """
+    Start the Airvo MCP server (stdio transport).
+
+    Exposes Airvo tools to any MCP-compatible client:
+    Claude Desktop, Cursor, VS Code, Windsurf, Zed, etc.
+
+    Add to Claude Desktop (~/AppData/Roaming/Claude/claude_desktop_config.json):
+
+    \\b
+    {
+      "mcpServers": {
+        "airvo": {
+          "command": "airvo",
+          "args": ["mcp"],
+          "env": { "PORT": "8765" }
+        }
+      }
+    }
+    """
+    try:
+        from airvo.mcp.server import run as _mcp_run
+        import os as _os
+        _os.environ["PORT"] = str(port)
+        typer.echo(f"  Starting Airvo MCP server (Airvo at port {port})…", err=True)
+        _mcp_run()
+    except ImportError:
+        typer.echo("  ✗ MCP SDK not installed. Run: pip install airvo[mcp]", err=True)
+        raise typer.Exit(1)
+
+
 # ── Version command: airvo version ────────────────────────────────────────
 @app.command()
 def version():
