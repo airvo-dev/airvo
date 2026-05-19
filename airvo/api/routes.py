@@ -893,6 +893,47 @@ async def record_copy(req: CopyEventRequest):
     settings.record_copy(req.model_id)
     return {"ok": True}
 
+# ── Response Quality Ratings ──────────────────────────────────────────────
+
+class RatingRequest(BaseModel):
+    model_id:       str
+    model_name:     str = ""
+    prompt:         str = ""
+    rating:         str   # "up" | "down"
+    route_category: str | None = None
+
+@router.post("/api/ratings", tags=["Ratings"], summary="Submit a 👍/👎 rating",
+    description="Save a thumbs-up or thumbs-down rating for a model response. After 50 ratings the Smart Router uses them to prefer higher-rated models.")
+async def submit_rating(req: RatingRequest):
+    from airvo.ratings.store import add_rating
+    if req.rating not in ("up", "down"):
+        raise HTTPException(status_code=400, detail="rating must be 'up' or 'down'")
+    entry = add_rating(
+        model_id       = req.model_id,
+        model_name     = req.model_name,
+        prompt         = req.prompt,
+        rating         = req.rating,
+        route_category = req.route_category,
+    )
+    return {"ok": True, "entry": entry}
+
+@router.get("/api/ratings/stats", tags=["Ratings"], summary="Get rating stats per model",
+    description="Returns per-model up/down counts and score (0–1). 'ready' is true when >= 50 ratings exist and the Smart Router is using them.")
+async def get_rating_stats():
+    from airvo.ratings.store import get_stats
+    return get_stats()
+
+@router.delete("/api/ratings", tags=["Ratings"], summary="Clear all ratings")
+async def clear_ratings():
+    import os
+    _f = os.path.join(os.path.expanduser("~"), ".airvo", "ratings.json")
+    try:
+        if os.path.exists(_f):
+            os.remove(_f)
+    except Exception:
+        pass
+    return {"ok": True}
+
 # ── Standard endpoints ────────────────────────────────────────────────────
 
 @router.get("/v1/models", tags=["Chat"], summary="List models (OpenAI compat)",
@@ -1825,6 +1866,16 @@ async def chat_stream(req: ChatSendRequest):
             chosen = next((m for m in active_mods if m["id"] == router_model_id), None)
     if not chosen and prefs.get("agent_model"):
         chosen = next((m for m in active_mods if m["id"] == prefs["agent_model"]), None)
+    # Rating boost: if still no explicit choice, prefer the highest-rated active model
+    if not chosen and active_mods:
+        try:
+            from airvo.ratings.store import get_model_scores
+            scores = get_model_scores()  # empty dict until >= 50 ratings
+            if scores:
+                best = max(active_mods, key=lambda m: scores.get(m["id"], 0.5))
+                chosen = best
+        except Exception:
+            pass
     if not chosen and active_mods:
         chosen = active_mods[0]
     if not chosen:

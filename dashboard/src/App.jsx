@@ -450,7 +450,7 @@ const I18N = {
     toast_error_delete:"Error deleting model", toast_error_add:"Error adding model",
     confirm_delete:"Delete this model?",
     toast_limit:"Airvo supports up to 3 active models. Deactivate one to activate another.",
-    stat_v1_limit:"max 3 active",
+    stat_v1_limit:"max 5 active",
     auto_detected:"Auto-detected",
     auto_local_hint:"Local model — no API cost",
     auto_cloud_hint:"Cloud model — API usage billed by provider",
@@ -882,7 +882,7 @@ const I18N = {
     toast_error_delete:"Error al eliminar", toast_error_add:"Error al agregar modelo",
     confirm_delete:"¿Eliminar este modelo?",
     toast_limit:"Airvo soporta hasta 3 modelos activos. Desactivá uno para activar otro.",
-    stat_v1_limit:"máx 3 activos",
+    stat_v1_limit:"máx 5 activos",
     auto_detected:"Detectado automáticamente",
     auto_local_hint:"Modelo local — sin costo de API",
     auto_cloud_hint:"Modelo cloud — uso facturado por el proveedor",
@@ -1310,7 +1310,7 @@ const I18N = {
     toast_error_delete:"Erreur de suppression", toast_error_add:"Erreur d'ajout",
     confirm_delete:"Supprimer ce modèle ?",
     toast_limit:"Airvo supporte jusqu'à 3 modèles actifs. Désactivez-en un pour en activer un autre.",
-    stat_v1_limit:"max 3 actifs",
+    stat_v1_limit:"max 5 actifs",
     auto_detected:"Détecté automatiquement",
     auto_local_hint:"Modèle local — sans coût d'API",
     auto_cloud_hint:"Modèle cloud — facturation par le fournisseur",
@@ -1739,7 +1739,7 @@ const I18N = {
     toast_error_delete:"Fehler beim Löschen", toast_error_add:"Fehler beim Hinzufügen",
     confirm_delete:"Dieses Modell löschen?",
     toast_limit:"Airvo unterstützt bis zu 3 aktive Modelle. Deaktivieren Sie eines, um ein anderes zu aktivieren.",
-    stat_v1_limit:"max 3 aktiv",
+    stat_v1_limit:"max 5 aktiv",
     auto_detected:"Automatisch erkannt",
     auto_local_hint:"Lokales Modell — keine API-Kosten",
     auto_cloud_hint:"Cloud-Modell — Abrechnung durch den Anbieter",
@@ -2168,7 +2168,7 @@ const I18N = {
     toast_error_delete:"删除时出错", toast_error_add:"添加模型时出错",
     confirm_delete:"删除此模型？",
     toast_limit:"Airvo 最多支持 3 个活跃模型。停用一个以激活另一个。",
-    stat_v1_limit:"最多 3 个活跃",
+    stat_v1_limit:"最多 5 个活跃",
     auto_detected:"自动检测",
     auto_local_hint:"本地模型 — 无 API 费用",
     auto_cloud_hint:"云端模型 — 由提供商计费",
@@ -2597,7 +2597,7 @@ const I18N = {
     toast_error_delete:"削除エラー", toast_error_add:"モデル追加エラー",
     confirm_delete:"このモデルを削除しますか？",
     toast_limit:"Airvoは最大3つのアクティブモデルをサポートします。別のモデルを有効化するには1つ無効化してください。",
-    stat_v1_limit:"最大3つアクティブ",
+    stat_v1_limit:"最大5つアクティブ",
     auto_detected:"自動検出",
     auto_local_hint:"ローカルモデル — APIコストなし",
     auto_cloud_hint:"クラウドモデル — プロバイダーによる課金",
@@ -3026,7 +3026,7 @@ const I18N = {
     toast_error_delete:"Erro ao excluir", toast_error_add:"Erro ao adicionar modelo",
     confirm_delete:"Excluir este modelo?",
     toast_limit:"O Airvo suporta até 3 modelos ativos. Desative um para ativar outro.",
-    stat_v1_limit:"máx 3 ativos",
+    stat_v1_limit:"máx 5 ativos",
     auto_detected:"Detectado automaticamente",
     auto_local_hint:"Modelo local — sem custo de API",
     auto_cloud_hint:"Modelo cloud — faturamento pelo provedor",
@@ -4033,7 +4033,7 @@ export default function AirvoDashboard() {
   }, [page, compareAutoRefresh, fetchCompare]);
   useEffect(() => { if (discOpen) fetchDiscovery(); }, [discOpen, fetchDiscovery]);
 
-  const MAX_ACTIVE = 3;
+  const MAX_ACTIVE = 5;
 
   async function unloadOllamaModel(modelName) {
     if (!confirm(t("hw_unload_confirm"))) return;
@@ -7643,6 +7643,7 @@ function ChatPage({ t, activeModels, prefs }) {
   const [activeModelName, setActiveModelName] = useState("");
   const [routeCategory,   setRouteCategory]   = useState(null); // {icon, label, color}
   const [fallbackNote,  setFallbackNote]  = useState(null); // {from, to}
+  const [ratings,       setRatings]       = useState({}); // { [msgIndex]: "up"|"down" }
   const bottomRef   = useRef(null);
   const textareaRef = useRef(null);
   const recognRef   = useRef(null);
@@ -7736,7 +7737,7 @@ function ChatPage({ t, activeModels, prefs }) {
           } else if (evt.type === "done") {
             const pendingCost = lastCost;
             const pendingConf = lastConfidence;
-            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0, cost: pendingCost, confidence: pendingConf }]);
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0, cost: pendingCost, confidence: pendingConf, model_id: evt.model_id || "", model_name: evt.model_name || "", prompt: text }]);
             setStreamContent("");
             setActiveConvId(evt.conv_id);
             if (evt.model_name) setActiveModelName(evt.model_name);
@@ -7887,7 +7888,7 @@ function ChatPage({ t, activeModels, prefs }) {
             setFallbackNote({ from: evt.from, to: evt.to });
             setTimeout(() => setFallbackNote(null), 5000);
           } else if (evt.type === "done") {
-            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0, cost: lastCost, confidence: lastConfidence }]);
+            setMessages(prev => [...prev, { role: "assistant", content: full, tokens: evt.tokens || 0, elapsed_s: evt.elapsed_s || 0, cost: lastCost, confidence: lastConfidence, model_id: evt.model_id || "", model_name: evt.model_name || "", prompt: lastUser.content }]);
             setStreamContent("");
             setActiveConvId(evt.conv_id);
             if (evt.model_name) setActiveModelName(evt.model_name);
@@ -7906,6 +7907,25 @@ function ChatPage({ t, activeModels, prefs }) {
     } finally {
       setStreaming(false);
     }
+  }
+
+  // ── Rate a response 👍/👎 ────────────────────────────────────────────────
+  async function rateMessage(msgIndex, rating) {
+    const msg = messages[msgIndex];
+    if (!msg || msg.role !== "assistant" || !msg.model_id) return;
+    setRatings(prev => ({ ...prev, [msgIndex]: rating }));
+    try {
+      await fetch("/api/ratings", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({
+          model_id:   msg.model_id,
+          model_name: msg.model_name || "",
+          prompt:     msg.prompt || "",
+          rating,
+        }),
+      });
+    } catch { /* silent fail */ }
   }
 
   // ── Handle Enter key (Shift+Enter = newline) ─────────────────────────────
@@ -7972,6 +7992,7 @@ function ChatPage({ t, activeModels, prefs }) {
   function renderBubble(msg, isStreaming, key) {
     const isUser = msg.role === "user";
     const blocks = parseBlocks(msg.content || "");
+    const myRating = ratings[key];
     return (
       <div key={key} className={`chat-bubble ${isUser ? "chat-bubble-user" : "chat-bubble-ai"}`}>
         <div className="chat-bubble-role">{isUser ? "You" : "AI"}</div>
@@ -7997,6 +8018,22 @@ function ChatPage({ t, activeModels, prefs }) {
                 title={t("chat_regenerate")}
                 style={{ fontSize:14 }}
               >↺</button>
+            )}
+            {msg.model_id && (
+              <>
+                <button
+                  className="chat-copy-btn"
+                  onClick={() => rateMessage(key, "up")}
+                  title="Good response"
+                  style={{ fontSize:13, color: myRating === "up" ? "var(--green)" : undefined, opacity: myRating === "down" ? 0.35 : 1 }}
+                >👍</button>
+                <button
+                  className="chat-copy-btn"
+                  onClick={() => rateMessage(key, "down")}
+                  title="Bad response"
+                  style={{ fontSize:13, color: myRating === "down" ? "var(--red)" : undefined, opacity: myRating === "up" ? 0.35 : 1 }}
+                >👎</button>
+              </>
             )}
             {msg.tokens > 0 && (
               <span className="chat-token-meta">{msg.tokens} tokens · {msg.elapsed_s ? msg.elapsed_s.toFixed(1)+"s" : ""}
