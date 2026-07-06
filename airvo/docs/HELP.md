@@ -1,6 +1,6 @@
 # Airvo — Complete User Guide
 
-> **Version:** 0.7.0 · **Language:** English (reference version)
+> **Version:** 0.9.1 · **Language:** English (reference version)
 > This document is the master reference for the Airvo dashboard Help page. It covers everything you need to get the most out of Airvo.
 
 ---
@@ -44,7 +44,7 @@ Your editor (VS Code)
         │  HTTP  (continue.dev protocol)
         ▼
 ┌──────────────────┐
-│   Airvo Server   │  ← port 5000 (default), running on your machine
+│   Airvo Server   │  ← port 8765 (default), running on your machine
 │   (FastAPI)      │
 └────────┬─────────┘
          │
@@ -89,13 +89,13 @@ airvo start
 
 You'll see:
 ```
-✓ Airvo server running at http://127.0.0.1:5000
-  Dashboard: http://127.0.0.1:5000
+✓ Airvo server running at http://127.0.0.1:8765
+  Dashboard: http://127.0.0.1:8765
 ```
 
 ### Step 3 — Open the dashboard
 
-In your browser: **http://localhost:5000**
+In your browser: **http://localhost:8765**
 
 ### Step 4 — Add your first model
 
@@ -118,7 +118,7 @@ In your continue.dev `config.json`:
       "title": "Airvo",
       "provider": "openai",
       "model": "airvo",
-      "apiBase": "http://localhost:5000",
+      "apiBase": "http://localhost:8765",
       "apiKey": "airvo"
     }
   ]
@@ -969,6 +969,124 @@ Not happy with the last AI response? Click the **↺** button on any AI message 
 
 ---
 
+### v0.8 Features — Privacy, Cost, Cache & History
+
+#### 🔒 Privacy Mode
+
+Scans every outgoing prompt for 18 categories of sensitive data before routing to a cloud model: API keys, JWTs, AWS credentials, database connection strings, SSH keys, credit card numbers, and more. If high-severity data is detected, cloud routing is blocked.
+
+**Enable:** Configuration → Privacy Mode → toggle on. Choose blocking level: block cloud models, warn only, or log silently.
+
+---
+
+#### 💰 Cost Tracking
+
+Estimated cost of every response shown inline in the chat, using LiteLLM's pricing database (2,708 models). Monthly spend tracked with a configurable budget and alert threshold.
+
+- 💰 `$0.0003` badge — cost for this specific response
+- ✦ `free` badge — local or free-tier response (zero cost)
+- **Budget:** Configuration → Cost Budget → set monthly USD cap. Airvo routes to free/local models when the alert threshold is reached.
+
+---
+
+#### ⚡ Prompt Cache
+
+SHA-256 cache of `(model + messages)`. Identical prompts return the cached response instantly — no API call, zero tokens, zero cost.
+
+- Persisted at `~/.airvo/prompt_cache.json`
+- Skipped automatically for temperature > 0.1 (non-deterministic requests)
+- TTL and max entries: Configuration → Cache
+
+---
+
+#### 🕓 Request History & Counterfactual Replay
+
+Every request saved to `~/.airvo/request_history.json`. The **History** tab lets you search by prompt or model, view cost and confidence per response, and replay past requests.
+
+**Counterfactual Replay:** Click Replay on any past request to re-run it through the current active model — measure whether upgrading a model actually improved results on your real prompts.
+
+---
+
+#### 🎯 Confidence Score
+
+Heuristic 0–100 score based on 30+ uncertainty, hedging, stale-knowledge, and refusal signal patterns. Shown as a ◈ badge under each response.
+
+| Score | Label |
+|---|---|
+| ≥ 80 | 🟢 `high` — direct, certain answer |
+| ≥ 60 | 🟡 `medium` — mild hedging |
+| ≥ 35 | 🟠 `low` — significant uncertainty |
+| < 35 | 🔴 `very_low` — heavy hedging or refusal |
+
+A low score means the model sounded uncertain, not necessarily that the answer is wrong.
+
+---
+
+#### 🧠 Context Window Optimizer
+
+Automatically trims conversation history to 70% of the model's actual context window (from LiteLLM's database). Replaces the old fixed 10-message cap — a 4K model and a 128K model are trimmed correctly without any manual configuration.
+
+---
+
+### v0.9 Features — MCP Server & Quality Tracker
+
+#### 🔌 MCP Server
+
+Exposes 7 Airvo tools via the Model Context Protocol. Compatible with Claude Desktop, Cursor, Windsurf, Zed, and any MCP-compatible client — without needing Continue.dev.
+
+**Install MCP support:**
+```bash
+pip install airvo[mcp]
+```
+
+**Start the MCP server:**
+```bash
+airvo mcp
+```
+
+**Available tools:**
+
+| Tool | What it does |
+|---|---|
+| `airvo_chat` | Send a prompt to one or all active models |
+| `airvo_compare` | Run the same prompt against all models in parallel |
+| `airvo_list_models` | List configured models and their status |
+| `airvo_get_stats` | Monthly cost, token usage, savings vs GPT-4o |
+| `airvo_set_config` | Change temperature, mode, budget limit |
+| `airvo_run_benchmark` | Run a quick speed/quality benchmark |
+| `airvo_get_status` | Server health + active model count |
+
+**Claude Desktop config (`claude_desktop_config.json`):**
+```json
+{
+  "mcpServers": {
+    "airvo": {
+      "command": "airvo",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+---
+
+#### 👍/👎 Response Quality Tracker
+
+Rate each AI response with thumbs up or down directly in the Chat tab. After 50 ratings, the Smart Router uses your personal preference data to automatically favor the model that works best for you.
+
+- Buttons appear under every AI response in Chat
+- Ratings saved locally at `~/.airvo/ratings.json`
+- After 50+ ratings: Smart Router boosts the highest-rated model when no explicit preference is set
+- Clear ratings anytime in Configuration → Quality Tracker
+
+---
+
+#### ⚡ 5 Simultaneous Active Models
+
+Increased from 3 to 5 active models simultaneously in parallel, race, vote, and review modes.
+
+---
+
 ## 16. Troubleshooting — When things go wrong
 
 ### ❌ "Rate limit error" / "tokens too large" from Groq
@@ -995,16 +1113,16 @@ Not happy with the last AI response? Click the **↺** button on any AI message 
 airvo start
 
 # What port?
-netstat -ano | findstr :5000   # Windows
-lsof -i :5000                  # Mac/Linux
+netstat -ano | findstr :8765   # Windows
+lsof -i :8765                  # Mac/Linux
 
 # Does it respond?
-curl http://127.0.0.1:5000/api/health
+curl http://127.0.0.1:8765/api/health
 ```
 
 **Fixes:**
 1. Run `airvo start` in a terminal
-2. Check that the port in `.env` (`PORT=5000`) matches the port in your continue.dev config
+2. Check that the port in `.env` (`PORT=8765`) matches the port in your continue.dev config
 3. If there's a port conflict: change to 8766 in `.env` and in your continue.dev config
 4. Restart: `Ctrl+C` → `airvo start`
 
@@ -1063,8 +1181,8 @@ The model catalog always loads (it comes from a local JSON). Only the "Installed
 **Why it happens:** Usually an IPv4/IPv6 issue. The server is on `127.0.0.1` (IPv4) but the browser tries `localhost` which may resolve to `::1` (IPv6).
 
 **Fix:**
-- Use **`http://localhost:5000`** in the browser
-- Or in continue.dev config: use `http://localhost:5000/v1` as `apiBase`
+- Use **`http://localhost:8765`** in the browser
+- Or in continue.dev config: use `http://localhost:8765/v1` as `apiBase`
 
 ---
 
@@ -1119,9 +1237,9 @@ By design. Chat is conversational: each response is independent. Agent is operat
 ---
 
 **How many models can I have active at the same time?**
-No hard technical limit. In practice:
-- 2–4 active models is most useful in parallel mode
-- More than 4 in parallel can be hard to read
+Up to 5 simultaneously. In practice:
+- 2–3 active models is most useful in parallel mode
+- 4–5 for comprehensive comparisons
 - The real limit is your tokens-per-minute budget with providers
 
 ---
@@ -1214,7 +1332,7 @@ Result: you say "refactor the authentication service to use JWT" and the model k
 ### 🛠️ Useful terminal commands
 
 ```bash
-airvo start               # start server (port 5000)
+airvo start               # start server (port 8765)
 airvo start --port 8766   # alternative port
 airvo version             # show installed version
 airvo --help              # show all commands
@@ -1227,4 +1345,4 @@ ollama rm llama3          # remove a model
 
 ---
 
-*Airvo v0.7.0 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*
+*Airvo v0.9.1 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*

@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.8.0-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.9.1-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -23,6 +23,7 @@ Airvo runs on your machine, connects to any AI model simultaneously, and integra
 - [What is Airvo?](#what-is-airvo)
 - [Quick Start](#quick-start)
 - [What's New in v0.8](#whats-new-in-v08)
+- [What's New in v0.9](#whats-new-in-v09)
 - [Features](#features)
 - [Supported Models](#supported-models)
 - [Dashboard](#dashboard)
@@ -59,11 +60,13 @@ Your Editor (VS Code)
 **Why Airvo?**
 
 - ✅ Any model, any provider — no lock-in
-- ✅ Up to 3 models simultaneously — parallel, race, vote or review
+- ✅ Up to 5 models simultaneously — parallel, race, vote or review
 - ✅ 4 multi-model modes — Parallel, Race, Vote, Review
 - ✅ **Compare tab** — compare any prompt across all models in real-time with word-level diff
 - ✅ **Benchmarks tab** — standardized suites, radar chart, score history, custom suites
 - ✅ **Airvo Assistant** — built-in chat to ask anything about Airvo: setup, features, troubleshooting
+- ✅ **MCP Server** — `airvo mcp` exposes 7 tools to Claude Desktop, Cursor, Windsurf, Zed and any MCP client; install with `pip install airvo[mcp]`
+- ✅ **Response Quality Tracker** — 👍/👎 per response; after 50 ratings, Smart Router learns which model works best for you
 - ✅ **Fallback Chains** — if a model fails, automatically retries with the next active model; toast shows `⚡ Fallback: A → B`
 - ✅ **Model Health Monitor** — ping all active models concurrently; live `✅ Xms` / `❌` chips on every model card
 - ✅ **Smart Router** — classifies every prompt (code/debug/math/creative/explain/general) and picks the optimal model; 0ms latency, fully local
@@ -135,6 +138,16 @@ Open VS Code → press `Ctrl+L` → ask anything.
 | ↺ **Counterfactual Replay** | In the History page, replay any past request through the current active model. Instantly compare how a model improvement changed the answer. |
 | 🎯 **Confidence Score** | Heuristic 0–100 score based on 30+ uncertainty/hedging/refusal signal patterns. Shown as a colored ◈ badge under each chat message and in the History table. |
 | 🧠 **Context Window Optimizer** | History trimmed dynamically to 70% of the model's actual context window (from LiteLLM DB or built-in table). Replaces the old fixed 10-message cap. |
+
+---
+
+## What's New in v0.9
+
+| Feature | What it does |
+|---|---|
+| 🔌 **MCP Server** | `airvo mcp` exposes 7 tools via the Model Context Protocol. Compatible with Claude Desktop, Cursor, Windsurf, Zed, and any MCP client. Install: `pip install airvo[mcp]` |
+| 👍/👎 **Response Quality Tracker** | Rate every response. After 50 ratings, Smart Router boosts the model that works best for you. Saved locally to `~/.airvo/ratings.json` |
+| ⚡ **5 Active Models** | Up from 3 — run up to 5 models simultaneously in parallel, race, vote, or review mode |
 
 ---
 
@@ -480,6 +493,17 @@ It measures how certain the model *sounds*, not how correct it is. A high score 
 ---
 
 ## Changelog
+
+**v0.9.1** — Response Quality Tracker · 5 Active Models
+- **Response Quality Tracker** — `airvo/ratings/store.py`. 👍/👎 buttons under every chat response. Ratings persisted to `~/.airvo/ratings.json` (max 2,000 entries). After 50 ratings, Smart Router boosts the highest-rated model automatically. Endpoints: `POST /api/ratings`, `GET /api/ratings/stats`, `DELETE /api/ratings`.
+- **5 simultaneous active models** — `MAX_ACTIVE` increased from 3 to 5. All 7 i18n languages updated.
+- **New module** — `airvo/ratings/store.py`.
+
+**v0.9.0** — MCP Server
+- **MCP Server** — `airvo/mcp/server.py` using FastMCP. `airvo mcp` starts a stdio MCP server with 7 tools: `airvo_chat`, `airvo_compare`, `airvo_list_models`, `airvo_get_stats`, `airvo_set_config`, `airvo_run_benchmark`, `airvo_get_status`. Compatible with Claude Desktop, Cursor, Windsurf, Zed, and any MCP client.
+- **Install:** `pip install airvo[mcp]` — MCP is an optional dependency.
+- **New CLI command** — `airvo mcp [--port PORT]`.
+- **New module** — `airvo/mcp/server.py`.
 
 **v0.8.0** — Privacy Mode · Cost Tracking · Prompt Cache · Request History · Confidence Score · Context Window Optimizer
 - **Privacy Mode** — `airvo/privacy/detector.py` scans every outgoing prompt for 18 secret categories (API keys, Bearer tokens, AWS creds, JWTs, DSNs, SSH keys…). Blocks cloud routing with HTTP 400 if high-severity data detected. Toggle in Config.
