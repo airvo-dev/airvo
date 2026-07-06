@@ -392,6 +392,13 @@ const I18N = {
     help_faq_13_a:"No. The cache only activates for temperature ≤ 0.1 (deterministic mode). If you need a fresh response, change the wording slightly, set temperature > 0.1, or clear the cache from Config.",
     help_faq_14_q:"What does the Confidence Score actually tell me?",
     help_faq_14_a:"It's a proxy for how certain the model sounds, not how correct it is. A high score means the model answered directly without hedging — useful for triaging responses. Always verify factual claims independently.",
+    help_v9_title:"v0.9 Features — MCP Server & Quality Tracker",
+    help_v9_mcp_title:"🔌 MCP Server",
+    help_v9_mcp_body:"Exposes 7 Airvo tools via the Model Context Protocol. Compatible with Claude Desktop, Cursor, Windsurf, Zed, and any MCP-compatible client — without needing Continue.dev. Install: pip install airvo[mcp] · Start: airvo mcp · Tools: airvo_chat, airvo_compare, airvo_list_models, airvo_get_stats, airvo_set_config, airvo_run_benchmark, airvo_get_status.",
+    help_v9_rating_title:"👍/👎 Response Quality Tracker",
+    help_v9_rating_body:"Rate each AI response with thumbs up or down in the Chat tab. After 50 ratings, the Smart Router automatically favors the model that works best for you. Ratings are saved locally at ~/.airvo/ratings.json.",
+    help_v9_models_title:"⚡ 5 Simultaneous Active Models",
+    help_v9_models_body:"Increased from 3 to 5 active models simultaneously in parallel, race, vote, and review modes.",
 
     config_context_memory_section:"Context & Memory",
     config_v8_section:"Privacy, Cost & History · v0.8",
@@ -875,6 +882,13 @@ const I18N = {
     help_faq_13_a:"No. El caché solo se activa con temperatura ≤ 0.1 (modo determinista). Para respuestas frescas, cambiá levemente el prompt, subí la temperatura o limpiá el caché.",
     help_faq_14_q:"¿Qué indica el Score de Confianza?",
     help_faq_14_a:"Es un proxy de qué tan seguro suena el modelo, no de qué tan correcto es. Un score alto significa respuesta directa sin dudas. Siempre verificá afirmaciones factuales de forma independiente.",
+    help_v9_title:"Novedades v0.9 — Servidor MCP y Calidad de Respuestas",
+    help_v9_mcp_title:"🔌 Servidor MCP",
+    help_v9_mcp_body:"Expone 7 herramientas de Airvo via Model Context Protocol. Compatible con Claude Desktop, Cursor, Windsurf, Zed y cualquier cliente MCP — sin necesitar Continue.dev. Instalar: pip install airvo[mcp] · Iniciar: airvo mcp.",
+    help_v9_rating_title:"👍/👎 Calificador de Respuestas",
+    help_v9_rating_body:"Calificá cada respuesta con pulgar arriba o abajo en el Chat. Después de 50 calificaciones, el Smart Router favorece automáticamente el modelo que mejor funciona para vos. Se guarda en ~/.airvo/ratings.json.",
+    help_v9_models_title:"⚡ 5 Modelos Activos Simultáneos",
+    help_v9_models_body:"Aumentado de 3 a 5 modelos activos simultáneamente en modos paralelo, carrera, votación y revisión.",
     toast_activated:"Modelo activado", toast_deactivated:"Modelo desactivado",
     toast_key_saved:"API key guardada ✓", toast_key_error:"Ingresá una API key válida",
     toast_deleted:"Modelo eliminado", toast_added:"Modelo agregado ✓",
@@ -1303,6 +1317,13 @@ const I18N = {
     help_faq_13_a:"Non. Le cache ne s'active que pour température ≤ 0.1 (mode déterministe). Pour une réponse fraîche, modifiez légèrement le prompt, augmentez la température ou videz le cache.",
     help_faq_14_q:"Que signifie le Score de Confiance ?",
     help_faq_14_a:"C'est un proxy de la certitude apparente du modèle, pas de son exactitude. Un score élevé signifie une réponse directe sans hésitation. Vérifiez toujours les affirmations factuelles.",
+    help_v9_title:"Nouveautés v0.9 — Serveur MCP & Qualité des réponses",
+    help_v9_mcp_title:"🔌 Serveur MCP",
+    help_v9_mcp_body:"Expose 7 outils Airvo via le Model Context Protocol. Compatible avec Claude Desktop, Cursor, Windsurf, Zed et tout client MCP — sans Continue.dev. Installation : pip install airvo[mcp] · Démarrage : airvo mcp.",
+    help_v9_rating_title:"👍/👎 Évaluateur de réponses",
+    help_v9_rating_body:"Évaluez chaque réponse avec pouce haut ou bas dans le Chat. Après 50 évaluations, le Smart Router favorise automatiquement le modèle qui fonctionne le mieux pour vous. Sauvegardé dans ~/.airvo/ratings.json.",
+    help_v9_models_title:"⚡ 5 modèles actifs simultanément",
+    help_v9_models_body:"Augmenté de 3 à 5 modèles actifs en parallèle, course, vote et révision.",
     toast_activated:"Modèle activé", toast_deactivated:"Modèle désactivé",
     toast_key_saved:"Clé API enregistrée ✓", toast_key_error:"Entrez une clé API valide",
     toast_deleted:"Modèle supprimé", toast_added:"Modèle ajouté ✓",
@@ -1732,6 +1753,13 @@ const I18N = {
     help_faq_13_a:"Nein. Der Cache aktiviert sich nur bei Temperatur ≤ 0.1 (deterministischer Modus). Für frische Antworten: Prompt leicht ändern, Temperatur erhöhen oder Cache leeren.",
     help_faq_14_q:"Was sagt der Konfidenz-Score aus?",
     help_faq_14_a:"Er ist ein Proxy dafür, wie sicher das Modell klingt, nicht wie korrekt es ist. Ein hoher Score bedeutet eine direkte Antwort ohne Einschränkungen. Überprüfen Sie faktische Aussagen stets unabhängig.",
+    help_v9_title:"Neu in v0.9 — MCP-Server & Antwortqualität",
+    help_v9_mcp_title:"🔌 MCP-Server",
+    help_v9_mcp_body:"Stellt 7 Airvo-Tools über das Model Context Protocol bereit. Kompatibel mit Claude Desktop, Cursor, Windsurf, Zed und jedem MCP-Client — ohne Continue.dev. Installation: pip install airvo[mcp] · Start: airvo mcp.",
+    help_v9_rating_title:"👍/👎 Antwortqualitäts-Tracker",
+    help_v9_rating_body:"Bewerten Sie jede Antwort im Chat mit Daumen hoch oder runter. Nach 50 Bewertungen bevorzugt der Smart Router automatisch das Modell, das am besten für Sie funktioniert. Gespeichert in ~/.airvo/ratings.json.",
+    help_v9_models_title:"⚡ 5 gleichzeitig aktive Modelle",
+    help_v9_models_body:"Von 3 auf 5 gleichzeitig aktive Modelle in Parallel-, Rennen-, Abstimmungs- und Überprüfungsmodus erhöht.",
     toast_activated:"Modell aktiviert", toast_deactivated:"Modell deaktiviert",
     toast_key_saved:"API-Schlüssel gespeichert ✓", toast_key_error:"Geben Sie einen gültigen API-Schlüssel ein",
     toast_deleted:"Modell gelöscht", toast_added:"Modell hinzugefügt ✓",
@@ -2161,6 +2189,13 @@ const I18N = {
     help_faq_13_a:"不会。缓存仅在温度≤0.1（确定性模式）时激活。如需新鲜响应，稍微修改措辞、提高温度或清除缓存即可。",
     help_faq_14_q:"置信度分数说明什么？",
     help_faq_14_a:"它衡量模型听起来有多确定，而非有多正确。高分意味着直接、无犹豫的回答。请始终独立验证事实性声明。",
+    help_v9_title:"v0.9 新功能 — MCP 服务器和回答质量",
+    help_v9_mcp_title:"🔌 MCP 服务器",
+    help_v9_mcp_body:"通过 Model Context Protocol 暴露 7 个 Airvo 工具。兼容 Claude Desktop、Cursor、Windsurf、Zed 及任何 MCP 客户端，无需 Continue.dev。安装：pip install airvo[mcp] · 启动：airvo mcp。",
+    help_v9_rating_title:"👍/👎 回答质量追踪器",
+    help_v9_rating_body:"在聊天中为每个回答点赞或踩。50 次评分后，Smart Router 自动偏好最适合您的模型。数据保存在 ~/.airvo/ratings.json。",
+    help_v9_models_title:"⚡ 5 个同时激活的模型",
+    help_v9_models_body:"并行、竞速、投票和审阅模式下同时激活的模型数量从 3 个增至 5 个。",
     toast_activated:"模型已激活", toast_deactivated:"模型已停用",
     toast_key_saved:"API 密钥已保存 ✓", toast_key_error:"请输入有效的 API 密钥",
     toast_deleted:"模型已删除", toast_added:"模型已添加 ✓",
@@ -2590,6 +2625,13 @@ const I18N = {
     help_faq_13_a:"いいえ。キャッシュは温度 ≤ 0.1（決定論的モード）の場合のみ有効になります。新鮮なレスポンスが必要な場合は、プロンプトを少し変更するか温度を上げるかキャッシュをクリアしてください。",
     help_faq_14_q:"信頼度スコアは何を示しますか？",
     help_faq_14_a:"モデルがどれほど確信を持って答えているかの指標であり、正確さの指標ではありません。高スコアは躊躇なく直接的な回答を意味します。事実の主張は常に独自に検証してください。",
+    help_v9_title:"v0.9 の新機能 — MCP サーバーと回答品質",
+    help_v9_mcp_title:"🔌 MCP サーバー",
+    help_v9_mcp_body:"Model Context Protocol 経由で 7 つの Airvo ツールを公開します。Claude Desktop、Cursor、Windsurf、Zed など任意の MCP クライアントと互換性あり — Continue.dev 不要。インストール: pip install airvo[mcp] · 起動: airvo mcp。",
+    help_v9_rating_title:"👍/👎 回答品質トラッカー",
+    help_v9_rating_body:"チャットで各回答にサムズアップ/ダウンで評価できます。50 件の評価後、Smart Router が最も適したモデルを自動的に優先します。~/.airvo/ratings.json に保存されます。",
+    help_v9_models_title:"⚡ 同時アクティブモデル 5 件",
+    help_v9_models_body:"並列・レース・投票・レビューモードで同時にアクティブにできるモデル数が 3 から 5 に増加しました。",
     toast_activated:"モデルを有効化しました", toast_deactivated:"モデルを無効化しました",
     toast_key_saved:"APIキーを保存しました ✓", toast_key_error:"有効なAPIキーを入力してください",
     toast_deleted:"モデルを削除しました", toast_added:"モデルを追加しました ✓",
@@ -3019,6 +3061,13 @@ const I18N = {
     help_faq_13_a:"Não. O cache só é ativado com temperatura ≤ 0.1 (modo determinístico). Para respostas novas, mude levemente o prompt, aumente a temperatura ou limpe o cache.",
     help_faq_14_q:"O que o Score de Confiança indica?",
     help_faq_14_a:"É um indicador de quão certo o modelo soa, não de quão correto ele é. Alta pontuação significa resposta direta sem hesitação. Sempre verifique afirmações factuais de forma independente.",
+    help_v9_title:"Novidades v0.9 — Servidor MCP e Qualidade de Respostas",
+    help_v9_mcp_title:"🔌 Servidor MCP",
+    help_v9_mcp_body:"Expõe 7 ferramentas Airvo via Model Context Protocol. Compatível com Claude Desktop, Cursor, Windsurf, Zed e qualquer cliente MCP — sem precisar do Continue.dev. Instalar: pip install airvo[mcp] · Iniciar: airvo mcp.",
+    help_v9_rating_title:"👍/👎 Rastreador de Qualidade de Respostas",
+    help_v9_rating_body:"Avalie cada resposta com positivo ou negativo no Chat. Após 50 avaliações, o Smart Router favorece automaticamente o modelo que funciona melhor para você. Salvo em ~/.airvo/ratings.json.",
+    help_v9_models_title:"⚡ 5 Modelos Ativos Simultâneos",
+    help_v9_models_body:"Aumentado de 3 para 5 modelos ativos simultaneamente nos modos paralelo, corrida, votação e revisão.",
     toast_activated:"Modelo ativado", toast_deactivated:"Modelo desativado",
     toast_key_saved:"Chave API salva ✓", toast_key_error:"Insira uma chave API válida",
     toast_deleted:"Modelo excluído", toast_added:"Modelo adicionado ✓",
@@ -7586,6 +7635,24 @@ function HelpPage({ t, setPage }) {
           { title:t("help_context_what_title"), body:t("help_context_what_body") },
           { title:t("help_context_how_title"),  body:t("help_context_how_body")  },
           { title:t("help_context_tip_title"),  body:t("help_context_tip_body")  },
+        ].map(f => (
+          <div key={f.title} className="help-field-block">
+            <div className="help-field-title">{f.title}</div>
+            <div className="help-field-desc" style={{ lineHeight:1.8 }}>{f.body}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* v0.9: MCP Server & Quality Tracker */}
+      <div className="help-section">
+        <div className="help-section-title">
+          <span className="help-section-icon">🚀</span>
+          {t("help_v9_title")}
+        </div>
+        {[
+          { title:t("help_v9_mcp_title"),     body:t("help_v9_mcp_body")     },
+          { title:t("help_v9_rating_title"),  body:t("help_v9_rating_body")  },
+          { title:t("help_v9_models_title"),  body:t("help_v9_models_body")  },
         ].map(f => (
           <div key={f.title} className="help-field-block">
             <div className="help-field-title">{f.title}</div>
