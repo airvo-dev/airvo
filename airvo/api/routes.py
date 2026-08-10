@@ -934,6 +934,93 @@ async def clear_ratings():
         pass
     return {"ok": True}
 
+# ── Free Route ────────────────────────────────────────────────────────────────
+
+class FreeRouteSetupRequest(BaseModel):
+    api_key:  str
+    mode:     str = "add"   # "add" | "replace"
+
+@router.post("/api/free-route/setup", tags=["FreeRoute"], summary="Setup Free Route")
+async def free_route_setup(req: FreeRouteSetupRequest):
+    from airvo.free_route.manager import setup as fr_setup, get_active_model_ids
+    if not req.api_key or len(req.api_key) < 8:
+        raise HTTPException(status_code=400, detail="Invalid API key")
+    try:
+        state = fr_setup(req.api_key)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+    active_ids = state.get("active_model_ids", [])
+
+    # Build model entries for Airvo config
+    models_by_cat = state.get("models_by_category", {})
+    all_free: dict[str, dict] = {}
+    for cat_models in models_by_cat.values():
+        for m in cat_models:
+            mid = m["id"]
+            if mid not in all_free:
+                all_free[mid] = m
+
+    new_models = []
+    for mid in active_ids:
+        m = all_free.get(mid, {"id": mid, "name": mid})
+        # strip the "openrouter/" prefix for the actual model_id sent to LiteLLM
+        litellm_id = mid[len("openrouter/"):] if mid.startswith("openrouter/") else mid
+        new_models.append({
+            "id":       litellm_id,
+            "name":     m.get("name", litellm_id) + " (free)",
+            "provider": "openrouter",
+            "api_key":  req.api_key,
+            "active":   True,
+            "free_route": True,
+        })
+
+    if req.mode == "replace":
+        # keep only free_route models (clear all existing first, then add new)
+        save_models(new_models)
+    else:
+        # add alongside existing, skip duplicates by id
+        existing = settings.get_models()
+        existing_ids = {m["id"] for m in existing}
+        to_add = [m for m in new_models if m["id"] not in existing_ids]
+        save_models(existing + to_add)
+
+    return {
+        "ok": True,
+        "active_model_ids": active_ids,
+        "total_free_found": state.get("total_free_found", 0),
+        "mode": req.mode,
+    }
+
+@router.post("/api/free-route/refresh", tags=["FreeRoute"], summary="Refresh free model list")
+async def free_route_refresh():
+    from airvo.free_route.manager import refresh as fr_refresh
+    try:
+        state = fr_refresh()
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    return {"ok": True, "active_model_ids": state.get("active_model_ids", []), "total_free_found": state.get("total_free_found", 0)}
+
+@router.get("/api/free-route/status", tags=["FreeRoute"], summary="Get Free Route status")
+async def free_route_status():
+    from airvo.free_route.manager import get_status
+    return get_status()
+
+@router.delete("/api/free-route", tags=["FreeRoute"], summary="Disable Free Route")
+async def free_route_disable():
+    from airvo.free_route.manager import disable as fr_disable
+    fr_disable()
+    # remove free_route models from settings
+    remaining = [m for m in settings.get_models() if not m.get("free_route")]
+    save_models(remaining)
+    return {"ok": True}
+
+@router.post("/api/free-route/test-key", tags=["FreeRoute"], summary="Test OpenRouter API key")
+async def free_route_test_key(req: FreeRouteSetupRequest):
+    from airvo.free_route.manager import test_api_key
+    ok = test_api_key(req.api_key)
+    return {"ok": ok}
+
 # ── Standard endpoints ────────────────────────────────────────────────────
 
 @router.get("/v1/models", tags=["Chat"], summary="List models (OpenAI compat)",
@@ -1866,6 +1953,17 @@ async def chat_stream(req: ChatSendRequest):
             chosen = next((m for m in active_mods if m["id"] == router_model_id), None)
     if not chosen and prefs.get("agent_model"):
         chosen = next((m for m in active_mods if m["id"] == prefs["agent_model"]), None)
+    # Free Route: if still no explicit choice, pick best free model for this category
+    if not chosen and active_mods:
+        try:
+            from airvo.free_route.manager import get_best_for_category
+            best_free_id = get_best_for_category(route_category)
+            if best_free_id:
+                # The stored ID has "openrouter/" prefix; models were added without it
+                litellm_id = best_free_id[len("openrouter/"):] if best_free_id.startswith("openrouter/") else best_free_id
+                chosen = next((m for m in active_mods if m["id"] == litellm_id), None)
+        except Exception:
+            pass
     # Rating boost: if still no explicit choice, prefer the highest-rated active model
     if not chosen and active_mods:
         try:

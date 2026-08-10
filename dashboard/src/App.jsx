@@ -401,6 +401,25 @@ const I18N = {
     help_v9_models_body:"Increased from 3 to 5 active models simultaneously in parallel, race, vote, and review modes.",
 
     config_context_memory_section:"Context & Memory",
+    config_free_route_section:"Free Route · Zero cost AI",
+    free_route_label:"🆓 Free Route",
+    free_route_sub:"One OpenRouter API key → Airvo auto-configures the best free models, ranked by task. One key, always free, automatic fallback.",
+    free_route_key_ph:"sk-or-v1-...",
+    free_route_test:"Test key",
+    free_route_mode_label:"What to do with existing models:",
+    free_route_mode_add:"Add alongside my current models",
+    free_route_mode_replace:"Replace all models with Free Route",
+    free_route_setup:"🚀 Setup Free Route",
+    free_route_setting_up:"Setting up...",
+    free_route_refresh:"🔄 Refresh free models",
+    free_route_refreshing:"Refreshing...",
+    free_route_remove:"Remove Free Route",
+    free_route_status_ok:"✅ Free Route active",
+    free_route_found:"free models found",
+    free_route_active_count:"models configured",
+    free_route_get_key:"Get your free OpenRouter API key at",
+    free_route_key_ok:"✓ API key valid",
+    free_route_key_error:"✗ Invalid API key",
     config_v8_section:"Privacy, Cost & History · v0.8",
     nav_history:"History",
     history_title:"Request History",
@@ -804,6 +823,7 @@ const I18N = {
     help_faq_10_q:"¿Puedo hacer benchmark con un solo modelo?",
     help_faq_10_a:"Sí — los puntajes absolutos funcionan con un modelo. Pero los benchmarks son más útiles con 2+ modelos para comparar performance relativa con los mismos prompts.",
     config_context_memory_section:"Contexto & Memoria",
+    config_free_route_section:"Free Route · IA gratuita",free_route_label:"🆓 Free Route",free_route_sub:"Una API key de OpenRouter → Airvo configura automáticamente los mejores modelos gratis por tarea.",free_route_key_ph:"sk-or-v1-...",free_route_test:"Probar key",free_route_mode_label:"Qué hacer con los modelos actuales:",free_route_mode_add:"Agregar junto a mis modelos actuales",free_route_mode_replace:"Reemplazar todos los modelos con Free Route",free_route_setup:"🚀 Configurar Free Route",free_route_setting_up:"Configurando...",free_route_refresh:"🔄 Actualizar modelos gratis",free_route_refreshing:"Actualizando...",free_route_remove:"Eliminar Free Route",free_route_status_ok:"✅ Free Route activo",free_route_found:"modelos gratis encontrados",free_route_active_count:"modelos configurados",free_route_get_key:"Obtené tu API key gratuita en",free_route_key_ok:"✓ API key válida",free_route_key_error:"✗ API key inválida",
     config_v8_section:"Privacidad, Costo & Historial · v0.8",
     nav_history:"Historial",
     history_title:"Historial de Requests",
@@ -1239,6 +1259,7 @@ const I18N = {
     help_faq_10_q:"Puis-je faire un benchmark avec un seul modèle ?",
     help_faq_10_a:"Oui — les scores absolus fonctionnent avec un seul modèle. Mais les benchmarks sont plus utiles avec 2+ modèles pour comparer les performances relatives sur les mêmes prompts.",
     config_context_memory_section:"Contexte & Mémoire",
+    config_free_route_section:"Free Route · IA gratuite",free_route_label:"🆓 Free Route",free_route_sub:"Une clé API OpenRouter → Airvo configure automatiquement les meilleurs modèles gratuits classés par tâche.",free_route_key_ph:"sk-or-v1-...",free_route_test:"Tester la clé",free_route_mode_label:"Que faire avec les modèles existants :",free_route_mode_add:"Ajouter à côté de mes modèles actuels",free_route_mode_replace:"Remplacer tous les modèles par Free Route",free_route_setup:"🚀 Configurer Free Route",free_route_setting_up:"Configuration...",free_route_refresh:"🔄 Actualiser les modèles gratuits",free_route_refreshing:"Actualisation...",free_route_remove:"Supprimer Free Route",free_route_status_ok:"✅ Free Route actif",free_route_found:"modèles gratuits trouvés",free_route_active_count:"modèles configurés",free_route_get_key:"Obtenez votre clé API gratuite sur",free_route_key_ok:"✓ Clé API valide",free_route_key_error:"✗ Clé API invalide",
     config_v8_section:"Confidentialité, Coût & Historique · v0.8",
     nav_history:"Historique",
     history_title:"Historique des Requêtes",
@@ -1675,6 +1696,7 @@ const I18N = {
     help_faq_10_q:"Kann ich einen Benchmark mit nur einem Modell durchführen?",
     help_faq_10_a:"Ja — absolute Punktzahlen funktionieren mit einem Modell. Benchmarks sind jedoch am nützlichsten mit 2+ Modellen für relative Leistungsvergleiche auf denselben Prompts.",
     config_context_memory_section:"Kontext & Speicher",
+    config_free_route_section:"Free Route · Kostenlose KI",free_route_label:"🆓 Free Route",free_route_sub:"Ein OpenRouter API-Schlüssel → Airvo konfiguriert automatisch die besten kostenlosen Modelle nach Aufgabe.",free_route_key_ph:"sk-or-v1-...",free_route_test:"Schlüssel testen",free_route_mode_label:"Was mit vorhandenen Modellen tun:",free_route_mode_add:"Neben meinen aktuellen Modellen hinzufügen",free_route_mode_replace:"Alle Modelle durch Free Route ersetzen",free_route_setup:"🚀 Free Route einrichten",free_route_setting_up:"Einrichten...",free_route_refresh:"🔄 Modelle aktualisieren",free_route_refreshing:"Aktualisieren...",free_route_remove:"Free Route entfernen",free_route_status_ok:"✅ Free Route aktiv",free_route_found:"kostenlose Modelle gefunden",free_route_active_count:"Modelle konfiguriert",free_route_get_key:"Kostenlosen API-Schlüssel holen auf",free_route_key_ok:"✓ API-Schlüssel gültig",free_route_key_error:"✗ Ungültiger API-Schlüssel",
     config_v8_section:"Datenschutz, Kosten & Verlauf · v0.8",
     nav_history:"Verlauf",
     history_title:"Anfrage-Verlauf",
@@ -2111,6 +2133,7 @@ const I18N = {
     help_faq_10_q:"只有一个模型能做基准测试吗？",
     help_faq_10_a:"可以——绝对分数适用于单个模型。但基准测试在2+个模型时最有价值，可以在完全相同的提示词上比较相对性能。",
     config_context_memory_section:"上下文与内存",
+    config_free_route_section:"免费路由 · 零成本 AI",free_route_label:"🆓 免费路由",free_route_sub:"一个 OpenRouter API 密钒 → Airvo 自动配置最佳免费模型，按任务排序。",free_route_key_ph:"sk-or-v1-...",free_route_test:"测试密钒",free_route_mode_label:"如何处理现有模型：",free_route_mode_add:"添加到我的现有模型旁边",free_route_mode_replace:"用免费路由替换所有模型",free_route_setup:"🚀 设置免费路由",free_route_setting_up:"设置中...",free_route_refresh:"🔄 刷新免费模型",free_route_refreshing:"刷新中...",free_route_remove:"移除免费路由",free_route_status_ok:"✅ 免费路由已激活",free_route_found:"个免费模型已找到",free_route_active_count:"个模型已配置",free_route_get_key:"在以下网址获取免费 API 密钒",free_route_key_ok:"✓ API 密钒有效",free_route_key_error:"✗ API 密钒无效",
     config_v8_section:"隐私、成本与历史 · v0.8",
     nav_history:"历史",
     history_title:"请求历史",
@@ -2547,6 +2570,7 @@ const I18N = {
     help_faq_10_q:"モデルが1つだけでもベンチマークを実行できますか？",
     help_faq_10_a:"はい——絶対スコアは1つのモデルでも機能します。ただし、全く同じプロンプトで相対パフォーマンスを比較するには、2+モデルで使用するのが最も効果的です。",
     config_context_memory_section:"コンテキスト & メモリ",
+    config_free_route_section:"フリールート · 無料 AI",free_route_label:"🆓 フリールート",free_route_sub:"OpenRouter APIキー 1つで Airvo がタスク別に最適な無料モデルを自動設定。",free_route_key_ph:"sk-or-v1-...",free_route_test:"キーをテスト",free_route_mode_label:"既存モデルの処理：",free_route_mode_add:"現在のモデルに追加",free_route_mode_replace:"すべてのモデルをフリールートで置換",free_route_setup:"🚀 フリールートを設定",free_route_setting_up:"設定中...",free_route_refresh:"🔄 無料モデルを更新",free_route_refreshing:"更新中...",free_route_remove:"フリールートを削除",free_route_status_ok:"✅ フリールート有効",free_route_found:"個の無料モデルが見つかりました",free_route_active_count:"個のモデルが設定済み",free_route_get_key:"無料 API キーはこちらから取得",free_route_key_ok:"✓ API キー有効",free_route_key_error:"✗ API キー無効",
     config_v8_section:"プライバシー・コスト・履歴 · v0.8",
     nav_history:"履歴",
     history_title:"リクエスト履歴",
@@ -2983,6 +3007,7 @@ const I18N = {
     help_faq_10_q:"Posso fazer benchmark com apenas um modelo?",
     help_faq_10_a:"Sim — pontuações absolutas funcionam com um modelo. Mas benchmarks são mais úteis com 2+ modelos para comparar performance relativa nos mesmos prompts.",
     config_context_memory_section:"Contexto & Memória",
+    config_free_route_section:"Free Route · IA gratuita",free_route_label:"🆓 Free Route",free_route_sub:"Uma chave API OpenRouter → Airvo configura automaticamente os melhores modelos gratuitos por tarefa.",free_route_key_ph:"sk-or-v1-...",free_route_test:"Testar chave",free_route_mode_label:"O que fazer com os modelos existentes:",free_route_mode_add:"Adicionar ao lado dos meus modelos atuais",free_route_mode_replace:"Substituir todos os modelos pelo Free Route",free_route_setup:"🚀 Configurar Free Route",free_route_setting_up:"Configurando...",free_route_refresh:"🔄 Atualizar modelos gratuitos",free_route_refreshing:"Atualizando...",free_route_remove:"Remover Free Route",free_route_status_ok:"✅ Free Route ativo",free_route_found:"modelos gratuitos encontrados",free_route_active_count:"modelos configurados",free_route_get_key:"Obtenha sua chave API gratuita em",free_route_key_ok:"✓ Chave API válida",free_route_key_error:"✗ Chave API inválida",
     config_v8_section:"Privacidade, Custo & Histórico · v0.8",
     nav_history:"Histórico",
     history_title:"Histórico de Requisições",
@@ -5560,6 +5585,15 @@ export default function AirvoDashboard() {
                 }
               </div>
 
+              {/* ── Free Route section ── */}
+              <div style={{ display:"flex", alignItems:"center", gap:12, marginTop:8 }}>
+                <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--green)", fontWeight:700, letterSpacing:2, textTransform:"uppercase" }}>
+                  🆓 {t("config_free_route_section")}
+                </span>
+                <div style={{ flex:1, height:1, background:"var(--border)" }} />
+              </div>
+              <FreeRoutePanel t={t} toast={toast} onModelsChanged={fetchAll} />
+
               {/* ── v0.8 section ── */}
               <div style={{ display:"flex", alignItems:"center", gap:12, marginTop:8 }}>
                 <span style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--accent)", fontWeight:700, letterSpacing:2, textTransform:"uppercase" }}>
@@ -6092,6 +6126,140 @@ const BENCH_SUITES = {
 
 function tryLS(key, def) { try { return JSON.parse(localStorage.getItem(key) || "null") ?? def; } catch { return def; } }
 function saveLS(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+
+// ── Free Route Panel ──────────────────────────────────────────────────────────
+function FreeRoutePanel({ t, toast, onModelsChanged }) {
+  const [apiKey,    setApiKey]    = useState("");
+  const [mode,      setMode]      = useState("add");
+  const [loading,   setLoading]   = useState(false);
+  const [refreshing,setRefreshing]= useState(false);
+  const [testing,   setTesting]   = useState(false);
+  const [keyStatus, setKeyStatus] = useState(null); // null | "ok" | "error"
+  const [status,    setStatus]    = useState(null);  // free-route status from server
+
+  // Load current status on mount
+  useState(() => {
+    fetch("/api/free-route/status").then(r => r.json()).then(s => {
+      if (s.enabled) setStatus(s);
+    }).catch(() => {});
+  });
+
+  async function testKey() {
+    if (!apiKey.trim()) return;
+    setTesting(true);
+    try {
+      const r = await fetch("/api/free-route/test-key", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ api_key: apiKey.trim(), mode }),
+      });
+      const d = await r.json();
+      setKeyStatus(d.ok ? "ok" : "error");
+    } catch { setKeyStatus("error"); }
+    setTesting(false);
+  }
+
+  async function setup() {
+    if (!apiKey.trim()) return;
+    setLoading(true);
+    try {
+      const r = await fetch("/api/free-route/setup", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ api_key: apiKey.trim(), mode }),
+      });
+      const d = await r.json();
+      if (!r.ok) { toast(d.detail || "Setup failed", "error"); return; }
+      toast(`✅ Free Route active — ${d.active_model_ids?.length || 0} ${t("free_route_active_count")}`, "success");
+      const newStatus = await fetch("/api/free-route/status").then(r2 => r2.json());
+      setStatus(newStatus.enabled ? newStatus : null);
+      onModelsChanged?.();
+    } catch (e) { toast(String(e), "error"); }
+    setLoading(false);
+  }
+
+  async function refresh() {
+    setRefreshing(true);
+    try {
+      const r = await fetch("/api/free-route/refresh", { method: "POST" });
+      const d = await r.json();
+      if (!r.ok) { toast(d.detail || "Refresh failed", "error"); return; }
+      toast(`✅ ${d.active_model_ids?.length || 0} ${t("free_route_active_count")}`, "success");
+      const newStatus = await fetch("/api/free-route/status").then(r2 => r2.json());
+      setStatus(newStatus.enabled ? newStatus : null);
+      onModelsChanged?.();
+    } catch (e) { toast(String(e), "error"); }
+    setRefreshing(false);
+  }
+
+  async function remove() {
+    if (!confirm("Remove Free Route and its models?")) return;
+    await fetch("/api/free-route", { method: "DELETE" });
+    setStatus(null);
+    toast("Free Route removed", "info");
+    onModelsChanged?.();
+  }
+
+  return (
+    <div className="card">
+      <div className="card-title">{t("free_route_label")}</div>
+      <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14, lineHeight:1.7 }}>
+        {t("free_route_sub")}
+      </p>
+      <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:14 }}>
+        {t("free_route_get_key")} <a href="https://openrouter.ai" target="_blank" rel="noreferrer" style={{ color:"var(--accent)" }}>openrouter.ai</a>
+      </p>
+
+      {/* API Key input */}
+      <div style={{ display:"flex", gap:8, marginBottom:10 }}>
+        <input
+          className="input-field"
+          style={{ flex:1, fontFamily:"var(--mono)", fontSize:12 }}
+          type="password"
+          placeholder={t("free_route_key_ph")}
+          value={apiKey}
+          onChange={e => { setApiKey(e.target.value); setKeyStatus(null); }}
+        />
+        <button className="btn btn-ghost btn-sm" onClick={testKey} disabled={testing || !apiKey.trim()}>
+          {testing ? "…" : t("free_route_test")}
+        </button>
+      </div>
+      {keyStatus === "ok"    && <p style={{ color:"var(--green)", fontFamily:"var(--mono)", fontSize:11, marginBottom:8 }}>{t("free_route_key_ok")}</p>}
+      {keyStatus === "error" && <p style={{ color:"var(--red)",   fontFamily:"var(--mono)", fontSize:11, marginBottom:8 }}>{t("free_route_key_error")}</p>}
+
+      {/* Mode radio */}
+      <p style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", marginBottom:6 }}>{t("free_route_mode_label")}</p>
+      <div style={{ display:"flex", flexDirection:"column", gap:6, marginBottom:14 }}>
+        {[["add", t("free_route_mode_add")], ["replace", t("free_route_mode_replace")]].map(([val, label]) => (
+          <label key={val} style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:13 }}>
+            <input type="radio" name="fr_mode" value={val} checked={mode === val} onChange={() => setMode(val)} />
+            {label}
+          </label>
+        ))}
+      </div>
+
+      {/* Setup button */}
+      <button className="btn btn-primary" onClick={setup} disabled={loading || !apiKey.trim()} style={{ marginBottom:16 }}>
+        {loading ? t("free_route_setting_up") : t("free_route_setup")}
+      </button>
+
+      {/* Status after setup */}
+      {status?.enabled && (
+        <div style={{ padding:"12px 16px", background:"#0a1a0f", border:"1px solid var(--green)", borderRadius:8, marginTop:4 }}>
+          <p style={{ color:"var(--green)", fontFamily:"var(--mono)", fontSize:12, marginBottom:8 }}>
+            {t("free_route_status_ok")} · {status.active_model_ids?.length || 0} {t("free_route_active_count")} · {status.total_free_found || 0} {t("free_route_found")}
+          </p>
+          <div style={{ display:"flex", gap:8 }}>
+            <button className="btn btn-ghost btn-sm" onClick={refresh} disabled={refreshing}>
+              {refreshing ? t("free_route_refreshing") : t("free_route_refresh")}
+            </button>
+            <button className="btn btn-ghost btn-sm" onClick={remove} style={{ color:"var(--red)" }}>
+              {t("free_route_remove")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const BENCH_COLORS = ["#7c3aed","#2563eb","#16a34a","#d97706","#dc2626","#db2777","#0891b2","#64748b"];
 
