@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.9.1-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.9.4-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -15,6 +15,8 @@
 **Your local AI coding assistant — any model, any provider. Your AI. Your Rules.**
 
 Airvo runs on your machine, connects to any AI model simultaneously, and integrates directly into VS Code via continue.dev. No cloud lock-in. No subscriptions. Your API keys stay local.
+
+> **🆓 New in v0.9.4 — Free Route:** One [OpenRouter](https://openrouter.ai) API key (free, no credit card) → Airvo auto-discovers and ranks the best free models available, routes each prompt to the optimal one by task, and falls back automatically if one hits a rate limit. Zero cost. Zero manual configuration.
 
 ---
 
@@ -62,6 +64,7 @@ Your Editor (VS Code)
 - ✅ Any model, any provider — no lock-in
 - ✅ Up to 5 models simultaneously — parallel, race, vote or review
 - ✅ 4 multi-model modes — Parallel, Race, Vote, Review
+- ✅ **🆓 Free Route** — one free [OpenRouter](https://openrouter.ai) API key → Airvo auto-ranks the best free models by task category and manages automatic fallback. Zero cost, zero config.
 - ✅ **Compare tab** — compare any prompt across all models in real-time with word-level diff
 - ✅ **Benchmarks tab** — standardized suites, radar chart, score history, custom suites
 - ✅ **Airvo Assistant** — built-in chat to ask anything about Airvo: setup, features, troubleshooting
@@ -112,7 +115,17 @@ That's it. Airvo will:
 
 Open the dashboard → Add Model → fill in the model details → Save.
 
-Not sure where to start? Add Groq — it's free and fast:
+Not sure where to start? Use **Free Route** — zero cost, one key:
+
+```bash
+pip install airvo
+airvo start
+# Open http://localhost:8765 → Config → 🆓 Free Route
+# Paste your free OpenRouter key → Setup Free Route
+# Done. 5 free AI models configured automatically.
+```
+
+Or add Groq manually — it's free and fast:
 - **Model ID:** `groq/llama-3.3-70b-versatile`
 - **Provider:** `groq`
 - **API Key:** get one free at [console.groq.com](https://console.groq.com) — no credit card required
@@ -145,6 +158,7 @@ Open VS Code → press `Ctrl+L` → ask anything.
 
 | Feature | What it does |
 |---|---|
+| 🆓 **Free Route** | One free [OpenRouter](https://openrouter.ai) API key → Airvo fetches all free models, ranks them by task (code, debug, math, creative, explain, general) using published benchmark scores, and configures up to 5 automatically. Smart Router routes each prompt to the best free model. Fallback Chain handles rate limits silently. Config → Free Route. |
 | 🔌 **MCP Server** | `airvo mcp` exposes 7 tools via the Model Context Protocol. Compatible with Claude Desktop, Cursor, Windsurf, Zed, and any MCP client. Install: `pip install airvo[mcp]` |
 | 👍/👎 **Response Quality Tracker** | Rate every response. After 50 ratings, Smart Router boosts the model that works best for you. Saved locally to `~/.airvo/ratings.json` |
 | ⚡ **5 Active Models** | Up from 3 — run up to 5 models simultaneously in parallel, race, vote, or review mode |
@@ -493,6 +507,10 @@ It measures how certain the model *sounds*, not how correct it is. A high score 
 ---
 
 ## Changelog
+
+**v0.9.4** — Free Route
+- **Free Route** — `airvo/free_route/manager.py`. One free [OpenRouter](https://openrouter.ai) API key → Airvo fetches all models with `pricing.prompt == "0"`, ranks them per task category using `coding_index`, `intelligence_index`, `agentic_index` from OpenRouter benchmarks, and configures up to 5 as active models. Smart Router picks the best free model per prompt. Fallback Chain handles rate limits silently. Config panel with add/replace mode, test key, refresh. Endpoints: `POST /api/free-route/setup`, `POST /api/free-route/refresh`, `GET /api/free-route/status`, `DELETE /api/free-route`.
+- **New module** — `airvo/free_route/manager.py`.
 
 **v0.9.1** — Response Quality Tracker · 5 Active Models
 - **Response Quality Tracker** — `airvo/ratings/store.py`. 👍/👎 buttons under every chat response. Ratings persisted to `~/.airvo/ratings.json` (max 2,000 entries). After 50 ratings, Smart Router boosts the highest-rated model automatically. Endpoints: `POST /api/ratings`, `GET /api/ratings/stats`, `DELETE /api/ratings`.
