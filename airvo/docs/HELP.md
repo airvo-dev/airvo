@@ -1,6 +1,6 @@
 # Airvo — Complete User Guide
 
-> **Version:** 0.9.1 · **Language:** English (reference version)
+> **Version:** 0.9.4 · **Language:** English (reference version)
 > This document is the master reference for the Airvo dashboard Help page. It covers everything you need to get the most out of Airvo.
 
 ---
@@ -1087,6 +1087,49 @@ Increased from 3 to 5 active models simultaneously in parallel, race, vote, and 
 
 ---
 
+### v0.9.4 Features — Free Route
+
+#### 🆓 Free Route — Zero cost AI with one key
+
+Free Route lets you access the best free AI models available on OpenRouter with a single API key — no credit card, no subscriptions. Airvo automatically discovers, ranks, and configures up to 5 free models from OpenRouter's catalog, then routes each of your prompts to the best model for that task category.
+
+**How it works:**
+1. You provide one OpenRouter API key (free account at [openrouter.ai](https://openrouter.ai))
+2. Airvo fetches all free models from OpenRouter's API (`pricing.prompt == "0"`)
+3. Each model is ranked by published benchmark scores per category:
+   - `code` / `debug` → ranked by `coding_index`
+   - `math` / `explain` / `creative` → ranked by `intelligence_index`
+   - `general` → ranked by `agentic_index`
+4. Top 5 unique models are added as active models in Airvo
+5. Smart Router automatically picks the best free model per prompt category
+6. If one model hits a rate limit → Fallback Chain automatically tries the next free model
+
+**Setup — 3 steps:**
+1. Create a free account at [openrouter.ai](https://openrouter.ai) → Settings → API Keys → Create Key
+2. In Airvo → Config → 🆓 Free Route → paste your key
+3. Choose mode (add alongside or replace) → click **Setup Free Route**
+
+**Modes:**
+
+| Mode | What it does |
+|---|---|
+| **Add alongside** | Adds free models to your existing setup — recommended for users with existing models |
+| **Replace all** | Removes your current models and sets up only free models — good for a fresh start |
+
+**After setup:**
+- Up to 5 free models appear in your Models list tagged with `(free)`
+- Smart Router automatically picks the best one per category
+- If a free model fails → Fallback Chain tries the next free model silently
+- Click **Refresh free models** to re-scan OpenRouter for new free models
+
+**Rate limits:**
+OpenRouter free models allow ~20 req/min per model. With 5 models in the chain, the effective capacity is ~100 req/min before any rate limiting kicks in — well above typical individual developer usage.
+
+**Privacy:**
+Your prompts travel from your machine directly to OpenRouter's API over HTTPS, using your personal API key. Airvo itself never receives or stores your conversation content.
+
+---
+
 ## 16. Troubleshooting — When things go wrong
 
 ### ❌ "Rate limit error" / "tokens too large" from Groq
@@ -1345,4 +1388,4 @@ ollama rm llama3          # remove a model
 
 ---
 
-*Airvo v0.9.1 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*
+*Airvo v0.9.4 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*
