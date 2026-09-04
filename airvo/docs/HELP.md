@@ -1,6 +1,6 @@
 # Airvo — Complete User Guide
 
-> **Version:** 0.9.4 · **Language:** English (reference version)
+> **Version:** 0.9.5 · **Language:** English (reference version)
 > This document is the master reference for the Airvo dashboard Help page. It covers everything you need to get the most out of Airvo.
 
 ---
@@ -1130,6 +1130,36 @@ Your prompts travel from your machine directly to OpenRouter's API over HTTPS, u
 
 ---
 
+### v0.9.5 Features — Fit LLM
+
+#### 🧠 Fit LLM — Which Ollama models fit your machine right now
+
+Fit LLM analyzes your current free RAM/VRAM and shows, in real time, which local Ollama models can run on your computer.
+
+You will see each model labeled as:
+- **Fits** → safe to run comfortably
+- **Tight** → likely to run, but with low remaining headroom
+- **Too large** → likely to fail or become very slow on current available memory
+
+**Where to use it:**
+1. Go to **Status**
+2. Open the **System Resources** card
+3. Check the **Fit LLM** section
+
+From there you can:
+- See a live summary count (`fits`, `tight`, `too_large`, `installed`)
+- Copy the suggested `ollama pull ...` command
+- Add the model to Airvo with one click
+
+**How it stays updated:**
+- It recalculates using your current free memory each time you open/refresh Status
+- It uses the curated Ollama catalog and updates automatically when new models are added to that catalog
+
+**Backend endpoint:**
+- `GET /api/hardware/fit-models`
+
+---
+
 ## 16. Troubleshooting — When things go wrong
 
 ### ❌ "Rate limit error" / "tokens too large" from Groq
@@ -1388,4 +1418,4 @@ ollama rm llama3          # remove a model
 
 ---
 
-*Airvo v0.9.4 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*
+*Airvo v0.9.5 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*

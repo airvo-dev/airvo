@@ -71,6 +71,21 @@ const I18N = {
     hw_cpu:"CPU", hw_cpu_cores:"cores", hw_cpu_usage:"usage",
     hw_processes:"Top memory consumers", hw_proc_sub:"Processes using the most RAM",
     hw_proc_show:"Show processes", hw_proc_hide:"Hide",
+    fit_title:"Fit LLM",
+    fit_sub:"Models that fit your current RAM/VRAM",
+    fit_loading:"Checking model fit...",
+    fit_refresh:"Refresh fit",
+    fit_summary_fits:"fits",
+    fit_summary_tight:"tight",
+    fit_summary_too_large:"too large",
+    fit_summary_installed:"installed",
+    fit_badge_fits:"Fits",
+    fit_badge_tight:"Tight",
+    fit_badge_too_large:"Too large",
+    fit_runs_on:"runs on",
+    fit_runs_cpu:"CPU",
+    fit_runs_gpu:"GPU",
+    fit_pull_cmd:"Pull",
     disc_label:"Discover Models", disc_sub:"Browse compatible models based on your hardware",
     disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Cloud (OpenRouter)",
     disc_fits:"Fits RAM", disc_too_large:"Needs more RAM", disc_installed:"Installed",
@@ -588,6 +603,21 @@ const I18N = {
     hw_cpu:"CPU", hw_cpu_cores:"n\u00facleos", hw_cpu_usage:"uso",
     hw_processes:"Principales consumidores de memoria", hw_proc_sub:"Procesos que m\u00e1s RAM consumen",
     hw_proc_show:"Ver procesos", hw_proc_hide:"Ocultar",
+    fit_title:"Fit LLM",
+    fit_sub:"Modelos que entran en tu RAM/VRAM actual",
+    fit_loading:"Calculando compatibilidad de modelos...",
+    fit_refresh:"Actualizar fit",
+    fit_summary_fits:"entran",
+    fit_summary_tight:"justos",
+    fit_summary_too_large:"muy grandes",
+    fit_summary_installed:"instalados",
+    fit_badge_fits:"Entra",
+    fit_badge_tight:"Justo",
+    fit_badge_too_large:"Muy grande",
+    fit_runs_on:"corre en",
+    fit_runs_cpu:"CPU",
+    fit_runs_gpu:"GPU",
+    fit_pull_cmd:"Pull",
     disc_label:"Descubrir Modelos", disc_sub:"Explorá modelos compatibles según tu hardware",
     disc_local_tab:"Local (Ollama)", disc_cloud_tab:"Nube (OpenRouter)",
     disc_fits:"Entra en RAM", disc_too_large:"Necesita más RAM", disc_installed:"Instalado",
@@ -3823,6 +3853,8 @@ export default function AirvoDashboard() {
   const [benchModalModel, setBenchModalModel] = useState("");
   const [hwStatus,  setHwStatus]  = useState(null);
   const [hwLoading, setHwLoading] = useState(false);
+  const [fitModels, setFitModels] = useState(null);
+  const [fitLoading, setFitLoading] = useState(false);
   const [hwProcesses,    setHwProcesses]    = useState(null);
   const [hwProcLoading,  setHwProcLoading]  = useState(false);
   const [hwProcOpen,     setHwProcOpen]     = useState(false);
@@ -3897,6 +3929,15 @@ export default function AirvoDashboard() {
       if (res.ok) setHwStatus(await res.json());
     } catch {}
     finally { setHwLoading(false); }
+  }, []);
+
+  const fetchFitModels = useCallback(async () => {
+    setFitLoading(true);
+    try {
+      const res = await fetch(`${API}/api/hardware/fit-models`);
+      if (res.ok) setFitModels(await res.json());
+    } catch {}
+    finally { setFitLoading(false); }
   }, []);
 
   const fetchProcesses = useCallback(async () => {
@@ -4092,7 +4133,12 @@ export default function AirvoDashboard() {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useEffect(() => { fetchRagStatus(); }, [fetchRagStatus]);
-  useEffect(() => { if (page === "status") fetchHardware(); }, [page, fetchHardware]);
+  useEffect(() => {
+    if (page === "status") {
+      fetchHardware();
+      fetchFitModels();
+    }
+  }, [page, fetchHardware, fetchFitModels]);
   useEffect(() => { if (page === "compare") fetchCompare(); }, [page, fetchCompare]);
   useEffect(() => { if (page === "stats") fetchStats(); }, [page, fetchStats]);
   useEffect(() => { if (page === "config") { fetchBudget(); fetchCacheStats(); } }, [page, fetchBudget, fetchCacheStats]);
@@ -4117,7 +4163,11 @@ export default function AirvoDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ model_name: modelName }),
       });
-      if (res.ok) { toast(t("hw_unload_done"), "success"); fetchHardware(); }
+      if (res.ok) {
+        toast(t("hw_unload_done"), "success");
+        fetchHardware();
+        fetchFitModels();
+      }
       else toast(t("hw_unload_error"), "error");
     } catch { toast(t("hw_unload_error"), "error"); }
   }
@@ -4549,7 +4599,7 @@ export default function AirvoDashboard() {
               <div className="card">
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
                   <div className="card-title" style={{ marginBottom:0 }}>{t("hw_label")}</div>
-                  <button className="btn btn-ghost btn-sm" onClick={fetchHardware} disabled={hwLoading} style={{ fontSize:11 }}>
+                  <button className="btn btn-ghost btn-sm" onClick={() => { fetchHardware(); fetchFitModels(); }} disabled={hwLoading} style={{ fontSize:11 }}>
                     {hwLoading ? "…" : t("hw_refresh")}
                   </button>
                 </div>
@@ -4656,6 +4706,72 @@ export default function AirvoDashboard() {
                           </div>
                         )))
                     }
+                  </div>
+
+                  {/* Fit LLM */}
+                  <div style={{ marginBottom:14, borderTop:"1px solid var(--border)", paddingTop:12 }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                      <div>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)", marginBottom:2 }}>{t("fit_title")}</div>
+                        <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"#6b7280" }}>{t("fit_sub")}</div>
+                      </div>
+                      <button className="btn btn-ghost btn-sm" onClick={fetchFitModels} disabled={fitLoading} style={{ fontSize:11 }}>
+                        {fitLoading ? "…" : t("fit_refresh")}
+                      </button>
+                    </div>
+
+                    {fitLoading && !fitModels && (
+                      <p style={{ fontFamily:"var(--mono)", fontSize:12, color:"var(--text2)" }}>{t("fit_loading")}</p>
+                    )}
+
+                    {fitModels && (
+                      <>
+                        <div style={{ display:"grid", gridTemplateColumns:"repeat(4, minmax(0, 1fr))", gap:8, marginBottom:10 }}>
+                          <div style={{ background:"#001a00", border:"1px solid #2a6a2a", borderRadius:6, padding:"6px 8px", fontFamily:"var(--mono)", fontSize:11, color:"#4ade80", textAlign:"center" }}>
+                            {fitModels.summary?.fits ?? 0} {t("fit_summary_fits")}
+                          </div>
+                          <div style={{ background:"#1a1200", border:"1px solid #8a6400", borderRadius:6, padding:"6px 8px", fontFamily:"var(--mono)", fontSize:11, color:"#fbbf24", textAlign:"center" }}>
+                            {fitModels.summary?.tight ?? 0} {t("fit_summary_tight")}
+                          </div>
+                          <div style={{ background:"#1a0000", border:"1px solid #6a1a1a", borderRadius:6, padding:"6px 8px", fontFamily:"var(--mono)", fontSize:11, color:"#f87171", textAlign:"center" }}>
+                            {fitModels.summary?.too_large ?? 0} {t("fit_summary_too_large")}
+                          </div>
+                          <div style={{ background:"#00131a", border:"1px solid #155e75", borderRadius:6, padding:"6px 8px", fontFamily:"var(--mono)", fontSize:11, color:"#67e8f9", textAlign:"center" }}>
+                            {fitModels.summary?.installed ?? 0} {t("fit_summary_installed")}
+                          </div>
+                        </div>
+
+                        <div style={{ display:"grid", gap:6, maxHeight:260, overflow:"auto", paddingRight:2 }}>
+                          {(fitModels.models || []).map((m) => {
+                            const badge = m.fit === "fits"
+                              ? { label: t("fit_badge_fits"), bg: "#001a00", bd: "#2a6a2a", fg: "#4ade80" }
+                              : m.fit === "tight"
+                              ? { label: t("fit_badge_tight"), bg: "#1a1200", bd: "#8a6400", fg: "#fbbf24" }
+                              : { label: t("fit_badge_too_large"), bg: "#1a0000", bd: "#6a1a1a", fg: "#f87171" };
+                            return (
+                              <div key={m.id} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", background:"var(--bg3)", border:"1px solid var(--border)", borderRadius:6, padding:"8px 10px", opacity: m.fit === "too_large" ? 0.7 : 1 }}>
+                                <div style={{ minWidth:0, flex:1 }}>
+                                  <div style={{ display:"flex", flexWrap:"wrap", gap:6, alignItems:"center", marginBottom:4 }}>
+                                    <span style={{ fontFamily:"var(--mono)", fontSize:12, fontWeight:700 }}>{m.name}</span>
+                                    <span style={{ fontFamily:"var(--mono)", fontSize:10, borderRadius:4, padding:"1px 6px", background:badge.bg, border:`1px solid ${badge.bd}`, color:badge.fg }}>{badge.label}</span>
+                                    {m.installed && <span style={{ fontFamily:"var(--mono)", fontSize:10, borderRadius:4, padding:"1px 6px", background:"#003a10", border:"1px solid var(--green)", color:"var(--green)" }}>✓ {t("disc_installed")}</span>}
+                                  </div>
+                                  <div style={{ fontFamily:"var(--mono)", fontSize:11, color:"var(--text2)", display:"flex", gap:10, flexWrap:"wrap" }}>
+                                    <span>{m.size_gb?.toFixed?.(1) ?? m.size_gb} GB</span>
+                                    {m.runs_on && <span>{t("fit_runs_on")} {m.runs_on === "gpu" ? t("fit_runs_gpu") : t("fit_runs_cpu")}</span>}
+                                  </div>
+                                  <div style={{ fontFamily:"var(--mono)", fontSize:10, color:"#7dd3fc", marginTop:3 }}>{t("fit_pull_cmd")}: {m.ollama_pull}</div>
+                                </div>
+                                <button className="btn btn-ghost btn-sm" style={{ fontSize:11, marginLeft:10, whiteSpace:"nowrap" }}
+                                  onClick={() => quickAddModel({ id: m.id, name: m.name, provider: "ollama" })}>
+                                  + {t("disc_add_btn")}
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {/* Suggestions */}

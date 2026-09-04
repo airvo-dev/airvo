@@ -1489,6 +1489,23 @@ async def hardware_unload(req: UnloadRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/api/hardware/fit-models", tags=["Hardware"], summary="Models that fit this machine",
+    description="Returns the full Ollama model catalog annotated with fit status (fits/tight/too_large) "
+    "based on current free RAM and VRAM. Updates automatically as new models are added to the catalog.")
+async def hardware_fit_models(ollama_url: str = "http://localhost:11434"):
+    """Return which Ollama models can run on this machine given current free RAM/VRAM."""
+    from airvo.hardware.detector import get_hardware_status
+    from airvo.hardware.fit_models import get_fit_models
+
+    hw = get_hardware_status()
+    vram_free_mb = hw.gpus[0].vram_free_mb if hw.gpus else 0.0
+
+    return get_fit_models(
+        ram_free_mb=hw.ram_free_mb,
+        vram_free_mb=vram_free_mb,
+        ollama_base_url=ollama_url,
+    )
+
 # ── Discovery endpoints ───────────────────────────────────────────────────────
 
 @router.get("/api/hardware/processes", tags=["Hardware"], summary="Top memory consumers",

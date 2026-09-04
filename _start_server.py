@@ -1,4 +1,9 @@
-import uvicorn, logging, sys
+import logging
+import sys
+
+import uvicorn
+
+from airvo.port_utils import is_port_in_use
 
 # Send ALL logs (including our [TPM-GUARD] warnings) to a file for debugging
 logging.basicConfig(
@@ -10,4 +15,11 @@ logging.basicConfig(
     ],
 )
 
-uvicorn.run('airvo.server:app', host='127.0.0.1', port=8765, log_level='info')
+HOST = "127.0.0.1"
+PORT = 8765
+
+if is_port_in_use(HOST, PORT):
+    print(f"Airvo already running on http://{HOST}:{PORT}; skipping startup.")
+    raise SystemExit(0)
+
+uvicorn.run('airvo.server:app', host=HOST, port=PORT, log_level='info')

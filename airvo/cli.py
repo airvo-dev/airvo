@@ -18,6 +18,8 @@ import typer
 import uvicorn
 from dotenv import load_dotenv
 
+from airvo.port_utils import is_port_in_use
+
 # Load .env from cwd (project root) or from the package parent directory
 _dotenv_cwd = Path.cwd() / ".env"
 _dotenv_pkg = Path(__file__).parent.parent / ".env"
@@ -229,6 +231,11 @@ def start(
         open_browser_delayed(f"http://{host}:{port}")
 
     # Step 5 — start the server
+    if is_port_in_use(host, port):
+        typer.echo(f"  Airvo is already running on http://{host}:{port}")
+        typer.echo("  Skipping duplicate startup.\n")
+        return
+
     typer.echo(f"  Server running at http://{host}:{port}\n")
     typer.echo("  Press Ctrl+C to stop.\n")
 
