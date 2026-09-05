@@ -27,8 +27,11 @@ import time
 from threading import Lock
 from typing import Optional
 
+from airvo.storage import JsonFileStore
+
 _CACHE_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "prompt_cache.json")
 _lock = Lock()
+_cache_store = JsonFileStore(_CACHE_FILE, default_factory=dict)
 
 
 # ── User-configurable settings (read from prefs at call time) ────────────
@@ -56,20 +59,13 @@ def _max_entries() -> int:
 # ── Persistence ──────────────────────────────────────────────────────────
 
 def _load() -> dict:
-    try:
-        if os.path.exists(_CACHE_FILE):
-            with open(_CACHE_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-    except Exception:
-        pass
-    return {}
+    data = _cache_store.load()
+    return data if isinstance(data, dict) else {}
 
 
 def _save(data: dict) -> None:
     try:
-        os.makedirs(os.path.dirname(_CACHE_FILE), exist_ok=True)
-        with open(_CACHE_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        _cache_store.save(data)
     except Exception:
         pass
 

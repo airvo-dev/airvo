@@ -19,14 +19,16 @@ Max 500 entries. FIFO eviction. Thread-safe. 100% local.
 
 from __future__ import annotations
 
-import json
 import os
 import time
 from threading import Lock
 from typing import Optional
 
+from airvo.storage import JsonFileStore
+
 _HISTORY_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "request_history.json")
 _lock         = Lock()
+_history_store = JsonFileStore(_HISTORY_FILE, default_factory=list)
 
 
 def _max_entries() -> int:
@@ -47,20 +49,13 @@ def _history_enabled() -> bool:
 
 
 def _load() -> list:
-    try:
-        if os.path.exists(_HISTORY_FILE):
-            with open(_HISTORY_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-    except Exception:
-        pass
-    return []
+    data = _history_store.load()
+    return data if isinstance(data, list) else []
 
 
 def _save(entries: list) -> None:
     try:
-        os.makedirs(os.path.dirname(_HISTORY_FILE), exist_ok=True)
-        with open(_HISTORY_FILE, "w", encoding="utf-8") as f:
-            json.dump(entries, f, ensure_ascii=False, indent=2)
+        _history_store.save(entries)
     except Exception:
         pass
 

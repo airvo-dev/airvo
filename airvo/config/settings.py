@@ -1,7 +1,8 @@
 from pydantic_settings import BaseSettings
 from typing import List, Optional
-import json
 import os
+
+from airvo.storage import JsonFileStore
 
 # ── User config directory and file paths ─────────────────────────────────
 CONFIG_DIR  = os.path.join(os.path.expanduser("~"), ".airvo")
@@ -114,7 +115,22 @@ DEFAULT_PREFS = {
     "cache_enabled":        True,
     "cache_ttl_seconds":    3600,  # 1 hour default
     "cache_max_entries":    500,
+    # ── Resilience (retry + circuit breaker) ──────────────────────────
+    "resilience_enabled":        True,
+    "retry_max_attempts":        2,
+    "retry_base_delay_ms":       250,
+    "retry_max_delay_ms":        2000,
+    "breaker_failure_threshold": 3,
+    "breaker_cooldown_seconds":  30,
+    # ── Operational SLO alerts ─────────────────────────────────────────
+    "slo_error_rate_warn": 0.05,
+    "slo_p95_ms_warn": 1200,
+    "slo_p99_ms_warn": 2500,
 }
+
+_models_store = JsonFileStore(MODELS_FILE, default_factory=lambda: DEFAULT_MODELS)
+_prefs_store = JsonFileStore(PREFS_FILE, default_factory=lambda: DEFAULT_PREFS.copy())
+_stats_store = JsonFileStore(STATS_FILE, default_factory=dict)
 
 
 def ensure_config_dir():
@@ -128,14 +144,13 @@ def load_models() -> List[dict]:
     if not os.path.exists(MODELS_FILE):
         save_models(DEFAULT_MODELS)
         return DEFAULT_MODELS
-    with open(MODELS_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    data = _models_store.load()
+    return data if isinstance(data, list) else DEFAULT_MODELS
 
 
 def save_models(models: List[dict]):
     ensure_config_dir()
-    with open(MODELS_FILE, "w", encoding="utf-8") as f:
-        json.dump(models, f, indent=2, ensure_ascii=False)
+    _models_store.save(models)
 
 
 # ── Preferences ───────────────────────────────────────────────────────────
@@ -145,15 +160,15 @@ def load_prefs() -> dict:
     if not os.path.exists(PREFS_FILE):
         save_prefs(DEFAULT_PREFS)
         return DEFAULT_PREFS.copy()
-    with open(PREFS_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    data = _prefs_store.load()
+    if not isinstance(data, dict):
+        data = {}
     return {**DEFAULT_PREFS, **data}
 
 
 def save_prefs(prefs: dict):
     ensure_config_dir()
-    with open(PREFS_FILE, "w", encoding="utf-8") as f:
-        json.dump(prefs, f, indent=2, ensure_ascii=False)
+    _prefs_store.save(prefs)
 
 
 # ── Stats ─────────────────────────────────────────────────────────────────
@@ -162,14 +177,13 @@ def load_stats() -> dict:
     ensure_config_dir()
     if not os.path.exists(STATS_FILE):
         return {}
-    with open(STATS_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    data = _stats_store.load()
+    return data if isinstance(data, dict) else {}
 
 
 def save_stats(stats: dict):
     ensure_config_dir()
-    with open(STATS_FILE, "w", encoding="utf-8") as f:
-        json.dump(stats, f, indent=2, ensure_ascii=False)
+    _stats_store.save(stats)
 
 
 def record_usage(model_id: str, tokens_used: int, elapsed_s: float = None):

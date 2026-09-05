@@ -8,9 +8,10 @@ All costs in USD. 100% local.
 
 from __future__ import annotations
 
-import json
 import os
 from threading import Lock
+
+from airvo.storage import JsonFileStore
 
 try:
     import litellm as _litellm
@@ -109,23 +110,17 @@ def format_cost(cost_usd: float) -> str:
 
 _COST_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "cost_tracker.json")
 _cost_lock = Lock()
+_cost_store = JsonFileStore(_COST_FILE, default_factory=lambda: {"monthly": {}, "total_usd": 0.0})
 
 
 def _load_cost_data() -> dict:
-    try:
-        if os.path.exists(_COST_FILE):
-            with open(_COST_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-    except Exception:
-        pass
-    return {"monthly": {}, "total_usd": 0.0}
+    data = _cost_store.load()
+    return data if isinstance(data, dict) else {"monthly": {}, "total_usd": 0.0}
 
 
 def _save_cost_data(data: dict) -> None:
     try:
-        os.makedirs(os.path.dirname(_COST_FILE), exist_ok=True)
-        with open(_COST_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+        _cost_store.save(data)
     except Exception:
         pass
 

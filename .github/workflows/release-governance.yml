@@ -1,0 +1,65 @@
+name: Release Governance
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to validate (required for manual runs)"
+        required: false
+        default: ""
+
+jobs:
+  validate-and-package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "value=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          elif [ -n "${{ inputs.tag }}" ]; then
+            echo "value=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "value=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate tag format and version sync
+        run: |
+          if [ -z "${{ steps.tag.outputs.value }}" ]; then
+            echo "No tag provided (manual run)."
+            exit 1
+          fi
+          python scripts/release/validate_release.py --tag "${{ steps.tag.outputs.value }}"
+
+      - name: Build package artifacts
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+          python -m build
+
+      - name: Generate Python SBOM (CycloneDX)
+        run: |
+          python -m pip install cyclonedx-bom
+          cyclonedx-py environment --of JSON --output-file sbom.cdx.json
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ steps.tag.outputs.value }}
+          path: |
+            dist/*
+            sbom.cdx.json

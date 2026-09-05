@@ -24,17 +24,18 @@ State file: ~/.airvo/free_route.json
 
 from __future__ import annotations
 
-import json
 import os
 import time
 from typing import Any
 
 import httpx
+from airvo.storage import JsonFileStore
 
 _STATE_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "free_route.json")
 _OR_MODELS_URL = "https://openrouter.ai/api/v1/models"
 _MAX_PER_CATEGORY = 3   # top N free models per category stored
 _MAX_ACTIVE       = 5   # cap at the Airvo MAX_ACTIVE limit
+_state_store = JsonFileStore(_STATE_FILE, default_factory=lambda: {"enabled": False})
 
 # ── Category → benchmark field used for ranking ──────────────────────────────
 _CATEGORY_SCORE: dict[str, str] = {
@@ -52,22 +53,12 @@ CATEGORIES = list(_CATEGORY_SCORE.keys())
 # ── State I/O ─────────────────────────────────────────────────────────────────
 
 def _load() -> dict:
-    try:
-        if os.path.exists(_STATE_FILE):
-            with open(_STATE_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-    except Exception:
-        pass
-    return {"enabled": False}
+    data = _state_store.load()
+    return data if isinstance(data, dict) else {"enabled": False}
 
 
 def _save(state: dict) -> None:
-    try:
-        os.makedirs(os.path.dirname(_STATE_FILE), exist_ok=True)
-        with open(_STATE_FILE, "w", encoding="utf-8") as f:
-            json.dump(state, f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
+    _state_store.save(state)
 
 
 # ── OpenRouter helpers ────────────────────────────────────────────────────────

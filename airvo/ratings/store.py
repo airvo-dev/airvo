@@ -19,35 +19,29 @@ Smart Router reads get_model_scores() after MIN_RATINGS_FOR_BOOST ratings.
 
 from __future__ import annotations
 
-import json
 import os
 import time
 import uuid
 from typing import Literal
 
+from airvo.storage import JsonFileStore
+
 _RATINGS_FILE = os.path.join(os.path.expanduser("~"), ".airvo", "ratings.json")
 _MAX_ENTRIES  = 2000       # cap to avoid unbounded growth
 MIN_RATINGS_FOR_BOOST = 50  # minimum ratings before Smart Router trusts the data
+_ratings_store = JsonFileStore(_RATINGS_FILE, default_factory=list)
 
 
 # ── Persistence ───────────────────────────────────────────────────────────
 
 def _load() -> list[dict]:
-    try:
-        if os.path.exists(_RATINGS_FILE):
-            with open(_RATINGS_FILE, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                return data if isinstance(data, list) else []
-    except Exception:
-        pass
-    return []
+    data = _ratings_store.load()
+    return data if isinstance(data, list) else []
 
 
 def _save(entries: list[dict]) -> None:
     try:
-        os.makedirs(os.path.dirname(_RATINGS_FILE), exist_ok=True)
-        with open(_RATINGS_FILE, "w", encoding="utf-8") as f:
-            json.dump(entries, f, ensure_ascii=False, indent=2)
+        _ratings_store.save(entries)
     except Exception:
         pass
 

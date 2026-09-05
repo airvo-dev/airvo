@@ -19,6 +19,7 @@ import uvicorn
 from dotenv import load_dotenv
 
 from airvo.port_utils import is_port_in_use
+from airvo.storage import JsonFileStore
 
 # Load .env from cwd (project root) or from the package parent directory
 _dotenv_cwd = Path.cwd() / ".env"
@@ -37,6 +38,8 @@ CONFIG_DIR    = Path.home() / ".airvo"
 MODELS_FILE   = CONFIG_DIR / "models.json"
 CONTINUE_DIR  = Path.home() / ".continue"
 CONTINUE_FILE = CONTINUE_DIR / "config.yaml"
+CONFIG_FILE   = CONFIG_DIR / "config.json"
+_config_store = JsonFileStore(str(CONFIG_FILE), default_factory=dict)
 
 # ── Continue.dev config template ──────────────────────────────────────────
 def _make_continue_config(port: int) -> str:
@@ -257,13 +260,9 @@ def config(
     """
     Configure Airvo settings and integrations.
     """
-    config_file = CONFIG_DIR / "config.json"
-    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-
-    current = {}
-    if config_file.exists():
-        with open(config_file, "r") as f:
-            current = json.load(f)
+    current = _config_store.load()
+    if not isinstance(current, dict):
+        current = {}
 
     if show:
         typer.echo(json.dumps(current, indent=2))
@@ -271,8 +270,7 @@ def config(
 
     if telegram_token:
         current["telegram_token"] = telegram_token
-        with open(config_file, "w") as f:
-            json.dump(current, f, indent=2)
+        _config_store.save(current)
         typer.echo("  ✓ Telegram token saved to ~/.airvo/config.json")
         return
 

@@ -1,0 +1,29 @@
+{
+  "baseline_health": {
+    "base_url": "http://127.0.0.1:8765",
+    "path": "/api/health",
+    "concurrency": 20,
+    "requests_per_worker": 50,
+    "timeout": 5,
+    "max_p95_ms": 300,
+    "max_error_rate": 0.01
+  },
+  "ops_snapshot": {
+    "base_url": "http://127.0.0.1:8765",
+    "path": "/api/stats/ops",
+    "concurrency": 10,
+    "requests_per_worker": 40,
+    "timeout": 5,
+    "max_p95_ms": 400,
+    "max_error_rate": 0.01
+  },
+  "models_list": {
+    "base_url": "http://127.0.0.1:8765",
+    "path": "/api/models",
+    "concurrency": 10,
+    "requests_per_worker": 40,
+    "timeout": 5,
+    "max_p95_ms": 400,
+    "max_error_rate": 0.01
+  }
+}

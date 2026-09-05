@@ -1,0 +1,63 @@
+name: Release SLO Guard
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  release-slo-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Start Airvo server
+        run: |
+          AIRVO_RATE_LIMIT_WINDOW_SECONDS=60 AIRVO_RATE_LIMIT_DEFAULT_PER_WINDOW=10000 AIRVO_RATE_LIMIT_STREAM_PER_WINDOW=5000 python _start_server.py > airvo-server.log 2>&1 &
+
+      - name: Wait for health endpoint
+        run: |
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:8765/api/health > /dev/null; then
+              echo "Airvo server is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server did not become ready in time"
+          cat airvo-server.log || true
+          exit 1
+
+      - name: Warm up metrics with reproducible smoke traffic
+        run: |
+          mkdir -p artifacts/release-gate
+          python scripts/load/run_load.py --base-url http://127.0.0.1:8765 --path /api/health --concurrency 6 --requests-per-worker 25 --max-p95-ms 550 --max-error-rate 0.03 --output artifacts/release-gate/health.json
+          python scripts/load/run_load.py --base-url http://127.0.0.1:8765 --path /api/stats/ops --concurrency 5 --requests-per-worker 25 --max-p95-ms 650 --max-error-rate 0.03 --output artifacts/release-gate/ops.json
+          python scripts/load/run_load.py --base-url http://127.0.0.1:8765 --path /api/models --concurrency 5 --requests-per-worker 25 --max-p95-ms 650 --max-error-rate 0.03 --output artifacts/release-gate/models.json
+
+      - name: Enforce official release SLO
+        run: |
+          python scripts/load/check_slo.py --base-url http://127.0.0.1:8765 --slo-file ops/slo/official_slo.json --output artifacts/release-gate/slo-report.json
+
+      - name: Upload release gate artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-slo-gate-artifacts
+          path: artifacts/release-gate
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat airvo-server.log || true

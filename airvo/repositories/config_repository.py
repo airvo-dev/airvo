@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import json
 import os
 from typing import Any, Dict, List
+
+from airvo.storage import JsonFileStore
 
 
 class ConfigRepository:
@@ -20,19 +21,14 @@ class ConfigRepository:
 
     def load_json(self, filename: str, default: Any = None) -> Any:
         path = os.path.join(self.root, filename)
-        if not os.path.exists(path):
-            return default
-        try:
-            with open(path, "r", encoding="utf-8") as fh:
-                return json.load(fh)
-        except (json.JSONDecodeError, OSError):
-            return default
+        store = JsonFileStore(path, default_factory=lambda: default)
+        return store.load()
 
     def save_json(self, filename: str, value: Any) -> None:
         self.ensure_dir()
         path = os.path.join(self.root, filename)
-        with open(path, "w", encoding="utf-8") as fh:
-            json.dump(value, fh, indent=2, ensure_ascii=False)
+        store = JsonFileStore(path, default_factory=lambda: value)
+        store.save(value)
 
     def load_models(self) -> List[Dict[str, Any]]:
         data = self.load_json("models.json", [])

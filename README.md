@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.9.5-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.9.6-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -36,6 +36,7 @@ Airvo runs on your machine, connects to any AI model simultaneously, and integra
 - [Security](#security)
 - [FAQ](#faq)
 - [Community](#community)
+- [Contributing & CLA](#contributing--cla)
 - [License](#license)
 
 ---
@@ -445,11 +446,51 @@ enable Smart Memory → index your project folder
 Airvo is designed with privacy and security in mind:
 
 - **API keys stay local** — stored in `~/.airvo/models.json` on your machine, never sent to Airvo servers
+- **Optional admin API protection** — set `AIRVO_ADMIN_TOKEN` and sensitive mutation endpoints require `Authorization: Bearer <token>` (or `X-Airvo-Token`)
 - **Privacy Mode** — scans every prompt for 18 categories of secrets (API keys, JWTs, AWS credentials, DSNs…) and blocks routing to cloud models if high-severity data is detected. Enable in Config.
 - **Localhost only** — the server listens on `localhost:5000` by default, not accessible from the internet
 - **Restricted CORS** — only the dashboard and VS Code extensions can make requests to the server
 - **No telemetry** — Airvo collects no usage data, no analytics, no crash reports
 - **Open source** — the full source code is on GitHub, you can audit everything
+- **CI quality gates** — pull requests run backend tests (Python 3.11/3.12), dashboard production build, and an automated dependency audit
+- **Security gates** — dependency review, static analysis, secret scanning, and release governance checks
+
+### External Observability
+
+Airvo now supports a production-ready observability baseline:
+
+- **Prometheus metrics endpoint**: `GET /metrics`
+- **OTLP tracing** via OpenTelemetry (optional)
+
+Enable with:
+
+```bash
+pip install -e .[observability]
+```
+
+Optional env vars:
+
+- `AIRVO_PROMETHEUS_ENABLED=1`
+- `AIRVO_OTEL_ENABLED=1`
+- `AIRVO_OTLP_ENDPOINT=http://localhost:4317`
+- `AIRVO_OTEL_SERVICE_NAME=airvo-server`
+
+Key metrics exported:
+
+- `airvo_http_requests_total{method,path,status_code}`
+- `airvo_http_request_latency_ms{method,path}`
+- `airvo_ops_slo_ok`
+
+Real collector stack (versioned in repo):
+
+```bash
+cd ops/observability
+docker compose up -d
+```
+
+- Prometheus: `http://localhost:9090`
+- Grafana: `http://localhost:3000` (admin/admin)
+- Dashboard as code: `ops/observability/grafana/dashboards/airvo-overview.json`
 
 ---
 
@@ -509,6 +550,22 @@ It measures how certain the model *sounds*, not how correct it is. A high score 
 ---
 
 ## Changelog
+
+**v0.9.6** — Production hardening baseline (Phase 6)
+- **Optional admin endpoint auth** — when `AIRVO_ADMIN_TOKEN` is set, sensitive `POST/PATCH/DELETE` routes require `Authorization: Bearer <token>` (or `X-Airvo-Token`) and return standardized 401 envelopes if missing/invalid.
+- **CI pipeline** — new GitHub Actions workflow: backend tests on Python 3.11/3.12, dashboard build validation, and dependency scan with `pip-audit`.
+- **External observability baseline** — `GET /metrics` for Prometheus plus optional OTLP tracing via OpenTelemetry.
+- **E2E critical-flow suite** — `tests/test_e2e_critical_flows.py` validates auth gate behavior, SSE request correlation, and ops metrics/alerts paths.
+- **Reproducible load benchmark** — `scripts/load/run_load.py` emits a deterministic JSON report with threshold gates (`p95`, `error_rate`) for release comparisons.
+- **Collector stack as code** — Docker Compose for Prometheus + Grafana with provisioned datasource and versioned dashboard in `ops/observability/`.
+- **Optional smoke load CI job** — manual CI trigger (`run_load_smoke=true`) runs load scenarios and stores JSON artifacts.
+- **Official SLO gate for CI/release** — `ops/slo/official_slo.json` + `scripts/load/check_slo.py` enforce endpoint thresholds automatically.
+
+**Unreleased (next)** — Security and release governance (Phase 7)
+- **Security workflow** — `.github/workflows/security.yml` adds dependency review, CodeQL, Bandit, pip-audit, and gitleaks scans.
+- **Dependabot automation** — `.github/dependabot.yml` enables weekly update PRs for Python, npm, and GitHub Actions dependencies.
+- **Release governance workflow** — `.github/workflows/release-governance.yml` validates semver tags against `pyproject.toml`, builds release artifacts, and generates SBOM (`sbom.cdx.json`).
+- **Security policy** — `SECURITY.md` defines vulnerability reporting path and baseline controls.
 
 **v0.9.4** — Free Route
 - **Free Route** — `airvo/free_route/manager.py`. One free [OpenRouter](https://openrouter.ai) API key → Airvo fetches all models with `pricing.prompt == "0"`, ranks them per task category using `coding_index`, `intelligence_index`, `agentic_index` from OpenRouter benchmarks, and configures up to 5 as active models. Smart Router picks the best free model per prompt. Fallback Chain handles rate limits silently. Config panel with add/replace mode, test key, refresh. Endpoints: `POST /api/free-route/setup`, `POST /api/free-route/refresh`, `GET /api/free-route/status`, `DELETE /api/free-route`.
@@ -648,7 +705,20 @@ Airvo is early. Your feedback shapes what comes next.
 
 - 🐛 **Found a bug?** [Open an issue](https://github.com/airvo-dev/airvo/issues)
 - 💡 **Have an idea?** [Start a discussion](https://github.com/airvo-dev/airvo/discussions)
+- 📄 **Want to contribute?** Read the [CLA](CLA.md) and [CONTRIBUTING guide](CONTRIBUTING.md)
 - ⭐ **Liked Airvo?** Star the repo — it helps a lot
+
+---
+
+## Contributing & CLA
+
+Contributions are welcome.
+
+- Read the contribution workflow in [CONTRIBUTING.md](CONTRIBUTING.md)
+- The project uses a Contributor License Agreement in [CLA.md](CLA.md)
+- To sign it, comment on your PR with: `I have read the CLA Document and I hereby sign the CLA`
+
+In plain English: you keep ownership of your contribution, and you give the project permission to use, distribute, and relicense it as described in the CLA.
 
 ---
 

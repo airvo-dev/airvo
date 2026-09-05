@@ -1,0 +1,136 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      run_load_smoke:
+        description: "Run optional smoke load + SLO gate"
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest
+
+      - name: Run backend tests
+        run: pytest -q
+
+  dashboard-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install dashboard dependencies
+        working-directory: dashboard
+        run: npm install
+
+      - name: Build dashboard
+        working-directory: dashboard
+        run: npm run build
+
+  security-audit:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pip-audit
+
+      - name: Run pip-audit
+        run: pip-audit
+
+  load-smoke:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && inputs.run_load_smoke == true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Start Airvo server
+        run: |
+          AIRVO_RATE_LIMIT_WINDOW_SECONDS=60 AIRVO_RATE_LIMIT_DEFAULT_PER_WINDOW=10000 AIRVO_RATE_LIMIT_STREAM_PER_WINDOW=5000 python _start_server.py > airvo-server.log 2>&1 &
+
+      - name: Wait for health endpoint
+        run: |
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:8765/api/health > /dev/null; then
+              echo "Airvo server is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server did not become ready in time"
+          cat airvo-server.log || true
+          exit 1
+
+      - name: Run smoke load scenarios
+        run: |
+          mkdir -p artifacts/load
+          python scripts/load/run_load.py --base-url http://127.0.0.1:8765 --path /api/health --concurrency 5 --requests-per-worker 20 --max-p95-ms 600 --max-error-rate 0.05 --output artifacts/load/health.json
+          python scripts/load/run_load.py --base-url http://127.0.0.1:8765 --path /api/stats/ops --concurrency 4 --requests-per-worker 20 --max-p95-ms 700 --max-error-rate 0.05 --output artifacts/load/ops.json
+          python scripts/load/run_load.py --base-url http://127.0.0.1:8765 --path /api/models --concurrency 4 --requests-per-worker 20 --max-p95-ms 700 --max-error-rate 0.05 --output artifacts/load/models.json
+
+      - name: Enforce official SLO targets
+        run: |
+          python scripts/load/check_slo.py --base-url http://127.0.0.1:8765 --slo-file ops/slo/official_slo.json --output artifacts/load/slo-report.json
+
+      - name: Upload load artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-smoke-artifacts
+          path: artifacts/load
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat airvo-server.log || true
