@@ -26,8 +26,8 @@ flowchart LR
     LiteLLM --> Providers[OpenAI, Groq, Anthropic, Ollama, others]
 
     Endpoints --> Store[JsonFileStore ~/.airvo/*.json]
-    Middleware --> Ops[/api/stats/ops]
-    Middleware --> Metrics[/metrics]
+    Middleware --> Ops["/api/stats/ops"]
+    Middleware --> Metrics["/metrics"]
 ```
 
 ## Backend Layering
