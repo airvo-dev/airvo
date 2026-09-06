@@ -1,6 +1,6 @@
 # Airvo — Complete User Guide
 
-> **Version:** 0.9.6 · **Language:** English (reference version)
+> **Version:** 0.9.7 · **Language:** English (reference version)
 > This document is the master reference for the Airvo dashboard Help page. It covers everything you need to get the most out of Airvo.
 
 ---
@@ -1418,4 +1418,4 @@ ollama rm llama3          # remove a model
 
 ---
 
-*Airvo v0.9.6 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*
+*Airvo v0.9.7 · [github.com/airvo-dev/airvo](https://github.com/airvo-dev/airvo) · [pypi.org/project/airvo](https://pypi.org/project/airvo)*

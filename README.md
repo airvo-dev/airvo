@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.9.6-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.9.7-7c6dfa?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/airvo)
 [![Python](https://img.shields.io/badge/python-3.11+-7c6dfa?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-fa6d8f?style=flat-square)](LICENSE)
 [![LiteLLM](https://img.shields.io/badge/powered%20by-LiteLLM-4ade80?style=flat-square)](https://litellm.ai)
@@ -16,7 +16,7 @@
 
 Airvo runs on your machine, connects to any AI model simultaneously, and integrates directly into VS Code via continue.dev. No cloud lock-in. No subscriptions. Your API keys stay local.
 
-> **🛡️📈 New in v0.9.6 — Production hardening baseline:** External observability with Prometheus metrics and optional OTLP tracing, critical-flow E2E coverage, reproducible load and SLO checks, plus security and release governance gates for safer production operation.
+> **📚🧭 New in v0.9.7 — OSS maturity release:** Contributor governance and onboarding were professionalized with SLA/triage policy, CODEOWNERS, issue templates, release-notes automation, and versioned public architecture/developer guides.
 
 ---
 

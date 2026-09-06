@@ -17,6 +17,25 @@ The project follows Semantic Versioning.
 
 ### Docs
 
+## 0.9.7 - 2026-09-06
+
+### Added
+- OSS governance baseline files: support policy, CODEOWNERS, issue templates, and release-notes automation workflow.
+- Versioned contributor onboarding and DX 30-minute checklist under airvo/docs.
+
+### Changed
+- CONTRIBUTING and PR template expanded with SLA, triage, novice path, risk/rollback, and changelog expectations.
+- Public documentation links consolidated in README for contributor discoverability.
+
+### Fixed
+- Mermaid architecture diagram labels adjusted for GitHub renderer compatibility.
+
+### Security
+- Official security reporting channels clarified, including private advisory flow and project email.
+
+### Docs
+- Version markers synchronized across README and HELP guide for release consistency.
+
 ## 0.9.6 - 2026-09-05
 
 ### Added
