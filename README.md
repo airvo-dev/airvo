@@ -16,7 +16,7 @@
 
 Airvo runs on your machine, connects to any AI model simultaneously, and integrates directly into VS Code via continue.dev. No cloud lock-in. No subscriptions. Your API keys stay local.
 
-> **🆓🧠 New in v0.9.5 — Free Route + Fit LLM:** One [OpenRouter](https://openrouter.ai) API key (free, no credit card) → Airvo auto-discovers and ranks the best free models available, routes each prompt to the optimal one by task, and falls back automatically if one hits a rate limit. Plus Fit LLM in Status to show which Ollama models fit your current RAM/VRAM.
+> **🛡️📈 New in v0.9.6 — Production hardening baseline:** External observability with Prometheus metrics and optional OTLP tracing, critical-flow E2E coverage, reproducible load and SLO checks, plus security and release governance gates for safer production operation.
 
 ---
 
