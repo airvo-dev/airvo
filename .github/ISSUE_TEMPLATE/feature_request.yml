@@ -1,0 +1,49 @@
+name: Feature request
+description: Propose an improvement with clear scope and value.
+title: "feat: <short summary>"
+labels:
+  - type:feature
+  - status:needs-info
+body:
+  - type: input
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What user pain does this solve?
+      placeholder: As a user, I cannot ...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the expected behavior and API/UI impact.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Include any workaround or other designs considered.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Bullet list of testable outcomes.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Backend
+        - Dashboard
+        - Docs
+        - CI/Release
+        - Security
+    validations:
+      required: true

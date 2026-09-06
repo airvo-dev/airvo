@@ -1,0 +1,21 @@
+# Global ownership
+* @airvo-dev
+
+# Backend core
+/airvo/ @airvo-dev
+/tests/ @airvo-dev
+
+# Frontend dashboard
+/dashboard/ @airvo-dev
+
+# CI, release, and governance
+/.github/ @airvo-dev
+/pyproject.toml @airvo-dev
+/CHANGELOG.md @airvo-dev
+/SUPPORT.md @airvo-dev
+/SECURITY.md @airvo-dev
+
+# Documentation
+/README.md @airvo-dev
+/CONTRIBUTING.md @airvo-dev
+/airvo/docs/ @airvo-dev

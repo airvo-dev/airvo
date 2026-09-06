@@ -17,6 +17,13 @@ Please do not open public issues for security vulnerabilities.
 2. Include reproduction steps and affected endpoints/files.
 3. If applicable, include logs with sensitive data removed.
 
+Official security contact channels:
+
+- Primary: GitHub private security advisory flow
+- URL: https://github.com/airvo-dev/airvo/security/advisories/new
+- Security email: hello@airvo.dev
+- Secondary (if advisory flow is unavailable): send report by email or open a general issue requesting secure contact channel without disclosing details
+
 We aim to acknowledge reports within 72 hours.
 
 ## Security Baseline

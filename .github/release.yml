@@ -1,0 +1,33 @@
+changelog:
+  exclude:
+    labels:
+      - skip-changelog
+  categories:
+    - title: Breaking Changes
+      labels:
+        - semver:major
+        - breaking-change
+    - title: Features
+      labels:
+        - type:feature
+        - feat
+    - title: Fixes
+      labels:
+        - type:bug
+        - fix
+    - title: Refactoring
+      labels:
+        - type:refactor
+        - refactor
+    - title: Documentation
+      labels:
+        - type:docs
+        - docs
+    - title: Security
+      labels:
+        - type:security
+        - security
+    - title: Tests and CI
+      labels:
+        - tests
+        - ci

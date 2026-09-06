@@ -2,6 +2,11 @@
 
 Describe what changed and why.
 
+## Scope
+
+- [ ] Single focused change
+- [ ] Multiple related changes (explain relationship in Summary)
+
 ## Type of Change
 
 - [ ] Feature
@@ -9,6 +14,11 @@ Describe what changed and why.
 - [ ] Refactor
 - [ ] Docs
 - [ ] Tests
+
+## Risk and Rollback
+
+- Risk level: Low / Medium / High
+- Rollback plan (required for Medium/High risk):
 
 ## Architecture and Contract Checklist (Required)
 
@@ -21,11 +31,27 @@ Describe what changed and why.
 - [ ] No sensitive secrets are logged.
 - [ ] Contract tests were added/updated if shape changed.
 - [ ] `pytest -q` passes.
+- [ ] `dashboard` build passes if frontend changed.
+- [ ] Changelog entry was added in `CHANGELOG.md` under `Unreleased` for user-visible changes.
 
 ## Validation
 
 - [ ] I ran tests locally.
 - [ ] I validated impacted endpoints manually when needed.
+
+Validation commands and key outputs:
+
+```text
+Paste commands and short results here.
+```
+
+## Release Notes Input
+
+For tag/release relevant PRs, provide 1-3 bullets suitable for release notes:
+
+- 
+- 
+- 
 
 ## CLA
 

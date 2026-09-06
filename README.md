@@ -708,6 +708,13 @@ Airvo is early. Your feedback shapes what comes next.
 - 📄 **Want to contribute?** Read the [CLA](CLA.md) and [CONTRIBUTING guide](CONTRIBUTING.md)
 - ⭐ **Liked Airvo?** Star the repo — it helps a lot
 
+## Official Contact
+
+- General project contact: use [GitHub Discussions](https://github.com/airvo-dev/airvo/discussions)
+- Bug reports: use [GitHub Issues](https://github.com/airvo-dev/airvo/issues)
+- Private security reports: use [GitHub Security Advisories](https://github.com/airvo-dev/airvo/security/advisories/new)
+- Official email: hello@airvo.dev
+
 ---
 
 ## Contributing & CLA
@@ -715,6 +722,12 @@ Airvo is early. Your feedback shapes what comes next.
 Contributions are welcome.
 
 - Read the contribution workflow in [CONTRIBUTING.md](CONTRIBUTING.md)
+- New contributor quick path: [airvo/docs/CONTRIBUTOR_ONBOARDING.md](airvo/docs/CONTRIBUTOR_ONBOARDING.md)
+- Developer implementation guide: [airvo/docs/DEVELOPER_GUIDE.md](airvo/docs/DEVELOPER_GUIDE.md)
+- Architecture baseline: [airvo/docs/ARCHITECTURE.md](airvo/docs/ARCHITECTURE.md)
+- 30-minute onboarding DX protocol: [airvo/docs/DX_30MIN_CHECKLIST.md](airvo/docs/DX_30MIN_CHECKLIST.md)
+- Support SLA and triage policy: [SUPPORT.md](SUPPORT.md)
+- Project release history: [CHANGELOG.md](CHANGELOG.md)
 - The project uses a Contributor License Agreement in [CLA.md](CLA.md)
 - To sign it, comment on your PR with: `I have read the CLA Document and I hereby sign the CLA`
 
