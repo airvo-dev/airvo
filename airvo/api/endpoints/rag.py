@@ -70,9 +70,12 @@ async def rag_index(req: RagIndexRequest):
                 detail="No directory configured. Set rag_path in preferences first."
             )
 
-        resolved_path = Path(path).expanduser().resolve()
-        allowed_roots = [Path.cwd().resolve()]
-        if not any(resolved_path == base or base in resolved_path.parents for base in allowed_roots):
+        workspace_root = Path.cwd().resolve()
+        candidate_path = Path(path).expanduser()
+        resolved_path = workspace_root.joinpath(candidate_path).resolve(strict=False)
+        try:
+            resolved_path.relative_to(workspace_root)
+        except ValueError:
             raise HTTPException(
                 status_code=400,
                 detail="RAG path must be inside the current workspace."
