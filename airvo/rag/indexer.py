@@ -125,23 +125,22 @@ def _chunk_text(text: str) -> List[str]:
     return [c.strip() for c in chunks if c.strip()]
 
 
-def _file_hash(path: Path | str) -> str:
+def _file_hash(path: Path) -> str:
     """SHA-1 of the file content — used as a stable document ID prefix."""
     h = hashlib.sha1()
-    with Path(path).open("rb") as f:
+    with path.open("rb") as f:
         for block in iter(lambda: f.read(65536), b""):
             h.update(block)
     return h.hexdigest()[:16]
 
 
-def _safe_text(path: Path | str, max_bytes: int) -> Optional[str]:
+def _safe_text(path: Path, max_bytes: int) -> Optional[str]:
     """Read a text file safely; return None if it can't be decoded."""
-    p = Path(path)
     try:
-        size = p.stat().st_size
+        size = path.stat().st_size
         if size == 0 or size > max_bytes:
             return None
-        with p.open("r", encoding="utf-8", errors="replace") as f:
+        with path.open("r", encoding="utf-8", errors="replace") as f:
             return f.read()
     except OSError:
         return None
@@ -214,8 +213,19 @@ def index_directory(
         return stats
 
     workspace_root = Path.cwd().resolve()
-    root = (workspace_root / candidate_path).absolute()
-    allowed_roots = _allowed_roots()
+    try:
+        root = (workspace_root / candidate_path).resolve(strict=True)
+    except OSError:
+        stats.errors.append(f"Directory not found: {path}")
+        return stats
+
+    try:
+        root.relative_to(workspace_root)
+    except ValueError:
+        stats.errors.append("Invalid directory path: must stay within workspace.")
+        return stats
+
+    allowed_roots = [p.resolve() for p in _allowed_roots()]
 
     if not root.is_dir():
         stats.errors.append(f"Directory not found: {path}")
@@ -246,7 +256,7 @@ def index_directory(
                 continue
 
             try:
-                resolved_path = filepath.resolve()
+                resolved_path = filepath.resolve(strict=True)
                 resolved_path.relative_to(root)
             except (OSError, ValueError):
                 continue
