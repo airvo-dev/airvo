@@ -20,7 +20,6 @@ import logging
 import os
 import time
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import List, Optional
 
 logger = logging.getLogger(__name__)
@@ -51,9 +50,9 @@ def is_rag_available() -> bool:
         return False
 
 
-def _allowed_roots() -> list[Path]:
+def _allowed_roots() -> list[str]:
     """Return the allowed root directories for RAG indexing."""
-    roots: list[Path] = []
+    roots: list[str] = []
     env_value = os.getenv("AIRVO_RAG_ALLOWED_ROOTS", "").strip()
     if env_value:
         for item in env_value.split(os.pathsep):
@@ -61,28 +60,33 @@ def _allowed_roots() -> list[Path]:
             if not item:
                 continue
             try:
-                roots.append(Path(item).expanduser().resolve())
+                expanded = os.path.expanduser(item)
+                resolved = os.path.realpath(expanded)
+                if os.path.isdir(resolved):
+                    roots.append(resolved)
             except OSError:
                 continue
     try:
-        roots.append(Path.cwd().resolve())
+        roots.append(os.path.realpath(os.getcwd()))
     except OSError:
         pass
 
     # Deduplicate while preserving order.
-    unique: list[Path] = []
+    unique: list[str] = []
     for root in roots:
         if root not in unique:
             unique.append(root)
     return unique
 
 
-def _is_path_allowed(candidate: Path, allowed_roots: list[Path]) -> bool:
+def _is_path_allowed(candidate: str, allowed_roots: list[str]) -> bool:
     for base in allowed_roots:
         try:
-            candidate.relative_to(base)
-            return True
+            if os.path.commonpath([base, candidate]) == base:
+                return True
         except ValueError:
+            continue
+        except OSError:
             continue
     return False
 
@@ -123,38 +127,6 @@ def _chunk_text(text: str) -> List[str]:
         chunks.append(text[start:end])
         start += CHUNK_SIZE - CHUNK_OVERLAP
     return [c.strip() for c in chunks if c.strip()]
-
-
-def _file_hash(path: Path) -> str:
-    """SHA-1 of the file content — used as a stable document ID prefix."""
-    try:
-        resolved = path.resolve(strict=True)
-    except OSError:
-        return ""
-    if not _is_path_allowed(resolved, [p.resolve() for p in _allowed_roots()]):
-        return ""
-
-    h = hashlib.sha1()
-    with resolved.open("rb") as f:
-        for block in iter(lambda: f.read(65536), b""):
-            h.update(block)
-    return h.hexdigest()[:16]
-
-
-def _safe_text(path: Path, max_bytes: int) -> Optional[str]:
-    """Read a text file safely; return None if it can't be decoded."""
-    try:
-        resolved = path.resolve(strict=True)
-        if not _is_path_allowed(resolved, [p.resolve() for p in _allowed_roots()]):
-            return None
-
-        size = resolved.stat().st_size
-        if size == 0 or size > max_bytes:
-            return None
-        with resolved.open("r", encoding="utf-8", errors="replace") as f:
-            return f.read()
-    except OSError:
-        return None
 
 
 # ── Public dataclass ─────────────────────────────────────────────────────────
@@ -220,30 +192,34 @@ def index_directory(
     total_indexed = 0   # bytes of file content indexed so far
 
     normalized_input = os.path.normpath((path or "").strip())
-    candidate_path = Path(normalized_input)
+    path_parts = normalized_input.split(os.sep)
     if (
         normalized_input in {"", ".", os.curdir}
-        or candidate_path.is_absolute()
-        or ".." in candidate_path.parts
+        or os.path.isabs(normalized_input)
+        or ".." in path_parts
     ):
         stats.errors.append("Invalid directory path: must be relative and stay within workspace.")
         return stats
 
-    workspace_root = Path.cwd().resolve()
+    workspace_root = os.path.realpath(os.getcwd())
     try:
-        root = (workspace_root / candidate_path).resolve(strict=True)
+        root = os.path.realpath(os.path.join(workspace_root, normalized_input))
     except OSError:
         stats.errors.append(f"Directory not found: {path}")
         return stats
 
-    # Canonical containment check: resolved target must be workspace_root or a descendant.
-    if root != workspace_root and workspace_root not in root.parents:
+    # Canonical containment check: root must be workspace_root or a descendant.
+    try:
+        if os.path.commonpath([workspace_root, root]) != workspace_root:
+            stats.errors.append("Invalid directory path: must stay within workspace.")
+            return stats
+    except ValueError:
         stats.errors.append("Invalid directory path: must stay within workspace.")
         return stats
 
-    allowed_roots = [p.resolve() for p in _allowed_roots()]
+    allowed_roots = _allowed_roots()
 
-    if not root.is_dir():
+    if not os.path.isdir(root):
         stats.errors.append(f"Directory not found: {path}")
         return stats
 
@@ -264,21 +240,34 @@ def index_directory(
             and not d.endswith(".egg-info")
         ]
 
+        safe_dirpath = os.path.realpath(dirpath)
+        try:
+            if os.path.commonpath([root, safe_dirpath]) != root:
+                continue
+        except ValueError:
+            continue
+
         for filename in filenames:
-            filepath = Path(dirpath) / filename
-            suffix   = Path(filename).suffix.lower()
+            _, suffix = os.path.splitext(filename)
+            suffix = suffix.lower()
 
             if suffix not in ext_set:
                 continue
 
             try:
-                resolved_path = filepath.resolve(strict=True)
-                resolved_path.relative_to(root)
-            except (OSError, ValueError):
+                candidate_file = os.path.realpath(os.path.join(safe_dirpath, filename))
+                if os.path.commonpath([root, candidate_file]) != root:
+                    continue
+            except ValueError:
+                continue
+            except OSError:
+                continue
+
+            if not os.path.isfile(candidate_file):
                 continue
 
             try:
-                file_size = resolved_path.stat().st_size
+                file_size = os.path.getsize(candidate_file)
             except OSError:
                 continue
 
@@ -290,15 +279,29 @@ def index_directory(
                 _finalise_stats(stats)
                 return stats
 
-            text = _safe_text(resolved_path, max_file_bytes)
-            if text is None:
+            if file_size == 0 or file_size > max_file_bytes:
+                continue
+
+            try:
+                with open(candidate_file, "r", encoding="utf-8", errors="replace") as f:
+                    text = f.read()
+            except OSError:
                 continue
 
             chunks     = _chunk_text(text)
-            file_hash  = _file_hash(resolved_path)
-            if not file_hash:
+            if not chunks:
                 continue
-            rel_path   = str(resolved_path.relative_to(root))
+
+            hasher = hashlib.sha1()
+            try:
+                with open(candidate_file, "rb") as f:
+                    for block in iter(lambda: f.read(65536), b""):
+                        hasher.update(block)
+            except OSError:
+                continue
+
+            file_hash = hasher.hexdigest()[:16]
+            rel_path = os.path.relpath(candidate_file, root)
 
             ids        = [f"{file_hash}_{i}" for i in range(len(chunks))]
             metadatas  = [{"file": rel_path, "chunk": i} for i in range(len(chunks))]
