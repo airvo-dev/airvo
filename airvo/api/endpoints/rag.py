@@ -71,11 +71,17 @@ async def rag_index(req: RagIndexRequest):
             )
 
         workspace_root = Path.cwd().resolve()
-        candidate_path = Path(path).expanduser()
+        candidate_path = Path(path)
         if candidate_path.is_absolute():
             raise HTTPException(
                 status_code=400,
                 detail="RAG path must be a relative path inside the current workspace.",
+            )
+
+        if ".." in candidate_path.parts:
+            raise HTTPException(
+                status_code=400,
+                detail="RAG path cannot traverse parent directories.",
             )
 
         resolved_path = (workspace_root / candidate_path).resolve(strict=False)
