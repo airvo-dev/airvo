@@ -18,11 +18,10 @@ from __future__ import annotations
 import hashlib
 import logging
 import os
-import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from pathlib import Path
+from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +49,42 @@ def is_rag_available() -> bool:
         return True
     except ImportError:
         return False
+
+
+def _allowed_roots() -> list[Path]:
+    """Return the allowed root directories for RAG indexing."""
+    roots: list[Path] = []
+    env_value = os.getenv("AIRVO_RAG_ALLOWED_ROOTS", "").strip()
+    if env_value:
+        for item in env_value.split(os.pathsep):
+            item = item.strip()
+            if not item:
+                continue
+            try:
+                roots.append(Path(item).expanduser().resolve())
+            except OSError:
+                continue
+    try:
+        roots.append(Path.cwd().resolve())
+    except OSError:
+        pass
+
+    # Deduplicate while preserving order.
+    unique: list[Path] = []
+    for root in roots:
+        if root not in unique:
+            unique.append(root)
+    return unique
+
+
+def _is_path_allowed(candidate: Path, allowed_roots: list[Path]) -> bool:
+    for base in allowed_roots:
+        try:
+            candidate.relative_to(base)
+            return True
+        except ValueError:
+            continue
+    return False
 
 
 # ── Internal helpers ─────────────────────────────────────────────────────────
@@ -174,9 +209,17 @@ def index_directory(
     stats         = IndexStats()
     total_indexed = 0   # bytes of file content indexed so far
     root          = Path(path).expanduser().resolve()
+    allowed_roots = _allowed_roots()
 
     if not root.is_dir():
         stats.errors.append(f"Directory not found: {path}")
+        return stats
+
+    if not _is_path_allowed(root, allowed_roots):
+        allowed_txt = ", ".join(str(p) for p in allowed_roots) or "<none>"
+        stats.errors.append(
+            f"Directory not allowed for indexing: {root}. Allowed roots: {allowed_txt}"
+        )
         return stats
 
     logger.info(f"[RAG] Indexing '{root}' …")

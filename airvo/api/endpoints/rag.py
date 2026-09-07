@@ -1,5 +1,6 @@
 from typing import List, Optional
 import logging
+from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -69,8 +70,16 @@ async def rag_index(req: RagIndexRequest):
                 detail="No directory configured. Set rag_path in preferences first."
             )
 
+        resolved_path = Path(path).expanduser().resolve()
+        allowed_roots = [Path.cwd().resolve()]
+        if not any(resolved_path == base or base in resolved_path.parents for base in allowed_roots):
+            raise HTTPException(
+                status_code=400,
+                detail="RAG path must be inside the current workspace."
+            )
+
         stats = index_directory(
-            path=path,
+            path=str(resolved_path),
             extensions=req.extensions or prefs.get("rag_extensions"),
             exclude_dirs=req.exclude_dirs or prefs.get("rag_exclude_dirs"),
             max_file_kb=req.max_file_kb or prefs.get("rag_max_file_kb", 500),
