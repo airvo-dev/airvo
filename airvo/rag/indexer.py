@@ -127,8 +127,15 @@ def _chunk_text(text: str) -> List[str]:
 
 def _file_hash(path: Path) -> str:
     """SHA-1 of the file content — used as a stable document ID prefix."""
+    try:
+        resolved = path.resolve(strict=True)
+    except OSError:
+        return ""
+    if not _is_path_allowed(resolved, [p.resolve() for p in _allowed_roots()]):
+        return ""
+
     h = hashlib.sha1()
-    with path.open("rb") as f:
+    with resolved.open("rb") as f:
         for block in iter(lambda: f.read(65536), b""):
             h.update(block)
     return h.hexdigest()[:16]
@@ -137,10 +144,14 @@ def _file_hash(path: Path) -> str:
 def _safe_text(path: Path, max_bytes: int) -> Optional[str]:
     """Read a text file safely; return None if it can't be decoded."""
     try:
-        size = path.stat().st_size
+        resolved = path.resolve(strict=True)
+        if not _is_path_allowed(resolved, [p.resolve() for p in _allowed_roots()]):
+            return None
+
+        size = resolved.stat().st_size
         if size == 0 or size > max_bytes:
             return None
-        with path.open("r", encoding="utf-8", errors="replace") as f:
+        with resolved.open("r", encoding="utf-8", errors="replace") as f:
             return f.read()
     except OSError:
         return None
@@ -207,8 +218,14 @@ def index_directory(
 
     stats         = IndexStats()
     total_indexed = 0   # bytes of file content indexed so far
-    candidate_path = Path(path)
-    if candidate_path.is_absolute() or ".." in candidate_path.parts:
+
+    normalized_input = os.path.normpath((path or "").strip())
+    candidate_path = Path(normalized_input)
+    if (
+        normalized_input in {"", ".", os.curdir}
+        or candidate_path.is_absolute()
+        or ".." in candidate_path.parts
+    ):
         stats.errors.append("Invalid directory path: must be relative and stay within workspace.")
         return stats
 
@@ -219,9 +236,8 @@ def index_directory(
         stats.errors.append(f"Directory not found: {path}")
         return stats
 
-    try:
-        root.relative_to(workspace_root)
-    except ValueError:
+    # Canonical containment check: resolved target must be workspace_root or a descendant.
+    if root != workspace_root and workspace_root not in root.parents:
         stats.errors.append("Invalid directory path: must stay within workspace.")
         return stats
 
@@ -280,6 +296,8 @@ def index_directory(
 
             chunks     = _chunk_text(text)
             file_hash  = _file_hash(resolved_path)
+            if not file_hash:
+                continue
             rel_path   = str(resolved_path.relative_to(root))
 
             ids        = [f"{file_hash}_{i}" for i in range(len(chunks))]
