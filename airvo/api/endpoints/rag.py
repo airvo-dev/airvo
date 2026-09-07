@@ -1,5 +1,6 @@
 from typing import List, Optional
 import logging
+import os
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
@@ -62,16 +63,17 @@ async def rag_index(req: RagIndexRequest):
             )
 
         prefs = settings.get_prefs()
-        path = (req.path or prefs.get("rag_path", "")).strip()
+        raw_path = req.path if req.path is not None else prefs.get("rag_path", "")
+        normalized_input = os.path.normpath((raw_path or "").strip())
 
-        if not path:
+        if normalized_input in {"", ".", os.curdir}:
             raise HTTPException(
                 status_code=400,
                 detail="No directory configured. Set rag_path in preferences first."
             )
 
         workspace_root = Path.cwd().resolve()
-        candidate_path = Path(path)
+        candidate_path = Path(normalized_input)
         if candidate_path.is_absolute():
             raise HTTPException(
                 status_code=400,
