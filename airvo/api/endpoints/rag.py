@@ -1,4 +1,7 @@
 from typing import List, Optional
+import logging
+import os
+from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -6,6 +9,7 @@ from pydantic import BaseModel
 from airvo.config.settings import settings
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 class RagIndexRequest(BaseModel):
@@ -41,8 +45,9 @@ async def rag_status():
             "index_size_mb": stats.index_size_mb,
             "last_indexed": stats.last_indexed,
         }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to fetch RAG status")
+        raise HTTPException(status_code=500, detail="Failed to fetch RAG status")
 
 
 @router.post("/api/rag/index", tags=["RAG"], summary="Index a directory",
@@ -58,16 +63,34 @@ async def rag_index(req: RagIndexRequest):
             )
 
         prefs = settings.get_prefs()
-        path = (req.path or prefs.get("rag_path", "")).strip()
+        raw_path = req.path if req.path is not None else prefs.get("rag_path", "")
+        normalized_input = os.path.normpath((raw_path or "").strip())
 
-        if not path:
+        if normalized_input in {"", ".", os.curdir}:
             raise HTTPException(
                 status_code=400,
                 detail="No directory configured. Set rag_path in preferences first."
             )
 
+        workspace_root = Path.cwd().resolve()
+        candidate_path = Path(normalized_input)
+        if candidate_path.is_absolute():
+            raise HTTPException(
+                status_code=400,
+                detail="RAG path must be a relative path inside the current workspace.",
+            )
+
+        if ".." in candidate_path.parts:
+            raise HTTPException(
+                status_code=400,
+                detail="RAG path cannot traverse parent directories.",
+            )
+
+        # Keep endpoint validation path-only; final containment checks happen inside indexer.
+        normalized_relative_path = str(candidate_path)
+
         stats = index_directory(
-            path=path,
+            path=normalized_relative_path,
             extensions=req.extensions or prefs.get("rag_extensions"),
             exclude_dirs=req.exclude_dirs or prefs.get("rag_exclude_dirs"),
             max_file_kb=req.max_file_kb or prefs.get("rag_max_file_kb", 500),
@@ -85,8 +108,9 @@ async def rag_index(req: RagIndexRequest):
 
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to index RAG directory")
+        raise HTTPException(status_code=500, detail="Failed to index RAG directory")
 
 
 @router.delete("/api/rag/reset", tags=["RAG"], summary="Reset RAG index",
@@ -96,5 +120,6 @@ async def rag_reset():
         from airvo.rag.indexer import clear_index
         clear_index()
         return {"ok": True}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to reset RAG index")
+        raise HTTPException(status_code=500, detail="Failed to reset RAG index")

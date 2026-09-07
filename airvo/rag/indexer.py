@@ -18,10 +18,8 @@ from __future__ import annotations
 import hashlib
 import logging
 import os
-import re
 import time
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import List, Optional
 
 logger = logging.getLogger(__name__)
@@ -50,6 +48,47 @@ def is_rag_available() -> bool:
         return True
     except ImportError:
         return False
+
+
+def _allowed_roots() -> list[str]:
+    """Return the allowed root directories for RAG indexing."""
+    roots: list[str] = []
+    env_value = os.getenv("AIRVO_RAG_ALLOWED_ROOTS", "").strip()
+    if env_value:
+        for item in env_value.split(os.pathsep):
+            item = item.strip()
+            if not item:
+                continue
+            try:
+                expanded = os.path.expanduser(item)
+                resolved = os.path.realpath(expanded)
+                if os.path.isdir(resolved):
+                    roots.append(resolved)
+            except OSError:
+                continue
+    try:
+        roots.append(os.path.realpath(os.getcwd()))
+    except OSError:
+        pass
+
+    # Deduplicate while preserving order.
+    unique: list[str] = []
+    for root in roots:
+        if root not in unique:
+            unique.append(root)
+    return unique
+
+
+def _is_path_allowed(candidate: str, allowed_roots: list[str]) -> bool:
+    for base in allowed_roots:
+        try:
+            if os.path.commonpath([base, candidate]) == base:
+                return True
+        except ValueError:
+            continue
+        except OSError:
+            continue
+    return False
 
 
 # ── Internal helpers ─────────────────────────────────────────────────────────
@@ -88,27 +127,6 @@ def _chunk_text(text: str) -> List[str]:
         chunks.append(text[start:end])
         start += CHUNK_SIZE - CHUNK_OVERLAP
     return [c.strip() for c in chunks if c.strip()]
-
-
-def _file_hash(path: str) -> str:
-    """SHA-1 of the file content — used as a stable document ID prefix."""
-    h = hashlib.sha1()
-    with open(path, "rb") as f:
-        for block in iter(lambda: f.read(65536), b""):
-            h.update(block)
-    return h.hexdigest()[:16]
-
-
-def _safe_text(path: str, max_bytes: int) -> Optional[str]:
-    """Read a text file safely; return None if it can't be decoded."""
-    try:
-        size = os.path.getsize(path)
-        if size == 0 or size > max_bytes:
-            return None
-        with open(path, "r", encoding="utf-8", errors="replace") as f:
-            return f.read()
-    except OSError:
-        return None
 
 
 # ── Public dataclass ─────────────────────────────────────────────────────────
@@ -172,30 +190,90 @@ def index_directory(
 
     stats         = IndexStats()
     total_indexed = 0   # bytes of file content indexed so far
-    root          = Path(path).resolve()
 
-    if not root.is_dir():
-        stats.errors.append(f"Directory not found: {path}")
+    normalized_input = os.path.normpath((path or "").strip())
+    path_parts = [p for p in normalized_input.split(os.sep) if p and p != "."]
+    if (
+        normalized_input in {"", ".", os.curdir}
+        or os.path.isabs(normalized_input)
+        or ".." in path_parts
+    ):
+        stats.errors.append("Invalid directory path: must be relative and stay within workspace.")
         return stats
 
-    logger.info(f"[RAG] Indexing '{root}' …")
+    workspace_root = os.path.realpath(os.getcwd())
+    allowed_roots = _allowed_roots()
+    if not _is_path_allowed(workspace_root, allowed_roots):
+        allowed_txt = ", ".join(str(p) for p in allowed_roots) or "<none>"
+        stats.errors.append(
+            f"Workspace directory not allowed for indexing: {workspace_root}. Allowed roots: {allowed_txt}"
+        )
+        return stats
 
-    for dirpath, dirnames, filenames in os.walk(root):
+    requested_rel = os.path.join(*path_parts) if path_parts else ""
+    found_requested_scope = False
+
+    logger.info(f"[RAG] Indexing '{workspace_root}' (scope='{requested_rel}') …")
+
+    for dirpath, dirnames, filenames in os.walk(workspace_root, followlinks=False):
         # Prune excluded directories in-place so os.walk won't recurse into them
-        dirnames[:] = [
+        safe_dirpath = os.path.realpath(dirpath)
+        rel_dir = os.path.relpath(safe_dirpath, workspace_root)
+        if rel_dir == ".":
+            rel_parts: list[str] = []
+        else:
+            rel_parts = [p for p in rel_dir.split(os.sep) if p]
+
+        # Keep traversal bounded to requested_rel without using user input as filesystem root.
+        if path_parts:
+            is_ancestor = rel_parts == path_parts[: len(rel_parts)]
+            is_descendant = path_parts == rel_parts[: len(path_parts)]
+            if not (is_ancestor or is_descendant):
+                dirnames[:] = []
+                continue
+            if is_descendant:
+                found_requested_scope = True
+
+        filtered_dirnames = [
             d for d in dirnames
-            if d.lower() not in exclude_set
-            and not d.endswith(".egg-info")
+            if d.lower() not in exclude_set and not d.endswith(".egg-info")
         ]
 
+        # If we're on the path toward requested_rel, descend only through the next segment.
+        if path_parts and rel_parts == path_parts[: len(rel_parts)] and len(rel_parts) < len(path_parts):
+            next_segment = path_parts[len(rel_parts)]
+            dirnames[:] = [d for d in filtered_dirnames if d == next_segment]
+            continue
+
+        dirnames[:] = filtered_dirnames
+
         for filename in filenames:
-            filepath = os.path.join(dirpath, filename)
-            suffix   = Path(filename).suffix.lower()
+            if path_parts and rel_parts != path_parts[: len(rel_parts)]:
+                continue
+
+            _, suffix = os.path.splitext(filename)
+            suffix = suffix.lower()
 
             if suffix not in ext_set:
                 continue
 
-            file_size = os.path.getsize(filepath)
+            try:
+                candidate_file = os.path.realpath(os.path.join(safe_dirpath, filename))
+                if os.path.commonpath([workspace_root, candidate_file]) != workspace_root:
+                    continue
+            except ValueError:
+                continue
+            except OSError:
+                continue
+
+            if not os.path.isfile(candidate_file):
+                continue
+
+            try:
+                file_size = os.path.getsize(candidate_file)
+            except OSError:
+                continue
+
             if total_indexed + file_size > max_index_bytes:
                 logger.info("[RAG] Index size cap reached, stopping early.")
                 stats.errors.append(
@@ -204,13 +282,29 @@ def index_directory(
                 _finalise_stats(stats)
                 return stats
 
-            text = _safe_text(filepath, max_file_bytes)
-            if text is None:
+            if file_size == 0 or file_size > max_file_bytes:
+                continue
+
+            try:
+                with open(candidate_file, "r", encoding="utf-8", errors="replace") as f:
+                    text = f.read()
+            except OSError:
                 continue
 
             chunks     = _chunk_text(text)
-            file_hash  = _file_hash(filepath)
-            rel_path   = os.path.relpath(filepath, root)
+            if not chunks:
+                continue
+
+            hasher = hashlib.sha1()
+            try:
+                with open(candidate_file, "rb") as f:
+                    for block in iter(lambda: f.read(65536), b""):
+                        hasher.update(block)
+            except OSError:
+                continue
+
+            file_hash = hasher.hexdigest()[:16]
+            rel_path = os.path.relpath(candidate_file, workspace_root)
 
             ids        = [f"{file_hash}_{i}" for i in range(len(chunks))]
             metadatas  = [{"file": rel_path, "chunk": i} for i in range(len(chunks))]
@@ -230,6 +324,9 @@ def index_directory(
                 msg = f"Error indexing {rel_path}: {exc}"
                 logger.warning(f"[RAG] {msg}")
                 stats.errors.append(msg)
+
+    if path_parts and not found_requested_scope:
+        stats.errors.append(f"Directory not found: {path}")
 
     _finalise_stats(stats)
     logger.info(

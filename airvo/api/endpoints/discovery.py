@@ -1,4 +1,5 @@
 from typing import Optional
+import logging
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -6,6 +7,7 @@ from pydantic import BaseModel
 from airvo.config.settings import settings, save_models
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/api/discovery/ollama", tags=["Discovery"], summary="Ollama model catalog",
@@ -21,8 +23,9 @@ async def discovery_ollama(base_url: str = "http://localhost:11434"):
             ram_free_mb = hw.ram_free_mb
 
         return get_ollama_discovery(base_url, ram_free_mb)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to fetch Ollama discovery data")
+        raise HTTPException(status_code=500, detail="Failed to fetch Ollama discovery data")
 
 
 @router.get("/api/discovery/openrouter", tags=["Discovery"], summary="OpenRouter models",
@@ -31,8 +34,9 @@ async def discovery_openrouter(limit: int = 60):
     try:
         from airvo.discovery.discoverer import get_openrouter_models
         return {"models": get_openrouter_models(limit)}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to fetch OpenRouter discovery data")
+        raise HTTPException(status_code=500, detail="Failed to fetch OpenRouter discovery data")
 
 
 class QuickAddRequest(BaseModel):
@@ -78,5 +82,6 @@ async def discovery_add(req: QuickAddRequest):
         existing.append(new_model)
         save_models(existing)
         return {"ok": True, "model": litellm_id, "already_existed": False}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to add discovery model")
+        raise HTTPException(status_code=500, detail="Failed to add model")

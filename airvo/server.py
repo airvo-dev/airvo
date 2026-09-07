@@ -350,20 +350,9 @@ if _dist.exists():
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
         """
-        Catch-all route — serve static files if they exist,
-        otherwise fall back to index.html for React client-side routing.
-        Path traversal protection: resolved path must stay within _dist.
+        Catch-all route for React client-side routing.
+        Static assets are served from /assets; every other path returns index.html.
         """
-        try:
-            file_path = (_dist / full_path).resolve()
-            dist_resolved = _dist.resolve()
-            # Block path traversal attacks
-            if not str(file_path).startswith(str(dist_resolved)):
-                return FileResponse(str(_dist / "index.html"))
-            if file_path.exists() and file_path.is_file():
-                return FileResponse(str(file_path))
-        except Exception:
-            pass
         return FileResponse(str(_dist / "index.html"))
 
 else:

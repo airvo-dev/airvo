@@ -468,4 +468,4 @@ async def chat_completions(request: ChatRequest, http_request: Request):
             status_code=500,
             error=str(e),
         )
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Chat completion failed")

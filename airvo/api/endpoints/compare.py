@@ -139,8 +139,9 @@ async def compare_run(req: CompareRunRequest):
         return {"data": entry}
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Compare run failed")
+        raise HTTPException(status_code=500, detail="Compare run failed")
 
 
 async def _stream_one_model(model_cfg: dict, messages: list, req_obj, idx: int, queue: asyncio.Queue, request_id: str):
