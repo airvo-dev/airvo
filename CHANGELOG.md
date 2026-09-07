@@ -17,6 +17,15 @@ The project follows Semantic Versioning.
 
 ### Docs
 
+## 0.9.8 - 2026-09-07
+
+### Changed
+- Standardized documentation defaults to localhost:8765 across root and dashboard README guides.
+- Quick Start now includes a health-check verification step for first-run success.
+
+### Docs
+- Updated release badges and onboarding copy to reflect the latest stable release.
+
 ## 0.9.7 - 2026-09-06
 
 ### Added
