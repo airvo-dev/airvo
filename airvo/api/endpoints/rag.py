@@ -72,7 +72,13 @@ async def rag_index(req: RagIndexRequest):
 
         workspace_root = Path.cwd().resolve()
         candidate_path = Path(path).expanduser()
-        resolved_path = workspace_root.joinpath(candidate_path).resolve(strict=False)
+        if candidate_path.is_absolute():
+            raise HTTPException(
+                status_code=400,
+                detail="RAG path must be a relative path inside the current workspace.",
+            )
+
+        resolved_path = (workspace_root / candidate_path).resolve(strict=False)
         try:
             resolved_path.relative_to(workspace_root)
         except ValueError:
