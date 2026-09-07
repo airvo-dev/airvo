@@ -18,11 +18,11 @@ from __future__ import annotations
 import hashlib
 import logging
 import os
-import re
+import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -90,22 +90,23 @@ def _chunk_text(text: str) -> List[str]:
     return [c.strip() for c in chunks if c.strip()]
 
 
-def _file_hash(path: str) -> str:
+def _file_hash(path: Path | str) -> str:
     """SHA-1 of the file content — used as a stable document ID prefix."""
     h = hashlib.sha1()
-    with open(path, "rb") as f:
+    with Path(path).open("rb") as f:
         for block in iter(lambda: f.read(65536), b""):
             h.update(block)
     return h.hexdigest()[:16]
 
 
-def _safe_text(path: str, max_bytes: int) -> Optional[str]:
+def _safe_text(path: Path | str, max_bytes: int) -> Optional[str]:
     """Read a text file safely; return None if it can't be decoded."""
+    p = Path(path)
     try:
-        size = os.path.getsize(path)
+        size = p.stat().st_size
         if size == 0 or size > max_bytes:
             return None
-        with open(path, "r", encoding="utf-8", errors="replace") as f:
+        with p.open("r", encoding="utf-8", errors="replace") as f:
             return f.read()
     except OSError:
         return None
@@ -172,7 +173,7 @@ def index_directory(
 
     stats         = IndexStats()
     total_indexed = 0   # bytes of file content indexed so far
-    root          = Path(path).resolve()
+    root          = Path(path).expanduser().resolve()
 
     if not root.is_dir():
         stats.errors.append(f"Directory not found: {path}")
@@ -180,7 +181,7 @@ def index_directory(
 
     logger.info(f"[RAG] Indexing '{root}' …")
 
-    for dirpath, dirnames, filenames in os.walk(root):
+    for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
         # Prune excluded directories in-place so os.walk won't recurse into them
         dirnames[:] = [
             d for d in dirnames
@@ -189,13 +190,23 @@ def index_directory(
         ]
 
         for filename in filenames:
-            filepath = os.path.join(dirpath, filename)
+            filepath = Path(dirpath) / filename
             suffix   = Path(filename).suffix.lower()
 
             if suffix not in ext_set:
                 continue
 
-            file_size = os.path.getsize(filepath)
+            try:
+                resolved_path = filepath.resolve()
+                resolved_path.relative_to(root)
+            except (OSError, ValueError):
+                continue
+
+            try:
+                file_size = resolved_path.stat().st_size
+            except OSError:
+                continue
+
             if total_indexed + file_size > max_index_bytes:
                 logger.info("[RAG] Index size cap reached, stopping early.")
                 stats.errors.append(
@@ -204,13 +215,13 @@ def index_directory(
                 _finalise_stats(stats)
                 return stats
 
-            text = _safe_text(filepath, max_file_bytes)
+            text = _safe_text(resolved_path, max_file_bytes)
             if text is None:
                 continue
 
             chunks     = _chunk_text(text)
-            file_hash  = _file_hash(filepath)
-            rel_path   = os.path.relpath(filepath, root)
+            file_hash  = _file_hash(resolved_path)
+            rel_path   = str(resolved_path.relative_to(root))
 
             ids        = [f"{file_hash}_{i}" for i in range(len(chunks))]
             metadatas  = [{"file": rel_path, "chunk": i} for i in range(len(chunks))]

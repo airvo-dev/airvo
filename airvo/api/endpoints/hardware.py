@@ -1,4 +1,5 @@
 from typing import Optional
+import logging
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -6,6 +7,7 @@ from pydantic import BaseModel
 from airvo.config.settings import settings
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/api/hardware/status", tags=["Hardware"], summary="Hardware status",
@@ -74,8 +76,9 @@ async def hardware_status():
             ],
             "error": hw.error,
         }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to fetch hardware status")
+        raise HTTPException(status_code=500, detail="Failed to fetch hardware status")
 
 
 class UnloadRequest(BaseModel):
@@ -94,8 +97,9 @@ async def hardware_unload(req: UnloadRequest):
         return {"ok": True, "model": req.model_name}
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to unload Ollama model")
+        raise HTTPException(status_code=500, detail="Failed to unload model")
 
 
 @router.get("/api/hardware/fit-models", tags=["Hardware"], summary="Models that fit this machine",
@@ -137,5 +141,6 @@ async def hardware_processes(limit: int = 8):
         return {"processes": procs[:limit]}
     except ImportError:
         return {"processes": [], "error": "psutil not available"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to list hardware processes")
+        raise HTTPException(status_code=500, detail="Failed to list hardware processes")

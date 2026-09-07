@@ -1,6 +1,7 @@
 from typing import Optional
 import asyncio
 import time
+import logging
 
 import litellm
 from fastapi import APIRouter, HTTPException
@@ -9,6 +10,7 @@ from pydantic import BaseModel
 from airvo.config.settings import settings
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 class ModelUpdate(BaseModel):
@@ -104,7 +106,8 @@ async def test_model_connection(req: TestConnectionRequest):
         await litellm.acompletion(**kwargs)
         return {"ok": True, "latency_ms": round((time.time() - start) * 1000)}
     except Exception as exc:
-        return {"ok": False, "error": str(exc)[:200]}
+        logger.warning("Model connection test failed for %s: %s", req.model_id, type(exc).__name__)
+        return {"ok": False, "error": "Connection test failed"}
 
 
 @router.get("/api/health/providers", tags=["Models"], summary="Health check all active models",
@@ -140,7 +143,7 @@ async def health_providers():
                 "provider": model.get("provider", ""),
                 "ok": False,
                 "latency_ms": None,
-                "error": str(exc)[:120],
+                "error": "Request failed",
             }
 
     results = await asyncio.gather(*[_ping(m) for m in active])

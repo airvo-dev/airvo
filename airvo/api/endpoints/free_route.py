@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+import logging
 
 from airvo.config.settings import settings, save_models
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 class FreeRouteSetupRequest(BaseModel):
@@ -19,8 +21,9 @@ async def free_route_setup(req: FreeRouteSetupRequest):
         raise HTTPException(status_code=400, detail="Invalid API key")
     try:
         state = fr_setup(req.api_key)
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
+    except Exception:
+        logger.exception("Free Route setup failed")
+        raise HTTPException(status_code=502, detail="Free Route setup failed")
 
     active_ids = state.get("active_model_ids", [])
     models_by_cat = state.get("models_by_category", {})
@@ -65,8 +68,9 @@ async def free_route_refresh():
     from airvo.free_route.manager import refresh as fr_refresh
     try:
         state = fr_refresh()
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
+    except Exception:
+        logger.exception("Free Route refresh failed")
+        raise HTTPException(status_code=502, detail="Free Route refresh failed")
     return {
         "ok": True,
         "active_model_ids": state.get("active_model_ids", []),

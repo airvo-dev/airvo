@@ -355,14 +355,16 @@ if _dist.exists():
         Path traversal protection: resolved path must stay within _dist.
         """
         try:
-            file_path = (_dist / full_path).resolve()
             dist_resolved = _dist.resolve()
-            # Block path traversal attacks
-            if not str(file_path).startswith(str(dist_resolved)):
+            file_path = (dist_resolved / full_path).resolve()
+            # Block path traversal attacks using a path-aware boundary check.
+            try:
+                file_path.relative_to(dist_resolved)
+            except ValueError:
                 return FileResponse(str(_dist / "index.html"))
             if file_path.exists() and file_path.is_file():
                 return FileResponse(str(file_path))
-        except Exception:
+        except (OSError, RuntimeError, ValueError):
             pass
         return FileResponse(str(_dist / "index.html"))
 

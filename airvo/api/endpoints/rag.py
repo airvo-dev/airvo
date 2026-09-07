@@ -1,4 +1,5 @@
 from typing import List, Optional
+import logging
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -6,6 +7,7 @@ from pydantic import BaseModel
 from airvo.config.settings import settings
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 class RagIndexRequest(BaseModel):
@@ -41,8 +43,9 @@ async def rag_status():
             "index_size_mb": stats.index_size_mb,
             "last_indexed": stats.last_indexed,
         }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to fetch RAG status")
+        raise HTTPException(status_code=500, detail="Failed to fetch RAG status")
 
 
 @router.post("/api/rag/index", tags=["RAG"], summary="Index a directory",
@@ -85,8 +88,9 @@ async def rag_index(req: RagIndexRequest):
 
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to index RAG directory")
+        raise HTTPException(status_code=500, detail="Failed to index RAG directory")
 
 
 @router.delete("/api/rag/reset", tags=["RAG"], summary="Reset RAG index",
@@ -96,5 +100,6 @@ async def rag_reset():
         from airvo.rag.indexer import clear_index
         clear_index()
         return {"ok": True}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Failed to reset RAG index")
+        raise HTTPException(status_code=500, detail="Failed to reset RAG index")

@@ -275,7 +275,7 @@ async def chat_stream(req: ChatSendRequest, request: Request):
                     )
                     err = json.dumps(
                         sse_error_event(
-                            message=f"All models failed. Last error: {exc}",
+                            message="All models failed. Please review provider connectivity and retry.",
                             request_id=request_id,
                             code="ALL_MODELS_FAILED",
                         )
