@@ -50,7 +50,7 @@ Your Editor (VS Code)
        │
        │  OpenAI-compatible API
        ▼
-  Airvo Server  ←─── runs on localhost:5000
+  Airvo Server  ←─── runs on localhost:8765
        │
        ├── Groq (Llama 3.1, Llama 3.3)
        ├── OpenAI (GPT-4o, GPT-4o mini)
@@ -111,9 +111,17 @@ airvo start
 That's it. Airvo will:
 - Create your config at `~/.airvo/models.json`
 - Auto-configure continue.dev at `~/.continue/config.yaml`
-- Open the dashboard at `http://localhost:5000`
+- Open the dashboard at `http://localhost:8765`
 
-**3. Add your first model**
+**3. Verify the server is up**
+
+```bash
+curl http://127.0.0.1:8765/api/health
+```
+
+Expected result: a JSON response with service status.
+
+**4. Add your first model**
 
 Open the dashboard → Add Model → fill in the model details → Save.
 
@@ -132,11 +140,11 @@ Or add Groq manually — it's free and fast:
 - **Provider:** `groq`
 - **API Key:** get one free at [console.groq.com](https://console.groq.com) — no credit card required
 
-**4. Install continue.dev in VS Code**
+**5. Install continue.dev in VS Code**
 
 Install the [Continue extension](https://marketplace.visualstudio.com/items?itemName=Continue.continue) from the VS Code marketplace. Airvo already configured it for you.
 
-**5. Start coding**
+**6. Start coding**
 
 Open VS Code → press `Ctrl+L` → ask anything.
 
@@ -177,13 +185,13 @@ Add any model supported by LiteLLM — over 100 providers. Groq, OpenAI, Anthrop
 A built-in chat interface in the dashboard that knows everything about Airvo. Ask how to add models, configure RAG, troubleshoot errors, or understand any feature. Responses stream in real-time, history is saved locally, and the assistant sees your live configuration state — so answers are specific to your setup, not generic.
 
 **⚡ Multi-Model Modes**
-Run up to 3 models simultaneously in 4 modes: **Parallel** (see all answers), **Race** (fastest wins), **Vote** (consensus), **Review** (one generates, others refine).
+Run up to 5 models simultaneously in 4 modes: **Parallel** (see all answers), **Race** (fastest wins), **Vote** (consensus), **Review** (one generates, others refine).
 
 **🔒 100% Local Option**
 Use Ollama or LM Studio with no API key, no internet, no cost. Your code never leaves your machine.
 
 **🎛️ Visual Dashboard**
-Manage models, configure API keys, toggle models on/off — all from a clean dark UI at `localhost:5000`.
+Manage models, configure API keys, toggle models on/off — all from a clean dark UI at `localhost:8765`.
 
 **🧠 Project Context**
 Write your stack, preferences and constraints once. Airvo injects it into every request so the model always knows your project — without you repeating yourself.
@@ -276,7 +284,7 @@ Any model supported by [LiteLLM](https://docs.litellm.ai/docs/providers) works w
 
 ## Dashboard
 
-The Airvo dashboard runs at `http://localhost:5000` and lets you manage everything visually.
+The Airvo dashboard runs at `http://localhost:8765` and lets you manage everything visually.
 
 **Models page** — activate/deactivate models, save API keys, test keys with one click, add personal notes, see requests and tokens per model.
 
@@ -345,7 +353,7 @@ models:
   - name: Airvo
     provider: openai
     model: airvo-auto
-    apiBase: http://localhost:5000/v1
+    apiBase: http://localhost:8765/v1
     apiKey: local
     roles:
       - chat
@@ -360,7 +368,7 @@ models:
 **CLI options**
 
 ```bash
-airvo start                    # default: localhost:5000, opens browser
+airvo start                    # default: localhost:8765, opens browser
 airvo start --port 9000        # custom port
 airvo start --host 0.0.0.0     # accessible from local network
 airvo start --no-browser       # don't open browser automatically
@@ -448,7 +456,7 @@ Airvo is designed with privacy and security in mind:
 - **API keys stay local** — stored in `~/.airvo/models.json` on your machine, never sent to Airvo servers
 - **Optional admin API protection** — set `AIRVO_ADMIN_TOKEN` and sensitive mutation endpoints require `Authorization: Bearer <token>` (or `X-Airvo-Token`)
 - **Privacy Mode** — scans every prompt for 18 categories of secrets (API keys, JWTs, AWS credentials, DSNs…) and blocks routing to cloud models if high-severity data is detected. Enable in Config.
-- **Localhost only** — the server listens on `localhost:5000` by default, not accessible from the internet
+- **Localhost only** — the server listens on `localhost:8765` by default, not accessible from the internet
 - **Restricted CORS** — only the dashboard and VS Code extensions can make requests to the server
 - **No telemetry** — Airvo collects no usage data, no analytics, no crash reports
 - **Open source** — the full source code is on GitHub, you can audit everything
