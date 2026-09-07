@@ -208,7 +208,13 @@ def index_directory(
 
     stats         = IndexStats()
     total_indexed = 0   # bytes of file content indexed so far
-    root          = Path(path).expanduser().resolve()
+    candidate_path = Path(path)
+    if candidate_path.is_absolute() or ".." in candidate_path.parts:
+        stats.errors.append("Invalid directory path: must be relative and stay within workspace.")
+        return stats
+
+    workspace_root = Path.cwd().resolve()
+    root = (workspace_root / candidate_path).absolute()
     allowed_roots = _allowed_roots()
 
     if not root.is_dir():

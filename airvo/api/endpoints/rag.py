@@ -84,17 +84,11 @@ async def rag_index(req: RagIndexRequest):
                 detail="RAG path cannot traverse parent directories.",
             )
 
-        resolved_path = (workspace_root / candidate_path).resolve(strict=False)
-        try:
-            resolved_path.relative_to(workspace_root)
-        except ValueError:
-            raise HTTPException(
-                status_code=400,
-                detail="RAG path must be inside the current workspace."
-            )
+        # Keep endpoint validation path-only; final containment checks happen inside indexer.
+        normalized_relative_path = str(candidate_path)
 
         stats = index_directory(
-            path=str(resolved_path),
+            path=normalized_relative_path,
             extensions=req.extensions or prefs.get("rag_extensions"),
             exclude_dirs=req.exclude_dirs or prefs.get("rag_exclude_dirs"),
             max_file_kb=req.max_file_kb or prefs.get("rag_max_file_kb", 500),
