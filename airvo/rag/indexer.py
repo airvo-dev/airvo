@@ -192,7 +192,7 @@ def index_directory(
     total_indexed = 0   # bytes of file content indexed so far
 
     normalized_input = os.path.normpath((path or "").strip())
-    path_parts = normalized_input.split(os.sep)
+    path_parts = [p for p in normalized_input.split(os.sep) if p and p != "."]
     if (
         normalized_input in {"", ".", os.curdir}
         or os.path.isabs(normalized_input)
@@ -202,52 +202,55 @@ def index_directory(
         return stats
 
     workspace_root = os.path.realpath(os.getcwd())
-    try:
-        root = os.path.realpath(os.path.join(workspace_root, normalized_input))
-    except OSError:
-        stats.errors.append(f"Directory not found: {path}")
-        return stats
-
-    # Canonical containment check: root must be workspace_root or a descendant.
-    try:
-        if os.path.commonpath([workspace_root, root]) != workspace_root:
-            stats.errors.append("Invalid directory path: must stay within workspace.")
-            return stats
-    except ValueError:
-        stats.errors.append("Invalid directory path: must stay within workspace.")
-        return stats
-
     allowed_roots = _allowed_roots()
-
-    if not os.path.isdir(root):
-        stats.errors.append(f"Directory not found: {path}")
-        return stats
-
-    if not _is_path_allowed(root, allowed_roots):
+    if not _is_path_allowed(workspace_root, allowed_roots):
         allowed_txt = ", ".join(str(p) for p in allowed_roots) or "<none>"
         stats.errors.append(
-            f"Directory not allowed for indexing: {root}. Allowed roots: {allowed_txt}"
+            f"Workspace directory not allowed for indexing: {workspace_root}. Allowed roots: {allowed_txt}"
         )
         return stats
 
-    logger.info(f"[RAG] Indexing '{root}' …")
+    requested_rel = os.path.join(*path_parts) if path_parts else ""
+    found_requested_scope = False
 
-    for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
+    logger.info(f"[RAG] Indexing '{workspace_root}' (scope='{requested_rel}') …")
+
+    for dirpath, dirnames, filenames in os.walk(workspace_root, followlinks=False):
         # Prune excluded directories in-place so os.walk won't recurse into them
-        dirnames[:] = [
+        safe_dirpath = os.path.realpath(dirpath)
+        rel_dir = os.path.relpath(safe_dirpath, workspace_root)
+        if rel_dir == ".":
+            rel_parts: list[str] = []
+        else:
+            rel_parts = [p for p in rel_dir.split(os.sep) if p]
+
+        # Keep traversal bounded to requested_rel without using user input as filesystem root.
+        if path_parts:
+            is_ancestor = rel_parts == path_parts[: len(rel_parts)]
+            is_descendant = path_parts == rel_parts[: len(path_parts)]
+            if not (is_ancestor or is_descendant):
+                dirnames[:] = []
+                continue
+            if is_descendant:
+                found_requested_scope = True
+
+        filtered_dirnames = [
             d for d in dirnames
-            if d.lower() not in exclude_set
-            and not d.endswith(".egg-info")
+            if d.lower() not in exclude_set and not d.endswith(".egg-info")
         ]
 
-        safe_dirpath = os.path.realpath(dirpath)
-        try:
-            if os.path.commonpath([root, safe_dirpath]) != root:
-                continue
-        except ValueError:
+        # If we're on the path toward requested_rel, descend only through the next segment.
+        if path_parts and rel_parts == path_parts[: len(rel_parts)] and len(rel_parts) < len(path_parts):
+            next_segment = path_parts[len(rel_parts)]
+            dirnames[:] = [d for d in filtered_dirnames if d == next_segment]
             continue
 
+        dirnames[:] = filtered_dirnames
+
         for filename in filenames:
+            if path_parts and rel_parts != path_parts[: len(rel_parts)]:
+                continue
+
             _, suffix = os.path.splitext(filename)
             suffix = suffix.lower()
 
@@ -256,7 +259,7 @@ def index_directory(
 
             try:
                 candidate_file = os.path.realpath(os.path.join(safe_dirpath, filename))
-                if os.path.commonpath([root, candidate_file]) != root:
+                if os.path.commonpath([workspace_root, candidate_file]) != workspace_root:
                     continue
             except ValueError:
                 continue
@@ -301,7 +304,7 @@ def index_directory(
                 continue
 
             file_hash = hasher.hexdigest()[:16]
-            rel_path = os.path.relpath(candidate_file, root)
+            rel_path = os.path.relpath(candidate_file, workspace_root)
 
             ids        = [f"{file_hash}_{i}" for i in range(len(chunks))]
             metadatas  = [{"file": rel_path, "chunk": i} for i in range(len(chunks))]
@@ -321,6 +324,9 @@ def index_directory(
                 msg = f"Error indexing {rel_path}: {exc}"
                 logger.warning(f"[RAG] {msg}")
                 stats.errors.append(msg)
+
+    if path_parts and not found_requested_scope:
+        stats.errors.append(f"Directory not found: {path}")
 
     _finalise_stats(stats)
     logger.info(
